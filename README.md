@@ -1,70 +1,185 @@
-# Getting Started with Create React App
+# AI Teaching Assistant
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An AI-powered teaching assistant platform that provides automated assignment grading, code analysis, plagiarism detection, and intelligent Q&A support for educational institutions.
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+This project consists of two main components:
 
-### `npm start`
+- **Backend**: FastAPI-based REST API with SQLAlchemy ORM for database management
+- **Frontend**: React-based web application for user interface
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- 📚 **Student Management**: Register, authenticate, and manage student records
+- 📝 **Assignment Management**: Create and manage course assignments with rubrics
+- 📤 **Submission Tracking**: Track student submissions with status updates
+- 🤖 **AI-Powered Grading**: Automated evaluation of code and essay submissions
+- 🔍 **Code Analysis**: Static analysis with PEP 8 compliance and complexity metrics
+- 🔒 **Plagiarism Detection**: AST-based similarity detection for code submissions
+- 💬 **Q&A System**: AI-powered question answering with teacher escalation
 
-### `npm test`
+## Quick Start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
 
-### `npm run build`
+- Python 3.10+ (Backend)
+- Node.js 18+ (Frontend)
+- OpenAI API key (optional, for AI features)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Backend Setup
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+cd backend
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+# or: venv\Scripts\activate  # Windows
 
-### `npm run eject`
+# Install dependencies
+pip install -r requirements.txt
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Configure environment
+cp .env.example .env
+# Edit .env with your settings
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Run database migrations
+alembic upgrade head
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Start the server
+python -m uvicorn app.main:app --reload --port 8000
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Frontend Setup
 
-## Learn More
+```bash
+cd frontend
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# Install dependencies
+npm install
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Start development server
+npm start
+```
 
-### Code Splitting
+## API Documentation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Once the backend is running, access the API documentation at:
 
-### Analyzing the Bundle Size
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Key API Endpoints
 
-### Making a Progressive Web App
+| Category | Endpoint | Description |
+|----------|----------|-------------|
+| Health | `GET /health` | Health check with database status |
+| Students | `POST /api/v1/students/register` | Register a new student |
+| Students | `GET /api/v1/students/{id}` | Get student information |
+| Assignments | `POST /api/v1/assignments` | Create an assignment |
+| Assignments | `GET /api/v1/assignments` | List assignments |
+| Submissions | `POST /api/v1/submissions` | Submit an assignment |
+| Grading | `POST /api/v1/assignments/grade` | Grade a submission |
+| Q&A | `POST /api/v1/qa/ask` | Ask a question |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Project Structure
 
-### Advanced Configuration
+```
+ai-teaching-assistant/
+├── backend/                 # FastAPI backend
+│   ├── alembic/             # Database migrations
+│   ├── api/                 # API route handlers
+│   ├── app/                 # Application entry point
+│   ├── core/                # Configuration & database
+│   ├── models/              # SQLAlchemy models
+│   ├── schemas/             # Pydantic schemas
+│   ├── services/            # Business logic
+│   └── utils/               # Utility functions
+├── frontend/                # React frontend
+│   ├── public/              # Static assets
+│   └── src/                 # React components
+└── docs/                    # Documentation
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Database Schema
 
-### Deployment
+The backend uses SQLAlchemy ORM with support for SQLite (development) and PostgreSQL (production).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Core Models
 
-### `npm run build` fails to minify
+- **Student**: Student information and enrollment
+- **Assignment**: Course assignments with rubrics
+- **Submission**: Student submissions with status tracking
+- **GradingResult**: AI and manual grading results
+- **Question/Answer**: Q&A system data
+- **PlagiarismCheck**: Plagiarism detection results
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Configuration
+
+### Backend Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DATABASE_URL` | Database connection string | `sqlite:///./teaching_assistant.db` |
+| `OPENAI_API_KEY` | OpenAI API key | (empty) |
+| `AI_MODEL` | OpenAI model to use | `gpt-4` |
+| `DEBUG` | Enable debug mode | `true` |
+| `PORT` | Server port | `8000` |
+
+## Development
+
+### Running Tests
+
+```bash
+# Backend tests
+cd backend
+pytest
+
+# Frontend tests
+cd frontend
+npm test
+```
+
+### Code Quality
+
+```bash
+# Backend
+cd backend
+black .          # Format code
+isort .          # Sort imports
+ruff check .     # Lint code
+mypy .           # Type check
+
+# Frontend
+cd frontend
+npm run lint     # Lint code
+```
+
+## Docker
+
+### Build and Run
+
+```bash
+# Backend
+cd backend
+docker build -t ai-ta-backend .
+docker run -p 8000:8000 --env-file .env ai-ta-backend
+
+# Frontend
+cd frontend
+docker build -t ai-ta-frontend .
+docker run -p 3000:3000 ai-ta-frontend
+```
+
+## License
+
+MIT License
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests
+5. Submit a pull request

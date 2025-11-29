@@ -1,16 +1,26 @@
 """
 Schemas for Student Management API
 """
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List
 from datetime import datetime
+import re
 
 
 class StudentBase(BaseModel):
     """Base schema for student data."""
     name: str = Field(..., min_length=1, max_length=255, description="Student's full name")
-    email: EmailStr = Field(..., description="Student's email address")
+    email: str = Field(..., description="Student's email address")
     course_id: Optional[str] = Field(None, max_length=50, description="Course ID the student is enrolled in")
+
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, v: str) -> str:
+        """Validate email format."""
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_pattern, v):
+            raise ValueError('Invalid email format')
+        return v
 
 
 class StudentCreate(StudentBase):
@@ -22,9 +32,20 @@ class StudentCreate(StudentBase):
 class StudentUpdate(BaseModel):
     """Schema for updating student information."""
     name: Optional[str] = Field(None, min_length=1, max_length=255, description="Student's full name")
-    email: Optional[EmailStr] = Field(None, description="Student's email address")
+    email: Optional[str] = Field(None, description="Student's email address")
     course_id: Optional[str] = Field(None, max_length=50, description="Course ID")
     enrollment_date: Optional[datetime] = Field(None, description="Date of enrollment")
+
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, v: Optional[str]) -> Optional[str]:
+        """Validate email format if provided."""
+        if v is None:
+            return v
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_pattern, v):
+            raise ValueError('Invalid email format')
+        return v
 
 
 class StudentResponse(StudentBase):
@@ -42,7 +63,7 @@ class StudentResponse(StudentBase):
 class StudentLogin(BaseModel):
     """Schema for student login."""
     student_id: str = Field(..., description="Student ID for login")
-    email: Optional[EmailStr] = Field(None, description="Email for verification (optional)")
+    email: Optional[str] = Field(None, description="Email for verification (optional)")
 
 
 class StudentLoginResponse(BaseModel):

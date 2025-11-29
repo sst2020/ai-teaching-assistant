@@ -15,7 +15,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from core.config import settings
-from core.database import engine, Base
+from core.database import async_engine, Base
 from api.health import router as health_router
 from api.assignments import router as assignments_router
 from api.qa import router as qa_router
@@ -31,7 +31,7 @@ async def lifespan(app: FastAPI):
     print(f"📚 API Documentation available at: http://{settings.HOST}:{settings.PORT}/docs")
 
     # Initialize database tables
-    async with engine.begin() as conn:
+    async with async_engine.begin() as conn:
         # Import all models to ensure they are registered with Base
         from models import (
             Student, Assignment, Submission, GradingResult,
@@ -44,7 +44,7 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     print(f"👋 Shutting down {settings.APP_NAME}")
-    await engine.dispose()
+    await async_engine.dispose()
 
 
 def create_application() -> FastAPI:

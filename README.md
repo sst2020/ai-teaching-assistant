@@ -206,4 +206,4 @@ See the TODO list for a comprehensive list of tasks:
 
 ## License
 
-GPL-3.0 License - See [LICENSE](./LICENSE) for details.
+MIT License - See [LICENSE](./LICENSE) for details.

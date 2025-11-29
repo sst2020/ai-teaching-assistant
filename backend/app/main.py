@@ -5,6 +5,7 @@ Main FastAPI application entry point.
 """
 import sys
 from pathlib import Path
+from contextlib import asynccontextmanager
 
 # Add backend directory to path for imports
 backend_dir = Path(__file__).parent.parent
@@ -14,9 +15,36 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from core.config import settings
+from core.database import engine, Base
 from api.health import router as health_router
 from api.assignments import router as assignments_router
 from api.qa import router as qa_router
+from api.students import router as students_router
+from api.submissions import router as submissions_router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application lifespan manager for startup and shutdown events."""
+    # Startup
+    print(f"🚀 Starting {settings.APP_NAME} v{settings.APP_VERSION}")
+    print(f"📚 API Documentation available at: http://{settings.HOST}:{settings.PORT}/docs")
+
+    # Initialize database tables
+    async with engine.begin() as conn:
+        # Import all models to ensure they are registered with Base
+        from models import (
+            Student, Assignment, Submission, GradingResult,
+            Question, Answer, PlagiarismCheck, Rubric
+        )
+        await conn.run_sync(Base.metadata.create_all)
+        print("✅ Database tables initialized")
+
+    yield
+
+    # Shutdown
+    print(f"👋 Shutting down {settings.APP_NAME}")
+    await engine.dispose()
 
 
 def create_application() -> FastAPI:
@@ -28,7 +56,8 @@ def create_application() -> FastAPI:
         description=settings.APP_DESCRIPTION,
         docs_url="/docs",
         redoc_url="/redoc",
-        openapi_url="/openapi.json"
+        openapi_url="/openapi.json",
+        lifespan=lifespan
     )
 
     # Configure CORS
@@ -44,25 +73,14 @@ def create_application() -> FastAPI:
     app.include_router(health_router)
     app.include_router(assignments_router, prefix=settings.API_V1_PREFIX)
     app.include_router(qa_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(students_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(submissions_router, prefix=settings.API_V1_PREFIX)
 
     return app
 
 
 # Create the application instance
 app = create_application()
-
-
-@app.on_event("startup")
-async def startup_event():
-    """Execute on application startup."""
-    print(f"🚀 Starting {settings.APP_NAME} v{settings.APP_VERSION}")
-    print(f"📚 API Documentation available at: http://{settings.HOST}:{settings.PORT}/docs")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Execute on application shutdown."""
-    print(f"👋 Shutting down {settings.APP_NAME}")
 
 
 if __name__ == "__main__":

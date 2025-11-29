@@ -11,6 +11,7 @@ class HealthResponse(BaseModel):
     status: str
     version: str
     timestamp: datetime
+    database_status: Optional[str] = None
 
 
 class APIResponse(BaseModel):

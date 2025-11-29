@@ -1,0 +1,28 @@
+{
+  "include": [
+    "app",
+    "api",
+    "core",
+    "models",
+    "schemas",
+    "services",
+    "utils",
+    "tests"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    ".venv",
+    "venv",
+    "build",
+    "dist"
+  ],
+  "extraPaths": ["."],
+  "pythonVersion": "3.10",
+  "pythonPlatform": "All",
+  "typeCheckingMode": "basic",
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false,
+  "reportUnusedImport": true,
+  "reportUnusedVariable": true
+}
+

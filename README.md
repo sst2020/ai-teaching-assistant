@@ -172,14 +172,38 @@ docker build -t ai-ta-frontend .
 docker run -p 3000:3000 ai-ta-frontend
 ```
 
+## Roadmap & Contributing
+
+See the TODO list for a comprehensive list of tasks:
+- 📄 **[TODO.md](./TODO.md)** (English)
+- 📄 **[TODO_zh-CN.md](./TODO_zh-CN.md)** (简体中文)
+
+**Task Categories:**
+- 🔐 Security & Authentication tasks
+- 🖥️ Frontend development tasks
+- ⚙️ Backend enhancement tasks
+- 🧪 Testing requirements
+- 📚 Documentation needs
+- 🚀 DevOps & Deployment tasks
+
+### How to Contribute
+
+1. Check [TODO.md](./TODO.md) or [TODO_zh-CN.md](./TODO_zh-CN.md) for available tasks
+2. Fork the repository
+3. Create a feature branch (`git checkout -b feature/your-feature`)
+4. Make your changes with tests
+5. Run tests (`pytest` for backend, `npm test` for frontend)
+6. Submit a pull request
+
+### Recommended First Tasks
+
+| Task | Complexity | File |
+|------|------------|------|
+| Add student endpoint tests | Easy | `backend/tests/test_students.py` |
+| Implement React Router | Easy | `frontend/src/App.tsx` |
+| Add toast notifications | Easy | `frontend/src/components/` |
+| Create contributing guide | Easy | `CONTRIBUTING.md` |
+
 ## License
 
-MIT License
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests
-5. Submit a pull request
+GPL-3.0 License - See [LICENSE](./LICENSE) for details.

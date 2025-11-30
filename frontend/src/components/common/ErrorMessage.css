@@ -1,39 +1,94 @@
+/**
+ * Material Design 3 - Error Message
+ * Error state component following MD3 specifications
+ */
+
 .error-message-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  background-color: #fff5f5;
-  border: 1px solid #feb2b2;
-  border-radius: 8px;
-  margin: 16px 0;
+  padding: var(--md-sys-spacing-6);
+  background-color: var(--md-sys-color-error-container);
+  border-radius: var(--md-sys-shape-corner-medium);
+  margin: var(--md-sys-spacing-4) 0;
+  animation: md3FadeIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+@keyframes md3FadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .error-icon {
-  font-size: 32px;
-  margin-bottom: 12px;
+  font-size: 40px;
+  margin-bottom: var(--md-sys-spacing-3);
+  color: var(--md-sys-color-error);
 }
 
 .error-text {
-  color: #c53030;
-  font-size: 14px;
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  color: var(--md-sys-color-on-error-container);
   text-align: center;
-  margin: 0 0 16px 0;
+  margin: 0 0 var(--md-sys-spacing-4) 0;
 }
 
+/* MD3 Filled Tonal Button for retry */
 .retry-button {
-  padding: 8px 16px;
-  background-color: #e53e3e;
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--md-sys-spacing-2);
+  height: var(--md-comp-button-height);
+  padding: 0 var(--md-sys-spacing-6);
+  background-color: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
   border: none;
-  border-radius: 4px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
+  transition:
+    background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+  position: relative;
+  overflow: hidden;
+}
+
+.retry-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--md-sys-color-on-error);
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 }
 
 .retry-button:hover {
-  background-color: #c53030;
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.retry-button:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.retry-button:focus-visible {
+  outline: 2px solid var(--md-sys-color-error);
+  outline-offset: 2px;
+}
+
+.retry-button:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
 }
 

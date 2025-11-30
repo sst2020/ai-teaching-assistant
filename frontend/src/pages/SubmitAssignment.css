@@ -1,0 +1,402 @@
+/**
+ * Material Design 3 - Submit Assignment Page
+ * Assignment submission following MD3 Expressive theme
+ */
+
+.submit-assignment {
+  padding: var(--md-sys-spacing-6);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.submit-assignment-loading,
+.submit-assignment-error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  gap: var(--md-sys-spacing-5);
+}
+
+.submit-header {
+  margin-bottom: var(--md-sys-spacing-6);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-2);
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  margin-bottom: var(--md-sys-spacing-3);
+  padding: var(--md-sys-spacing-2);
+  border-radius: var(--md-sys-shape-corner-small);
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.back-link:hover {
+  background-color: rgba(124, 77, 255, var(--md-sys-state-hover-opacity));
+  text-decoration: none;
+}
+
+.submit-header h1 {
+  font-family: var(--md-sys-typescale-headline-large-font);
+  font-size: var(--md-sys-typescale-headline-large-size);
+  font-weight: var(--md-sys-typescale-headline-large-weight);
+  line-height: var(--md-sys-typescale-headline-large-line-height);
+  color: var(--md-sys-color-on-surface);
+  margin: 0;
+}
+
+/* Assignment Details - MD3 Card */
+.assignment-details {
+  background-color: var(--md-sys-color-surface);
+  border-radius: var(--md-sys-shape-corner-large);
+  padding: var(--md-sys-spacing-6);
+  margin-bottom: var(--md-sys-spacing-6);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.assignment-details h2 {
+  font-family: var(--md-sys-typescale-headline-small-font);
+  font-size: var(--md-sys-typescale-headline-small-size);
+  font-weight: var(--md-sys-typescale-headline-small-weight);
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 var(--md-sys-spacing-4) 0;
+}
+
+.assignment-meta-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--md-sys-spacing-3);
+  margin-bottom: var(--md-sys-spacing-5);
+}
+
+/* MD3 Chip Style */
+.assignment-type {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 var(--md-sys-spacing-4);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  border-radius: var(--md-sys-shape-corner-small);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  text-transform: capitalize;
+}
+
+.due-date {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.due-date.overdue {
+  color: var(--md-sys-color-error);
+  font-weight: 500;
+}
+
+.max-score {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.assignment-description h3 {
+  font-family: var(--md-sys-typescale-title-medium-font);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 var(--md-sys-spacing-2) 0;
+}
+
+.assignment-description p {
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Submission Form - MD3 Card */
+.submission-form {
+  background-color: var(--md-sys-color-surface);
+  border-radius: var(--md-sys-shape-corner-large);
+  padding: var(--md-sys-spacing-6);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+/* Banners */
+.warning-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-3);
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+  padding: var(--md-sys-spacing-4);
+  border-radius: var(--md-sys-shape-corner-medium);
+  margin-bottom: var(--md-sys-spacing-5);
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+}
+
+.info-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-3);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  padding: var(--md-sys-spacing-4);
+  border-radius: var(--md-sys-shape-corner-medium);
+  margin-bottom: var(--md-sys-spacing-5);
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+}
+
+.form-section {
+  margin-bottom: var(--md-sys-spacing-6);
+}
+
+.form-section label {
+  display: block;
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: var(--md-sys-spacing-2);
+}
+
+/* Code Editor - MD3 Outlined Text Field Style */
+.code-editor {
+  width: 100%;
+  padding: var(--md-sys-spacing-4);
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  font-family: 'Fira Code', 'Roboto Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--md-sys-color-on-surface);
+  background-color: var(--md-sys-color-surface-container-lowest);
+  resize: vertical;
+  transition:
+    border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.code-editor:hover:not(:focus) {
+  border-color: var(--md-sys-color-on-surface);
+}
+
+.code-editor:focus {
+  outline: none;
+  border-color: var(--md-sys-color-primary);
+  border-width: 2px;
+}
+
+/* File Upload */
+.upload-prompt input[type="file"] {
+  display: none;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--md-sys-spacing-2);
+  cursor: pointer;
+  color: var(--md-sys-color-on-surface-variant);
+  padding: var(--md-sys-spacing-6);
+  border: 2px dashed var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-medium);
+  transition:
+    border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.upload-label:hover {
+  border-color: var(--md-sys-color-primary);
+  background-color: rgba(124, 77, 255, var(--md-sys-state-hover-opacity));
+}
+
+.upload-icon {
+  font-size: 40px;
+  color: var(--md-sys-color-primary);
+}
+
+.upload-hint {
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Selected File Display */
+.selected-file {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--md-sys-spacing-3);
+  padding: var(--md-sys-spacing-4);
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-medium);
+}
+
+.file-icon {
+  font-size: 28px;
+  color: var(--md-sys-color-primary);
+}
+
+.file-name {
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+}
+
+.file-size {
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.remove-file-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+  border: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.remove-file-btn:hover {
+  background-color: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--md-sys-spacing-3);
+  margin-top: var(--md-sys-spacing-6);
+  padding-top: var(--md-sys-spacing-6);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* MD3 Outlined Button */
+.cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--md-comp-button-height);
+  padding: 0 var(--md-sys-spacing-6);
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  transition:
+    background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.cancel-btn:hover {
+  background-color: rgba(124, 77, 255, var(--md-sys-state-hover-opacity));
+  text-decoration: none;
+}
+
+/* MD3 Filled Button */
+.submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--md-sys-spacing-2);
+  height: var(--md-comp-button-height);
+  padding: 0 var(--md-sys-spacing-6);
+  min-width: 160px;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  cursor: pointer;
+  transition:
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-emphasized);
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--md-sys-color-on-primary);
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.submit-btn:hover:not(:disabled) {
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.submit-btn:hover:not(:disabled)::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.submit-btn:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.submit-btn:disabled {
+  background-color: var(--md-sys-color-on-surface);
+  color: var(--md-sys-color-surface);
+  opacity: var(--md-sys-state-disabled-opacity);
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .submit-assignment {
+    padding: var(--md-sys-spacing-4);
+  }
+
+  .assignment-meta-info {
+    flex-direction: column;
+    gap: var(--md-sys-spacing-2);
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .submit-btn {
+    width: 100%;
+  }
+}
+

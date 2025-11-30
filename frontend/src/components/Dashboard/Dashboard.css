@@ -1,145 +1,182 @@
+/**
+ * Material Design 3 - Dashboard Component
+ * Main dashboard following MD3 Expressive theme
+ */
+
 .dashboard {
-  padding: 24px;
+  padding: var(--md-sys-spacing-6);
 }
 
 .dashboard-header {
-  margin-bottom: 32px;
+  margin-bottom: var(--md-sys-spacing-8);
 }
 
 .dashboard-header h2 {
-  margin: 0 0 8px 0;
-  font-size: 28px;
-  color: #2d3748;
+  font-family: var(--md-sys-typescale-headline-large-font);
+  font-size: var(--md-sys-typescale-headline-large-size);
+  font-weight: var(--md-sys-typescale-headline-large-weight);
+  line-height: var(--md-sys-typescale-headline-large-line-height);
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 var(--md-sys-spacing-2) 0;
 }
 
 .dashboard-header p {
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  color: var(--md-sys-color-on-surface-variant);
   margin: 0;
-  color: #718096;
-  font-size: 16px;
 }
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
+  gap: var(--md-sys-spacing-6);
 }
 
+/* MD3 Cards */
 .status-card,
 .info-card,
 .feature-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background-color: var(--md-sys-color-surface);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level1);
   overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 }
 
 .status-card:hover,
 .info-card:hover,
 .feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--md-sys-elevation-level3);
 }
 
 .card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 20px;
-  border-bottom: 1px solid #e2e8f0;
-  background: #f7fafc;
+  gap: var(--md-sys-spacing-3);
+  padding: var(--md-sys-spacing-5);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-surface-container-low);
 }
 
 .card-icon {
   font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--md-sys-color-primary-container);
+  border-radius: var(--md-sys-shape-corner-medium);
 }
 
 .card-header h3 {
+  font-family: var(--md-sys-typescale-title-large-font);
+  font-size: var(--md-sys-typescale-title-large-size);
+  font-weight: var(--md-sys-typescale-title-large-weight);
+  color: var(--md-sys-color-on-surface);
   margin: 0;
-  font-size: 18px;
-  color: #2d3748;
 }
 
 .card-content {
-  padding: 20px;
+  padding: var(--md-sys-spacing-5);
 }
 
+/* MD3 Chip for status */
 .status-badge {
-  display: inline-block;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 var(--md-sys-spacing-4);
+  border-radius: var(--md-sys-shape-corner-small);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
   text-transform: capitalize;
-  margin-bottom: 16px;
+  margin-bottom: var(--md-sys-spacing-4);
 }
 
 .status-badge.healthy {
-  background: #c6f6d5;
-  color: #22543d;
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
 }
 
 .status-badge.unhealthy {
-  background: #fed7d7;
-  color: #742a2a;
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
 }
 
 .status-details p {
-  margin: 8px 0;
-  font-size: 14px;
-  color: #4a5568;
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: var(--md-sys-spacing-2) 0;
 }
 
 .info-card .card-content p {
-  margin: 8px 0;
-  font-size: 14px;
-  color: #4a5568;
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: var(--md-sys-spacing-2) 0;
 }
 
+/* MD3 Filled Tonal Button */
 .docs-link {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 10px 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--md-comp-button-height);
+  padding: 0 var(--md-sys-spacing-6);
+  margin-top: var(--md-sys-spacing-3);
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
   text-decoration: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  transition: opacity 0.2s;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  transition:
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    opacity var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 }
 
 .docs-link:hover {
-  opacity: 0.9;
+  box-shadow: var(--md-sys-elevation-level1);
+  text-decoration: none;
 }
 
 .feature-card .card-content p {
-  margin: 0 0 16px 0;
-  font-size: 14px;
-  color: #4a5568;
-  line-height: 1.6;
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0 0 var(--md-sys-spacing-4) 0;
 }
 
 .feature-card ul {
   margin: 0;
-  padding-left: 20px;
+  padding-left: var(--md-sys-spacing-5);
 }
 
 .feature-card li {
-  font-size: 13px;
-  color: #718096;
-  margin-bottom: 6px;
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: var(--md-sys-spacing-2);
 }
 
 .feature-card li::marker {
-  color: #667eea;
+  color: var(--md-sys-color-primary);
 }
 
 @media (max-width: 768px) {
   .dashboard {
-    padding: 16px;
+    padding: var(--md-sys-spacing-4);
   }
-  
+
   .dashboard-grid {
     grid-template-columns: 1fr;
   }

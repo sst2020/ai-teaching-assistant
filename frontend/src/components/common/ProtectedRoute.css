@@ -1,0 +1,25 @@
+/**
+ * Material Design 3 - Protected Route
+ * Loading state for protected routes
+ */
+
+.protected-route-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  gap: var(--md-sys-spacing-4);
+  background-color: var(--md-sys-color-surface);
+  animation: md3FadeIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+@keyframes md3FadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+

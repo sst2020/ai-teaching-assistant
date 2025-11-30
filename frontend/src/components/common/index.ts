@@ -1,3 +1,7 @@
 export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as ErrorMessage } from './ErrorMessage';
+export { default as ProtectedRoute } from './ProtectedRoute';
+export { default as Toast } from './Toast';
+export { default as ToastContainer } from './ToastContainer';
+export type { ToastType, ToastProps } from './Toast';
 

@@ -1,22 +1,30 @@
+/**
+ * Material Design 3 - Loading Spinner
+ * Circular progress indicator following MD3 specifications
+ */
+
 .loading-spinner-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: var(--md-sys-spacing-5);
+  gap: var(--md-sys-spacing-4);
 }
 
+/* MD3 Circular Progress Indicator */
 .loading-spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  border: 4px solid var(--md-sys-color-surface-container-highest);
+  border-top-color: var(--md-sys-color-primary);
+  animation: md3Spin var(--md-sys-motion-duration-extra-long4) var(--md-sys-motion-easing-linear) infinite;
 }
 
+/* Size variants */
 .loading-spinner-container.small .loading-spinner {
-  width: 20px;
-  height: 20px;
-  border-width: 2px;
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
 }
 
 .loading-spinner-container.medium .loading-spinner {
@@ -26,19 +34,28 @@
 }
 
 .loading-spinner-container.large .loading-spinner {
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   border-width: 5px;
 }
 
+/* Loading message */
 .loading-message {
-  margin-top: 12px;
-  color: #666;
-  font-size: 14px;
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-@keyframes spin {
+/* MD3 Spin animation */
+@keyframes md3Spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Tertiary color variant for expressive theme */
+.loading-spinner-container.expressive .loading-spinner {
+  border-top-color: var(--md-sys-color-tertiary);
 }
 

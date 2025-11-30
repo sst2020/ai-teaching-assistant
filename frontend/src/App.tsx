@@ -1,78 +1,107 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { ToastProvider } from './contexts/ToastContext';
 import { Header } from './components/layout';
 import { Dashboard } from './components/Dashboard';
 import { CodeAnalysis } from './components/CodeAnalysis';
 import { QAInterface } from './components/QAInterface';
+import { Login, Register, StudentDashboard, SubmitAssignment, Grades } from './pages';
 import './App.css';
 
-type TabType = 'dashboard' | 'code-analysis' | 'qa';
+// Layout component for authenticated pages
+const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
 
-const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabType>('dashboard');
-
-  const handleHashChange = () => {
-    const hash = window.location.hash.replace('#', '') as TabType;
-    if (['dashboard', 'code-analysis', 'qa'].includes(hash)) {
-      setActiveTab(hash);
-    }
+  // Helper to determine active tab based on current path
+  const getActiveTab = (): string => {
+    const path = location.pathname;
+    if (path.startsWith('/code-analysis')) return 'code-analysis';
+    if (path.startsWith('/qa')) return 'qa';
+    return 'dashboard';
   };
 
-  React.useEffect(() => {
-    window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // Check initial hash
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'code-analysis':
-        return <CodeAnalysis />;
-      case 'qa':
-        return <QAInterface />;
-      case 'dashboard':
-      default:
-        return <Dashboard />;
-    }
-  };
+  const activeTab = getActiveTab();
 
   return (
-    <div className="app">
-      <Header />
+    <>
+      <Header activeTab={activeTab} />
       <main className="app-main">
-        <div className="tab-navigation">
-          <button
-            className={`tab-button ${activeTab === 'dashboard' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('dashboard');
-              window.location.hash = 'dashboard';
-            }}
-          >
-            🏠 Dashboard
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'code-analysis' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('code-analysis');
-              window.location.hash = 'code-analysis';
-            }}
-          >
-            📊 Code Analysis
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'qa' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('qa');
-              window.location.hash = 'qa';
-            }}
-          >
-            💬 Q&A
-          </button>
-        </div>
         <div className="content-container">
-          {renderContent()}
+          {children}
         </div>
       </main>
-    </div>
+    </>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <ToastProvider>
+        <div className="app">
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Authenticated routes with layout */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route
+            path="/dashboard"
+            element={
+              <AuthenticatedLayout>
+                <Dashboard />
+              </AuthenticatedLayout>
+            }
+          />
+          <Route
+            path="/code-analysis"
+            element={
+              <AuthenticatedLayout>
+                <CodeAnalysis />
+              </AuthenticatedLayout>
+            }
+          />
+          <Route
+            path="/qa"
+            element={
+              <AuthenticatedLayout>
+                <QAInterface />
+              </AuthenticatedLayout>
+            }
+          />
+          <Route
+            path="/student-dashboard"
+            element={
+              <AuthenticatedLayout>
+                <StudentDashboard />
+              </AuthenticatedLayout>
+            }
+          />
+          <Route
+            path="/submit/:assignmentId"
+            element={
+              <AuthenticatedLayout>
+                <SubmitAssignment />
+              </AuthenticatedLayout>
+            }
+          />
+          <Route
+            path="/grades"
+            element={
+              <AuthenticatedLayout>
+                <Grades />
+              </AuthenticatedLayout>
+            }
+          />
+
+          {/* Fallback route for unknown paths */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+        </div>
+      </ToastProvider>
+    </AuthProvider>
   );
 };
 

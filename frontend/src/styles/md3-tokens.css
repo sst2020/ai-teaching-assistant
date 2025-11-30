@@ -1,0 +1,291 @@
+/**
+ * Material Design 3 - Expressive Theme Tokens
+ *
+ * This file contains all MD3 design tokens for the Expressive theme variant.
+ * The Expressive theme emphasizes bold colors, dynamic shapes, and engaging motion.
+ */
+
+:root {
+  /* ============================================
+   * COLOR SYSTEM - MD3 Expressive Palette
+   * Using a vibrant purple/violet primary with
+   * complementary tertiary colors for expression
+   * ============================================ */
+
+  /* Primary Colors - Vibrant Purple */
+  --md-sys-color-primary: #7C4DFF;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #E8DDFF;
+  --md-sys-color-on-primary-container: #21005D;
+  --md-sys-color-primary-fixed: #E8DDFF;
+  --md-sys-color-primary-fixed-dim: #CFBCFF;
+  --md-sys-color-on-primary-fixed: #21005D;
+  --md-sys-color-on-primary-fixed-variant: #5B2EBF;
+
+  /* Secondary Colors - Muted Purple */
+  --md-sys-color-secondary: #625B71;
+  --md-sys-color-on-secondary: #FFFFFF;
+  --md-sys-color-secondary-container: #E8DEF8;
+  --md-sys-color-on-secondary-container: #1D192B;
+
+  /* Tertiary Colors - Expressive Coral/Pink */
+  --md-sys-color-tertiary: #FF6B6B;
+  --md-sys-color-on-tertiary: #FFFFFF;
+  --md-sys-color-tertiary-container: #FFD9D9;
+  --md-sys-color-on-tertiary-container: #410002;
+
+  /* Error Colors */
+  --md-sys-color-error: #BA1A1A;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #FFDAD6;
+  --md-sys-color-on-error-container: #410002;
+
+  /* Surface Colors */
+  --md-sys-color-surface: #FFFBFF;
+  --md-sys-color-on-surface: #1C1B1F;
+  --md-sys-color-surface-variant: #E7E0EC;
+  --md-sys-color-on-surface-variant: #49454F;
+  --md-sys-color-surface-container-lowest: #FFFFFF;
+  --md-sys-color-surface-container-low: #F7F2FA;
+  --md-sys-color-surface-container: #F3EDF7;
+  --md-sys-color-surface-container-high: #ECE6F0;
+  --md-sys-color-surface-container-highest: #E6E0E9;
+
+  /* Outline Colors */
+  --md-sys-color-outline: #79747E;
+  --md-sys-color-outline-variant: #CAC4D0;
+
+  /* Inverse Colors */
+  --md-sys-color-inverse-surface: #313033;
+  --md-sys-color-inverse-on-surface: #F4EFF4;
+  --md-sys-color-inverse-primary: #CFBCFF;
+
+  /* Background & Scrim */
+  --md-sys-color-background: #FFFBFF;
+  --md-sys-color-on-background: #1C1B1F;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-shadow: #000000;
+
+  /* Success/Warning/Info (Extended palette for Expressive) */
+  --md-sys-color-success: #2E7D32;
+  --md-sys-color-on-success: #FFFFFF;
+  --md-sys-color-success-container: #C8E6C9;
+  --md-sys-color-on-success-container: #1B5E20;
+
+  --md-sys-color-warning: #F57C00;
+  --md-sys-color-on-warning: #FFFFFF;
+  --md-sys-color-warning-container: #FFE0B2;
+  --md-sys-color-on-warning-container: #E65100;
+
+  --md-sys-color-info: #0288D1;
+  --md-sys-color-on-info: #FFFFFF;
+  --md-sys-color-info-container: #B3E5FC;
+  --md-sys-color-on-info-container: #01579B;
+
+  /* ============================================
+   * TYPOGRAPHY - MD3 Type Scale
+   * Using Roboto Flex for variable font support
+   * ============================================ */
+
+  /* Display */
+  --md-sys-typescale-display-large-font: 'Roboto', sans-serif;
+  --md-sys-typescale-display-large-weight: 400;
+  --md-sys-typescale-display-large-size: 57px;
+  --md-sys-typescale-display-large-line-height: 64px;
+  --md-sys-typescale-display-large-tracking: -0.25px;
+
+  --md-sys-typescale-display-medium-font: 'Roboto', sans-serif;
+  --md-sys-typescale-display-medium-weight: 400;
+  --md-sys-typescale-display-medium-size: 45px;
+  --md-sys-typescale-display-medium-line-height: 52px;
+  --md-sys-typescale-display-medium-tracking: 0px;
+
+  --md-sys-typescale-display-small-font: 'Roboto', sans-serif;
+  --md-sys-typescale-display-small-weight: 400;
+  --md-sys-typescale-display-small-size: 36px;
+  --md-sys-typescale-display-small-line-height: 44px;
+  --md-sys-typescale-display-small-tracking: 0px;
+
+  /* Headline */
+  --md-sys-typescale-headline-large-font: 'Roboto', sans-serif;
+  --md-sys-typescale-headline-large-weight: 400;
+  --md-sys-typescale-headline-large-size: 32px;
+  --md-sys-typescale-headline-large-line-height: 40px;
+  --md-sys-typescale-headline-large-tracking: 0px;
+
+  --md-sys-typescale-headline-medium-font: 'Roboto', sans-serif;
+  --md-sys-typescale-headline-medium-weight: 400;
+  --md-sys-typescale-headline-medium-size: 28px;
+  --md-sys-typescale-headline-medium-line-height: 36px;
+  --md-sys-typescale-headline-medium-tracking: 0px;
+
+  --md-sys-typescale-headline-small-font: 'Roboto', sans-serif;
+  --md-sys-typescale-headline-small-weight: 400;
+  --md-sys-typescale-headline-small-size: 24px;
+  --md-sys-typescale-headline-small-line-height: 32px;
+  --md-sys-typescale-headline-small-tracking: 0px;
+
+  /* Title */
+  --md-sys-typescale-title-large-font: 'Roboto', sans-serif;
+  --md-sys-typescale-title-large-weight: 500;
+  --md-sys-typescale-title-large-size: 22px;
+  --md-sys-typescale-title-large-line-height: 28px;
+  --md-sys-typescale-title-large-tracking: 0px;
+
+  --md-sys-typescale-title-medium-font: 'Roboto', sans-serif;
+  --md-sys-typescale-title-medium-weight: 500;
+  --md-sys-typescale-title-medium-size: 16px;
+  --md-sys-typescale-title-medium-line-height: 24px;
+  --md-sys-typescale-title-medium-tracking: 0.15px;
+
+  --md-sys-typescale-title-small-font: 'Roboto', sans-serif;
+  --md-sys-typescale-title-small-weight: 500;
+  --md-sys-typescale-title-small-size: 14px;
+  --md-sys-typescale-title-small-line-height: 20px;
+  --md-sys-typescale-title-small-tracking: 0.1px;
+
+  /* Body */
+  --md-sys-typescale-body-large-font: 'Roboto', sans-serif;
+  --md-sys-typescale-body-large-weight: 400;
+  --md-sys-typescale-body-large-size: 16px;
+
+  /* ============================================
+   * ELEVATION - MD3 Elevation System
+   * Levels 0-5 with appropriate shadows
+   * ============================================ */
+
+  --md-sys-elevation-level0: none;
+  --md-sys-elevation-level1:
+    0px 1px 2px rgba(0, 0, 0, 0.3),
+    0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level2:
+    0px 1px 2px rgba(0, 0, 0, 0.3),
+    0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level3:
+    0px 1px 3px rgba(0, 0, 0, 0.3),
+    0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level4:
+    0px 2px 3px rgba(0, 0, 0, 0.3),
+    0px 6px 10px 4px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level5:
+    0px 4px 4px rgba(0, 0, 0, 0.3),
+    0px 8px 12px 6px rgba(0, 0, 0, 0.15);
+
+  /* ============================================
+   * SHAPE - MD3 Shape System (Expressive)
+   * Larger corner radii for expressive feel
+   * ============================================ */
+
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* Expressive shape variants (asymmetric) */
+  --md-sys-shape-expressive-small: 8px 16px 8px 16px;
+  --md-sys-shape-expressive-medium: 12px 24px 12px 24px;
+  --md-sys-shape-expressive-large: 16px 32px 16px 32px;
+
+  /* ============================================
+   * MOTION - MD3 Motion System
+   * Easing curves and duration tokens
+   * ============================================ */
+
+  /* Duration tokens */
+  --md-sys-motion-duration-short1: 50ms;
+  --md-sys-motion-duration-short2: 100ms;
+  --md-sys-motion-duration-short3: 150ms;
+  --md-sys-motion-duration-short4: 200ms;
+  --md-sys-motion-duration-medium1: 250ms;
+  --md-sys-motion-duration-medium2: 300ms;
+  --md-sys-motion-duration-medium3: 350ms;
+  --md-sys-motion-duration-medium4: 400ms;
+  --md-sys-motion-duration-long1: 450ms;
+  --md-sys-motion-duration-long2: 500ms;
+  --md-sys-motion-duration-long3: 550ms;
+  --md-sys-motion-duration-long4: 600ms;
+  --md-sys-motion-duration-extra-long1: 700ms;
+  --md-sys-motion-duration-extra-long2: 800ms;
+  --md-sys-motion-duration-extra-long3: 900ms;
+  --md-sys-motion-duration-extra-long4: 1000ms;
+
+  /* Easing curves - Standard */
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+  --md-sys-motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+
+  /* Easing curves - Emphasized (for Expressive) */
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+
+  /* Easing curves - Legacy */
+  --md-sys-motion-easing-linear: cubic-bezier(0, 0, 1, 1);
+
+  /* ============================================
+   * SPACING - MD3 4dp Grid System
+   * ============================================ */
+
+  --md-sys-spacing-0: 0px;
+  --md-sys-spacing-1: 4px;
+  --md-sys-spacing-2: 8px;
+  --md-sys-spacing-3: 12px;
+  --md-sys-spacing-4: 16px;
+  --md-sys-spacing-5: 20px;
+  --md-sys-spacing-6: 24px;
+  --md-sys-spacing-7: 28px;
+  --md-sys-spacing-8: 32px;
+  --md-sys-spacing-9: 36px;
+  --md-sys-spacing-10: 40px;
+  --md-sys-spacing-11: 44px;
+  --md-sys-spacing-12: 48px;
+  --md-sys-spacing-14: 56px;
+  --md-sys-spacing-16: 64px;
+  --md-sys-spacing-20: 80px;
+  --md-sys-spacing-24: 96px;
+
+  /* ============================================
+   * STATE LAYERS - MD3 State System
+   * Opacity values for interactive states
+   * ============================================ */
+
+  --md-sys-state-hover-opacity: 0.08;
+  --md-sys-state-focus-opacity: 0.12;
+  --md-sys-state-pressed-opacity: 0.12;
+  --md-sys-state-dragged-opacity: 0.16;
+  --md-sys-state-disabled-opacity: 0.38;
+  --md-sys-state-disabled-container-opacity: 0.12;
+
+  /* ============================================
+   * COMPONENT TOKENS
+   * ============================================ */
+
+  /* Button heights */
+  --md-comp-button-height: 40px;
+  --md-comp-button-height-small: 32px;
+  --md-comp-button-height-large: 48px;
+
+  /* Icon sizes */
+  --md-comp-icon-size-small: 18px;
+  --md-comp-icon-size-medium: 24px;
+  --md-comp-icon-size-large: 36px;
+
+  /* Navigation bar */
+  --md-comp-navigation-bar-height: 80px;
+  --md-comp-navigation-rail-width: 80px;
+
+  /* Text field */
+  --md-comp-text-field-height: 56px;
+  --md-comp-text-field-height-small: 48px;
+
+  /* Card */
+  --md-comp-card-padding: 16px;
+
+  /* Dialog */
+  --md-comp-dialog-max-width: 560px;
+  --md-comp-dialog-min-width: 280px;
+}
+

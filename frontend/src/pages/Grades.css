@@ -1,0 +1,375 @@
+/**
+ * Material Design 3 - Grades Page
+ * Grades display following MD3 Expressive theme
+ */
+
+.grades-page {
+  padding: var(--md-sys-spacing-6);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.grades-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+/* Header */
+.grades-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--md-sys-spacing-6);
+}
+
+.header-content h1 {
+  font-family: var(--md-sys-typescale-headline-large-font);
+  font-size: var(--md-sys-typescale-headline-large-size);
+  font-weight: var(--md-sys-typescale-headline-large-weight);
+  line-height: var(--md-sys-typescale-headline-large-line-height);
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 var(--md-sys-spacing-2) 0;
+}
+
+.grades-subtitle {
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-2);
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  padding: var(--md-sys-spacing-2);
+  border-radius: var(--md-sys-shape-corner-small);
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.back-link:hover {
+  background-color: rgba(124, 77, 255, var(--md-sys-state-hover-opacity));
+  text-decoration: none;
+}
+
+/* Summary Stats - MD3 Cards */
+.grades-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--md-sys-spacing-4);
+  margin-bottom: var(--md-sys-spacing-6);
+}
+
+.summary-card {
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-large);
+  padding: var(--md-sys-spacing-5);
+  text-align: center;
+  box-shadow: var(--md-sys-elevation-level1);
+  transition:
+    transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.summary-card.highlight {
+  background-color: var(--md-sys-color-primary-container);
+}
+
+.summary-card.highlight .summary-value {
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.summary-card.highlight .summary-label {
+  color: var(--md-sys-color-on-primary-container);
+  opacity: 0.8;
+}
+
+.summary-value {
+  display: block;
+  font-family: var(--md-sys-typescale-headline-medium-font);
+  font-size: var(--md-sys-typescale-headline-medium-size);
+  font-weight: var(--md-sys-typescale-headline-medium-weight);
+  color: var(--md-sys-color-on-surface);
+  margin-bottom: var(--md-sys-spacing-1);
+}
+
+.summary-label {
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Filter Tabs - MD3 Segmented Button */
+.filter-tabs {
+  display: flex;
+  gap: var(--md-sys-spacing-1);
+  margin-bottom: var(--md-sys-spacing-5);
+  background-color: var(--md-sys-color-surface-container-low);
+  padding: var(--md-sys-spacing-1);
+  border-radius: var(--md-sys-shape-corner-full);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.filter-tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--md-comp-button-height);
+  padding: 0 var(--md-sys-spacing-4);
+  border: none;
+  background-color: transparent;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  transition:
+    background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.filter-tab:hover {
+  background-color: rgba(124, 77, 255, var(--md-sys-state-hover-opacity));
+}
+
+.filter-tab.active {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* Grades List */
+.grades-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--md-sys-spacing-3);
+}
+
+/* Grade Card - MD3 Card with color indicator */
+.grade-card {
+  background-color: var(--md-sys-color-surface);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level1);
+  overflow: hidden;
+  border-left: 4px solid var(--md-sys-color-outline-variant);
+  transition: box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.grade-card:hover {
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+/* Grade color indicators using MD3 colors */
+.grade-card.excellent { border-left-color: var(--md-sys-color-tertiary); }
+.grade-card.good { border-left-color: #4CAF50; }
+.grade-card.average { border-left-color: #FFC107; }
+.grade-card.below-average { border-left-color: #FF9800; }
+.grade-card.needs-improvement { border-left-color: var(--md-sys-color-error); }
+.grade-card.pending { border-left-color: var(--md-sys-color-outline); }
+
+.grade-card-header {
+  display: flex;
+  align-items: center;
+  padding: var(--md-sys-spacing-4) var(--md-sys-spacing-5);
+  cursor: pointer;
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.grade-card-header:hover {
+  background-color: var(--md-sys-color-surface-container);
+}
+
+.grade-info {
+  flex: 1;
+}
+
+.percent {
+  display: block;
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* MD3 Chip for pending */
+.pending-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 var(--md-sys-spacing-4);
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+}
+
+.expand-icon {
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 12px;
+  transition: transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* Grade Card Details */
+.grade-card-details {
+  padding: 0 var(--md-sys-spacing-5) var(--md-sys-spacing-5);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  margin-top: 0;
+  animation: md3Expand var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+@keyframes md3Expand {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feedback-section {
+  margin-top: var(--md-sys-spacing-4);
+}
+
+.feedback-section h4 {
+  font-family: var(--md-sys-typescale-title-small-font);
+  font-size: var(--md-sys-typescale-title-small-size);
+  font-weight: var(--md-sys-typescale-title-small-weight);
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 var(--md-sys-spacing-2) 0;
+}
+
+.feedback-text {
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  color: var(--md-sys-color-on-surface);
+  margin: 0;
+  white-space: pre-wrap;
+  background-color: var(--md-sys-color-surface-container);
+  padding: var(--md-sys-spacing-4);
+  border-radius: var(--md-sys-shape-corner-medium);
+}
+
+.no-feedback {
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface-variant);
+  font-style: italic;
+  margin: 0;
+}
+
+.graded-info {
+  display: flex;
+  gap: var(--md-sys-spacing-4);
+  margin-top: var(--md-sys-spacing-4);
+  padding-top: var(--md-sys-spacing-3);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Empty State - MD3 Style */
+.empty-state {
+  text-align: center;
+  padding: var(--md-sys-spacing-10) var(--md-sys-spacing-5);
+  background-color: var(--md-sys-color-surface);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.empty-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: var(--md-sys-spacing-4);
+  opacity: 0.6;
+}
+
+.empty-state p {
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+}
+
+/* Grade Info */
+.grade-info h3 {
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 var(--md-sys-spacing-1) 0;
+}
+
+.submission-date {
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.grade-score {
+  text-align: right;
+  margin-right: var(--md-sys-spacing-4);
+}
+
+.score {
+  font-family: var(--md-sys-typescale-title-large-font);
+  font-size: var(--md-sys-typescale-title-large-size);
+  font-weight: var(--md-sys-typescale-title-large-weight);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .grades-page {
+    padding: var(--md-sys-spacing-4);
+  }
+
+  .grades-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grades-header {
+    flex-direction: column;
+    gap: var(--md-sys-spacing-4);
+  }
+
+  .grade-card-header {
+    flex-wrap: wrap;
+  }
+
+  .grade-score {
+    margin-right: 0;
+    margin-top: var(--md-sys-spacing-2);
+    width: 100%;
+    text-align: left;
+  }
+
+  .filter-tabs {
+    flex-wrap: wrap;
+  }
+
+  .filter-tab {
+    flex: 1 1 45%;
+  }
+}
+

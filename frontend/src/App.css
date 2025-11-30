@@ -1,55 +1,99 @@
+/**
+ * Material Design 3 - App Layout Styles
+ * Main application layout following MD3 Expressive theme
+ */
+
 .app {
   min-height: 100vh;
-  background-color: #f7fafc;
+  background-color: var(--md-sys-color-background);
+  display: flex;
+  flex-direction: column;
 }
 
 .app-main {
+  flex: 1;
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
-  padding: 24px;
+  padding: var(--md-sys-spacing-6);
 }
 
+/* Tab Navigation - MD3 Segmented Button Style */
 .tab-navigation {
   display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-  padding: 8px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  gap: var(--md-sys-spacing-1);
+  margin-bottom: var(--md-sys-spacing-6);
+  padding: var(--md-sys-spacing-1);
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-full);
+  box-shadow: var(--md-sys-elevation-level1);
 }
 
 .tab-button {
   flex: 1;
-  padding: 12px 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--md-sys-spacing-2);
+  height: var(--md-comp-button-height);
+  padding: 0 var(--md-sys-spacing-6);
   border: none;
-  background: transparent;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #718096;
+  background-color: transparent;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-emphasized);
+  position: relative;
+  overflow: hidden;
 }
 
-.tab-button:hover {
-  background: #edf2f7;
-  color: #4a5568;
+.tab-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: currentColor;
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.tab-button:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.tab-button:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.tab-button:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
 }
 
 .tab-button.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
 }
 
+.tab-button.active:hover::before {
+  background-color: var(--md-sys-color-on-secondary-container);
+}
+
+/* Content Container with MD3 Motion */
 .content-container {
-  animation: fadeIn 0.3s ease-in-out;
+  animation: md3FadeIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
 }
 
-@keyframes fadeIn {
+@keyframes md3FadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(var(--md-sys-spacing-4));
   }
   to {
     opacity: 1;
@@ -57,16 +101,52 @@
   }
 }
 
+/* Page transition */
+.page-enter {
+  opacity: 0;
+  transform: translateX(var(--md-sys-spacing-6));
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate),
+    transform var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateX(calc(-1 * var(--md-sys-spacing-6)));
+  transition:
+    opacity var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-accelerate),
+    transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-accelerate);
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .app-main {
-    padding: 16px;
+    padding: var(--md-sys-spacing-4);
   }
 
   .tab-navigation {
     flex-direction: column;
+    border-radius: var(--md-sys-shape-corner-large);
   }
 
   .tab-button {
-    text-align: center;
+    border-radius: var(--md-sys-shape-corner-medium);
+  }
+}
+
+/* Large screen adjustments */
+@media (min-width: 1200px) {
+  .app-main {
+    padding: var(--md-sys-spacing-8);
   }
 }

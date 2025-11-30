@@ -14,9 +14,13 @@ from sqlalchemy.orm import selectinload
 from core.database import Base
 from models import (
     Student, Assignment, Submission, GradingResult,
-    Question, Answer, PlagiarismCheck, Rubric
+    Question, Answer, PlagiarismCheck, Rubric, AnalysisResult,
+    FeedbackTemplate, AIInteraction
 )
 from models.submission import SubmissionStatus
+from models.code_file import CodeFile
+from models.feedback_template import TemplateCategory
+from models.ai_interaction import AIInteractionType, AIProvider
 
 # Generic type for models
 ModelType = TypeVar("ModelType", bound=Base)
@@ -223,8 +227,337 @@ def generate_unique_id(prefix: str = "") -> str:
     return f"{timestamp}_{unique_part}"
 
 
+# CodeFile CRUD
+class CRUDCodeFile(CRUDBase[CodeFile]):
+    """CRUD operations for CodeFile model."""
+
+    async def get_by_file_id(self, db: AsyncSession, file_id: str) -> Optional[CodeFile]:
+        """Get file by unique file_id."""
+        result = await db.execute(
+            select(CodeFile).where(CodeFile.file_id == file_id)
+        )
+        return result.scalar_one_or_none()
+
+    async def get_by_content_hash(self, db: AsyncSession, content_hash: str) -> Optional[CodeFile]:
+        """Get file by content hash (for deduplication)."""
+        result = await db.execute(
+            select(CodeFile).where(CodeFile.content_hash == content_hash)
+        )
+        return result.scalar_one_or_none()
+
+    async def get_by_uploader(
+        self, db: AsyncSession, uploader_id: str, skip: int = 0, limit: int = 100
+    ) -> List[CodeFile]:
+        """Get files by uploader ID."""
+        result = await db.execute(
+            select(CodeFile)
+            .where(CodeFile.uploader_id == uploader_id)
+            .order_by(CodeFile.created_at.desc())
+            .offset(skip).limit(limit)
+        )
+        return list(result.scalars().all())
+
+    async def get_by_assignment(
+        self, db: AsyncSession, assignment_id: str, skip: int = 0, limit: int = 100
+    ) -> List[CodeFile]:
+        """Get files by assignment ID."""
+        result = await db.execute(
+            select(CodeFile)
+            .where(CodeFile.assignment_id == assignment_id)
+            .order_by(CodeFile.created_at.desc())
+            .offset(skip).limit(limit)
+        )
+        return list(result.scalars().all())
+
+    async def count_by_uploader(self, db: AsyncSession, uploader_id: str) -> int:
+        """Count files by uploader."""
+        result = await db.execute(
+            select(func.count()).select_from(CodeFile).where(CodeFile.uploader_id == uploader_id)
+        )
+        return result.scalar() or 0
+
+    async def count_by_assignment(self, db: AsyncSession, assignment_id: str) -> int:
+        """Count files by assignment."""
+        result = await db.execute(
+            select(func.count()).select_from(CodeFile).where(CodeFile.assignment_id == assignment_id)
+        )
+        return result.scalar() or 0
+
+    async def update_status(
+        self, db: AsyncSession, file_id: str, status: str
+    ) -> Optional[CodeFile]:
+        """Update file status."""
+        file = await self.get_by_file_id(db, file_id)
+        if file:
+            file.status = status
+            await db.flush()
+            await db.refresh(file)
+        return file
+
+    async def update_analysis_result(
+        self, db: AsyncSession, file_id: str, analysis_result: str
+    ) -> Optional[CodeFile]:
+        """Update file analysis result."""
+        file = await self.get_by_file_id(db, file_id)
+        if file:
+            file.analysis_result = analysis_result
+            await db.flush()
+            await db.refresh(file)
+        return file
+
+
+# CRUD for AnalysisResult
+class CRUDAnalysisResult(CRUDBase[AnalysisResult]):
+    """CRUD operations for AnalysisResult model."""
+
+    async def get_by_analysis_id(
+        self, db: AsyncSession, analysis_id: str
+    ) -> Optional[AnalysisResult]:
+        """Get analysis result by analysis ID."""
+        result = await db.execute(
+            select(AnalysisResult).where(AnalysisResult.id == analysis_id)
+        )
+        return result.scalar_one_or_none()
+
+    async def get_by_file_id(
+        self, db: AsyncSession, file_id: str
+    ) -> List[AnalysisResult]:
+        """Get all analysis results for a file."""
+        result = await db.execute(
+            select(AnalysisResult)
+            .where(AnalysisResult.file_id == file_id)
+            .order_by(AnalysisResult.analyzed_at.desc())
+        )
+        return list(result.scalars().all())
+
+    async def get_latest_by_file_id(
+        self, db: AsyncSession, file_id: str
+    ) -> Optional[AnalysisResult]:
+        """Get the most recent analysis result for a file."""
+        result = await db.execute(
+            select(AnalysisResult)
+            .where(AnalysisResult.file_id == file_id)
+            .order_by(AnalysisResult.analyzed_at.desc())
+            .limit(1)
+        )
+        return result.scalar_one_or_none()
+
+    async def create_from_result(
+        self, db: AsyncSession, analysis_result: dict
+    ) -> AnalysisResult:
+        """Create an analysis result from a dictionary."""
+        db_result = AnalysisResult(
+            id=analysis_result.get("analysis_id"),
+            file_id=analysis_result.get("file_id"),
+            language=analysis_result.get("language", "unknown"),
+            overall_score=analysis_result.get("summary", {}).get("overall_score", 0),
+            grade=analysis_result.get("summary", {}).get("grade", "F"),
+            total_lines=analysis_result.get("line_metrics", {}).get("total_lines", 0),
+            code_lines=analysis_result.get("line_metrics", {}).get("code_lines", 0),
+            comment_lines=analysis_result.get("line_metrics", {}).get("comment_lines", 0),
+            blank_lines=analysis_result.get("line_metrics", {}).get("blank_lines", 0),
+            docstring_lines=analysis_result.get("line_metrics", {}).get("docstring_lines", 0),
+            cyclomatic_complexity=analysis_result.get("complexity", {}).get("cyclomatic_complexity", 0),
+            cognitive_complexity=analysis_result.get("complexity", {}).get("cognitive_complexity", 0),
+            max_nesting_depth=analysis_result.get("complexity", {}).get("max_nesting_depth", 0),
+            max_function_length=analysis_result.get("complexity", {}).get("max_function_length", 0),
+            max_parameters=analysis_result.get("complexity", {}).get("max_parameters", 0),
+            total_functions=analysis_result.get("complexity", {}).get("total_functions", 0),
+            total_classes=analysis_result.get("structure", {}).get("total_classes", 0),
+            total_methods=analysis_result.get("structure", {}).get("total_methods", 0),
+            average_function_length=analysis_result.get("structure", {}).get("average_function_length", 0),
+            total_violations=analysis_result.get("summary", {}).get("total_violations", 0),
+            critical_violations=analysis_result.get("summary", {}).get("critical_violations", 0),
+            warnings=analysis_result.get("summary", {}).get("warnings", 0),
+            info_violations=analysis_result.get("summary", {}).get("info_violations", 0),
+            category_scores=analysis_result.get("category_scores", {}),
+            violations=analysis_result.get("violations", []),
+            recommendations=analysis_result.get("recommendations", []),
+            naming_results=analysis_result.get("naming_conventions", {})
+        )
+        db.add(db_result)
+        await db.flush()
+        await db.refresh(db_result)
+        return db_result
+
+
+# CRUD for Feedback Templates
+class CRUDFeedbackTemplate(CRUDBase[FeedbackTemplate]):
+    """CRUD operations for feedback templates."""
+
+    async def get_by_category(
+        self,
+        db: AsyncSession,
+        category: str,
+        language: Optional[str] = None,
+        is_active: bool = True
+    ) -> List[FeedbackTemplate]:
+        """Get templates by category and optionally language."""
+        query = select(self.model).where(
+            and_(
+                self.model.category == category,
+                self.model.is_active == is_active
+            )
+        )
+        if language:
+            query = query.where(
+                (self.model.language == language) | (self.model.language.is_(None))
+            )
+        result = await db.execute(query)
+        return list(result.scalars().all())
+
+    async def get_by_tags(
+        self,
+        db: AsyncSession,
+        tags: List[str],
+        is_active: bool = True
+    ) -> List[FeedbackTemplate]:
+        """Get templates that have any of the specified tags."""
+        # Note: This is a simplified implementation
+        # For production, consider using PostgreSQL array operations
+        query = select(self.model).where(self.model.is_active == is_active)
+        result = await db.execute(query)
+        templates = result.scalars().all()
+
+        # Filter by tags in Python (for SQLite compatibility)
+        matching = []
+        for template in templates:
+            if template.tags and any(tag in template.tags for tag in tags):
+                matching.append(template)
+        return matching
+
+    async def increment_usage(
+        self,
+        db: AsyncSession,
+        template_id: int
+    ) -> Optional[FeedbackTemplate]:
+        """Increment the usage count for a template."""
+        template = await self.get(db, template_id)
+        if template:
+            template.usage_count += 1
+            await db.flush()
+            await db.refresh(template)
+        return template
+
+    async def search(
+        self,
+        db: AsyncSession,
+        search_term: str,
+        is_active: bool = True
+    ) -> List[FeedbackTemplate]:
+        """Search templates by name or message."""
+        pattern = f"%{search_term}%"
+        query = select(self.model).where(
+            and_(
+                self.model.is_active == is_active,
+                (self.model.name.ilike(pattern) | self.model.message.ilike(pattern))
+            )
+        )
+        result = await db.execute(query)
+        return list(result.scalars().all())
+
+
+# CRUD for AI Interactions
+class CRUDAIInteraction(CRUDBase[AIInteraction]):
+    """CRUD operations for AI interactions."""
+
+    async def get_by_user(
+        self,
+        db: AsyncSession,
+        user_id: str,
+        limit: int = 50
+    ) -> List[AIInteraction]:
+        """Get interactions for a specific user."""
+        query = select(self.model).where(
+            self.model.user_id == user_id
+        ).order_by(self.model.created_at.desc()).limit(limit)
+        result = await db.execute(query)
+        return list(result.scalars().all())
+
+    async def get_by_type(
+        self,
+        db: AsyncSession,
+        interaction_type: str,
+        limit: int = 100
+    ) -> List[AIInteraction]:
+        """Get interactions by type."""
+        query = select(self.model).where(
+            self.model.interaction_type == interaction_type
+        ).order_by(self.model.created_at.desc()).limit(limit)
+        result = await db.execute(query)
+        return list(result.scalars().all())
+
+    async def get_stats(self, db: AsyncSession) -> Dict[str, Any]:
+        """Get statistics about AI interactions."""
+        # Total count
+        total_result = await db.execute(select(func.count(self.model.id)))
+        total = total_result.scalar() or 0
+
+        # Average latency
+        avg_latency_result = await db.execute(
+            select(func.avg(self.model.latency_ms))
+        )
+        avg_latency = avg_latency_result.scalar() or 0
+
+        # Total tokens
+        total_tokens_result = await db.execute(
+            select(func.sum(self.model.tokens_used))
+        )
+        total_tokens = total_tokens_result.scalar() or 0
+
+        # Count by type
+        type_counts = {}
+        for itype in AIInteractionType:
+            count_result = await db.execute(
+                select(func.count(self.model.id)).where(
+                    self.model.interaction_type == itype.value
+                )
+            )
+            type_counts[itype.value] = count_result.scalar() or 0
+
+        return {
+            "total_interactions": total,
+            "average_latency_ms": round(avg_latency, 2),
+            "total_tokens_used": total_tokens,
+            "interactions_by_type": type_counts
+        }
+
+    async def log_interaction(
+        self,
+        db: AsyncSession,
+        interaction_type: str,
+        provider: str,
+        model: str,
+        prompt: str,
+        response: str,
+        tokens_used: int = 0,
+        latency_ms: int = 0,
+        user_id: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> AIInteraction:
+        """Log a new AI interaction."""
+        interaction = AIInteraction(
+            interaction_type=interaction_type,
+            provider=provider,
+            model=model,
+            prompt=prompt,
+            response=response,
+            tokens_used=tokens_used,
+            latency_ms=latency_ms,
+            user_id=user_id,
+            metadata=metadata or {}
+        )
+        db.add(interaction)
+        await db.flush()
+        await db.refresh(interaction)
+        return interaction
+
+
 # Create singleton instances
 crud_student = CRUDStudent(Student)
 crud_assignment = CRUDAssignment(Assignment)
 crud_submission = CRUDSubmission(Submission)
-
+crud_code_file = CRUDCodeFile(CodeFile)
+crud_analysis_result = CRUDAnalysisResult(AnalysisResult)
+crud_feedback_template = CRUDFeedbackTemplate(FeedbackTemplate)
+crud_ai_interaction = CRUDAIInteraction(AIInteraction)

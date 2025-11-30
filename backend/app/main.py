@@ -21,6 +21,10 @@ from api.assignments import router as assignments_router
 from api.qa import router as qa_router
 from api.students import router as students_router
 from api.submissions import router as submissions_router
+from api.files import router as files_router
+from api.analysis import router as analysis_router
+from api.ai import router as ai_router
+from api.feedback_templates import router as feedback_templates_router
 
 
 @asynccontextmanager
@@ -35,7 +39,8 @@ async def lifespan(app: FastAPI):
         # Import all models to ensure they are registered with Base
         from models import (
             Student, Assignment, Submission, GradingResult,
-            Question, Answer, PlagiarismCheck, Rubric
+            Question, Answer, PlagiarismCheck, Rubric, CodeFile,
+            FeedbackTemplate, AIInteraction
         )
         await conn.run_sync(Base.metadata.create_all)
         print("✅ Database tables initialized")
@@ -75,6 +80,10 @@ def create_application() -> FastAPI:
     app.include_router(qa_router, prefix=settings.API_V1_PREFIX)
     app.include_router(students_router, prefix=settings.API_V1_PREFIX)
     app.include_router(submissions_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(files_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(analysis_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(ai_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(feedback_templates_router, prefix=settings.API_V1_PREFIX)
 
     return app
 

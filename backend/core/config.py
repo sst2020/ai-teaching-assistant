@@ -53,7 +53,12 @@ class Settings(BaseSettings):
     # File Upload Settings
     MAX_UPLOAD_SIZE: int = 10 * 1024 * 1024  # 10MB
     UPLOAD_DIR: str = "./uploads"
-    ALLOWED_EXTENSIONS: List[str] = [".py", ".java", ".cpp", ".c", ".js", ".ts", ".pdf", ".docx", ".txt"]
+    ALLOWED_EXTENSIONS: List[str] = [
+        ".py", ".java", ".cpp", ".c", ".cc", ".cxx",
+        ".js", ".jsx", ".ts", ".tsx",
+        ".h", ".hpp",
+        ".pdf", ".docx", ".txt"
+    ]
 
     # Code Analysis Settings
     MAX_LINE_LENGTH: int = 120

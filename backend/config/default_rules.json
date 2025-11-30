@@ -1,0 +1,28 @@
+{
+  "name": "Default Analysis Rules",
+  "description": "Default code analysis rules for all supported languages",
+  "version": "1.0.0",
+  "rules": [
+    {"rule_id": "COMPLEXITY_001", "name": "High Cyclomatic Complexity", "description": "Function has high cyclomatic complexity", "category": "complexity", "severity": "warning", "enabled": true, "languages": ["all"], "thresholds": {"max_complexity": 10}, "weight": 2.0},
+    {"rule_id": "COMPLEXITY_002", "name": "Deep Nesting", "description": "Code block is too deeply nested", "category": "complexity", "severity": "warning", "enabled": true, "languages": ["all"], "thresholds": {"max_depth": 4}, "weight": 1.5},
+    {"rule_id": "COMPLEXITY_003", "name": "Long Function", "description": "Function exceeds maximum length", "category": "complexity", "severity": "warning", "enabled": true, "languages": ["all"], "thresholds": {"max_lines": 50}, "weight": 1.5},
+    {"rule_id": "COMPLEXITY_004", "name": "Too Many Parameters", "description": "Function has too many parameters", "category": "complexity", "severity": "warning", "enabled": true, "languages": ["all"], "thresholds": {"max_params": 5}, "weight": 1.0},
+    {"rule_id": "NAMING_001", "name": "Invalid Variable Name", "description": "Variable name does not follow naming convention", "category": "naming", "severity": "info", "enabled": true, "languages": ["all"], "thresholds": {"min_length": 2, "max_length": 30}, "weight": 0.5},
+    {"rule_id": "NAMING_002", "name": "Invalid Function Name", "description": "Function name does not follow naming convention", "category": "naming", "severity": "warning", "enabled": true, "languages": ["all"], "thresholds": {"min_length": 2, "max_length": 50}, "weight": 1.0},
+    {"rule_id": "NAMING_003", "name": "Invalid Class Name", "description": "Class name does not follow naming convention", "category": "naming", "severity": "warning", "enabled": true, "languages": ["all"], "thresholds": {}, "weight": 1.0},
+    {"rule_id": "NAMING_004", "name": "Invalid Constant Name", "description": "Constant should be UPPER_CASE", "category": "naming", "severity": "info", "enabled": true, "languages": ["all"], "thresholds": {}, "weight": 0.5},
+    {"rule_id": "STYLE_001", "name": "Line Too Long", "description": "Line exceeds maximum length", "category": "style", "severity": "info", "enabled": true, "languages": ["all"], "thresholds": {"max_length": 100}, "weight": 0.3},
+    {"rule_id": "STYLE_002", "name": "Missing Docstring", "description": "Function or class is missing documentation", "category": "style", "severity": "info", "enabled": true, "languages": ["python", "javascript", "typescript", "java"], "thresholds": {}, "weight": 0.5},
+    {"rule_id": "STYLE_003", "name": "Trailing Whitespace", "description": "Line has trailing whitespace", "category": "style", "severity": "info", "enabled": true, "languages": ["all"], "thresholds": {}, "weight": 0.2},
+    {"rule_id": "STRUCTURE_001", "name": "Duplicate Code", "description": "Duplicate code pattern detected", "category": "structure", "severity": "warning", "enabled": true, "languages": ["all"], "thresholds": {"min_lines": 3}, "weight": 1.5},
+    {"rule_id": "STRUCTURE_002", "name": "Unused Import", "description": "Import is not used in the code", "category": "structure", "severity": "info", "enabled": true, "languages": ["python", "javascript", "typescript", "java"], "thresholds": {}, "weight": 0.5},
+    {"rule_id": "STRUCTURE_003", "name": "Unused Variable", "description": "Variable is defined but never used", "category": "structure", "severity": "warning", "enabled": true, "languages": ["all"], "thresholds": {}, "weight": 1.0},
+    {"rule_id": "BEST_PRACTICES_001", "name": "Missing Error Handling", "description": "Code lacks proper error handling", "category": "best_practices", "severity": "warning", "enabled": true, "languages": ["all"], "thresholds": {}, "weight": 1.5},
+    {"rule_id": "BEST_PRACTICES_002", "name": "Magic Number", "description": "Avoid using magic numbers without explanation", "category": "best_practices", "severity": "info", "enabled": true, "languages": ["all"], "thresholds": {}, "weight": 0.5},
+    {"rule_id": "SECURITY_001", "name": "Hardcoded Credentials", "description": "Potential hardcoded password or API key detected", "category": "security", "severity": "error", "enabled": true, "languages": ["all"], "thresholds": {}, "weight": 5.0},
+    {"rule_id": "SECURITY_002", "name": "SQL Injection Risk", "description": "Potential SQL injection vulnerability", "category": "security", "severity": "error", "enabled": true, "languages": ["python", "javascript", "java"], "thresholds": {}, "weight": 5.0},
+    {"rule_id": "SECURITY_003", "name": "Eval Usage", "description": "Use of eval() or similar dangerous functions", "category": "security", "severity": "error", "enabled": true, "languages": ["python", "javascript"], "thresholds": {}, "weight": 4.0},
+    {"rule_id": "SECURITY_004", "name": "XSS Risk", "description": "Potential cross-site scripting vulnerability", "category": "security", "severity": "error", "enabled": true, "languages": ["javascript", "jsx", "tsx"], "thresholds": {}, "weight": 4.0}
+  ]
+}
+

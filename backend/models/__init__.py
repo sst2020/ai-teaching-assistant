@@ -12,6 +12,10 @@ from models.grading_result import GradingResult, GradedBy
 from models.question import Question, QuestionCategory, QuestionStatus
 from models.answer import Answer
 from models.plagiarism_check import PlagiarismCheck
+from models.code_file import CodeFile, FileStatus, ProgrammingLanguage
+from models.analysis_result import AnalysisResult
+from models.feedback_template import FeedbackTemplate, TemplateCategory
+from models.ai_interaction import AIInteraction, AIProvider, AIInteractionType
 
 __all__ = [
     # Base
@@ -25,11 +29,20 @@ __all__ = [
     "Question",
     "Answer",
     "PlagiarismCheck",
+    "CodeFile",
+    "AnalysisResult",
+    "FeedbackTemplate",
+    "AIInteraction",
     # Enums
     "AssignmentType",
     "SubmissionStatus",
     "GradedBy",
     "QuestionCategory",
     "QuestionStatus",
+    "FileStatus",
+    "ProgrammingLanguage",
+    "TemplateCategory",
+    "AIProvider",
+    "AIInteractionType",
 ]
 

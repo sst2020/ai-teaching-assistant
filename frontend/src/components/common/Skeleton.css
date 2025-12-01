@@ -1,0 +1,140 @@
+/* Skeleton Loading Component Styles */
+
+.skeleton {
+  background-color: var(--md-sys-color-surface-variant, #e7e0ec);
+  border-radius: var(--md-sys-shape-corner-extra-small, 4px);
+}
+
+.skeleton--text {
+  height: 1em;
+  margin-bottom: 0.5em;
+  border-radius: var(--md-sys-shape-corner-extra-small, 4px);
+}
+
+.skeleton--rectangular {
+  border-radius: var(--md-sys-shape-corner-small, 8px);
+}
+
+.skeleton--circular {
+  border-radius: 50%;
+}
+
+/* Pulse animation */
+.skeleton--pulse {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Wave animation */
+.skeleton--wave {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton--wave::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: skeleton-wave 1.5s linear infinite;
+}
+
+@keyframes skeleton-wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Skeleton Card */
+.skeleton-card {
+  padding: 1rem;
+  background: var(--md-sys-color-surface, #fffbfe);
+  border-radius: var(--md-sys-shape-corner-medium, 12px);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.skeleton-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.skeleton-card__header-text {
+  flex: 1;
+}
+
+.skeleton-card__body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Skeleton Table */
+.skeleton-table {
+  width: 100%;
+}
+
+.skeleton-table__header {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--md-sys-color-surface-variant, #e7e0ec);
+  border-radius: var(--md-sys-shape-corner-small, 8px) var(--md-sys-shape-corner-small, 8px) 0 0;
+}
+
+.skeleton-table__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-table__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant, #cac4d0);
+}
+
+.skeleton-table__row:last-child {
+  border-bottom: none;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .skeleton {
+    background-color: var(--md-sys-color-surface-variant, #49454f);
+  }
+
+  .skeleton--wave::after {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+  }
+}
+

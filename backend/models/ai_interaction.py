@@ -43,7 +43,7 @@ class AIInteraction(Base, TimestampMixin):
         student_id: Associated student ID
         submission_id: Associated submission ID
         file_id: Associated file ID
-        metadata: Additional metadata as JSON
+        extra_metadata: Additional metadata as JSON
         success: Whether the interaction was successful
         error_message: Error message if failed
     """
@@ -68,7 +68,7 @@ class AIInteraction(Base, TimestampMixin):
     student_id: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, index=True)
     submission_id: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, index=True)
     file_id: Mapped[Optional[str]] = mapped_column(String(100), nullable=True, index=True)
-    metadata: Mapped[Optional[str]] = mapped_column(JSON, nullable=True, default=dict)
+    extra_metadata: Mapped[Optional[str]] = mapped_column(JSON, nullable=True, default=dict)
     success: Mapped[bool] = mapped_column(nullable=False, default=True)
     error_message: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     

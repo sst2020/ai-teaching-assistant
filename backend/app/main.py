@@ -17,6 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
 from core.database import async_engine, Base
 from api.health import router as health_router
+from api.auth import router as auth_router
 from api.assignments import router as assignments_router
 from api.qa import router as qa_router
 from api.students import router as students_router
@@ -76,6 +77,7 @@ def create_application() -> FastAPI:
 
     # Include routers
     app.include_router(health_router)
+    app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
     app.include_router(assignments_router, prefix=settings.API_V1_PREFIX)
     app.include_router(qa_router, prefix=settings.API_V1_PREFIX)
     app.include_router(students_router, prefix=settings.API_V1_PREFIX)

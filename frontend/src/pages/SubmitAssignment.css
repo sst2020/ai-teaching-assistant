@@ -20,7 +20,35 @@
 }
 
 .submit-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--md-sys-spacing-3);
   margin-bottom: var(--md-sys-spacing-6);
+}
+
+.submit-header h1 {
+  flex: 1;
+}
+
+.draft-saved-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-1);
+  padding: var(--md-sys-spacing-2) var(--md-sys-spacing-3);
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+  border-radius: var(--md-sys-shape-corner-small);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .back-link {
@@ -61,12 +89,127 @@
   box-shadow: var(--md-sys-elevation-level1);
 }
 
+.assignment-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--md-sys-spacing-4);
+  margin-bottom: var(--md-sys-spacing-4);
+}
+
 .assignment-details h2 {
   font-family: var(--md-sys-typescale-headline-small-font);
   font-size: var(--md-sys-typescale-headline-small-size);
   font-weight: var(--md-sys-typescale-headline-small-weight);
   color: var(--md-sys-color-on-surface);
-  margin: 0 0 var(--md-sys-spacing-4) 0;
+  margin: 0;
+}
+
+.view-rubric-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 var(--md-sys-spacing-4);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  border: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  cursor: pointer;
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.view-rubric-btn:hover {
+  background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
+}
+
+/* Rubric Section */
+.rubric-section {
+  margin-top: var(--md-sys-spacing-5);
+  padding: var(--md-sys-spacing-5);
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-medium);
+}
+
+.rubric-section h3 {
+  font-family: var(--md-sys-typescale-title-medium-font);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 var(--md-sys-spacing-2) 0;
+}
+
+.rubric-description {
+  font-family: var(--md-sys-typescale-body-medium-font);
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: var(--md-sys-spacing-4);
+}
+
+.rubric-criteria {
+  display: flex;
+  flex-direction: column;
+  gap: var(--md-sys-spacing-3);
+}
+
+.criterion-card {
+  background-color: var(--md-sys-color-surface);
+  padding: var(--md-sys-spacing-4);
+  border-radius: var(--md-sys-shape-corner-small);
+  border-left: 4px solid var(--md-sys-color-primary);
+}
+
+.criterion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--md-sys-spacing-2);
+}
+
+.criterion-name {
+  font-family: var(--md-sys-typescale-title-small-font);
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.criterion-points {
+  font-family: var(--md-sys-typescale-label-large-font);
+  color: var(--md-sys-color-primary);
+  font-weight: 600;
+}
+
+.criterion-description {
+  font-family: var(--md-sys-typescale-body-small-font);
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: var(--md-sys-spacing-2);
+}
+
+.criterion-levels {
+  display: flex;
+  flex-direction: column;
+  gap: var(--md-sys-spacing-1);
+  padding-left: var(--md-sys-spacing-3);
+  border-left: 2px solid var(--md-sys-color-outline-variant);
+}
+
+.level-item {
+  font-family: var(--md-sys-typescale-body-small-font);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.level-points {
+  font-weight: 600;
+  color: var(--md-sys-color-secondary);
+}
+
+.rubric-total {
+  margin-top: var(--md-sys-spacing-4);
+  padding-top: var(--md-sys-spacing-3);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  font-family: var(--md-sys-typescale-title-medium-font);
+  font-weight: 600;
+  color: var(--md-sys-color-primary);
+  text-align: right;
 }
 
 .assignment-meta-info {
@@ -168,7 +311,7 @@
   margin-bottom: var(--md-sys-spacing-6);
 }
 
-.form-section label {
+.form-section > label {
   display: block;
   font-family: var(--md-sys-typescale-body-medium-font);
   font-size: var(--md-sys-typescale-body-medium-size);
@@ -177,7 +320,119 @@
   margin-bottom: var(--md-sys-spacing-2);
 }
 
-/* Code Editor - MD3 Outlined Text Field Style */
+/* Editor Header with Controls */
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--md-sys-spacing-3);
+  margin-bottom: var(--md-sys-spacing-3);
+}
+
+.editor-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-2);
+}
+
+.language-select {
+  height: 36px;
+  padding: 0 var(--md-sys-spacing-3);
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  cursor: pointer;
+}
+
+.language-select:focus {
+  outline: none;
+  border-color: var(--md-sys-color-primary);
+}
+
+.preview-btn,
+.clear-btn {
+  height: 36px;
+  padding: 0 var(--md-sys-spacing-4);
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  cursor: pointer;
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.preview-btn:hover,
+.clear-btn:hover {
+  background-color: rgba(124, 77, 255, var(--md-sys-state-hover-opacity));
+}
+
+.clear-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Monaco Editor Container */
+.monaco-editor-container {
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-medium);
+  overflow: hidden;
+}
+
+/* Code Preview */
+.code-preview {
+  background-color: #1e1e1e;
+  border-radius: var(--md-sys-shape-corner-medium);
+  padding: var(--md-sys-spacing-4);
+  min-height: 400px;
+  max-height: 600px;
+  overflow: auto;
+}
+
+.code-preview pre {
+  margin: 0;
+  font-family: 'Fira Code', 'Roboto Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.code-preview code {
+  color: #d4d4d4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Editor Footer */
+.editor-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--md-sys-spacing-4);
+  margin-top: var(--md-sys-spacing-2);
+  padding: var(--md-sys-spacing-2);
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.char-count,
+.line-count {
+  padding: var(--md-sys-spacing-1) var(--md-sys-spacing-2);
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+}
+
+.shortcut-hint {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Legacy Code Editor - MD3 Outlined Text Field Style */
 .code-editor {
   width: 100%;
   padding: var(--md-sys-spacing-4);
@@ -323,6 +578,35 @@
 .cancel-btn:hover {
   background-color: rgba(124, 77, 255, var(--md-sys-state-hover-opacity));
   text-decoration: none;
+}
+
+/* MD3 Tonal Button - Save Draft */
+.save-draft-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--md-comp-button-height);
+  padding: 0 var(--md-sys-spacing-6);
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  border: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  cursor: pointer;
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.save-draft-btn:hover:not(:disabled) {
+  background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
+}
+
+.save-draft-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* MD3 Filled Button */

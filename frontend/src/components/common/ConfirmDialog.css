@@ -1,0 +1,161 @@
+/**
+ * Material Design 3 - Confirm Dialog
+ * Modal dialog following MD3 Dialog specifications
+ */
+
+.confirm-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: var(--md-sys-spacing-4);
+  animation: fadeIn var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.confirm-dialog {
+  background-color: var(--md-sys-color-surface);
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  min-width: 280px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: var(--md-sys-elevation-level3);
+  animation: scaleIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.9); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+.confirm-dialog-header {
+  padding: var(--md-sys-spacing-5) var(--md-sys-spacing-5) var(--md-sys-spacing-3);
+}
+
+.confirm-dialog-header h2 {
+  font-family: var(--md-sys-typescale-headline-small-font);
+  font-size: var(--md-sys-typescale-headline-small-size);
+  font-weight: var(--md-sys-typescale-headline-small-weight);
+  line-height: var(--md-sys-typescale-headline-small-line-height);
+  color: var(--md-sys-color-on-surface);
+  margin: 0;
+}
+
+.confirm-dialog-body {
+  padding: 0 var(--md-sys-spacing-5) var(--md-sys-spacing-5);
+}
+
+.confirm-dialog-body p {
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--md-sys-spacing-2);
+  padding: var(--md-sys-spacing-3) var(--md-sys-spacing-5) var(--md-sys-spacing-5);
+}
+
+/* Cancel Button - Text Button */
+.confirm-dialog-cancel {
+  height: 40px;
+  padding: 0 var(--md-sys-spacing-4);
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+  border: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  cursor: pointer;
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.confirm-dialog-cancel:hover {
+  background-color: rgba(124, 77, 255, var(--md-sys-state-hover-opacity));
+}
+
+.confirm-dialog-cancel:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+/* Confirm Button - Filled Button */
+.confirm-dialog-confirm {
+  height: 40px;
+  padding: 0 var(--md-sys-spacing-5);
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  cursor: pointer;
+  transition: box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.confirm-dialog-confirm:hover {
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.confirm-dialog-confirm:focus-visible {
+  outline: 2px solid var(--md-sys-color-on-primary);
+  outline-offset: -4px;
+}
+
+/* Danger Variant */
+.confirm-dialog-confirm-danger {
+  background-color: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
+}
+
+.confirm-dialog-confirm-danger:focus-visible {
+  outline-color: var(--md-sys-color-on-error);
+}
+
+/* Warning Variant */
+.confirm-dialog-confirm-warning {
+  background-color: #FF9800;
+  color: #fff;
+}
+
+.confirm-dialog-confirm-warning:focus-visible {
+  outline-color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .confirm-dialog {
+    min-width: auto;
+    max-width: none;
+    margin: var(--md-sys-spacing-4);
+  }
+  
+  .confirm-dialog-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .confirm-dialog-cancel,
+  .confirm-dialog-confirm {
+    width: 100%;
+  }
+}
+

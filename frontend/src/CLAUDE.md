@@ -6,7 +6,7 @@ This directory contains the React TypeScript frontend application for the AI Tea
 
 ### `/components`
 Reusable UI components organized by feature:
-- **`/common`** - Shared components (LoadingSpinner, ErrorMessage, ProtectedRoute, Toast, ToastContainer)
+- **`/common`** - Shared components (LoadingSpinner, ErrorMessage, ProtectedRoute, Toast, ToastContainer, ConfirmDialog, Skeleton, SkeletonCard, SkeletonTable)
 - **`/layout`** - Layout components (Header, Footer)
 - **`/Dashboard`** - Dashboard feature components
 - **`/CodeAnalysis`** - Code analysis feature components
@@ -39,6 +39,10 @@ TypeScript type definitions:
 - **`student.ts`** - Student, StudentProfile, Course, StudentStats
 - **`submission.ts`** - Submission, CreateSubmissionRequest, SubmissionFilters
 - **`assignment.ts`** - Assignment, AssignmentFilters, Rubric
+
+### `/utils`
+Utility functions and helpers:
+- **`cache.ts`** - Simple in-memory cache for API responses (apiCache, cachedFetch, invalidateCache)
 
 ### `/styles`
 Material Design 3 (MD3) Expressive theme implementation:
@@ -74,4 +78,28 @@ Global toast notifications are available via useToast hook:
 const { showSuccess, showError, showInfo, showWarning } = useToast();
 showSuccess('Operation completed!');
 ```
+
+## Confirmation Dialogs
+
+Use the ConfirmDialog component for user confirmations:
+```tsx
+import { ConfirmDialog } from '../components/common';
+
+<ConfirmDialog
+  isOpen={showDialog}
+  title="Confirm Action"
+  message="Are you sure you want to proceed?"
+  confirmText="Confirm"
+  cancelText="Cancel"
+  variant="default" // 'default' | 'danger' | 'warning'
+  onConfirm={handleConfirm}
+  onCancel={() => setShowDialog(false)}
+/>
+```
+
+Features:
+- Focus trap for accessibility
+- Keyboard navigation (Escape to close, Tab to cycle)
+- ARIA attributes for screen readers
+- Three variants: default, danger, warning
 

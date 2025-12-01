@@ -138,6 +138,16 @@ class LineMetrics(BaseModel):
     comment_ratio: float = Field(0, description="Comment to code ratio percentage")
 
 
+class StructureResult(BaseModel):
+    """Code structure analysis results."""
+    total_classes: int = Field(0, description="Total number of classes")
+    total_methods: int = Field(0, description="Total number of methods")
+    total_functions: int = Field(0, description="Total number of functions")
+    average_function_length: float = Field(0, description="Average function length in lines")
+    max_class_methods: int = Field(0, description="Maximum methods in a single class")
+    inheritance_depth: int = Field(0, description="Maximum inheritance depth")
+
+
 
 # ============================================
 # Category Scores

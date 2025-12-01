@@ -49,14 +49,6 @@ const StudentDashboard: React.FC = () => {
     .sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime())
     .slice(0, 5);
 
-  const recentGrades = assignments
-    .filter(a => a.submission?.grade !== undefined)
-    .sort((a, b) => 
-      new Date(b.submission?.submitted_at || 0).getTime() - 
-      new Date(a.submission?.submitted_at || 0).getTime()
-    )
-    .slice(0, 5);
-
   if (isLoading) {
     return (
       <div className="student-dashboard-loading">

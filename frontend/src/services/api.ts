@@ -41,6 +41,26 @@ import {
   AssignmentStats,
   Rubric,
 } from '../types/assignment';
+import {
+  BatchAnalysisRequest,
+  BatchAnalysisResponse,
+  OriginalityReport,
+  SimilarityMatrix,
+  PlagiarismSettings,
+} from '../types/plagiarism';
+import {
+  ReportAnalysisRequest,
+  ReportAnalysisResponse,
+} from '../types/reportAnalysis';
+
+// 扩展 Axios 配置类型以支持 metadata
+declare module 'axios' {
+  interface InternalAxiosRequestConfig {
+    metadata?: {
+      startTime: number;
+    };
+  }
+}
 
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -55,26 +75,140 @@ const apiClient: AxiosInstance = axios.create({
   },
 });
 
-// Request interceptor for logging
+// Enhanced request interceptor with detailed logging and performance tracking
 apiClient.interceptors.request.use(
   (config) => {
-    console.log(`[API] ${config.method?.toUpperCase()} ${config.url}`);
+    // Add request timestamp for performance tracking
+    config.metadata = { startTime: Date.now() };
+
+    // Add unique request ID for tracking
+    const requestId = Math.random().toString(36).substr(2, 9);
+    config.headers['X-Request-ID'] = requestId;
+
+    // Enhanced logging
+    const isDebugMode = process.env.REACT_APP_DEBUG_MODE === 'true';
+    const enableApiLogging = process.env.REACT_APP_ENABLE_API_LOGGING === 'true';
+
+    if (isDebugMode && enableApiLogging) {
+      console.group(`🚀 [API Request] ${config.method?.toUpperCase()} ${config.url}`);
+      console.log('📋 Request ID:', requestId);
+      console.log('🔗 URL:', (config.baseURL || '') + (config.url || ''));
+      console.log('📤 Method:', config.method?.toUpperCase());
+      console.log('📋 Headers:', config.headers);
+      if (config.data) {
+        console.log('📦 Data:', config.data);
+      }
+      if (config.params) {
+        console.log('🔍 Params:', config.params);
+      }
+      console.log('⏰ Timestamp:', new Date().toISOString());
+      console.groupEnd();
+    }
+
     return config;
   },
   (error) => {
-    console.error('[API] Request error:', error);
+    console.error('❌ [API] Request error:', error);
     return Promise.reject(error);
   }
 );
 
-// Response interceptor for error handling
+// Enhanced response interceptor with performance tracking and detailed error handling
 apiClient.interceptors.response.use(
   (response) => {
-    console.log(`[API] Response ${response.status}:`, response.data);
+    // Calculate response time
+    const startTime = response.config.metadata?.startTime;
+    const responseTime = startTime ? Date.now() - startTime : 0;
+
+    // Add response time to headers for debugging
+    response.headers['X-Response-Time'] = `${responseTime}ms`;
+
+    const isDebugMode = process.env.REACT_APP_DEBUG_MODE === 'true';
+    const enableApiLogging = process.env.REACT_APP_ENABLE_API_LOGGING === 'true';
+    const enablePerformanceMonitoring = process.env.REACT_APP_ENABLE_PERFORMANCE_MONITORING === 'true';
+
+    if (isDebugMode && enableApiLogging) {
+      const requestId = response.config.headers['X-Request-ID'];
+      const statusColor = response.status >= 200 && response.status < 300 ? '✅' : '⚠️';
+
+      console.group(`${statusColor} [API Response] ${response.status} ${response.config.method?.toUpperCase()} ${response.config.url}`);
+      console.log('📋 Request ID:', requestId);
+      console.log('📊 Status:', response.status, response.statusText);
+      console.log('⏱️ Response Time:', `${responseTime}ms`);
+      console.log('📥 Headers:', response.headers);
+      console.log('📦 Data:', response.data);
+      console.log('⏰ Timestamp:', new Date().toISOString());
+      console.groupEnd();
+    }
+
+    // Performance monitoring
+    if (enablePerformanceMonitoring && responseTime > 0) {
+      // Store performance data for monitoring dashboard
+      const performanceData = {
+        url: response.config.url,
+        method: response.config.method?.toUpperCase(),
+        responseTime,
+        status: response.status,
+        timestamp: Date.now()
+      };
+
+      // Store in sessionStorage for debug panel
+      const existingData = JSON.parse(sessionStorage.getItem('api_performance') || '[]');
+      existingData.push(performanceData);
+      // Keep only last 100 entries
+      if (existingData.length > 100) {
+        existingData.shift();
+      }
+      sessionStorage.setItem('api_performance', JSON.stringify(existingData));
+    }
+
     return response;
   },
   (error: AxiosError<ApiError>) => {
-    console.error('[API] Response error:', error.response?.data || error.message);
+    // Calculate response time for failed requests
+    const startTime = error.config?.metadata?.startTime;
+    const responseTime = startTime ? Date.now() - startTime : 0;
+
+    const isDebugMode = process.env.REACT_APP_DEBUG_MODE === 'true';
+    const enableApiLogging = process.env.REACT_APP_ENABLE_API_LOGGING === 'true';
+
+    // Enhanced error logging
+    if (isDebugMode && enableApiLogging) {
+      const requestId = error.config?.headers?.['X-Request-ID'];
+
+      console.group(`❌ [API Error] ${error.response?.status || 'Network'} ${error.config?.method?.toUpperCase()} ${error.config?.url}`);
+      console.log('📋 Request ID:', requestId);
+      console.log('⏱️ Response Time:', `${responseTime}ms`);
+      console.log('🔥 Error Type:', error.name);
+      console.log('💬 Error Message:', error.message);
+      if (error.response) {
+        console.log('📊 Status:', error.response.status, error.response.statusText);
+        console.log('📥 Response Headers:', error.response.headers);
+        console.log('📦 Response Data:', error.response.data);
+      }
+      console.log('⏰ Timestamp:', new Date().toISOString());
+      console.groupEnd();
+    }
+
+    // Store error data for debugging
+    const errorData = {
+      url: error.config?.url,
+      method: error.config?.method?.toUpperCase(),
+      status: error.response?.status,
+      message: error.message,
+      responseTime,
+      timestamp: Date.now(),
+      requestId: error.config?.headers?.['X-Request-ID']
+    };
+
+    const existingErrors = JSON.parse(sessionStorage.getItem('api_errors') || '[]');
+    existingErrors.push(errorData);
+    // Keep only last 50 errors
+    if (existingErrors.length > 50) {
+      existingErrors.shift();
+    }
+    sessionStorage.setItem('api_errors', JSON.stringify(existingErrors));
+
     return Promise.reject(error);
   }
 );
@@ -141,6 +275,60 @@ export const checkPlagiarism = async (request: PlagiarismRequest): Promise<Plagi
   const response = await apiClient.post<PlagiarismResponse>(
     `${API_V1_PREFIX}/assignments/plagiarism/check`,
     request
+  );
+  return response.data;
+};
+
+// ============ Project Report Analysis Endpoints ============
+
+export const analyzeProjectReport = async (
+  request: ReportAnalysisRequest
+): Promise<ReportAnalysisResponse> => {
+  const response = await apiClient.post<ReportAnalysisResponse>(
+    `${API_V1_PREFIX}/report-analysis/analyze`,
+    request
+  );
+  return response.data;
+};
+
+// 批量分析查重（增强版）
+export const batchAnalyzePlagiarism = async (
+  request: BatchAnalysisRequest
+): Promise<BatchAnalysisResponse> => {
+  const response = await apiClient.post<BatchAnalysisResponse>(
+    `${API_V1_PREFIX}/assignments/plagiarism/batch-analyze`,
+    request
+  );
+  return response.data;
+};
+
+// 获取原创性报告
+export const getOriginalityReport = async (
+  submissionId: string,
+  assignmentId: string
+): Promise<OriginalityReport> => {
+  const response = await apiClient.get<OriginalityReport>(
+    `${API_V1_PREFIX}/assignments/plagiarism/originality-report/${submissionId}`,
+    { params: { assignment_id: assignmentId } }
+  );
+  return response.data;
+};
+
+// 获取查重设置
+export const getPlagiarismSettings = async (): Promise<PlagiarismSettings> => {
+  const response = await apiClient.get<PlagiarismSettings>(
+    `${API_V1_PREFIX}/assignments/plagiarism/settings`
+  );
+  return response.data;
+};
+
+// 更新查重设置
+export const updatePlagiarismSettings = async (
+  settings: PlagiarismSettings
+): Promise<PlagiarismSettings> => {
+  const response = await apiClient.put<PlagiarismSettings>(
+    `${API_V1_PREFIX}/assignments/plagiarism/settings`,
+    settings
   );
   return response.data;
 };

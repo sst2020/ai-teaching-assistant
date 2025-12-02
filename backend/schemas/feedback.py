@@ -42,6 +42,18 @@ class TemplateCategory(str, Enum):
     STYLE = "style"
     COMPLEXITY = "complexity"
     NAMING = "naming"
+    PERFORMANCE = "performance"
+    ERROR_HANDLING = "error_handling"
+    TESTING = "testing"
+    ALGORITHM = "algorithm"
+
+
+class TemplateTone(str, Enum):
+    """Tone variants for feedback templates."""
+    NEUTRAL = "neutral"
+    ENCOURAGING = "encouraging"
+    STRICT = "strict"
+    PROFESSIONAL = "professional"
 
 
 class AIProvider(str, Enum):
@@ -57,6 +69,36 @@ class AIInteractionType(str, Enum):
     EXPLAIN_CODE = "explain_code"
     SUGGEST_IMPROVEMENTS = "suggest_improvements"
     ANSWER_QUESTION = "answer_question"
+
+
+class FeedbackDetailLevel(str, Enum):
+    """Detail level for feedback generation."""
+    BRIEF = "brief"           # 简洁 - 只包含关键点
+    STANDARD = "standard"     # 标准 - 适中的详细程度
+    DETAILED = "detailed"     # 详细 - 包含更多解释
+    COMPREHENSIVE = "comprehensive"  # 全面 - 包含所有细节和示例
+
+
+class SuggestionDifficulty(str, Enum):
+    """Difficulty level for improvement suggestions."""
+    EASY = "easy"       # 立即可做 - 简单修改
+    MEDIUM = "medium"   # 需要学习 - 需要一些学习
+    HARD = "hard"       # 进阶挑战 - 需要深入学习
+
+
+class StudentLevel(str, Enum):
+    """Student skill level."""
+    BEGINNER = "beginner"         # 初学者
+    INTERMEDIATE = "intermediate"  # 中级
+    ADVANCED = "advanced"          # 高级
+
+
+class PerformanceTrend(str, Enum):
+    """Student performance trend."""
+    IMPROVING = "improving"     # 进步中
+    DECLINING = "declining"     # 退步中
+    STABLE = "stable"           # 稳定
+    FLUCTUATING = "fluctuating" # 波动
 
 
 # ============================================
@@ -182,6 +224,115 @@ class AnswerQuestionResponse(BaseModel):
 
 
 # ============================================
+# Personalized Feedback Schemas
+# ============================================
+
+class ProgressiveSuggestion(BaseModel):
+    """A progressive improvement suggestion with difficulty and time estimate."""
+    suggestion_id: str = Field(..., description="Unique suggestion ID")
+    difficulty: SuggestionDifficulty = Field(..., description="Difficulty level")
+    title: str = Field(..., description="Suggestion title")
+    title_zh: str = Field(..., description="Suggestion title in Chinese")
+    description: str = Field(..., description="Detailed description")
+    description_zh: str = Field(..., description="Description in Chinese")
+    estimated_time: str = Field(..., description="Estimated time to implement (e.g., '5 minutes', '1 hour')")
+    estimated_time_zh: str = Field(..., description="Estimated time in Chinese")
+    code_example: Optional[str] = Field(None, description="Example code if applicable")
+    learning_resources: List[str] = Field(default_factory=list, description="Related learning resources")
+    order: int = Field(1, description="Order in the learning path")
+
+
+class LearningPath(BaseModel):
+    """A structured learning path with progressive steps."""
+    path_id: str = Field(..., description="Unique path ID")
+    title: str = Field(..., description="Learning path title")
+    title_zh: str = Field(..., description="Title in Chinese")
+    description: str = Field(..., description="Path description")
+    description_zh: str = Field(..., description="Description in Chinese")
+    steps: List[ProgressiveSuggestion] = Field(default_factory=list)
+    total_estimated_time: str = Field(..., description="Total estimated time")
+    total_estimated_time_zh: str = Field(..., description="Total time in Chinese")
+
+
+class StudentHistoryAnalysis(BaseModel):
+    """Analysis of student's historical performance."""
+    student_id: str = Field(..., description="Student ID")
+    total_submissions: int = Field(0, description="Total number of submissions")
+    average_score: float = Field(0.0, description="Average score across submissions")
+    trend: PerformanceTrend = Field(PerformanceTrend.STABLE, description="Performance trend")
+    trend_zh: str = Field("稳定", description="Trend in Chinese")
+    level: StudentLevel = Field(StudentLevel.INTERMEDIATE, description="Estimated skill level")
+    level_zh: str = Field("中级", description="Level in Chinese")
+    strengths: List[str] = Field(default_factory=list, description="Identified strengths")
+    strengths_zh: List[str] = Field(default_factory=list, description="Strengths in Chinese")
+    weaknesses: List[str] = Field(default_factory=list, description="Areas needing improvement")
+    weaknesses_zh: List[str] = Field(default_factory=list, description="Weaknesses in Chinese")
+    recurring_issues: List[str] = Field(default_factory=list, description="Issues that appear repeatedly")
+    recurring_issues_zh: List[str] = Field(default_factory=list, description="Recurring issues in Chinese")
+    improvement_rate: float = Field(0.0, description="Rate of improvement (0-100)")
+    recent_scores: List[float] = Field(default_factory=list, description="Recent submission scores")
+
+
+class PersonalizedFeedbackRequest(BaseModel):
+    """Request for personalized feedback generation."""
+    code: str = Field(..., description="Source code to analyze")
+    language: str = Field("python", description="Programming language")
+    student_id: str = Field(..., description="Student ID for historical context")
+    submission_id: Optional[str] = Field(None, description="Current submission ID")
+    assignment_id: Optional[str] = Field(None, description="Assignment ID")
+    detail_level: FeedbackDetailLevel = Field(FeedbackDetailLevel.STANDARD, description="Detail level")
+    tone: FeedbackTone = Field(FeedbackTone.PROFESSIONAL, description="Feedback tone")
+    include_learning_path: bool = Field(True, description="Include progressive learning path")
+    include_history_analysis: bool = Field(True, description="Include historical analysis")
+    max_suggestions: int = Field(5, ge=1, le=20, description="Maximum suggestions")
+
+
+class PersonalizedFeedback(BaseModel):
+    """Complete personalized feedback with history context."""
+    feedback_id: str = Field(..., description="Unique feedback ID")
+    student_id: str = Field(..., description="Student ID")
+    submission_id: Optional[str] = Field(None)
+    generated_at: datetime = Field(default_factory=datetime.utcnow)
+
+    # Core feedback
+    overall_score: float = Field(..., ge=0, le=100)
+    overall_grade: str = Field(..., description="Letter grade A-F")
+    summary: str = Field(..., description="Overall feedback summary")
+    summary_zh: str = Field(..., description="Summary in Chinese")
+
+    # Personalization
+    personalized_message: str = Field(..., description="Personalized message based on history")
+    personalized_message_zh: str = Field(..., description="Personalized message in Chinese")
+
+    # History analysis
+    history_analysis: Optional[StudentHistoryAnalysis] = Field(None)
+
+    # Categorized feedback
+    categories: List[CategoryFeedback] = Field(default_factory=list)
+
+    # Progressive suggestions
+    suggestions: List[ProgressiveSuggestion] = Field(default_factory=list)
+    learning_path: Optional[LearningPath] = Field(None)
+
+    # Encouragement
+    encouragement: str = Field("", description="Encouraging message")
+    encouragement_zh: str = Field("", description="Encouragement in Chinese")
+
+    # Metadata
+    tone: FeedbackTone = Field(FeedbackTone.PROFESSIONAL)
+    detail_level: FeedbackDetailLevel = Field(FeedbackDetailLevel.STANDARD)
+    language: str = Field("python")
+
+
+class PersonalizedFeedbackResponse(BaseModel):
+    """Response for personalized feedback generation."""
+    success: bool = Field(True)
+    feedback: PersonalizedFeedback
+    message: str = Field("个性化评语生成成功")
+    processing_time_ms: Optional[float] = Field(None)
+
+
+# ============================================
 # Template Schemas
 # ============================================
 
@@ -196,6 +347,8 @@ class FeedbackTemplateBase(BaseModel):
     tags: List[str] = Field(default_factory=list, description="Searchable tags")
     variables: List[str] = Field(default_factory=list, description="Available placeholder variables")
     is_active: bool = Field(True, description="Whether template is active")
+    tone: Optional[TemplateTone] = Field(TemplateTone.NEUTRAL, description="Template tone variant")
+    locale: Optional[str] = Field("en", description="Template locale (e.g., 'en', 'zh-CN')")
 
 
 class FeedbackTemplateCreate(FeedbackTemplateBase):
@@ -214,6 +367,8 @@ class FeedbackTemplateUpdate(BaseModel):
     tags: Optional[List[str]] = None
     variables: Optional[List[str]] = None
     is_active: Optional[bool] = None
+    tone: Optional[TemplateTone] = None
+    locale: Optional[str] = None
 
 
 class FeedbackTemplateResponse(FeedbackTemplateBase):
@@ -233,6 +388,23 @@ class FeedbackTemplateListResponse(BaseModel):
     total: int
     page: int
     page_size: int
+
+
+class TemplateSearchRequest(BaseModel):
+    """Request for advanced template search."""
+    query: Optional[str] = Field(None, description="Search query for name, title, message, tags")
+    categories: Optional[List[TemplateCategory]] = Field(None, description="Filter by categories")
+    languages: Optional[List[str]] = Field(None, description="Filter by languages")
+    tones: Optional[List[TemplateTone]] = Field(None, description="Filter by tones")
+    locales: Optional[List[str]] = Field(None, description="Filter by locales")
+    severities: Optional[List[str]] = Field(None, description="Filter by severities")
+    tags: Optional[List[str]] = Field(None, description="Filter by tags (any match)")
+    is_active: Optional[bool] = Field(None, description="Filter by active status")
+    min_usage_count: Optional[int] = Field(None, ge=0, description="Minimum usage count")
+    page: int = Field(1, ge=1, description="Page number")
+    page_size: int = Field(20, ge=1, le=100, description="Items per page")
+    sort_by: Optional[str] = Field("name", description="Sort field: name, usage_count, created_at")
+    sort_order: Optional[str] = Field("asc", description="Sort order: asc, desc")
 
 
 # ============================================

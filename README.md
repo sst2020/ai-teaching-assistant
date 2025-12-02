@@ -15,6 +15,9 @@ The Minimum Viable Product (MVP) is now complete with full frontend-backend inte
 | Grades Viewing | ✅ Complete |
 | Student Dashboard | ✅ Complete |
 | API Documentation | ✅ Complete |
+| Enhanced Code Analysis | ✅ Complete |
+| Security Analysis | ✅ Complete |
+| Performance Analysis | ✅ Complete |
 
 **Quick Start:**
 ```bash
@@ -41,6 +44,9 @@ This project consists of two main components:
 - 📤 **Submission Tracking**: Track student submissions with status updates
 - 🤖 **AI-Powered Grading**: Automated evaluation of code and essay submissions
 - 🔍 **Code Analysis**: Static analysis with PEP 8 compliance and complexity metrics
+- 📊 **Advanced Quality Metrics**: Cyclomatic/cognitive complexity, maintainability index, code duplication detection
+- 🛡️ **Security Analysis**: Bandit integration for vulnerability detection with Chinese translations
+- ⚡ **Performance Analysis**: Anti-pattern detection, best practices evaluation
 - 🔒 **Plagiarism Detection**: AST-based similarity detection for code submissions
 - 💬 **Q&A System**: AI-powered question answering with teacher escalation
 - 🎨 **Modern UI**: Material Design 3 with accessibility features

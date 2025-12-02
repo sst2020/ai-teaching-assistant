@@ -1,7 +1,15 @@
 """
 API endpoints for code analysis.
+
+Provides comprehensive code analysis including:
+- Code quality analysis (complexity, maintainability, duplication)
+- Linting (Pylint integration)
+- Security analysis (Bandit integration)
+- Performance analysis (anti-patterns, best practices)
+- Comprehensive analysis (all of the above)
 """
 import logging
+import asyncio
 from typing import Optional, List
 from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,7 +19,15 @@ from schemas.analysis_rules import (
     AnalysisRequest, AnalysisResultResponse, BatchAnalysisRequest,
     BatchAnalysisResponse, FullAnalysisResult, RuleSet, AnalysisRule
 )
+from schemas.analysis import (
+    AnalysisCodeRequest, CodeQualityResult, LintRequest, LintResult,
+    SecurityRequest, SecurityResult, PerformanceRequest, PerformanceResult,
+    ComprehensiveRequest, ComprehensiveAnalysisResult
+)
 from services.enhanced_analysis_service import enhanced_analysis_service, EnhancedAnalysisService
+from services.code_analyzer import code_quality_analyzer
+from services.linter import linter_service
+from services.security_analyzer import security_analyzer, performance_analyzer
 from utils.crud import crud_code_file, crud_analysis_result
 
 logger = logging.getLogger(__name__)
@@ -295,3 +311,254 @@ async def get_analysis_summary(
         "files": analyzed_files,
         "average_score": round(sum(f["score"] for f in analyzed_files) / len(analyzed_files), 1) if analyzed_files else 0
     }
+
+
+# ============================================
+# New Advanced Analysis Endpoints
+# ============================================
+
+@router.post("/quality", response_model=CodeQualityResult)
+async def analyze_code_quality(request: AnalysisCodeRequest):
+    """
+    Perform advanced code quality analysis.
+
+    Analyzes code for:
+    - Cyclomatic complexity (using radon)
+    - Cognitive complexity
+    - Code duplication detection
+    - Maintainability index
+    - Function-level metrics
+
+    Returns detailed metrics and recommendations for improvement.
+    """
+    try:
+        result = await asyncio.wait_for(
+            code_quality_analyzer.analyze(request),
+            timeout=request.timeout
+        )
+        return result
+    except asyncio.TimeoutError:
+        raise HTTPException(
+            status_code=408,
+            detail=f"分析超时（超过 {request.timeout} 秒）"
+        )
+    except Exception as e:
+        logger.error(f"Code quality analysis failed: {e}")
+        raise HTTPException(status_code=500, detail=f"分析失败: {str(e)}")
+
+
+@router.post("/lint", response_model=LintResult)
+async def lint_code(request: LintRequest):
+    """
+    Perform linting analysis using Pylint.
+
+    Checks code for:
+    - Convention violations (PEP 8)
+    - Refactoring suggestions
+    - Warnings and errors
+    - Code style issues
+
+    Returns issues with Chinese explanations and fix suggestions.
+    """
+    try:
+        result = await linter_service.lint(request)
+        return result
+    except Exception as e:
+        logger.error(f"Linting failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Lint 分析失败: {str(e)}")
+
+
+@router.post("/security", response_model=SecurityResult)
+async def analyze_security(request: SecurityRequest):
+    """
+    Perform security vulnerability analysis.
+
+    Uses Bandit to detect:
+    - Hardcoded passwords and secrets
+    - SQL injection vulnerabilities
+    - Command injection risks
+    - Insecure function usage
+    - Cryptographic issues
+
+    Returns issues with severity levels and remediation advice.
+    """
+    try:
+        result = await security_analyzer.analyze(request)
+        return result
+    except Exception as e:
+        logger.error(f"Security analysis failed: {e}")
+        raise HTTPException(status_code=500, detail=f"安全分析失败: {str(e)}")
+
+
+@router.post("/performance", response_model=PerformanceResult)
+async def analyze_performance(request: PerformanceRequest):
+    """
+    Perform performance and best practices analysis.
+
+    Detects:
+    - Inefficient algorithms (O(n²) patterns)
+    - Memory issues (large file reads, memory leaks)
+    - Blocking operations
+    - Best practice violations
+
+    Returns issues with performance impact and optimization suggestions.
+    """
+    try:
+        result = await performance_analyzer.analyze(request)
+        return result
+    except Exception as e:
+        logger.error(f"Performance analysis failed: {e}")
+        raise HTTPException(status_code=500, detail=f"性能分析失败: {str(e)}")
+
+
+@router.post("/comprehensive", response_model=ComprehensiveAnalysisResult)
+async def analyze_comprehensive(request: ComprehensiveRequest):
+    """
+    Perform comprehensive code analysis.
+
+    Combines all analysis types:
+    - Code quality (complexity, maintainability)
+    - Linting (style, conventions)
+    - Security (vulnerabilities)
+    - Performance (anti-patterns, best practices)
+
+    Returns a unified report with overall score and recommendations.
+    """
+    import uuid
+    from datetime import datetime, timezone
+
+    try:
+        analysis_id = str(uuid.uuid4())
+        results = {}
+        all_recommendations = []
+
+        # Run analyses in parallel where possible
+        tasks = []
+
+        if request.include_quality:
+            quality_req = AnalysisCodeRequest(
+                code=request.code,
+                language=request.language,
+                timeout=request.timeout
+            )
+            tasks.append(("quality", code_quality_analyzer.analyze(quality_req)))
+
+        if request.include_lint:
+            lint_req = LintRequest(code=request.code, language=request.language)
+            tasks.append(("lint", linter_service.lint(lint_req)))
+
+        if request.include_security:
+            security_req = SecurityRequest(code=request.code, language=request.language)
+            tasks.append(("security", security_analyzer.analyze(security_req)))
+
+        if request.include_performance:
+            perf_req = PerformanceRequest(
+                code=request.code,
+                language=request.language,
+                check_best_practices=True
+            )
+            tasks.append(("performance", performance_analyzer.analyze(perf_req)))
+
+        # Execute all tasks with timeout
+        async def run_with_timeout(name, coro):
+            try:
+                return name, await asyncio.wait_for(coro, timeout=request.timeout)
+            except asyncio.TimeoutError:
+                logger.warning(f"{name} analysis timed out")
+                return name, None
+            except Exception as e:
+                logger.error(f"{name} analysis failed: {e}")
+                return name, None
+
+        completed = await asyncio.gather(
+            *[run_with_timeout(name, coro) for name, coro in tasks]
+        )
+
+        for name, result in completed:
+            if result:
+                results[name] = result
+                if hasattr(result, 'recommendations'):
+                    all_recommendations.extend(result.recommendations)
+
+        # Calculate overall score
+        scores = []
+        if "quality" in results:
+            scores.append(results["quality"].score)
+        if "lint" in results:
+            scores.append(results["lint"].score)
+        if "security" in results:
+            scores.append(results["security"].score)
+        if "performance" in results:
+            scores.append(results["performance"].score)
+
+        overall_score = sum(scores) / len(scores) if scores else 0
+
+        # Determine grade
+        if overall_score >= 90:
+            grade = "A"
+        elif overall_score >= 80:
+            grade = "B"
+        elif overall_score >= 70:
+            grade = "C"
+        elif overall_score >= 60:
+            grade = "D"
+        else:
+            grade = "F"
+
+        # Generate summary
+        summary_parts = []
+        if "quality" in results:
+            summary_parts.append(f"代码质量: {results['quality'].grade}")
+        if "lint" in results:
+            summary_parts.append(f"规范检查: {results['lint'].total_issues} 个问题")
+        if "security" in results:
+            summary_parts.append(f"安全分析: {results['security'].total_issues} 个问题")
+        if "performance" in results:
+            summary_parts.append(f"性能分析: {results['performance'].total_issues} 个问题")
+
+        summary = "综合分析完成。" + "；".join(summary_parts) + "。"
+
+        # Collect metrics
+        metrics = {
+            "overall_score": round(overall_score, 1),
+            "grade": grade,
+            "analyses_completed": len(results),
+            "analyses_requested": len(tasks),
+        }
+
+        if "quality" in results:
+            metrics["quality_score"] = results["quality"].score
+            metrics["maintainability_index"] = results["quality"].metrics.maintainability_index
+            metrics["avg_complexity"] = results["quality"].metrics.avg_cyclomatic_complexity
+
+        if "lint" in results:
+            metrics["lint_score"] = results["lint"].score
+            metrics["lint_issues"] = results["lint"].total_issues
+
+        if "security" in results:
+            metrics["security_score"] = results["security"].score
+            metrics["security_issues"] = results["security"].total_issues
+            metrics["high_severity_issues"] = results["security"].high_severity
+
+        if "performance" in results:
+            metrics["performance_score"] = results["performance"].score
+            metrics["performance_issues"] = results["performance"].total_issues
+
+        return ComprehensiveAnalysisResult(
+            analysis_id=analysis_id,
+            analyzed_at=datetime.now(timezone.utc),
+            language=request.language,
+            overall_score=round(overall_score, 1),
+            grade=grade,
+            quality=results.get("quality"),
+            lint=results.get("lint"),
+            security=results.get("security"),
+            performance=results.get("performance"),
+            summary=summary,
+            recommendations=list(set(all_recommendations))[:10],  # Dedupe and limit
+            metrics=metrics
+        )
+
+    except Exception as e:
+        logger.error(f"Comprehensive analysis failed: {e}")
+        raise HTTPException(status_code=500, detail=f"综合分析失败: {str(e)}")

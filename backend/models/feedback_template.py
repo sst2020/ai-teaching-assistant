@@ -22,6 +22,18 @@ class TemplateCategory(str, PyEnum):
     STYLE = "style"
     COMPLEXITY = "complexity"
     NAMING = "naming"
+    PERFORMANCE = "performance"
+    ERROR_HANDLING = "error_handling"
+    TESTING = "testing"
+    ALGORITHM = "algorithm"
+
+
+class TemplateTone(str, PyEnum):
+    """Tone variants for feedback templates."""
+    NEUTRAL = "neutral"
+    ENCOURAGING = "encouraging"
+    STRICT = "strict"
+    PROFESSIONAL = "professional"
 
 
 class FeedbackTemplate(Base, TimestampMixin):
@@ -59,6 +71,14 @@ class FeedbackTemplate(Base, TimestampMixin):
     variables: Mapped[Optional[str]] = mapped_column(JSON, nullable=True, default=list)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     usage_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    # New fields for enhanced template system
+    tone: Mapped[Optional[str]] = mapped_column(
+        String(20),
+        nullable=True,
+        default=TemplateTone.NEUTRAL.value,
+        index=True
+    )
+    locale: Mapped[Optional[str]] = mapped_column(String(10), nullable=True, default="en", index=True)
     
     def __repr__(self) -> str:
         return f"<FeedbackTemplate(id={self.id}, name='{self.name}', category='{self.category}')>"
@@ -97,6 +117,8 @@ class FeedbackTemplate(Base, TimestampMixin):
             "variables": self.variables or [],
             "is_active": self.is_active,
             "usage_count": self.usage_count,
+            "tone": self.tone,
+            "locale": self.locale,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None
         }

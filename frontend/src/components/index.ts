@@ -8,4 +8,6 @@ export * from './layout';
 export * from './Dashboard';
 export * from './CodeAnalysis';
 export * from './QAInterface';
+export * from './PlagiarismCheck';
+export * from './ReportAnalysis';
 

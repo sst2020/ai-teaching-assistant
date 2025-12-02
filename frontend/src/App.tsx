@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
@@ -6,11 +6,14 @@ import { Header } from './components/layout';
 import { Dashboard } from './components/Dashboard';
 import { CodeAnalysis } from './components/CodeAnalysis';
 import { QAInterface } from './components/QAInterface';
+import { PlagiarismCheck } from './components/PlagiarismCheck';
+import { ReportAnalysis } from './components/ReportAnalysis';
+import { DebugPanel } from './components/common/DebugPanel';
 import { Login, Register, StudentDashboard, SubmitAssignment, Grades } from './pages';
 import './App.css';
 
-// Layout component for authenticated pages
-const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Layout component for authenticated pages
+  const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
 
   // Helper to determine active tab based on current path
@@ -18,6 +21,8 @@ const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({ children
     const path = location.pathname;
     if (path.startsWith('/code-analysis')) return 'code-analysis';
     if (path.startsWith('/qa')) return 'qa';
+    if (path.startsWith('/plagiarism')) return 'plagiarism';
+    if (path.startsWith('/report-analysis')) return 'report-analysis';
     return 'dashboard';
   };
 
@@ -36,6 +41,12 @@ const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({ children
 };
 
 const App: React.FC = () => {
+  const [debugPanelVisible, setDebugPanelVisible] = useState(false);
+
+  // 检查是否启用调试面板
+  const isDebugMode = process.env.NODE_ENV === 'development' &&
+                     process.env.REACT_APP_ENABLE_DEBUG_PANEL === 'true';
+
   return (
     <AuthProvider>
       <ToastProvider>
@@ -72,6 +83,22 @@ const App: React.FC = () => {
             }
           />
           <Route
+            path="/plagiarism"
+            element={
+              <AuthenticatedLayout>
+                <PlagiarismCheck />
+              </AuthenticatedLayout>
+            }
+          />
+	          <Route
+	            path="/report-analysis"
+	            element={
+	              <AuthenticatedLayout>
+	                <ReportAnalysis />
+	              </AuthenticatedLayout>
+	            }
+	          />
+          <Route
             path="/student-dashboard"
             element={
               <AuthenticatedLayout>
@@ -99,6 +126,14 @@ const App: React.FC = () => {
           {/* Fallback route for unknown paths */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
+
+        {/* Debug Panel - 仅在开发环境下显示 */}
+        {isDebugMode && (
+          <DebugPanel
+            isVisible={debugPanelVisible}
+            onToggle={() => setDebugPanelVisible(!debugPanelVisible)}
+          />
+        )}
         </div>
       </ToastProvider>
     </AuthProvider>

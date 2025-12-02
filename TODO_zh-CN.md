@@ -1,7 +1,7 @@
 # AI 智能教学助手 - 项目待办事项清单
 
-> **最后更新：** 2024年12月
-> **项目状态：** MVP 已完成 ✅
+> **最后更新：** 2024年12月2日
+> **项目状态：** MVP 已完成 ✅ + 增强调试环境 ✅
 > **复杂度指标：** 🟢 简单 | 🟡 中等 | 🔴 困难 | ⏱️ 耗时较长
 
 本文档概述了 AI 智能教学助手项目的剩余任务、优先级和贡献机会。
@@ -52,7 +52,7 @@
 ## ✅ 已完成功能
 
 > **状态：** 已实现
-> **最后更新：** 2024年11月
+> **最后更新：** 2024年12月
 
 ### 智能反馈生成系统 ✅
 
@@ -123,6 +123,176 @@
 
 - [x] 🟢 **测试** - `backend/tests/test_feedback_system.py`
   - 反馈生成、AI 服务和模板的综合测试
+
+### 增强代码分析系统 ✅
+
+> **完成时间：** 2024年12月
+
+#### 任务 2.1.1：高级代码质量分析 ✅
+
+- [x] 🟡 **CodeQualityAnalyzer** - `backend/services/code_analyzer.py`
+  - 使用 `radon` 库计算圈复杂度
+  - 使用 AST 访问者模式检测认知复杂度
+  - 使用 AST 规范化检测代码重复
+  - 可维护性指数计算（A-F 评级）
+  - 函数级复杂度指标
+
+- [x] 🟢 **分析模式** - `backend/schemas/analysis.py`
+  - 所有分析类型的 Pydantic 模型
+  - 枚举：ComplexityGrade、MaintainabilityRating、IssueSeverity、SecuritySeverity、PerformanceIssueType
+  - 质量、规范、安全、性能和综合分析的请求/响应模型
+
+#### 任务 2.1.2：编程规范检查器 ✅
+
+- [x] 🟡 **LinterService** - `backend/services/linter.py`
+  - Pylint 集成用于 Python 代码检查
+  - 可配置的规则系统
+  - 200+ 条 Pylint 消息的中文翻译
+  - 常见问题的修复建议
+
+#### 任务 2.1.3：性能与安全分析 ✅
+
+- [x] 🟡 **SecurityAnalyzer** - `backend/services/security_analyzer.py`
+  - Bandit 集成用于安全扫描
+  - Bandit 不可用时的回退模式匹配
+  - 安全问题的中文翻译
+  - 基于严重性的评分
+
+- [x] 🟡 **PerformanceAnalyzer** - `backend/services/security_analyzer.py`
+  - 性能反模式检测（嵌套循环、内存问题、阻塞操作）
+  - 最佳实践评估系统
+  - 所有建议的中文翻译
+
+- [x] 🟢 **分析 API 端点** - `backend/api/analysis.py`
+  - `POST /api/v1/analysis/quality` - 代码质量分析
+  - `POST /api/v1/analysis/lint` - 编程规范检查
+  - `POST /api/v1/analysis/security` - 安全漏洞分析
+  - `POST /api/v1/analysis/performance` - 性能分析
+  - `POST /api/v1/analysis/comprehensive` - 综合分析（包含以上所有）
+
+- [x] 🟢 **测试** - `backend/tests/test_advanced_analysis.py`
+  - 25 个全面的分析服务测试
+  - CodeQualityAnalyzer、LinterService、SecurityAnalyzer、PerformanceAnalyzer 测试
+  - 综合分析的集成测试
+
+### 智能评语系统增强 ✅
+
+> **完成时间：** 2024年12月
+
+#### 任务 2.2.1：个性化评语生成 ✅
+
+- [x] 🟡 **增强的 FeedbackGenerationService** - `backend/services/feedback_service.py`
+  - 学生历史分析（趋势检测、水平判定）
+  - 表现趋势计算（进步、退步、稳定）
+  - 学生水平判定（初学者、中级、高级）
+  - 改进速度计算
+  - 基于历史的个性化消息生成
+  - 渐进式建议（带难度等级）
+  - 学习路径创建（带预估时间）
+  - 所有反馈的中文翻译支持
+
+- [x] 🟢 **个性化反馈 Schemas** - `backend/schemas/feedback.py`
+  - StudentLevel、PerformanceTrend、SuggestionDifficulty、FeedbackDetailLevel 枚举
+  - StudentHistoryAnalysis、PersonalizedFeedbackRequest、PersonalizedFeedbackResponse 模型
+  - ProgressiveSuggestion、LearningPathItem 模型
+
+- [x] 🟢 **个性化反馈 API** - `backend/api/personalized_feedback.py`
+  - `POST /api/v1/personalized-feedback/generate` - 生成个性化反馈
+  - `GET /api/v1/personalized-feedback/history/{student_id}` - 获取学生历史分析
+  - `GET /api/v1/personalized-feedback/learning-path/{student_id}` - 获取学习路径
+
+- [x] 🟢 **测试** - `backend/tests/test_personalized_feedback.py`
+  - 36 个个性化反馈生成的全面测试
+
+#### 任务 2.2.2：多维度评价系统 ✅
+
+- [x] 🟡 **MultiDimensionalEvaluator** - `backend/services/multi_dimensional_evaluator.py`
+  - 6 个评价维度：正确性、效率、可读性、结构、最佳实践、文档
+  - 雷达图数据生成（用于可视化）
+  - 班级对比统计（百分位、排名、平均分）
+  - 维度特定反馈生成
+  - 所有评价的中文翻译
+
+- [x] 🟢 **评价 Schemas** - `backend/schemas/evaluation.py`
+  - EvaluationDimension 枚举
+  - DimensionScore、RadarChartData、ClassComparisonStats 模型
+  - MultiDimensionalEvaluationRequest、MultiDimensionalEvaluationResponse 模型
+
+- [x] 🟢 **评价 API** - `backend/api/evaluation.py`
+  - `POST /api/v1/evaluation/multi-dimensional` - 多维度评价
+  - `GET /api/v1/evaluation/radar-chart/{submission_id}` - 获取雷达图数据
+  - `GET /api/v1/evaluation/class-comparison/{student_id}` - 获取班级对比
+
+- [x] 🟢 **测试** - `backend/tests/test_multi_dimensional_evaluation.py`
+  - 25 个多维度评价的全面测试
+
+### 前后端协同调试环境 ✅
+
+> **完成时间：** 2024年12月
+
+#### 增强调试环境 + 一键启动系统 ✅
+
+- [x] 🟡 **环境检查脚本** - `scripts/check-environment.js`
+  - 自动化 Node.js、Python 和依赖验证
+  - 彩色控制台输出和全面的系统检查
+  - 跨平台兼容性检测
+
+- [x] 🟢 **增强环境配置** - `frontend/.env`, `backend/.env`
+  - 前端调试设置：DEBUG_MODE、API_LOGGING、PERFORMANCE_MONITORING
+  - 后端调试设置：REQUEST_LOGGING、CORS 配置、LOG_LEVEL
+  - 开发环境优化的环境变量
+
+- [x] 🟡 **增强API客户端调试功能** - `frontend/src/services/api.ts`
+  - 详细日志记录的请求/响应拦截器
+  - 性能计时和请求ID关联
+  - 错误分类和会话存储集成
+  - Axios 元数据的 TypeScript 模块声明
+
+- [x] 🟡 **实时调试面板** - `frontend/src/components/common/DebugPanel.tsx`
+  - 带性能指标的实时API调用监控
+  - 错误跟踪和分类
+  - 响应式设计的选项卡界面
+  - 持久化调试数据的会话存储集成
+
+- [x] 🟡 **高级后端日志系统** - `backend/utils/logger.py`, `backend/app/main.py`
+  - 带请求关联的彩色控制台格式化器
+  - 带计时指标的性能监控
+  - 带上下文变量的结构化日志
+  - 详细跟踪的请求/响应中间件
+
+- [x] 🟡 **一键启动系统** - `scripts/dev-start.js`, `dev-start.bat`, `dev-start.sh`
+  - 并行前后端服务启动
+  - 自动浏览器打开和健康检查
+  - 跨平台支持（Windows/Unix）
+  - 优雅关闭和进程管理
+
+- [x] 🟢 **开发文档** - `docs/DEVELOPMENT_SETUP.md`
+  - 带故障排除的全面设置指南
+  - 功能概述和使用说明
+  - 系统要求和配置详情
+
+#### 任务 2.2.3：扩展反馈模板库 ✅
+
+- [x] 🟡 **扩展模板** - `backend/scripts/seed_feedback_templates.py`
+  - 从 29 个扩展到 103 个模板
+  - 语言特定模板：Python (10)、JavaScript/TypeScript (10)、Java (7)、C++ (7)
+  - 性能模板 (8)
+  - 错误处理模板 (7)
+  - 测试模板 (5)
+  - 算法模板 (5)
+  - 语气变体：鼓励型 (4)、严格/专业型 (4)
+  - 中文本地化模板 (12)
+
+- [x] 🟢 **增强的模板模型** - `backend/models/feedback_template.py`
+  - 添加 TemplateTone 枚举（NEUTRAL、ENCOURAGING、STRICT、PROFESSIONAL）
+  - 添加新分类：PERFORMANCE、ERROR_HANDLING、TESTING、ALGORITHM
+  - 添加 `tone` 和 `locale` 字段（带索引）
+
+- [x] 🟢 **增强的模板 API** - `backend/api/feedback_templates.py`
+  - `POST /api/v1/feedback-templates/search` - 高级搜索（多条件过滤）
+  - `GET /api/v1/feedback-templates/tones/list` - 列出可用语气
+  - `GET /api/v1/feedback-templates/stats/summary` - 模板统计
+  - 增强的列表端点（支持语气、本地化和排序过滤）
 
 #### 剩余设置步骤
 
@@ -324,6 +494,38 @@
   - 头部主题切换
   - 持久化偏好设置
   - CSS 变量已准备好用于主题切换
+
+### 开发工具增强
+
+- [ ] 🟡 **创建API测试工具页面** (P2)
+  - 创建 `frontend/src/components/DevTools/ApiTester.tsx`
+  - 在线API测试和请求构建器
+  - 响应查看器和历史记录
+  - **文件：** `frontend/src/components/DevTools/ApiTester.tsx`
+
+- [ ] 🟡 **添加性能监控组件** (P2)
+  - 创建 `frontend/src/components/DevTools/PerformanceMonitor.tsx`
+  - 实时API响应时间监控
+  - 内存使用和渲染性能跟踪
+  - **文件：** `frontend/src/components/DevTools/PerformanceMonitor.tsx`
+
+- [ ] 🟢 **增强错误边界组件** (P2)
+  - 升级 `frontend/src/components/common/ErrorBoundary.tsx`
+  - 添加错误报告和重试机制
+  - 调试信息显示
+  - **文件：** `frontend/src/components/common/ErrorBoundary.tsx`
+
+- [ ] 🟢 **添加服务健康检查自动化** (P2)
+  - 创建 `scripts/health-check.js`
+  - 定期前后端服务状态检查
+  - 失败时自动服务重启
+  - **文件：** `scripts/health-check.js`
+
+- [ ] 🟢 **优化package.json脚本** (P2)
+  - 更新 `frontend/package.json` 和根目录 `package.json`
+  - 添加调试相关的npm脚本
+  - 标准化开发命令
+  - **文件：** `frontend/package.json`, `package.json`
 
 ### API 集成 ✅
 

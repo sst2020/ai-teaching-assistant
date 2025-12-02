@@ -11,10 +11,13 @@ from contextlib import asynccontextmanager
 backend_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(backend_dir))
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+import time
+import os
 
 from core.config import settings
+from utils.logger import setup_logger, log_request_start, log_request_end, generate_request_id, set_request_id
 from core.database import async_engine, Base
 from api.health import router as health_router
 from api.auth import router as auth_router
@@ -24,16 +27,31 @@ from api.students import router as students_router
 from api.submissions import router as submissions_router
 from api.files import router as files_router
 from api.analysis import router as analysis_router
+from api.report_analysis import router as report_analysis_router
 from api.ai import router as ai_router
 from api.feedback_templates import router as feedback_templates_router
+from api.personalized_feedback import router as personalized_feedback_router
+from api.evaluation import router as evaluation_router
+
+# Setup enhanced logger
+logger = setup_logger(
+    name="ai_teaching_assistant",
+    level=os.getenv("LOG_LEVEL", "INFO"),
+    log_file="logs/app.log" if os.getenv("ENABLE_FILE_LOGGING", "false").lower() == "true" else None,
+    enable_colors=os.getenv("PRETTY_PRINT_LOGS", "true").lower() == "true",
+    pretty_print=os.getenv("PRETTY_PRINT_LOGS", "true").lower() == "true"
+)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager for startup and shutdown events."""
     # Startup
-    print(f"🚀 Starting {settings.APP_NAME} v{settings.APP_VERSION}")
-    print(f"📚 API Documentation available at: http://{settings.HOST}:{settings.PORT}/docs")
+    logger.info(f"🚀 Starting {settings.APP_NAME} v{settings.APP_VERSION}")
+    logger.info(f"📚 API Documentation available at: http://{settings.HOST}:{settings.PORT}/docs")
+    logger.info(f"🔧 Debug mode: {settings.DEBUG}")
+    logger.info(f"📊 Request logging: {os.getenv('ENABLE_REQUEST_LOGGING', 'false')}")
+    logger.info(f"⚡ Performance monitoring: {os.getenv('ENABLE_PERFORMANCE_MONITORING', 'false')}")
 
     # Initialize database tables
     async with async_engine.begin() as conn:
@@ -44,13 +62,64 @@ async def lifespan(app: FastAPI):
             FeedbackTemplate, AIInteraction
         )
         await conn.run_sync(Base.metadata.create_all)
-        print("✅ Database tables initialized")
+        logger.info("✅ Database tables initialized")
 
     yield
 
     # Shutdown
-    print(f"👋 Shutting down {settings.APP_NAME}")
+    logger.info(f"👋 Shutting down {settings.APP_NAME}")
     await async_engine.dispose()
+
+
+async def log_requests_middleware(request: Request, call_next):
+    """Enhanced request logging middleware with performance tracking"""
+
+    # Generate request ID
+    request_id = generate_request_id()
+    set_request_id(request_id)
+
+    # Add request ID to response headers
+    start_time = time.time()
+
+    # Log request start (if enabled)
+    if os.getenv("ENABLE_REQUEST_LOGGING", "false").lower() == "true":
+        log_request_start(request.method, str(request.url), request_id)
+
+        # Log request details in debug mode
+        if logger.level <= 10:  # DEBUG level
+            logger.debug(f"📋 Headers: {dict(request.headers)}")
+            if request.method in ["POST", "PUT", "PATCH"]:
+                # Note: We can't easily log request body here without consuming the stream
+                logger.debug(f"📦 Content-Type: {request.headers.get('content-type', 'N/A')}")
+
+    # Process request
+    try:
+        response = await call_next(request)
+
+        # Calculate response time
+        process_time = time.time() - start_time
+
+        # Add performance headers
+        response.headers["X-Request-ID"] = request_id
+        response.headers["X-Response-Time"] = f"{process_time:.3f}s"
+
+        # Log request completion
+        if os.getenv("ENABLE_REQUEST_LOGGING", "false").lower() == "true":
+            log_request_end(request.method, str(request.url), response.status_code, process_time)
+
+        # Performance monitoring
+        if os.getenv("ENABLE_PERFORMANCE_MONITORING", "false").lower() == "true":
+            if process_time > 2.0:
+                logger.warning(f"🐌 Slow request: {request.method} {request.url} took {process_time:.3f}s")
+            elif process_time > 1.0:
+                logger.info(f"⏰ Request: {request.method} {request.url} took {process_time:.3f}s")
+
+        return response
+
+    except Exception as e:
+        process_time = time.time() - start_time
+        logger.error(f"💥 Request failed: {request.method} {request.url} after {process_time:.3f}s - {str(e)}")
+        raise
 
 
 def create_application() -> FastAPI:
@@ -65,6 +134,9 @@ def create_application() -> FastAPI:
         openapi_url="/openapi.json",
         lifespan=lifespan
     )
+
+    # Add request logging middleware
+    app.middleware("http")(log_requests_middleware)
 
     # Configure CORS
     app.add_middleware(
@@ -84,8 +156,11 @@ def create_application() -> FastAPI:
     app.include_router(submissions_router, prefix=settings.API_V1_PREFIX)
     app.include_router(files_router, prefix=settings.API_V1_PREFIX)
     app.include_router(analysis_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(report_analysis_router, prefix=settings.API_V1_PREFIX)
     app.include_router(ai_router, prefix=settings.API_V1_PREFIX)
     app.include_router(feedback_templates_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(personalized_feedback_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(evaluation_router, prefix=settings.API_V1_PREFIX)
 
     return app
 

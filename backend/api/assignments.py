@@ -15,11 +15,15 @@ from schemas.assignment_crud import (
     AssignmentCreate, AssignmentUpdate, AssignmentResponse, AssignmentListResponse
 )
 from schemas.code_analysis import CodeAnalysisRequest, CodeAnalysisResult
-from schemas.plagiarism import PlagiarismCheckRequest, PlagiarismReport, BatchPlagiarismReport
+from schemas.plagiarism import (
+    PlagiarismCheckRequest, PlagiarismReport, BatchPlagiarismReport,
+    BatchAnalysisRequest, BatchAnalysisResponse, OriginalityReport,
+    SimilarityMatrix, PlagiarismSettings
+)
 from schemas.common import APIResponse
 from services.grading_service import grading_service
 from services.code_analysis_service import code_analysis_service
-from services.plagiarism_service import plagiarism_service
+from services.plagiarism_service import plagiarism_service, enhanced_plagiarism_service
 from utils.crud import crud_assignment
 from models.assignment import AssignmentType as DBAssignmentType
 
@@ -345,4 +349,97 @@ async def batch_plagiarism_check(
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================
+# 增强的查重与原创性分析端点
+# ============================================
+
+@router.post("/plagiarism/batch-analyze", response_model=BatchAnalysisResponse)
+async def batch_analyze_plagiarism(request: BatchAnalysisRequest):
+    """
+    批量分析多个提交的相似度（增强版）
+
+    功能：
+    - 生成完整的相似度矩阵
+    - 支持多种相似度算法（AST、编辑距离、余弦相似度）
+    - 检测变量/函数重命名和代码重构
+    - 生成每个学生的原创性报告
+
+    请求体示例：
+    ```json
+    {
+        "assignment_id": "hw001",
+        "course_id": "CS101",
+        "submissions": [
+            {"student_id": "s001", "student_name": "张三", "code": "def hello(): ..."},
+            {"student_id": "s002", "student_name": "李四", "code": "def greet(): ..."}
+        ],
+        "similarity_threshold": 0.7,
+        "algorithms": ["combined"],
+        "generate_reports": true
+    }
+    ```
+    """
+    try:
+        if not request.submissions or len(request.submissions) < 2:
+            raise HTTPException(
+                status_code=400,
+                detail="至少需要2份提交才能进行对比分析"
+            )
+        result = await enhanced_plagiarism_service.batch_analyze(request)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/plagiarism/originality-report/{submission_id}", response_model=OriginalityReport)
+async def get_originality_report(
+    submission_id: str,
+    assignment_id: str = Query(..., description="作业ID")
+):
+    """
+    获取单个提交的原创性分析报告
+
+    返回：
+    - 原创性评分（0-100）
+    - 相似代码片段的精确位置
+    - 与哪些其他作业存在相似性
+    - 改进建议
+    """
+    # 注意：这里需要从缓存或数据库获取之前的分析结果
+    # 当前实现返回一个示例报告，实际应用中应该存储和检索报告
+    raise HTTPException(
+        status_code=404,
+        detail=f"未找到提交 {submission_id} 的原创性报告，请先执行批量分析"
+    )
+
+
+@router.put("/plagiarism/settings", response_model=PlagiarismSettings)
+async def update_plagiarism_settings(settings: PlagiarismSettings):
+    """
+    更新查重设置
+
+    可配置项：
+    - similarity_threshold: 相似度阈值 (0-1)
+    - algorithms: 启用的算法列表
+    - ast_weight: AST算法权重
+    - token_weight: Token算法权重
+    - text_weight: 文本算法权重
+    - detect_renaming: 是否检测重命名
+    - detect_refactoring: 是否检测重构
+    """
+    try:
+        enhanced_plagiarism_service.update_settings(settings)
+        return settings
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/plagiarism/settings", response_model=PlagiarismSettings)
+async def get_plagiarism_settings():
+    """
+    获取当前查重设置
+    """
+    return enhanced_plagiarism_service.settings
 

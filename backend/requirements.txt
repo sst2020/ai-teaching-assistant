@@ -40,6 +40,8 @@ PyPDF2>=3.0.0
 # Code Analysis and Quality
 pycodestyle>=2.11.0
 radon>=6.0.0
+pylint>=3.0.0
+bandit>=1.7.0
 
 # Testing
 pytest>=7.4.0

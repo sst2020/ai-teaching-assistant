@@ -54,6 +54,18 @@ const Header: React.FC<HeaderProps> = () => {
           >
             💬 Q&A
           </NavLink>
+          <NavLink
+            to="/plagiarism"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            🔍 查重分析
+          </NavLink>
+          <NavLink
+            to="/report-analysis"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            📑 报告分析
+          </NavLink>
         </nav>
         <div className="header-status">
           <span className={`status-indicator ${backendStatus}`}></span>

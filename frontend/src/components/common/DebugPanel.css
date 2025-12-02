@@ -1,0 +1,275 @@
+/* Debug Panel Styles */
+.debug-panel-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #2196F3;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 10000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.debug-panel-toggle:hover {
+  background: #1976D2;
+  transform: scale(1.05);
+}
+
+.debug-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 600px;
+  max-height: 80vh;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  z-index: 10000;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.debug-panel.minimized {
+  height: 50px;
+}
+
+.debug-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f5f5f5;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.debug-panel-title {
+  font-weight: bold;
+  color: #333;
+}
+
+.debug-panel-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.minimize-btn, .close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.minimize-btn:hover, .close-btn:hover {
+  background: #e0e0e0;
+}
+
+.debug-panel-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.stat-value {
+  font-weight: bold;
+  color: #333;
+}
+
+.stat-value.error {
+  color: #f44336;
+}
+
+.clear-btn {
+  background: #ff5722;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.clear-btn:hover {
+  background: #e64a19;
+}
+
+.debug-panel-tabs {
+  display: flex;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  flex: 1;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  background: #e0e0e0;
+}
+
+.tab.active {
+  background: white;
+  color: #333;
+  font-weight: bold;
+  border-bottom: 2px solid #2196F3;
+}
+
+.debug-panel-content {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.debug-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.debug-table th {
+  background: #f5f5f5;
+  padding: 8px 6px;
+  text-align: left;
+  font-weight: bold;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+}
+
+.debug-table td {
+  padding: 6px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+
+.debug-table tr:hover {
+  background: #f9f9f9;
+}
+
+.method {
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: white;
+  text-align: center;
+  min-width: 50px;
+}
+
+.method-get { background: #4CAF50; }
+.method-post { background: #2196F3; }
+.method-put { background: #FF9800; }
+.method-delete { background: #F44336; }
+.method-patch { background: #9C27B0; }
+
+.url {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-badge {
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.slow {
+  color: #ff5722;
+  font-weight: bold;
+}
+
+.error-row {
+  background: #ffebee;
+}
+
+.error-message {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #d32f2f;
+}
+
+.logs-tab {
+  padding: 20px;
+  text-align: center;
+}
+
+.log-info p {
+  margin: 10px 0;
+  color: #666;
+}
+
+.open-devtools-btn {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.open-devtools-btn:hover {
+  background: #1976D2;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .debug-panel {
+    width: calc(100vw - 40px);
+    right: 20px;
+    left: 20px;
+  }
+  
+  .debug-panel-stats {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .stat-item {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

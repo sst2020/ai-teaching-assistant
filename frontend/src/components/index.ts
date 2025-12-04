@@ -11,3 +11,8 @@ export * from './QAInterface';
 export * from './PlagiarismCheck';
 export * from './ReportAnalysis';
 
+// Knowledge Base & Triage components
+export * from './KnowledgeBase';
+export * from './QATriage';
+export * from './TeacherDashboard';
+

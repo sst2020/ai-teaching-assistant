@@ -5,11 +5,15 @@ from typing import List, Optional
 from datetime import datetime
 import uuid
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from schemas.qa import (
     QuestionRequest, QuestionResponse, QuestionCategory, QuestionStatus,
     AIAnswer, QAAnalyticsReport, KnowledgeGap, EscalationRequest
 )
+from schemas.qa_log import QALogCreate, QALogResponse
 from services.ai_service import ai_service
+from services.qa_engine_service import qa_engine_service
 
 
 class QAService:
@@ -18,6 +22,36 @@ class QAService:
     def __init__(self):
         self._questions: dict = {}
         self.ai = ai_service
+        self.qa_engine = qa_engine_service
+
+    async def smart_answer(
+        self,
+        db: AsyncSession,
+        question: str,
+        user_id: Optional[str] = None,
+        user_name: Optional[str] = None,
+        session_id: Optional[str] = None
+    ) -> QALogResponse:
+        """
+        智能问答接口 - 使用知识库匹配和分诊逻辑
+
+        Args:
+            db: 数据库会话
+            question: 用户问题
+            user_id: 用户ID
+            user_name: 用户名
+            session_id: 会话ID
+
+        Returns:
+            QALogResponse: 问答日志响应
+        """
+        request = QALogCreate(
+            user_id=user_id,
+            user_name=user_name,
+            session_id=session_id,
+            question=question
+        )
+        return await self.qa_engine.process_question(db, request)
 
     async def answer_question(self, request: QuestionRequest) -> QuestionResponse:
         """Process and answer a student question using AI."""

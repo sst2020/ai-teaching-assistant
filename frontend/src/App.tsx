@@ -9,6 +9,7 @@ import { QAInterface } from './components/QAInterface';
 import { PlagiarismCheck } from './components/PlagiarismCheck';
 import { ReportAnalysis } from './components/ReportAnalysis';
 import { DebugPanel } from './components/common/DebugPanel';
+import { KnowledgeBase, QATriage, TeacherDashboard } from './components';
 import { Login, Register, StudentDashboard, SubmitAssignment, Grades } from './pages';
 import './App.css';
 
@@ -119,6 +120,38 @@ const App: React.FC = () => {
             element={
               <AuthenticatedLayout>
                 <Grades />
+              </AuthenticatedLayout>
+            }
+          />
+
+          {/* 智能问答分诊系统路由 */}
+          <Route
+            path="/smart-qa"
+            element={
+              <AuthenticatedLayout>
+                <React.Suspense fallback={<div>加载中...</div>}>
+                  <QATriage userId="current_user" userName="当前用户" />
+                </React.Suspense>
+              </AuthenticatedLayout>
+            }
+          />
+          <Route
+            path="/knowledge-base"
+            element={
+              <AuthenticatedLayout>
+                <React.Suspense fallback={<div>加载中...</div>}>
+                  <KnowledgeBase />
+                </React.Suspense>
+              </AuthenticatedLayout>
+            }
+          />
+          <Route
+            path="/teacher-dashboard"
+            element={
+              <AuthenticatedLayout>
+                <React.Suspense fallback={<div>加载中...</div>}>
+                  <TeacherDashboard teacherId="teacher_001" teacherName="教师" />
+                </React.Suspense>
               </AuthenticatedLayout>
             }
           />

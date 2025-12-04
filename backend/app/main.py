@@ -32,6 +32,8 @@ from api.ai import router as ai_router
 from api.feedback_templates import router as feedback_templates_router
 from api.personalized_feedback import router as personalized_feedback_router
 from api.evaluation import router as evaluation_router
+from api.knowledge_base import router as knowledge_base_router
+from api.triage import router as triage_router
 
 # Setup enhanced logger
 logger = setup_logger(
@@ -59,7 +61,7 @@ async def lifespan(app: FastAPI):
         from models import (
             Student, Assignment, Submission, GradingResult,
             Question, Answer, PlagiarismCheck, Rubric, CodeFile,
-            FeedbackTemplate, AIInteraction
+            FeedbackTemplate, AIInteraction, KnowledgeBaseEntry, QALog
         )
         await conn.run_sync(Base.metadata.create_all)
         logger.info("✅ Database tables initialized")
@@ -161,6 +163,8 @@ def create_application() -> FastAPI:
     app.include_router(feedback_templates_router, prefix=settings.API_V1_PREFIX)
     app.include_router(personalized_feedback_router, prefix=settings.API_V1_PREFIX)
     app.include_router(evaluation_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(knowledge_base_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(triage_router, prefix=settings.API_V1_PREFIX)
 
     return app
 

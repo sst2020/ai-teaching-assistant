@@ -91,17 +91,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const storedTokens = localStorage.getItem(TOKEN_KEY);
         const storedUser = localStorage.getItem(USER_KEY);
 
+        console.log('[AuthContext] Loading stored auth data...');
+        console.log('[AuthContext] storedTokens:', storedTokens ? 'exists' : 'null');
+        console.log('[AuthContext] storedUser:', storedUser ? 'exists' : 'null');
+
         if (storedTokens && storedUser) {
+          // Validate JSON before parsing
+          if (!storedTokens.startsWith('{') || !storedUser.startsWith('{')) {
+            console.error('[AuthContext] Invalid stored data format, clearing...');
+            throw new Error('Invalid stored data format');
+          }
           const tokens: AuthTokens = JSON.parse(storedTokens);
           const user: User = JSON.parse(storedUser);
           // Set the auth token for API requests
           setAuthToken(tokens.access_token);
           dispatch({ type: 'AUTH_SUCCESS', payload: { user, tokens } });
+          console.log('[AuthContext] Auth loaded successfully');
         } else {
+          console.log('[AuthContext] No stored auth data, setting loading to false');
           dispatch({ type: 'SET_LOADING', payload: false });
         }
       } catch (error) {
-        console.error('Error loading stored auth:', error);
+        console.error('[AuthContext] Error loading stored auth:', error);
         localStorage.removeItem(TOKEN_KEY);
         localStorage.removeItem(USER_KEY);
         setAuthToken(null);

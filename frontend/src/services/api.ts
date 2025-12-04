@@ -52,6 +52,26 @@ import {
   ReportAnalysisRequest,
   ReportAnalysisResponse,
 } from '../types/reportAnalysis';
+import {
+  KnowledgeBaseEntry,
+  KnowledgeBaseCreateRequest,
+  KnowledgeBaseUpdateRequest,
+  KnowledgeBaseSearchRequest,
+  KnowledgeBaseSearchResponse,
+  KnowledgeBaseListResponse,
+  KnowledgeBaseStats,
+  CategoriesResponse,
+} from '../types/knowledgeBase';
+import {
+  TriageRequest,
+  TriageResponse,
+  PendingQueueResponse,
+  TeacherTakeoverRequest,
+  TeacherAnswerRequest,
+  TeacherAnswerResponse,
+  TriageStats,
+  DifficultyLevelsResponse,
+} from '../types/triage';
 
 // 扩展 Axios 配置类型以支持 metadata
 declare module 'axios' {
@@ -153,13 +173,19 @@ apiClient.interceptors.response.use(
       };
 
       // Store in sessionStorage for debug panel
-      const existingData = JSON.parse(sessionStorage.getItem('api_performance') || '[]');
-      existingData.push(performanceData);
-      // Keep only last 100 entries
-      if (existingData.length > 100) {
-        existingData.shift();
+      try {
+        const rawData = sessionStorage.getItem('api_performance');
+        const existingData = rawData ? JSON.parse(rawData) : [];
+        existingData.push(performanceData);
+        // Keep only last 100 entries
+        if (existingData.length > 100) {
+          existingData.shift();
+        }
+        sessionStorage.setItem('api_performance', JSON.stringify(existingData));
+      } catch (parseError) {
+        console.warn('[API] Failed to parse performance data, resetting:', parseError);
+        sessionStorage.setItem('api_performance', JSON.stringify([performanceData]));
       }
-      sessionStorage.setItem('api_performance', JSON.stringify(existingData));
     }
 
     return response;
@@ -201,13 +227,19 @@ apiClient.interceptors.response.use(
       requestId: error.config?.headers?.['X-Request-ID']
     };
 
-    const existingErrors = JSON.parse(sessionStorage.getItem('api_errors') || '[]');
-    existingErrors.push(errorData);
-    // Keep only last 50 errors
-    if (existingErrors.length > 50) {
-      existingErrors.shift();
+    try {
+      const rawErrors = sessionStorage.getItem('api_errors');
+      const existingErrors = rawErrors ? JSON.parse(rawErrors) : [];
+      existingErrors.push(errorData);
+      // Keep only last 50 errors
+      if (existingErrors.length > 50) {
+        existingErrors.shift();
+      }
+      sessionStorage.setItem('api_errors', JSON.stringify(existingErrors));
+    } catch (parseError) {
+      console.warn('[API] Failed to parse error data, resetting:', parseError);
+      sessionStorage.setItem('api_errors', JSON.stringify([errorData]));
     }
-    sessionStorage.setItem('api_errors', JSON.stringify(existingErrors));
 
     return Promise.reject(error);
   }
@@ -523,6 +555,148 @@ export const getAssignmentStats = async (courseId?: string): Promise<AssignmentS
 export const getAssignmentRubric = async (assignmentId: string): Promise<Rubric> => {
   const response = await apiClient.get<Rubric>(
     `${API_V1_PREFIX}/assignments/${assignmentId}/rubric`
+  );
+  return response.data;
+};
+
+// ============ Knowledge Base Endpoints ============
+
+export const getKnowledgeBaseEntries = async (
+  page: number = 1,
+  pageSize: number = 20,
+  category?: string,
+  difficultyLevel?: number
+): Promise<KnowledgeBaseListResponse> => {
+  const params = new URLSearchParams();
+  params.append('page', page.toString());
+  params.append('page_size', pageSize.toString());
+  if (category) params.append('category', category);
+  if (difficultyLevel) params.append('difficulty_level', difficultyLevel.toString());
+
+  const response = await apiClient.get<KnowledgeBaseListResponse>(
+    `${API_V1_PREFIX}/knowledge-base?${params.toString()}`
+  );
+  return response.data;
+};
+
+export const getKnowledgeBaseEntry = async (entryId: string): Promise<KnowledgeBaseEntry> => {
+  const response = await apiClient.get<KnowledgeBaseEntry>(
+    `${API_V1_PREFIX}/knowledge-base/${entryId}`
+  );
+  return response.data;
+};
+
+export const createKnowledgeBaseEntry = async (
+  data: KnowledgeBaseCreateRequest
+): Promise<KnowledgeBaseEntry> => {
+  const response = await apiClient.post<KnowledgeBaseEntry>(
+    `${API_V1_PREFIX}/knowledge-base`,
+    data
+  );
+  return response.data;
+};
+
+export const updateKnowledgeBaseEntry = async (
+  entryId: string,
+  data: KnowledgeBaseUpdateRequest
+): Promise<KnowledgeBaseEntry> => {
+  const response = await apiClient.put<KnowledgeBaseEntry>(
+    `${API_V1_PREFIX}/knowledge-base/${entryId}`,
+    data
+  );
+  return response.data;
+};
+
+export const deleteKnowledgeBaseEntry = async (entryId: string): Promise<void> => {
+  await apiClient.delete(`${API_V1_PREFIX}/knowledge-base/${entryId}`);
+};
+
+export const searchKnowledgeBase = async (
+  request: KnowledgeBaseSearchRequest
+): Promise<KnowledgeBaseSearchResponse> => {
+  const response = await apiClient.post<KnowledgeBaseSearchResponse>(
+    `${API_V1_PREFIX}/knowledge-base/search`,
+    request
+  );
+  return response.data;
+};
+
+export const getKnowledgeBaseCategories = async (): Promise<CategoriesResponse> => {
+  const response = await apiClient.get<CategoriesResponse>(
+    `${API_V1_PREFIX}/knowledge-base/categories/list`
+  );
+  return response.data;
+};
+
+export const getKnowledgeBaseStats = async (): Promise<KnowledgeBaseStats> => {
+  const response = await apiClient.get<KnowledgeBaseStats>(
+    `${API_V1_PREFIX}/knowledge-base/stats/overview`
+  );
+  return response.data;
+};
+
+export const markKnowledgeBaseEntryHelpful = async (entryId: string): Promise<void> => {
+  await apiClient.post(`${API_V1_PREFIX}/knowledge-base/${entryId}/helpful`);
+};
+
+// ============ Triage Endpoints ============
+
+export const askTriageQuestion = async (request: TriageRequest): Promise<TriageResponse> => {
+  const response = await apiClient.post<TriageResponse>(
+    `${API_V1_PREFIX}/triage/ask`,
+    request
+  );
+  return response.data;
+};
+
+export const getPendingQueue = async (
+  role?: string,
+  handlerId?: string,
+  page: number = 1,
+  pageSize: number = 20
+): Promise<PendingQueueResponse> => {
+  const params = new URLSearchParams();
+  if (role) params.append('role', role);
+  if (handlerId) params.append('handler_id', handlerId);
+  params.append('page', page.toString());
+  params.append('page_size', pageSize.toString());
+
+  const response = await apiClient.get<PendingQueueResponse>(
+    `${API_V1_PREFIX}/triage/queue?${params.toString()}`
+  );
+  return response.data;
+};
+
+export const teacherTakeover = async (
+  request: TeacherTakeoverRequest
+): Promise<{ message: string; log_id: string }> => {
+  const response = await apiClient.post<{ message: string; log_id: string }>(
+    `${API_V1_PREFIX}/triage/takeover`,
+    request
+  );
+  return response.data;
+};
+
+export const teacherAnswer = async (
+  request: TeacherAnswerRequest
+): Promise<TeacherAnswerResponse> => {
+  const response = await apiClient.post<TeacherAnswerResponse>(
+    `${API_V1_PREFIX}/triage/answer`,
+    request
+  );
+  return response.data;
+};
+
+export const getTriageStats = async (): Promise<TriageStats> => {
+  const response = await apiClient.get<TriageStats>(
+    `${API_V1_PREFIX}/triage/stats`
+  );
+  return response.data;
+};
+
+export const getDifficultyLevels = async (): Promise<DifficultyLevelsResponse> => {
+  const response = await apiClient.get<DifficultyLevelsResponse>(
+    `${API_V1_PREFIX}/triage/difficulty-levels`
   );
   return response.data;
 };

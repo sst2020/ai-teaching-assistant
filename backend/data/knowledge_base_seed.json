@@ -1,0 +1,237 @@
+{
+  "entries": [
+    {
+      "category": "syntax_error",
+      "question": "Python中出现IndentationError: unexpected indent错误怎么解决？",
+      "answer": "这个错误表示代码缩进不正确。Python使用缩进来定义代码块，解决方法：\n1. 检查是否混用了Tab和空格，建议统一使用4个空格\n2. 确保同一代码块内的缩进一致\n3. 使用IDE的显示空白字符功能检查\n4. 可以使用autopep8等工具自动修复缩进",
+      "keywords": ["IndentationError", "缩进", "indent", "Python", "空格", "Tab"],
+      "difficulty_level": 1,
+      "language": "Python"
+    },
+    {
+      "category": "syntax_error",
+      "question": "Java编译时出现cannot find symbol错误是什么原因？",
+      "answer": "cannot find symbol错误表示编译器找不到你引用的符号（变量、方法或类）。常见原因：\n1. 变量或方法名拼写错误\n2. 忘记导入需要的类（缺少import语句）\n3. 变量在使用前未声明\n4. 作用域问题，变量在当前作用域不可见\n5. 类名与文件名不匹配",
+      "keywords": ["cannot find symbol", "Java", "编译错误", "import", "变量未定义"],
+      "difficulty_level": 1,
+      "language": "Java"
+    },
+    {
+      "category": "syntax_error",
+      "question": "JavaScript中Uncaught SyntaxError: Unexpected token错误怎么处理？",
+      "answer": "Unexpected token错误表示JavaScript解析器遇到了意外的字符。解决步骤：\n1. 检查括号、花括号、方括号是否配对\n2. 检查字符串引号是否正确闭合\n3. 检查是否遗漏了逗号或分号\n4. 检查JSON格式是否正确（不能有尾随逗号）\n5. 使用浏览器开发者工具定位具体行号",
+      "keywords": ["SyntaxError", "Unexpected token", "JavaScript", "语法错误", "括号"],
+      "difficulty_level": 1,
+      "language": "JavaScript"
+    },
+    {
+      "category": "logic_error",
+      "question": "为什么我的循环是无限循环，程序一直不停止？",
+      "answer": "无限循环通常由以下原因造成：\n1. 循环条件永远为真，没有正确更新循环变量\n2. while循环中忘记修改条件变量\n3. for循环的终止条件设置错误\n4. 循环内部的break条件永远不满足\n\n调试方法：\n- 在循环内添加打印语句观察变量变化\n- 使用调试器单步执行\n- 检查循环变量的更新逻辑",
+      "keywords": ["无限循环", "死循环", "while", "for", "循环条件", "break"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "logic_error",
+      "question": "数组越界错误IndexError/ArrayIndexOutOfBoundsException怎么解决？",
+      "answer": "数组越界表示访问了不存在的数组索引。解决方法：\n1. 检查数组长度，确保索引在0到length-1范围内\n2. 循环时使用 < length 而不是 <= length\n3. 访问前检查数组是否为空\n4. 使用try-catch捕获异常并处理\n5. 打印数组长度和当前索引进行调试\n\n常见场景：空数组访问、循环边界错误、负索引",
+      "keywords": ["IndexError", "ArrayIndexOutOfBoundsException", "数组越界", "索引", "边界"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "logic_error",
+      "question": "NullPointerException空指针异常是什么意思，怎么避免？",
+      "answer": "NullPointerException表示尝试使用null对象的方法或属性。避免方法：\n1. 使用前检查对象是否为null\n2. 使用Optional类（Java 8+）包装可能为null的值\n3. 初始化变量时赋予默认值\n4. 使用Objects.requireNonNull()进行参数校验\n5. 使用?.操作符（Kotlin/JavaScript）进行安全调用\n\n调试：查看堆栈跟踪定位null对象的位置",
+      "keywords": ["NullPointerException", "空指针", "null", "NPE", "对象为空"],
+      "difficulty_level": 2,
+      "language": "Java"
+    },
+    {
+      "category": "concept",
+      "question": "什么是递归？递归和循环有什么区别？",
+      "answer": "递归是函数调用自身的编程技术。\n\n递归的特点：\n1. 必须有基准条件（终止条件）\n2. 每次递归调用都应该向基准条件靠近\n3. 使用调用栈存储中间状态\n\n与循环的区别：\n- 递归代码通常更简洁，适合树形结构\n- 循环效率更高，不会栈溢出\n- 递归可以转换为循环（尾递归优化）\n\n适用场景：树遍历、分治算法、回溯问题",
+      "keywords": ["递归", "recursion", "循环", "基准条件", "调用栈", "分治"],
+      "difficulty_level": 3,
+      "language": null
+    },
+    {
+      "category": "concept",
+      "question": "面向对象编程中的封装、继承、多态是什么意思？",
+      "answer": "面向对象三大特性：\n\n**封装**：将数据和操作数据的方法绑定在一起，隐藏内部实现细节，只暴露必要的接口。使用private/public等访问修饰符控制访问权限。\n\n**继承**：子类继承父类的属性和方法，实现代码复用。子类可以扩展或重写父类的功能。\n\n**多态**：同一个方法在不同对象上有不同的行为。通过方法重写和接口实现，使得程序更灵活、可扩展。\n\n这三个特性共同支持代码的可维护性和可扩展性。",
+      "keywords": ["封装", "继承", "多态", "面向对象", "OOP", "类", "对象"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "concept",
+      "question": "什么是时间复杂度和空间复杂度？O(n)是什么意思？",
+      "answer": "复杂度用于衡量算法的效率：\n\n**时间复杂度**：算法执行时间随输入规模增长的趋势\n**空间复杂度**：算法占用内存随输入规模增长的趋势\n\n常见复杂度（从快到慢）：\n- O(1)：常数时间，如数组索引访问\n- O(log n)：对数时间，如二分查找\n- O(n)：线性时间，如遍历数组\n- O(n log n)：如快速排序\n- O(n²)：如冒泡排序\n- O(2^n)：指数时间，如暴力递归\n\nO(n)表示时间与输入规模n成正比。",
+      "keywords": ["时间复杂度", "空间复杂度", "Big O", "算法效率", "O(n)"],
+      "difficulty_level": 3,
+      "language": null
+    },
+    {
+      "category": "algorithm",
+      "question": "如何实现二分查找算法？",
+      "answer": "二分查找用于在有序数组中快速查找元素，时间复杂度O(log n)。\n\n```python\ndef binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1  # 未找到\n```\n\n关键点：\n1. 数组必须有序\n2. 注意边界条件 left <= right\n3. mid计算避免整数溢出",
+      "keywords": ["二分查找", "binary search", "有序数组", "查找算法", "O(log n)"],
+      "difficulty_level": 3,
+      "language": "Python"
+    },
+    {
+      "category": "algorithm",
+      "question": "常见的排序算法有哪些？各有什么特点？",
+      "answer": "常见排序算法比较：\n\n**冒泡排序**：O(n²)，简单但效率低，适合小数据量\n**选择排序**：O(n²)，不稳定，交换次数少\n**插入排序**：O(n²)，对近乎有序的数据效率高\n**快速排序**：O(n log n)平均，最常用，原地排序\n**归并排序**：O(n log n)，稳定，需要额外空间\n**堆排序**：O(n log n)，原地排序，不稳定\n\n选择建议：\n- 小数据量：插入排序\n- 一般情况：快速排序\n- 需要稳定性：归并排序",
+      "keywords": ["排序算法", "冒泡排序", "快速排序", "归并排序", "时间复杂度"],
+      "difficulty_level": 3,
+      "language": null
+    },
+    {
+      "category": "data_structure",
+      "question": "数组和链表有什么区别？分别适用于什么场景？",
+      "answer": "**数组**：\n- 内存连续存储\n- 随机访问O(1)\n- 插入删除O(n)\n- 大小固定（动态数组除外）\n\n**链表**：\n- 内存不连续，通过指针连接\n- 随机访问O(n)\n- 插入删除O(1)（已知位置）\n- 大小动态变化\n\n适用场景：\n- 数组：频繁随机访问，大小固定\n- 链表：频繁插入删除，大小不确定\n\n实际应用：ArrayList用数组，LinkedList用链表",
+      "keywords": ["数组", "链表", "Array", "LinkedList", "数据结构", "随机访问"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "data_structure",
+      "question": "什么是栈和队列？它们有什么应用场景？",
+      "answer": "**栈(Stack)**：后进先出(LIFO)\n- 操作：push(入栈)、pop(出栈)、peek(查看栈顶)\n- 应用：函数调用栈、表达式求值、括号匹配、撤销操作\n\n**队列(Queue)**：先进先出(FIFO)\n- 操作：enqueue(入队)、dequeue(出队)\n- 应用：任务调度、消息队列、BFS广度优先搜索\n\n变体：\n- 双端队列(Deque)：两端都可操作\n- 优先队列：按优先级出队\n- 循环队列：避免假溢出",
+      "keywords": ["栈", "队列", "Stack", "Queue", "LIFO", "FIFO", "数据结构"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "data_structure",
+      "question": "哈希表(HashMap)的原理是什么？如何处理哈希冲突？",
+      "answer": "**哈希表原理**：\n通过哈希函数将键映射到数组索引，实现O(1)的查找、插入、删除。\n\n**哈希冲突处理**：\n1. **链地址法**：每个桶存储链表，冲突元素追加到链表\n2. **开放地址法**：冲突时探测下一个空位\n   - 线性探测：依次查找\n   - 二次探测：按平方步长查找\n3. **再哈希法**：使用第二个哈希函数\n\n**负载因子**：元素数/桶数，超过阈值需要扩容\n\nJava HashMap在链表长度>8时转为红黑树优化",
+      "keywords": ["哈希表", "HashMap", "哈希冲突", "链地址法", "开放地址法"],
+      "difficulty_level": 3,
+      "language": null
+    },
+    {
+      "category": "environment",
+      "question": "Python pip安装包时出现Permission denied错误怎么办？",
+      "answer": "Permission denied错误表示没有写入权限。解决方法：\n\n1. **使用--user参数**（推荐）：\n   ```\n   pip install --user package_name\n   ```\n\n2. **使用虚拟环境**（最佳实践）：\n   ```\n   python -m venv myenv\n   source myenv/bin/activate  # Linux/Mac\n   myenv\\Scripts\\activate  # Windows\n   pip install package_name\n   ```\n\n3. **使用管理员权限**（不推荐）：\n   - Linux/Mac: sudo pip install\n   - Windows: 以管理员身份运行\n\n建议始终使用虚拟环境隔离项目依赖。",
+      "keywords": ["pip", "Permission denied", "权限", "虚拟环境", "venv", "安装"],
+      "difficulty_level": 1,
+      "language": "Python"
+    },
+    {
+      "category": "environment",
+      "question": "如何配置Java环境变量JAVA_HOME和PATH？",
+      "answer": "**Windows配置**：\n1. 右键\"此电脑\" -> 属性 -> 高级系统设置\n2. 环境变量 -> 系统变量 -> 新建\n3. 变量名：JAVA_HOME，值：JDK安装路径（如C:\\Program Files\\Java\\jdk-17）\n4. 编辑Path变量，添加：%JAVA_HOME%\\bin\n\n**Linux/Mac配置**：\n在~/.bashrc或~/.zshrc添加：\n```bash\nexport JAVA_HOME=/usr/lib/jvm/java-17\nexport PATH=$JAVA_HOME/bin:$PATH\n```\n执行source ~/.bashrc生效\n\n**验证**：\n```\njava -version\njavac -version\n```",
+      "keywords": ["JAVA_HOME", "PATH", "环境变量", "Java配置", "JDK"],
+      "difficulty_level": 1,
+      "language": "Java"
+    },
+    {
+      "category": "environment",
+      "question": "Node.js的npm和yarn有什么区别？应该用哪个？",
+      "answer": "**npm**（Node Package Manager）：\n- Node.js官方包管理器\n- 自动随Node.js安装\n- npm 5+性能已大幅提升\n\n**yarn**：\n- Facebook开发的替代方案\n- 并行安装，速度更快\n- 更好的缓存机制\n- yarn.lock确保一致性\n\n**选择建议**：\n- 新项目：两者都可以，保持团队一致\n- 已有项目：沿用现有的包管理器\n- 不要混用：会导致lock文件冲突\n\n常用命令对比：\n- 安装：npm install / yarn\n- 添加包：npm install pkg / yarn add pkg",
+      "keywords": ["npm", "yarn", "Node.js", "包管理器", "依赖管理"],
+      "difficulty_level": 2,
+      "language": "JavaScript"
+    },
+    {
+      "category": "debugging",
+      "question": "如何使用print/console.log进行调试？有什么技巧？",
+      "answer": "打印调试是最基础但有效的调试方法：\n\n**技巧**：\n1. **添加标识**：print(\"DEBUG-1:\", variable)\n2. **打印类型**：print(type(var), var)\n3. **格式化输出**：使用f-string或format\n4. **打印分隔线**：print(\"=\"*50)\n5. **条件打印**：if DEBUG: print(...)\n\n**Python示例**：\n```python\nimport pprint\npprint.pprint(complex_dict)  # 美化打印\n```\n\n**JavaScript示例**：\n```javascript\nconsole.table(array);  // 表格形式\nconsole.dir(object);   // 对象结构\n```\n\n注意：生产环境记得移除调试代码！",
+      "keywords": ["print", "console.log", "调试", "debug", "打印调试"],
+      "difficulty_level": 1,
+      "language": null
+    },
+    {
+      "category": "debugging",
+      "question": "如何使用断点调试代码？",
+      "answer": "断点调试比print更强大，可以暂停执行并检查状态：\n\n**IDE断点调试**（VS Code/PyCharm/IDEA）：\n1. 点击行号左侧设置断点\n2. 以Debug模式运行\n3. 程序在断点处暂停\n4. 查看变量值、调用栈\n5. 单步执行(Step Over/Into/Out)\n\n**Python pdb**：\n```python\nimport pdb; pdb.set_trace()  # 或 breakpoint()\n```\n\n**浏览器调试**：\n- F12打开开发者工具\n- Sources面板设置断点\n- 或代码中写debugger;\n\n**常用操作**：\n- Step Over(F10)：执行当前行\n- Step Into(F11)：进入函数\n- Continue(F5)：继续执行",
+      "keywords": ["断点", "breakpoint", "调试器", "debugger", "单步执行", "pdb"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "best_practice",
+      "question": "什么是代码命名规范？变量和函数应该怎么命名？",
+      "answer": "良好的命名让代码自解释：\n\n**通用原则**：\n1. 使用有意义的名称，避免a、b、x\n2. 名称应表达意图，不是实现\n3. 避免缩写，除非是通用缩写(id, url)\n\n**命名风格**：\n- **camelCase**：JavaScript变量/函数\n- **PascalCase**：类名\n- **snake_case**：Python变量/函数\n- **UPPER_CASE**：常量\n\n**示例**：\n```python\n# 差\ndef calc(a, b): ...\n# 好\ndef calculate_total_price(unit_price, quantity): ...\n```\n\n**类命名**：名词，如UserService\n**函数命名**：动词开头，如getUserById",
+      "keywords": ["命名规范", "camelCase", "snake_case", "代码风格", "变量命名"],
+      "difficulty_level": 1,
+      "language": null
+    },
+    {
+      "category": "best_practice",
+      "question": "什么是DRY原则？如何避免代码重复？",
+      "answer": "**DRY = Don't Repeat Yourself**\n\n重复代码的问题：\n- 修改时需要改多处\n- 容易遗漏导致不一致\n- 代码膨胀难以维护\n\n**消除重复的方法**：\n\n1. **提取函数**：\n```python\n# 重复代码提取为函数\ndef format_user_name(first, last):\n    return f\"{first} {last}\".title()\n```\n\n2. **使用循环**：\n```python\nfor item in items:\n    process(item)\n```\n\n3. **继承/组合**：共享父类代码\n\n4. **配置化**：将差异部分参数化\n\n注意：过度抽象也是问题，3次重复再考虑抽取",
+      "keywords": ["DRY", "代码重复", "重构", "函数提取", "代码复用"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "best_practice",
+      "question": "如何写好代码注释？什么时候需要注释？",
+      "answer": "**注释原则**：\n代码说明\"怎么做\"，注释说明\"为什么\"\n\n**需要注释的情况**：\n1. 复杂的业务逻辑\n2. 非显而易见的算法\n3. 临时解决方案(TODO/FIXME)\n4. API文档(docstring)\n5. 正则表达式解释\n\n**不需要注释**：\n```python\n# 差：注释重复代码\ni = i + 1  # i加1\n\n# 好：解释原因\ni = i + 1  # 跳过标题行\n```\n\n**文档字符串**：\n```python\ndef calculate_tax(income: float) -> float:\n    \"\"\"计算个人所得税\n    \n    Args:\n        income: 年收入（元）\n    Returns:\n        应缴税额\n    \"\"\"\n```",
+      "keywords": ["注释", "comment", "文档", "docstring", "代码可读性"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "syntax_error",
+      "question": "Python中TypeError: 'NoneType' object is not subscriptable是什么错误？",
+      "answer": "这个错误表示你尝试对None值使用下标访问（如[0]或['key']）。\n\n**常见原因**：\n1. 函数没有return语句，默认返回None\n2. 列表方法如sort()、append()返回None\n3. 字典get()找不到键返回None\n\n**示例**：\n```python\n# 错误\nresult = [3,1,2].sort()  # sort()返回None\nprint(result[0])  # TypeError!\n\n# 正确\nmy_list = [3,1,2]\nmy_list.sort()\nprint(my_list[0])  # 1\n```\n\n**调试**：在使用下标前打印变量值和类型",
+      "keywords": ["TypeError", "NoneType", "subscriptable", "None", "下标访问"],
+      "difficulty_level": 2,
+      "language": "Python"
+    },
+    {
+      "category": "concept",
+      "question": "什么是API？RESTful API是什么意思？",
+      "answer": "**API (Application Programming Interface)**：\n应用程序编程接口，定义软件组件之间如何交互。\n\n**RESTful API**：\n基于REST架构风格的Web API，特点：\n\n1. **资源导向**：URL表示资源\n   - /users - 用户列表\n   - /users/123 - 特定用户\n\n2. **HTTP方法表示操作**：\n   - GET：获取资源\n   - POST：创建资源\n   - PUT：更新资源\n   - DELETE：删除资源\n\n3. **无状态**：每个请求包含所有必要信息\n\n4. **统一接口**：使用标准HTTP状态码\n\n示例：GET /api/users/123 获取ID为123的用户",
+      "keywords": ["API", "RESTful", "REST", "HTTP", "接口", "Web服务"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "concept",
+      "question": "什么是Git？为什么要使用版本控制？",
+      "answer": "**Git**是分布式版本控制系统，用于跟踪代码变更。\n\n**为什么需要版本控制**：\n1. 记录所有修改历史\n2. 可以回退到任意版本\n3. 多人协作不会互相覆盖\n4. 分支开发，互不影响\n5. 代码备份\n\n**基本概念**：\n- **仓库(Repository)**：项目的所有文件和历史\n- **提交(Commit)**：保存一次修改\n- **分支(Branch)**：独立的开发线\n- **合并(Merge)**：合并分支修改\n\n**常用命令**：\n```bash\ngit init          # 初始化仓库\ngit add .         # 暂存修改\ngit commit -m \"\" # 提交\ngit push          # 推送到远程\n```",
+      "keywords": ["Git", "版本控制", "commit", "branch", "merge", "仓库"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "logic_error",
+      "question": "为什么浮点数比较会出问题？0.1+0.2不等于0.3？",
+      "answer": "浮点数在计算机中是二进制近似表示，存在精度问题。\n\n**问题演示**：\n```python\nprint(0.1 + 0.2)  # 0.30000000000000004\nprint(0.1 + 0.2 == 0.3)  # False\n```\n\n**解决方法**：\n\n1. **使用误差范围比较**：\n```python\ndef float_equal(a, b, epsilon=1e-9):\n    return abs(a - b) < epsilon\n```\n\n2. **使用Decimal类**（精确计算）：\n```python\nfrom decimal import Decimal\nDecimal('0.1') + Decimal('0.2') == Decimal('0.3')  # True\n```\n\n3. **转为整数计算**：金额用分而不是元\n\n**注意**：涉及金钱计算务必使用Decimal",
+      "keywords": ["浮点数", "精度", "float", "Decimal", "比较", "0.1+0.2"],
+      "difficulty_level": 3,
+      "language": "Python"
+    },
+    {
+      "category": "algorithm",
+      "question": "什么是动态规划？如何判断问题是否适合用动态规划？",
+      "answer": "**动态规划(DP)**：将复杂问题分解为重叠子问题，存储子问题结果避免重复计算。\n\n**适用条件**：\n1. **最优子结构**：问题的最优解包含子问题的最优解\n2. **重叠子问题**：子问题被多次计算\n\n**解题步骤**：\n1. 定义状态（dp数组含义）\n2. 确定状态转移方程\n3. 确定初始条件\n4. 确定遍历顺序\n\n**经典问题**：\n- 斐波那契数列\n- 背包问题\n- 最长公共子序列\n- 爬楼梯\n\n**示例**：斐波那契\n```python\ndp[i] = dp[i-1] + dp[i-2]\n```",
+      "keywords": ["动态规划", "DP", "状态转移", "最优子结构", "重叠子问题"],
+      "difficulty_level": 4,
+      "language": null
+    },
+    {
+      "category": "environment",
+      "question": "Git提交时出现冲突(conflict)怎么解决？",
+      "answer": "**冲突原因**：多人修改了同一文件的同一位置。\n\n**解决步骤**：\n\n1. **查看冲突文件**：\n```bash\ngit status  # 显示冲突文件\n```\n\n2. **打开冲突文件**，找到冲突标记：\n```\n<<<<<<< HEAD\n你的修改\n=======\n他人的修改\n>>>>>>> branch-name\n```\n\n3. **手动编辑**：保留需要的代码，删除标记\n\n4. **标记已解决**：\n```bash\ngit add <file>\ngit commit -m \"resolve conflict\"\n```\n\n**预防冲突**：\n- 频繁拉取最新代码\n- 小步提交\n- 团队沟通分工",
+      "keywords": ["Git", "冲突", "conflict", "merge", "解决冲突"],
+      "difficulty_level": 2,
+      "language": null
+    },
+    {
+      "category": "syntax_error",
+      "question": "JavaScript中const、let、var有什么区别？",
+      "answer": "**var**（ES5，不推荐）：\n- 函数作用域\n- 可重复声明\n- 存在变量提升\n\n**let**（ES6，推荐）：\n- 块级作用域\n- 不可重复声明\n- 暂时性死区(TDZ)\n\n**const**（ES6，推荐）：\n- 块级作用域\n- 声明时必须初始化\n- 不可重新赋值（但对象属性可修改）\n\n**使用建议**：\n1. 默认使用const\n2. 需要重新赋值时用let\n3. 避免使用var\n\n```javascript\nconst PI = 3.14;  // 常量\nlet count = 0;    // 会变化的变量\ncount++;          // OK\nPI = 3;           // Error!\n```",
+      "keywords": ["const", "let", "var", "作用域", "变量声明", "ES6"],
+      "difficulty_level": 2,
+      "language": "JavaScript"
+    }
+  ]
+}
+

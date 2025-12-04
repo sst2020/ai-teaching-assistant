@@ -16,6 +16,12 @@ from models.code_file import CodeFile, FileStatus, ProgrammingLanguage
 from models.analysis_result import AnalysisResult
 from models.feedback_template import FeedbackTemplate, TemplateCategory
 from models.ai_interaction import AIInteraction, AIProvider, AIInteractionType
+from models.knowledge_base import (
+    KnowledgeBaseEntry,
+    KnowledgeBaseCategory as KBCategory,
+    DifficultyLevel,
+)
+from models.qa_log import QALog, TriageResult, QALogStatus
 
 __all__ = [
     # Base
@@ -33,6 +39,8 @@ __all__ = [
     "AnalysisResult",
     "FeedbackTemplate",
     "AIInteraction",
+    "KnowledgeBaseEntry",
+    "QALog",
     # Enums
     "AssignmentType",
     "SubmissionStatus",
@@ -44,5 +52,9 @@ __all__ = [
     "TemplateCategory",
     "AIProvider",
     "AIInteractionType",
+    "KBCategory",
+    "DifficultyLevel",
+    "TriageResult",
+    "QALogStatus",
 ]
 

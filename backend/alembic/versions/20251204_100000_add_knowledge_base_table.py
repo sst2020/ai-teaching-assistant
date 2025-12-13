@@ -1,7 +1,7 @@
 """add knowledge_base table
 
 Revision ID: 20251204_100000
-Revises: 20251130_114448_92ae8528c62e
+Revises: 92ae8528c62e
 Create Date: 2025-12-04 10:00:00.000000
 
 """
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = '20251204_100000'
-down_revision: Union[str, None] = '20251130_114448_92ae8528c62e'
+down_revision: Union[str, None] = '92ae8528c62e'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

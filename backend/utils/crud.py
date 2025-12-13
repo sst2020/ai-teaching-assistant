@@ -13,6 +13,7 @@ from sqlalchemy.orm import selectinload
 
 from core.database import Base
 from models import (
+    User, RefreshToken, TokenBlacklist,
     Student, Assignment, Submission, GradingResult,
     Question, Answer, PlagiarismCheck, Rubric, AnalysisResult,
     FeedbackTemplate, AIInteraction
@@ -553,7 +554,173 @@ class CRUDAIInteraction(CRUDBase[AIInteraction]):
         return interaction
 
 
+# ============ Authentication CRUD Classes ============
+
+class CRUDUser(CRUDBase[User]):
+    """CRUD operations for User model."""
+
+    async def get_by_email(self, db: AsyncSession, email: str) -> Optional[User]:
+        """通过邮箱查找用户"""
+        result = await db.execute(select(User).where(User.email == email))
+        return result.scalar_one_or_none()
+
+    async def create_with_password(
+        self,
+        db: AsyncSession,
+        email: str,
+        password_hash: str,
+        role: str = "student",
+        **kwargs
+    ) -> User:
+        """创建用户 (密码已哈希)"""
+        user = User(
+            email=email,
+            password_hash=password_hash,
+            role=role,
+            is_active=True,
+            **kwargs
+        )
+        db.add(user)
+        await db.flush()
+        await db.refresh(user)
+        return user
+
+    async def update_last_login(self, db: AsyncSession, user_id: int) -> None:
+        """更新最后登录时间"""
+        user = await self.get(db, user_id)
+        if user:
+            user.last_login = datetime.utcnow()
+            await db.flush()
+
+    async def deactivate(self, db: AsyncSession, user_id: int) -> bool:
+        """停用用户"""
+        user = await self.get(db, user_id)
+        if user:
+            user.is_active = False
+            await db.flush()
+            return True
+        return False
+
+
+class CRUDRefreshToken(CRUDBase[RefreshToken]):
+    """CRUD operations for RefreshToken model."""
+
+    async def get_by_token(self, db: AsyncSession, token: str) -> Optional[RefreshToken]:
+        """通过 token 字符串查找"""
+        result = await db.execute(
+            select(RefreshToken).where(RefreshToken.token == token)
+        )
+        return result.scalar_one_or_none()
+
+    async def create_token(
+        self,
+        db: AsyncSession,
+        user_id: int,
+        token: str,
+        expires_at: datetime
+    ) -> RefreshToken:
+        """创建刷新令牌"""
+        refresh_token = RefreshToken(
+            user_id=user_id,
+            token=token,
+            expires_at=expires_at,
+            revoked=False
+        )
+        db.add(refresh_token)
+        await db.flush()
+        await db.refresh(refresh_token)
+        return refresh_token
+
+    async def revoke_token(self, db: AsyncSession, token: str) -> bool:
+        """撤销令牌"""
+        refresh_token = await self.get_by_token(db, token)
+        if refresh_token:
+            refresh_token.revoked = True
+            await db.flush()
+            return True
+        return False
+
+    async def revoke_all_user_tokens(self, db: AsyncSession, user_id: int) -> int:
+        """撤销用户所有令牌"""
+        result = await db.execute(
+            select(RefreshToken).where(
+                and_(
+                    RefreshToken.user_id == user_id,
+                    RefreshToken.revoked == False
+                )
+            )
+        )
+        tokens = result.scalars().all()
+        count = 0
+        for token in tokens:
+            token.revoked = True
+            count += 1
+        await db.flush()
+        return count
+
+    async def delete_expired(self, db: AsyncSession) -> int:
+        """删除过期令牌"""
+        now = datetime.utcnow()
+        result = await db.execute(
+            select(RefreshToken).where(RefreshToken.expires_at < now)
+        )
+        tokens = result.scalars().all()
+        count = len(tokens)
+        for token in tokens:
+            await db.delete(token)
+        await db.flush()
+        return count
+
+
+class CRUDTokenBlacklist(CRUDBase[TokenBlacklist]):
+    """CRUD operations for TokenBlacklist model."""
+
+    async def add_to_blacklist(
+        self,
+        db: AsyncSession,
+        jti: str,
+        user_id: int,
+        token_type: str,
+        expires_at: datetime
+    ) -> TokenBlacklist:
+        """加入黑名单"""
+        blacklist_entry = TokenBlacklist(
+            jti=jti,
+            user_id=user_id,
+            token_type=token_type,
+            expires_at=expires_at
+        )
+        db.add(blacklist_entry)
+        await db.flush()
+        await db.refresh(blacklist_entry)
+        return blacklist_entry
+
+    async def is_blacklisted(self, db: AsyncSession, jti: str) -> bool:
+        """检查是否在黑名单"""
+        result = await db.execute(
+            select(TokenBlacklist).where(TokenBlacklist.jti == jti)
+        )
+        return result.scalar_one_or_none() is not None
+
+    async def cleanup_expired(self, db: AsyncSession) -> int:
+        """清理过期黑名单记录"""
+        now = datetime.utcnow()
+        result = await db.execute(
+            select(TokenBlacklist).where(TokenBlacklist.expires_at < now)
+        )
+        entries = result.scalars().all()
+        count = len(entries)
+        for entry in entries:
+            await db.delete(entry)
+        await db.flush()
+        return count
+
+
 # Create singleton instances
+crud_user = CRUDUser(User)
+crud_refresh_token = CRUDRefreshToken(RefreshToken)
+crud_token_blacklist = CRUDTokenBlacklist(TokenBlacklist)
+
 crud_student = CRUDStudent(Student)
 crud_assignment = CRUDAssignment(Assignment)
 crud_submission = CRUDSubmission(Submission)

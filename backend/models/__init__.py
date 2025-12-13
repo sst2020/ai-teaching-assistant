@@ -4,6 +4,9 @@ Database Models Package
 This package contains all SQLAlchemy ORM models for the AI Teaching Assistant.
 """
 from models.base import TimestampMixin
+from models.user import User
+from models.refresh_token import RefreshToken
+from models.token_blacklist import TokenBlacklist
 from models.student import Student
 from models.rubric import Rubric
 from models.assignment import Assignment, AssignmentType
@@ -26,7 +29,11 @@ from models.qa_log import QALog, TriageResult, QALogStatus
 __all__ = [
     # Base
     "TimestampMixin",
-    # Models
+    # Authentication Models
+    "User",
+    "RefreshToken",
+    "TokenBlacklist",
+    # Business Models
     "Student",
     "Rubric",
     "Assignment",

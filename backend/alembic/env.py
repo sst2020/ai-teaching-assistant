@@ -22,6 +22,9 @@ from core.database import Base
 
 # Import all models to ensure they are registered with Base.metadata
 from models import (
+    User,
+    RefreshToken,
+    TokenBlacklist,
     Student,
     Rubric,
     Assignment,

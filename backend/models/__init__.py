@@ -7,6 +7,7 @@ from models.base import TimestampMixin
 from models.user import User
 from models.refresh_token import RefreshToken
 from models.token_blacklist import TokenBlacklist
+from models.auth_log import AuthLog
 from models.student import Student
 from models.rubric import Rubric
 from models.assignment import Assignment, AssignmentType
@@ -33,6 +34,7 @@ __all__ = [
     "User",
     "RefreshToken",
     "TokenBlacklist",
+    "AuthLog",
     # Business Models
     "Student",
     "Rubric",

@@ -1,7 +1,7 @@
 # AI 智能教学助手 - 项目待办事项清单
 
-> **最后更新：** 2024年12月2日
-> **项目状态：** MVP 已完成 ✅ + 增强调试环境 ✅
+> **最后更新：** 2024年12月14日
+> **项目状态：** MVP 已完成 ✅ + 增强调试环境 ✅ + 生产级 JWT 认证 ✅ + 认证监控 ✅
 > **复杂度指标：** 🟢 简单 | 🟡 中等 | 🔴 困难 | ⏱️ 耗时较长
 
 本文档概述了 AI 智能教学助手项目的剩余任务、优先级和贡献机会。
@@ -10,6 +10,12 @@
 
 最小可行产品（MVP）已完成，包含以下核心功能：
 - ✅ 用户认证（登录、注册、登出）
+- ✅ **生产级 JWT 认证系统** (新增 - 2024年12月13日)
+  - ✅ Bcrypt 密码哈希
+  - ✅ JWT token 生成和验证
+  - ✅ Refresh token 轮换
+  - ✅ Token 黑名单机制
+  - ✅ 基于角色的访问控制
 - ✅ 作业提交（集成 Monaco 代码编辑器）
 - ✅ 文件上传（自动语言检测）
 - ✅ 成绩查看（支持筛选和排序）
@@ -21,6 +27,7 @@
 - 📄 [用户界面指南](docs/USER_INTERFACE_GUIDE.md)
 - 📄 [系统测试报告](docs/SYSTEM_TESTING_REPORT.md)
 - 📄 [调试指南](docs/DEBUGGING_GUIDE.md)
+- 📄 [认证测试结果](backend/TEST_RESULTS.md) (新增)
 
 ---
 
@@ -226,6 +233,105 @@
 - [x] 🟢 **测试** - `backend/tests/test_multi_dimensional_evaluation.py`
   - 25 个多维度评价的全面测试
 
+### 生产级 JWT 认证系统 ✅
+
+> **完成时间：** 2024年12月13日
+
+#### 核心认证基础设施 ✅
+
+- [x] 🔴 **独立 User 模型** - `backend/models/user.py`
+  - 基于邮箱的认证，带唯一约束
+  - 使用 bcrypt 进行密码哈希（成本因子 12）
+  - 基于角色的访问控制（学生、教师、管理员）
+  - 用户激活状态跟踪
+  - 最后登录时间戳跟踪
+  - 与 Student 模型的一对一关系
+
+- [x] 🟡 **安全工具** - `backend/core/security.py`
+  - Bcrypt 密码哈希和验证（处理 72 字节限制）
+  - 使用 HS256 算法生成 JWT token
+  - Token 验证和过期检查
+  - JTI（JWT ID）提取用于黑名单
+  - OAuth2 密码承载配置
+
+- [x] 🟡 **Token 管理模型**
+  - **RefreshToken** (`backend/models/refresh_token.py`)：7 天过期，支持轮换
+  - **TokenBlacklist** (`backend/models/token_blacklist.py`)：失效 token 跟踪
+
+- [x] 🟢 **认证 Schemas** - `backend/schemas/auth.py`
+  - RegisterRequest 带密码验证（最少 8 个字符，字母数字）
+  - LoginRequest、LoginResponse 带嵌套 token 结构
+  - UserResponse、TokenRefreshRequest、ChangePasswordRequest
+  - 全面的 Pydantic 验证
+
+- [x] 🟡 **CRUD 操作** - `backend/utils/crud.py`
+  - CRUDUser：get_by_email、create、authenticate、update_last_login、change_password
+  - CRUDRefreshToken：create、get_valid_token、revoke、revoke_all_for_user
+  - CRUDTokenBlacklist：add_token、is_blacklisted、cleanup_expired
+
+- [x] 🟡 **依赖注入** - `backend/core/dependencies.py`
+  - get_current_user：JWT 验证和用户检索
+  - get_current_active_user：活跃用户验证
+  - require_role：基于角色的访问控制装饰器
+  - Token 黑名单检查
+
+#### 认证 API 端点 ✅
+
+- [x] 🔴 **7 个生产就绪端点** - `backend/api/auth.py`
+  1. **POST /auth/register** - 用户注册并自动创建 Student
+  2. **POST /auth/login** - 登录并获取 JWT tokens（access + refresh）
+  3. **GET /auth/me** - 获取当前认证用户
+  4. **POST /auth/refresh** - 刷新 access token 并轮换
+  5. **POST /auth/change-password** - 修改密码并撤销所有会话
+  6. **POST /auth/logout** - 登出并将当前 token 加入黑名单
+  7. **POST /auth/revoke-all** - 撤销用户的所有 refresh tokens
+
+#### 数据库迁移 ✅
+
+- [x] 🟢 **生产认证迁移** - `backend/alembic/versions/20251213_000000_add_production_auth_system.py`
+  - 创建 users 表，在 email 上建立索引
+  - 创建 refresh_tokens 表，带 user_id 外键
+  - 创建 token_blacklist 表，在 jti 上建立索引
+  - 向 students 表添加 user_id 列
+  - 使用 SQLite batch 模式进行 ALTER TABLE 操作
+
+#### 安全特性 ✅
+
+- [x] 🟢 **密码安全**
+  - 使用成本因子 12 的 Bcrypt 哈希
+  - 处理 72 字节密码长度限制
+  - 密码强度验证（最少 8 个字符，字母数字）
+
+- [x] 🟢 **Token 安全**
+  - 使用 HS256 算法的标准 JWT
+  - Access token：30 分钟过期
+  - Refresh token：7 天过期
+  - 登出时的 token 黑名单
+  - Refresh token 轮换（一次性使用）
+  - 基于 JTI 的 token 跟踪
+
+- [x] 🟢 **访问控制**
+  - 基于角色的权限（学生、教师、管理员）
+  - 用户激活状态检查
+  - 受保护路由依赖
+
+#### 测试与验证 ✅
+
+- [x] 🟡 **综合测试套件** - `backend/test_auth_api.py`
+  - 12 个测试场景，100% 通过率
+  - 用户注册和登录测试
+  - Token 刷新和轮换测试
+  - 密码修改和安全测试
+  - Token 黑名单和撤销测试
+  - 错误处理测试（无效凭据、重复邮箱）
+  - **测试报告：** `backend/TEST_RESULTS.md`
+
+- [x] 🟢 **测试期间的 Bug 修复**
+  - 修复导入路径（backend.* → 相对导入）
+  - 修复 bcrypt 兼容性（passlib → 直接使用 bcrypt）
+  - 修复 SQLAlchemy 延迟加载（添加 db.refresh）
+  - 修复 CRUD 参数类型（Pydantic → dict）
+
 ### 前后端协同调试环境 ✅
 
 > **完成时间：** 2024年12月
@@ -323,8 +429,8 @@
 
 ## 🔐 安全与认证
 
-> **状态：** MVP 已完成 ✅（开发环境认证）
-> **优先级：** P1 - 需要生产环境认证
+> **状态：** 生产环境已完成 ✅
+> **优先级：** P1 - 建议增强 RBAC
 > **依赖：** 无
 
 ### JWT 认证系统 ✅（MVP）
@@ -344,22 +450,120 @@
   - API 调用时自动刷新令牌
   - 实现了受保护路由包装器
 
-### 生产环境认证（待完成）
+### 生产环境认证 ✅
 
-- [ ] 🔴 **实现带数据库存储的生产 JWT** (P0)
-  - 从内存存储迁移到数据库存储
-  - 使用 bcrypt 添加密码哈希
-  - 实现令牌黑名单用于登出
+> **完成时间：** 2024年12月13日
+
+- [x] 🔴 **实现带数据库存储的生产 JWT** (P0) ✅
+  - ✅ 创建了独立的 User 模型，包含 email、password_hash、role、is_active
+  - ✅ 实现了 bcrypt 密码哈希（成本因子 12）
+  - ✅ 实现了 JWT token 生成和验证（HS256，python-jose）
+  - ✅ 实现了登出时的 token 黑名单
+  - ✅ 实现了 refresh token 轮换机制
+  - ✅ 创建了 3 个新模型：User、RefreshToken、TokenBlacklist
+  - ✅ 创建了数据库迁移（20251213_000000_add_production_auth_system）
   - **验收标准：**
-    - 令牌在可配置时间后过期（默认：30分钟）
-    - 支持刷新令牌
-    - 安全密码存储
+    - ✅ Access tokens 在 30 分钟后过期
+    - ✅ Refresh tokens 在 7 天后过期
+    - ✅ 每次刷新时轮换 refresh token
+    - ✅ 使用 bcrypt 安全存储密码
+    - ✅ Token 黑名单机制正常工作
+  - **创建的文件：**
+    - `backend/core/security.py` - 密码哈希和 JWT 工具
+    - `backend/models/user.py` - User 模型
+    - `backend/models/refresh_token.py` - RefreshToken 模型
+    - `backend/models/token_blacklist.py` - TokenBlacklist 模型
+    - `backend/schemas/auth.py` - 认证 schemas
+    - `backend/core/dependencies.py` - 依赖注入函数
+  - **修改的文件：**
+    - `backend/models/student.py` - 添加了 user_id 外键
+    - `backend/utils/crud.py` - 添加了 User、RefreshToken、TokenBlacklist 的 CRUD 类
+    - `backend/core/config.py` - 添加了 JWT 配置
+    - `backend/api/auth.py` - 完全重写，包含 7 个端点
 
-- [ ] 🟡 **为 Student 模型添加密码字段** (P1)
-  - 更新 `backend/models/student.py`
-  - 创建 Alembic 迁移
-  - 更新注册端点以哈希密码
-  - **文件：** `backend/models/student.py`, `backend/schemas/student.py`
+- [x] 🟡 **为 Student 模型添加密码字段** (P1) ✅
+  - ✅ 创建了独立的 User 模型而不是修改 Student
+  - ✅ 向 Student 模型添加了 user_id 外键
+  - ✅ 创建了 Alembic 迁移
+  - ✅ 更新了注册端点以使用 bcrypt 哈希密码
+  - **文件：** `backend/models/student.py`, `backend/models/user.py`
+
+- [x] 🟢 **实现 7 个认证 API 端点** (P0) ✅
+  - ✅ POST /api/v1/auth/register - 用户注册并自动创建 Student
+  - ✅ POST /api/v1/auth/login - 登录并生成 JWT token
+  - ✅ GET /api/v1/auth/me - 获取当前用户信息
+  - ✅ POST /api/v1/auth/refresh - 刷新 access token 并轮换
+  - ✅ POST /api/v1/auth/change-password - 修改密码并撤销所有 tokens
+  - ✅ POST /api/v1/auth/logout - 登出并将 token 加入黑名单
+  - ✅ POST /api/v1/auth/revoke-all - 撤销所有 refresh tokens
+  - **测试：** 所有 12 个测试场景通过（100% 成功率）
+  - **测试报告：** `backend/TEST_RESULTS.md`
+
+### 前端集成 ✅
+
+> **完成时间：** 2024年12月14日
+
+- [x] 🟡 **更新前端类型定义** (P1) ✅
+  - ✅ 更新 `User` 接口,添加生产环境字段（is_active、last_login、updated_at）
+  - ✅ 修复 `RegisterResponse`,添加 tokens 字段
+  - ✅ 添加 `RefreshTokenResponse`、`ChangePasswordRequest`、`ChangePasswordResponse`、`RevokeAllTokensResponse`
+  - **文件：** `frontend/src/types/auth.ts`
+
+- [x] 🟡 **更新 API 服务** (P1) ✅
+  - ✅ 更新 `refreshToken` 函数以处理新的响应结构
+  - ✅ 添加 `changePassword` API 函数
+  - ✅ 添加 `revokeAllTokens` API 函数
+  - **文件：** `frontend/src/services/api.ts`
+
+- [x] 🔴 **更新 AuthContext** (P1) ✅
+  - ✅ 更新 `register` 函数,直接使用注册响应中的 tokens
+  - ✅ 更新 `logout` 函数,调用后端 API 将 token 加入黑名单
+  - ✅ 更新 `refreshToken` 函数以处理新的响应结构
+  - ✅ 实现自动 token 刷新机制（过期前 5 分钟自动刷新）
+  - ✅ 添加 `changePassword` 方法
+  - ✅ 添加 `revokeAllTokens` 方法
+  - **文件：** `frontend/src/contexts/AuthContext.tsx`
+
+### 认证监控与日志 ✅
+
+> **完成时间：** 2024年12月14日
+
+- [x] 🔴 **实现认证事件日志记录** (P1) ✅
+  - ✅ 创建 `AuthLog` 模型用于跟踪所有认证事件
+  - ✅ 事件类型：login、logout、register、token_refresh、password_change、token_revoke、login_failed
+  - ✅ 跟踪：user_id、email、event_type、status、ip_address、user_agent、failure_reason、extra_data
+  - ✅ 优化查询性能的索引
+  - **文件：** `backend/models/auth_log.py`
+
+- [x] 🔴 **实现认证监控服务** (P1) ✅
+  - ✅ 创建 `AuthMonitorService` 用于检测可疑活动
+  - ✅ 账户锁定机制（5次失败尝试 = 锁定15分钟）
+  - ✅ 可疑活动检测（多个IP、过度尝试）
+  - ✅ 将日志集成到所有认证端点
+  - **文件：** `backend/services/auth_monitor.py`
+
+- [x] 🟡 **更新认证端点添加日志记录** (P1) ✅
+  - ✅ 添加 IP 地址和 User-Agent 提取辅助函数
+  - ✅ 将日志集成到 register 端点
+  - ✅ 将日志集成到 login 端点,包含锁定检查
+  - ✅ 将日志集成到 refresh 端点
+  - ✅ 将日志集成到 logout 端点
+  - ✅ 将日志集成到 change-password 端点
+  - ✅ 将日志集成到 revoke-all 端点
+  - **文件：** `backend/api/auth.py`
+
+- [x] 🟢 **创建数据库迁移** (P1) ✅
+  - ✅ 为 auth_logs 表创建迁移
+  - ✅ MySQL 兼容的迁移脚本
+  - ✅ 成功创建所有索引
+  - **文件：** `backend/alembic/versions/20251214_000000_add_auth_log_model.py`
+
+- [x] 🟢 **测试和验证** (P1) ✅
+  - ✅ 测试所有认证事件日志记录
+  - ✅ 验证账户锁定机制（5次尝试,15分钟锁定）
+  - ✅ 验证 IP 地址和 User-Agent 跟踪
+  - ✅ 验证数据库架构和索引
+  - **测试结果：** 所有监控功能正常工作
 
 ### 基于角色的访问控制 (RBAC)
 

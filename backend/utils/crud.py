@@ -13,7 +13,7 @@ from sqlalchemy.orm import selectinload
 
 from core.database import Base
 from models import (
-    User, RefreshToken, TokenBlacklist,
+    User, RefreshToken, TokenBlacklist, AuthLog,
     Student, Assignment, Submission, GradingResult,
     Question, Answer, PlagiarismCheck, Rubric, AnalysisResult,
     FeedbackTemplate, AIInteraction
@@ -720,6 +720,7 @@ class CRUDTokenBlacklist(CRUDBase[TokenBlacklist]):
 crud_user = CRUDUser(User)
 crud_refresh_token = CRUDRefreshToken(RefreshToken)
 crud_token_blacklist = CRUDTokenBlacklist(TokenBlacklist)
+crud_auth_log = CRUDBase(AuthLog)  # AuthLog 使用基础 CRUD 操作即可
 
 crud_student = CRUDStudent(Student)
 crud_assignment = CRUDAssignment(Assignment)

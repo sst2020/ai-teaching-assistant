@@ -19,6 +19,10 @@ import {
   RegisterResponse,
   AuthTokens,
   User,
+  RefreshTokenResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
+  RevokeAllTokensResponse,
 } from '../types/auth';
 import {
   StudentProfile,
@@ -383,8 +387,8 @@ export const register = async (data: RegisterData): Promise<RegisterResponse> =>
   return response.data;
 };
 
-export const refreshToken = async (refresh_token: string): Promise<AuthTokens> => {
-  const response = await apiClient.post<AuthTokens>(
+export const refreshToken = async (refresh_token: string): Promise<RefreshTokenResponse> => {
+  const response = await apiClient.post<RefreshTokenResponse>(
     `${API_V1_PREFIX}/auth/refresh`,
     { refresh_token }
   );
@@ -397,6 +401,27 @@ export const logout = async (): Promise<void> => {
 
 export const getCurrentUser = async (): Promise<User> => {
   const response = await apiClient.get<User>(`${API_V1_PREFIX}/auth/me`);
+  return response.data;
+};
+
+export const changePassword = async (
+  oldPassword: string,
+  newPassword: string
+): Promise<ChangePasswordResponse> => {
+  const response = await apiClient.post<ChangePasswordResponse>(
+    `${API_V1_PREFIX}/auth/change-password`,
+    {
+      old_password: oldPassword,
+      new_password: newPassword,
+    }
+  );
+  return response.data;
+};
+
+export const revokeAllTokens = async (): Promise<RevokeAllTokensResponse> => {
+  const response = await apiClient.post<RevokeAllTokensResponse>(
+    `${API_V1_PREFIX}/auth/revoke-all`
+  );
   return response.data;
 };
 

@@ -7,7 +7,7 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db
@@ -43,8 +43,28 @@ from schemas.auth import (
     Token,
     UserResponse,
 )
+from services.auth_monitor import AuthMonitorService
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+
+def get_client_ip(request: Request) -> Optional[str]:
+    """获取客户端 IP 地址"""
+    # 优先从 X-Forwarded-For 获取(如果使用了代理)
+    forwarded = request.headers.get("X-Forwarded-For")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    # 否则从 X-Real-IP 获取
+    real_ip = request.headers.get("X-Real-IP")
+    if real_ip:
+        return real_ip
+    # 最后使用直接连接的 IP
+    return request.client.host if request.client else None
+
+
+def get_user_agent(request: Request) -> Optional[str]:
+    """获取用户代理字符串"""
+    return request.headers.get("User-Agent")
 
 
 
@@ -99,6 +119,7 @@ async def _create_tokens_for_user(db: AsyncSession, user: User) -> Token:
 @router.post("/register", response_model=RegisterResponse, status_code=status.HTTP_201_CREATED)
 async def register(
     data: RegisterRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -108,6 +129,9 @@ async def register(
     - 如果提供了 student_id,同时创建 Student 记录
     - 返回 JWT tokens
     """
+    ip_address = get_client_ip(request)
+    user_agent = get_user_agent(request)
+
     # 检查邮箱是否已存在
     existing_user = await crud_user.get_by_email(db, data.email)
     if existing_user:
@@ -158,6 +182,17 @@ async def register(
     tokens = await _create_tokens_for_user(db, user)
     await db.commit()
 
+    # 记录注册事件
+    await AuthMonitorService.log_auth_event(
+        db=db,
+        email=data.email,
+        event_type="register",
+        status="success",
+        user_id=user.id,
+        ip_address=ip_address,
+        user_agent=user_agent
+    )
+
     return RegisterResponse(
         user=UserResponse.model_validate(user),
         tokens=tokens,
@@ -168,6 +203,7 @@ async def register(
 @router.post("/login", response_model=LoginResponse)
 async def login(
     credentials: LoginRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -177,9 +213,44 @@ async def login(
     - 更新最后登录时间
     - 返回 JWT tokens
     """
+    ip_address = get_client_ip(request)
+    user_agent = get_user_agent(request)
+
+    # 检查是否被锁定
+    lockout_info = await AuthMonitorService.check_failed_login_attempts(
+        db=db,
+        email=credentials.email
+    )
+
+    if lockout_info['is_locked']:
+        # 记录被锁定的登录尝试
+        await AuthMonitorService.log_auth_event(
+            db=db,
+            email=credentials.email,
+            event_type="login_failed",
+            status="failure",
+            ip_address=ip_address,
+            user_agent=user_agent,
+            failure_reason=f"账户已被锁定,剩余 {lockout_info['remaining_lockout_minutes']} 分钟"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=f"登录失败次数过多,账户已被锁定 {lockout_info['remaining_lockout_minutes']} 分钟"
+        )
+
     # 查找用户
     user = await crud_user.get_by_email(db, credentials.email)
     if not user:
+        # 记录失败的登录尝试(用户不存在)
+        await AuthMonitorService.log_auth_event(
+            db=db,
+            email=credentials.email,
+            event_type="login_failed",
+            status="failure",
+            ip_address=ip_address,
+            user_agent=user_agent,
+            failure_reason="用户不存在"
+        )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="邮箱或密码错误"
@@ -187,6 +258,17 @@ async def login(
 
     # 验证密码
     if not verify_password(credentials.password, user.password_hash):
+        # 记录失败的登录尝试(密码错误)
+        await AuthMonitorService.log_auth_event(
+            db=db,
+            email=credentials.email,
+            event_type="login_failed",
+            status="failure",
+            user_id=user.id,
+            ip_address=ip_address,
+            user_agent=user_agent,
+            failure_reason="密码错误"
+        )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="邮箱或密码错误"
@@ -194,6 +276,17 @@ async def login(
 
     # 检查用户是否激活
     if not user.is_active:
+        # 记录失败的登录尝试(账户未激活)
+        await AuthMonitorService.log_auth_event(
+            db=db,
+            email=credentials.email,
+            event_type="login_failed",
+            status="failure",
+            user_id=user.id,
+            ip_address=ip_address,
+            user_agent=user_agent,
+            failure_reason="账户已被停用"
+        )
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="账户已被停用"
@@ -209,6 +302,17 @@ async def login(
     # 刷新 user 对象以加载所有属性
     await db.refresh(user)
 
+    # 记录成功的登录事件
+    await AuthMonitorService.log_auth_event(
+        db=db,
+        email=credentials.email,
+        event_type="login",
+        status="success",
+        user_id=user.id,
+        ip_address=ip_address,
+        user_agent=user_agent
+    )
+
     return LoginResponse(
         user=UserResponse.model_validate(user),
         tokens=tokens,
@@ -219,7 +323,8 @@ async def login(
 
 @router.post("/refresh", response_model=RefreshTokenResponse)
 async def refresh_access_token(
-    request: RefreshTokenRequest,
+    request_data: RefreshTokenRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -229,8 +334,11 @@ async def refresh_access_token(
     - 撤销旧的 Refresh Token (Rotation)
     - 生成新的 Access Token 和 Refresh Token
     """
+    ip_address = get_client_ip(request)
+    user_agent = get_user_agent(request)
+
     # 查找 Refresh Token
-    refresh_token = await crud_refresh_token.get_by_token(db, request.refresh_token)
+    refresh_token = await crud_refresh_token.get_by_token(db, request_data.refresh_token)
 
     if not refresh_token:
         raise HTTPException(
@@ -261,11 +369,22 @@ async def refresh_access_token(
         )
 
     # 撤销旧的 Refresh Token (Rotation 机制)
-    await crud_refresh_token.revoke_token(db, request.refresh_token)
+    await crud_refresh_token.revoke_token(db, request_data.refresh_token)
 
     # 创建新的 tokens
     new_tokens = await _create_tokens_for_user(db, user)
     await db.commit()
+
+    # 记录 token 刷新事件
+    await AuthMonitorService.log_auth_event(
+        db=db,
+        email=user.email,
+        event_type="token_refresh",
+        status="success",
+        user_id=user.id,
+        ip_address=ip_address,
+        user_agent=user_agent
+    )
 
     return RefreshTokenResponse(
         access_token=new_tokens.access_token,
@@ -277,6 +396,7 @@ async def refresh_access_token(
 
 @router.post("/logout", response_model=LogoutResponse)
 async def logout(
+    request: Request,
     current_user: User = Depends(get_current_active_user),
     authorization: str = Depends(oauth2_scheme),
     db: AsyncSession = Depends(get_db)
@@ -287,6 +407,9 @@ async def logout(
     - 将当前 Access Token 加入黑名单
     - 撤销所有 Refresh Tokens
     """
+    ip_address = get_client_ip(request)
+    user_agent = get_user_agent(request)
+
     # 提取 Access Token 的 JTI
     jti = get_token_jti(authorization)
     if jti:
@@ -306,6 +429,17 @@ async def logout(
     await crud_refresh_token.revoke_all_user_tokens(db, current_user.id)
     await db.commit()
 
+    # 记录登出事件
+    await AuthMonitorService.log_auth_event(
+        db=db,
+        email=current_user.email,
+        event_type="logout",
+        status="success",
+        user_id=current_user.id,
+        ip_address=ip_address,
+        user_agent=user_agent
+    )
+
     return LogoutResponse(message="登出成功")
 
 
@@ -323,7 +457,8 @@ async def get_current_user_info(
 
 @router.post("/change-password", response_model=ChangePasswordResponse)
 async def change_password(
-    request: ChangePasswordRequest,
+    request_data: ChangePasswordRequest,
+    http_request: Request,
     current_user: User = Depends(get_current_active_user),
     authorization: str = Depends(oauth2_scheme),
     db: AsyncSession = Depends(get_db)
@@ -335,15 +470,18 @@ async def change_password(
     - 更新为新密码
     - 撤销所有现有 tokens (强制重新登录)
     """
+    ip_address = get_client_ip(http_request)
+    user_agent = get_user_agent(http_request)
+
     # 验证旧密码
-    if not verify_password(request.old_password, current_user.password_hash):
+    if not verify_password(request_data.old_password, current_user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="旧密码错误"
         )
 
     # 更新密码
-    new_password_hash = hash_password(request.new_password)
+    new_password_hash = hash_password(request_data.new_password)
     current_user.password_hash = new_password_hash
 
     # 将当前 Access Token 加入黑名单
@@ -363,11 +501,23 @@ async def change_password(
     await crud_refresh_token.revoke_all_user_tokens(db, current_user.id)
     await db.commit()
 
+    # 记录密码修改事件
+    await AuthMonitorService.log_auth_event(
+        db=db,
+        email=current_user.email,
+        event_type="password_change",
+        status="success",
+        user_id=current_user.id,
+        ip_address=ip_address,
+        user_agent=user_agent
+    )
+
     return ChangePasswordResponse(message="密码修改成功,所有设备已登出")
 
 
 @router.post("/revoke-all", response_model=RevokeAllTokensResponse)
 async def revoke_all_tokens(
+    request: Request,
     current_user: User = Depends(get_current_active_user),
     db: AsyncSession = Depends(get_db)
 ):
@@ -376,8 +526,23 @@ async def revoke_all_tokens(
 
     用于安全事件响应,强制所有设备重新登录。
     """
+    ip_address = get_client_ip(request)
+    user_agent = get_user_agent(request)
+
     revoked_count = await crud_refresh_token.revoke_all_user_tokens(db, current_user.id)
     await db.commit()
+
+    # 记录撤销所有 tokens 事件
+    await AuthMonitorService.log_auth_event(
+        db=db,
+        email=current_user.email,
+        event_type="token_revoke",
+        status="success",
+        user_id=current_user.id,
+        ip_address=ip_address,
+        user_agent=user_agent,
+        metadata={"revoked_count": revoked_count}
+    )
 
     return RevokeAllTokensResponse(
         message="所有设备已登出",

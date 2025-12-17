@@ -1,0 +1,126 @@
+# AI Teaching Assistant - Docker Compose Configuration (China Mirror)
+# 使用国内镜像源，适用于中国大陆网络环境
+# 启动命令: docker-compose -f docker-compose.cn.yml up -d
+#
+# 镜像源说明：
+# - 使用 Docker Hub 镜像加速器前缀
+# - 如果仍然无法拉取，请在 Docker Desktop 设置中配置镜像加速器：
+#   Settings -> Docker Engine -> 添加 "registry-mirrors": ["https://docker.m.daocloud.io"]
+
+services:
+  # PostgreSQL Database (使用 DaoCloud 镜像加速)
+  postgres:
+    image: docker.m.daocloud.io/library/postgres:15-alpine
+    container_name: ai-ta-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ai_teaching}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ai_teaching_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-ai_teaching_assistant}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ai_teaching}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ai-ta-network
+
+  # Redis Cache (使用 DaoCloud 镜像加速)
+  redis:
+    image: docker.m.daocloud.io/library/redis:7-alpine
+    container_name: ai-ta-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ai-ta-network
+
+  # Backend API Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.cn
+    container_name: ai-ta-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-ai_teaching}:${POSTGRES_PASSWORD:-ai_teaching_dev}@postgres:5432/${POSTGRES_DB:-ai_teaching_assistant}
+      DATABASE_ECHO: ${DATABASE_ECHO:-false}
+      REDIS_URL: redis://redis:6379/0
+      DEBUG: ${DEBUG:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      SECRET_KEY: ${SECRET_KEY:-change-this-in-production-use-a-secure-random-key}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_API_BASE: ${OPENAI_API_BASE:-https://api.openai.com/v1}
+      AI_MODEL: ${AI_MODEL:-gpt-4}
+      CORS_ORIGINS: '["http://localhost:3000", "http://localhost:80", "http://frontend:80"]'
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+    networks:
+      - ai-ta-network
+    command: >
+      sh -c "
+        python -m alembic upgrade head &&
+        python -m scripts.seed_feedback_templates &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+  # Frontend Web Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.cn
+    container_name: ai-ta-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+    networks:
+      - ai-ta-network
+
+# Named volumes for data persistence
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  backend_uploads:
+    driver: local
+
+# Network configuration
+networks:
+  ai-ta-network:
+    driver: bridge
+

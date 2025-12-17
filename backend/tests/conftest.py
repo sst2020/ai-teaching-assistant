@@ -10,12 +10,13 @@ from pathlib import Path
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.main import app
+from app.main import create_app
 
 
 @pytest.fixture
 def client():
     """Synchronous test client for FastAPI."""
+    app = create_app(testing=True)
     with TestClient(app) as client:
         yield client
 
@@ -23,6 +24,7 @@ def client():
 @pytest.fixture
 async def async_client():
     """Asynchronous test client for FastAPI."""
+    app = create_app(testing=True)
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         yield client

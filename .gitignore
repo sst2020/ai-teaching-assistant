@@ -205,3 +205,22 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Docker
+docker-compose.override.yml
+
+# Environment files (keep templates, ignore actual .env)
+.env
+.env.local
+!.env.development
+!.env.staging
+!.env.production
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads directory content
+backend/uploads/*
+!backend/uploads/.gitkeep

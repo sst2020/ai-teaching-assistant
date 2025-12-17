@@ -10,7 +10,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sqlalchemy import select
-from core.database import async_session_maker, engine, Base
+from core.database import AsyncSessionLocal, async_engine, Base
 from models.feedback_template import FeedbackTemplate, TemplateCategory
 
 
@@ -1077,7 +1077,7 @@ ALL_TEMPLATES = (
 
 async def seed_templates():
     """Seed the database with default feedback templates."""
-    async with async_session_maker() as session:
+    async with AsyncSessionLocal() as session:
         # Check if templates already exist
         result = await session.execute(select(FeedbackTemplate).limit(1))
         if result.scalar_one_or_none():
@@ -1108,7 +1108,7 @@ async def seed_templates():
 async def main():
     """Main entry point."""
     # Create tables if they don't exist
-    async with engine.begin() as conn:
+    async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
     await seed_templates()

@@ -21,7 +21,7 @@ export interface RegisterData {
   email: string;
   password: string;
   name: string;
-  student_id: string;
+  student_id?: string;
 }
 
 export interface AuthTokens {

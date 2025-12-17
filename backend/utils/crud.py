@@ -29,19 +29,19 @@ ModelType = TypeVar("ModelType", bound=Base)
 
 class CRUDBase(Generic[ModelType]):
     """Base class for CRUD operations."""
-    
+
     def __init__(self, model: Type[ModelType]):
         self.model = model
-    
+
     async def get(self, db: AsyncSession, id: int) -> Optional[ModelType]:
         """Get a single record by ID."""
         result = await db.execute(select(self.model).where(self.model.id == id))
         return result.scalar_one_or_none()
-    
+
     async def get_multi(
-        self, 
-        db: AsyncSession, 
-        skip: int = 0, 
+        self,
+        db: AsyncSession,
+        skip: int = 0,
         limit: int = 100,
         filters: Optional[Dict[str, Any]] = None
     ) -> List[ModelType]:
@@ -54,7 +54,7 @@ class CRUDBase(Generic[ModelType]):
         query = query.offset(skip).limit(limit)
         result = await db.execute(query)
         return list(result.scalars().all())
-    
+
     async def count(self, db: AsyncSession, filters: Optional[Dict[str, Any]] = None) -> int:
         """Count records with optional filters."""
         query = select(func.count()).select_from(self.model)
@@ -64,7 +64,7 @@ class CRUDBase(Generic[ModelType]):
                     query = query.where(getattr(self.model, key) == value)
         result = await db.execute(query)
         return result.scalar() or 0
-    
+
     async def create(self, db: AsyncSession, obj_in: Dict[str, Any]) -> ModelType:
         """Create a new record."""
         db_obj = self.model(**obj_in)
@@ -72,11 +72,11 @@ class CRUDBase(Generic[ModelType]):
         await db.flush()
         await db.refresh(db_obj)
         return db_obj
-    
+
     async def update(
-        self, 
-        db: AsyncSession, 
-        db_obj: ModelType, 
+        self,
+        db: AsyncSession,
+        db_obj: ModelType,
         obj_in: Dict[str, Any]
     ) -> ModelType:
         """Update an existing record."""
@@ -86,7 +86,7 @@ class CRUDBase(Generic[ModelType]):
         await db.flush()
         await db.refresh(db_obj)
         return db_obj
-    
+
     async def delete(self, db: AsyncSession, id: int) -> bool:
         """Delete a record by ID."""
         obj = await self.get(db, id)
@@ -100,21 +100,21 @@ class CRUDBase(Generic[ModelType]):
 # Student CRUD
 class CRUDStudent(CRUDBase[Student]):
     """CRUD operations for Student model."""
-    
+
     async def get_by_student_id(self, db: AsyncSession, student_id: str) -> Optional[Student]:
         """Get student by unique student_id."""
         result = await db.execute(
             select(Student).where(Student.student_id == student_id)
         )
         return result.scalar_one_or_none()
-    
+
     async def get_by_email(self, db: AsyncSession, email: str) -> Optional[Student]:
         """Get student by email."""
         result = await db.execute(
             select(Student).where(Student.email == email)
         )
         return result.scalar_one_or_none()
-    
+
     async def get_by_course(
         self, db: AsyncSession, course_id: str, skip: int = 0, limit: int = 100
     ) -> List[Student]:
@@ -130,14 +130,14 @@ class CRUDStudent(CRUDBase[Student]):
 # Assignment CRUD
 class CRUDAssignment(CRUDBase[Assignment]):
     """CRUD operations for Assignment model."""
-    
+
     async def get_by_assignment_id(self, db: AsyncSession, assignment_id: str) -> Optional[Assignment]:
         """Get assignment by unique assignment_id."""
         result = await db.execute(
             select(Assignment).where(Assignment.assignment_id == assignment_id)
         )
         return result.scalar_one_or_none()
-    
+
     async def get_by_course(
         self, db: AsyncSession, course_id: str, skip: int = 0, limit: int = 100
     ) -> List[Assignment]:
@@ -729,3 +729,46 @@ crud_code_file = CRUDCodeFile(CodeFile)
 crud_analysis_result = CRUDAnalysisResult(AnalysisResult)
 crud_feedback_template = CRUDFeedbackTemplate(FeedbackTemplate)
 crud_ai_interaction = CRUDAIInteraction(AIInteraction)
+
+
+
+# Rubric CRUD
+class CRUDRubric(CRUDBase[Rubric]):
+    """Rubric 的 CRUD 操作"""
+
+    async def get_by_rubric_id(self, db: AsyncSession, rubric_id: str) -> Optional[Rubric]:
+        """通过 rubric_id 获取 Rubric"""
+        result = await db.execute(
+            select(Rubric).where(Rubric.rubric_id == rubric_id)
+        )
+        return result.scalar_one_or_none()
+
+    async def get_with_assignments(
+        self, db: AsyncSession, rubric_id: str
+    ) -> Optional[Rubric]:
+        """获取 Rubric 及其关联的所有 Assignment（使用 eager loading）"""
+        result = await db.execute(
+            select(Rubric)
+            .options(selectinload(Rubric.assignments))
+            .where(Rubric.rubric_id == rubric_id)
+        )
+        return result.scalar_one_or_none()
+
+    async def get_assignments_by_rubric(
+        self, db: AsyncSession, rubric_id: str, skip: int = 0, limit: int = 100
+    ) -> List[Assignment]:
+        """获取使用指定 Rubric 的所有 Assignment"""
+        rubric = await self.get_by_rubric_id(db, rubric_id)
+        if not rubric:
+            return []
+
+        result = await db.execute(
+            select(Assignment)
+            .where(Assignment.rubric_id == rubric.id)
+            .offset(skip).limit(limit)
+        )
+        return list(result.scalars().all())
+
+
+# Create CRUD instance
+crud_rubric = CRUDRubric(Rubric)

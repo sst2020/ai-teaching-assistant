@@ -34,6 +34,7 @@ from api.personalized_feedback import router as personalized_feedback_router
 from api.evaluation import router as evaluation_router
 from api.knowledge_base import router as knowledge_base_router
 from api.triage import router as triage_router
+from api.rubrics import router as rubrics_router
 
 # Setup enhanced logger
 logger = setup_logger(
@@ -124,8 +125,36 @@ async def log_requests_middleware(request: Request, call_next):
         raise
 
 
-def create_application() -> FastAPI:
-    """Create and configure the FastAPI application."""
+def create_app(testing: bool = False) -> FastAPI:
+    """
+    FastAPI 应用工厂函数
+
+    Args:
+        testing: 是否为测试模式。测试模式下会跳过某些初始化步骤。
+
+    Returns:
+        FastAPI 应用实例
+    """
+
+    # 在测试模式下，使用简化的 lifespan
+    if testing:
+        @asynccontextmanager
+        async def test_lifespan(app: FastAPI):
+            """测试模式的简化 lifespan"""
+            # 测试模式下仍然需要初始化数据库表
+            async with async_engine.begin() as conn:
+                from models import (
+                    Student, Assignment, Submission, GradingResult,
+                    Question, Answer, PlagiarismCheck, Rubric, CodeFile,
+                    FeedbackTemplate, AIInteraction, KnowledgeBaseEntry, QALog
+                )
+                await conn.run_sync(Base.metadata.create_all)
+            yield
+            await async_engine.dispose()
+
+        app_lifespan = test_lifespan
+    else:
+        app_lifespan = lifespan
 
     app = FastAPI(
         title=settings.APP_NAME,
@@ -134,7 +163,7 @@ def create_application() -> FastAPI:
         docs_url="/docs",
         redoc_url="/redoc",
         openapi_url="/openapi.json",
-        lifespan=lifespan
+        lifespan=app_lifespan
     )
 
     # Add request logging middleware
@@ -165,12 +194,23 @@ def create_application() -> FastAPI:
     app.include_router(evaluation_router, prefix=settings.API_V1_PREFIX)
     app.include_router(knowledge_base_router, prefix=settings.API_V1_PREFIX)
     app.include_router(triage_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(rubrics_router, prefix=settings.API_V1_PREFIX)
 
     return app
 
 
-# Create the application instance
-app = create_application()
+# Create the application instance (向后兼容)
+app = create_app()
+
+
+# 保留旧函数名以向后兼容
+def create_application() -> FastAPI:
+    """
+    已弃用：请使用 create_app() 代替
+
+    为了向后兼容保留此函数
+    """
+    return create_app()
 
 
 if __name__ == "__main__":

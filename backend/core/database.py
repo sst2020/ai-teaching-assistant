@@ -22,27 +22,39 @@ class Base(DeclarativeBase):
 
 def get_database_url(async_mode: bool = True) -> str:
     """
-    Get the database URL, converting to async driver if needed.
-    
+    Get the database URL, converting to async/sync driver as needed.
+
     Args:
-        async_mode: If True, convert to async driver URL
-        
+        async_mode: If True, convert to async driver URL; if False, convert to sync driver URL
+
     Returns:
         Database URL string
     """
     url = settings.DATABASE_URL
-    
+
     if async_mode:
-        # Convert sqlite:/// to sqlite+aiosqlite:///
+        # Convert to async drivers
+        # sqlite:/// to sqlite+aiosqlite:///
         if url.startswith("sqlite:///"):
             url = url.replace("sqlite:///", "sqlite+aiosqlite:///")
-        # Convert postgresql:// to postgresql+asyncpg://
-        elif url.startswith("postgresql://"):
+        # postgresql:// to postgresql+asyncpg://
+        elif url.startswith("postgresql://") and "+asyncpg" not in url:
             url = url.replace("postgresql://", "postgresql+asyncpg://")
-        # Convert mysql:// to mysql+aiomysql://
-        elif url.startswith("mysql://"):
+        # mysql:// to mysql+aiomysql://
+        elif url.startswith("mysql://") and "+aiomysql" not in url:
             url = url.replace("mysql://", "mysql+aiomysql://")
-    
+    else:
+        # Convert to sync drivers (for Alembic migrations)
+        # sqlite+aiosqlite:/// to sqlite:///
+        if "+aiosqlite" in url:
+            url = url.replace("sqlite+aiosqlite:///", "sqlite:///")
+        # postgresql+asyncpg:// to postgresql://
+        elif "+asyncpg" in url:
+            url = url.replace("postgresql+asyncpg://", "postgresql://")
+        # mysql+aiomysql:// to mysql://
+        elif "+aiomysql" in url:
+            url = url.replace("mysql+aiomysql://", "mysql://")
+
     return url
 
 

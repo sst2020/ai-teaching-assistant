@@ -42,12 +42,16 @@ const QAInterface: React.FC = () => {
         question: question,
       });
 
+      // 从 ai_answer 对象中提取答案内容和置信度
+      const answerContent = response.ai_answer?.answer || response.teacher_answer || '暂无回答';
+      const confidence = response.ai_answer?.confidence;
+
       const answerMessage: Message = {
         id: response.question_id,
         type: 'answer',
-        content: response.ai_answer,
+        content: answerContent,
         timestamp: new Date(),
-        confidence: response.confidence,
+        confidence: confidence,
       };
 
       setMessages(prev => [...prev, answerMessage]);

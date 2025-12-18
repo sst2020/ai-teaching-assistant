@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { SubmissionComparison, SimilarityMatrix } from '../../types/plagiarism';
 
 interface SuspiciousListProps {
@@ -15,10 +15,10 @@ const SuspiciousList: React.FC<SuspiciousListProps> = ({ pairs, matrix, onPairCl
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [filter, setFilter] = useState('');
 
-  const getStudentName = (studentId: string): string => {
+  const getStudentName = useCallback((studentId: string): string => {
     const index = matrix.student_ids.indexOf(studentId);
     return index >= 0 ? (matrix.student_names[index] || studentId) : studentId;
-  };
+  }, [matrix.student_ids, matrix.student_names]);
 
   const getSimilarityLevel = (score: number): { label: string; className: string } => {
     if (score >= 0.9) return { label: '极高', className: 'very-high' };
@@ -60,7 +60,7 @@ const SuspiciousList: React.FC<SuspiciousListProps> = ({ pairs, matrix, onPairCl
     });
 
     return result;
-  }, [pairs, sortField, sortOrder, filter]);
+  }, [pairs, sortField, sortOrder, filter, getStudentName]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {

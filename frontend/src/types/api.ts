@@ -102,18 +102,25 @@ export interface QuestionRequest {
   context?: string;
 }
 
+// AI 生成的回答结构
+export interface AIAnswer {
+  answer: string;
+  confidence: number;
+  sources: string[];
+  needs_teacher_review: boolean;
+}
+
 export interface QuestionResponse {
   question_id: string;
   student_id: string;
   course_id: string;
   question: string;
-  ai_answer: string;
-  confidence: number;
+  ai_answer: AIAnswer | null;
+  teacher_answer: string | null;
   category: string;
   status: string;
-  needs_teacher_review: boolean;
   created_at: string;
-  answered_at: string;
+  answered_at: string | null;
 }
 
 // Plagiarism Types

@@ -35,10 +35,16 @@ API service layer:
 
 ### `/types`
 TypeScript type definitions:
+- **`api.ts`** - API 响应类型定义，包括：
+  - `AIAnswer` - AI 回答结构（answer, confidence, sources, needs_teacher_review）
+  - `QuestionResponse` - 问答响应（ai_answer 为 AIAnswer 对象或 null）
+  - `CodeAnalysisResponse`, `GradingResult`, `PlagiarismResponse` 等
 - **`auth.ts`** - User, LoginCredentials, RegisterData, AuthTokens, AuthState
 - **`student.ts`** - Student, StudentProfile, Course, StudentStats
 - **`submission.ts`** - Submission, CreateSubmissionRequest, SubmissionFilters
 - **`assignment.ts`** - Assignment, AssignmentFilters, Rubric
+- **`triage.ts`** - 分诊相关类型（TriageResponse, TriageDecision 等）
+- **`reportAnalysis.ts`** - 报告分析类型（ReportFileType, ReportAnalysisResponse 等）
 
 ### `/utils`
 Utility functions and helpers:
@@ -51,8 +57,23 @@ Material Design 3 (MD3) Expressive theme implementation:
 
 ## Key Files
 
-- **`App.tsx`** - Main application component with React Router routes and context providers
+- **`App.tsx`** - Main application component with React Router routes and context providers (TypeScript version)
+- **`App.js`** - Main application component (JavaScript version) - **React 入口实际使用此文件**
 - **`index.tsx`** - Application entry point with BrowserRouter wrapper
+- **`index.js`** - Application entry point (JavaScript version)
+
+### ⚠️ App.tsx 与 App.js 同步规则
+
+**重要**：由于 React 入口使用的是 `App.js`，修改 `App.tsx` 时必须同步更新 `App.js`，反之亦然。
+
+同步内容包括：
+- 导入语句（imports）
+- 路由配置（Routes）
+- 组件逻辑（AuthenticatedLayout、getActiveTab 等）
+- 状态管理（useState 等）
+- 功能特性（DebugPanel 等）
+
+TypeScript 差异：App.tsx 包含类型注解，App.js 使用纯 JavaScript 语法。
 
 ## Routing
 

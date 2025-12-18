@@ -129,6 +129,23 @@ type: "always_apply"
 - **文件位置**：所有项目文件必须在项目目录内部
 - **工具协同**：根据任务复杂度合理组合使用多个MCP工具
 
+## 前端文件同步规则
+
+### App.tsx 与 App.js 同步
+
+**重要**：本项目同时存在 `frontend/src/App.tsx` 和 `frontend/src/App.js` 两个文件。由于 React 入口使用的是 `App.js`，必须确保两个文件保持同步。
+
+- **修改 App.tsx 时**：必须同步更新 App.js，确保功能一致
+- **修改 App.js 时**：必须同步更新 App.tsx，确保功能一致
+- **同步内容包括**：
+  - 导入语句（imports）
+  - 路由配置（Routes）
+  - 组件逻辑（AuthenticatedLayout、getActiveTab 等）
+  - 状态管理（useState 等）
+  - 功能特性（DebugPanel 等）
+- **TypeScript 差异**：App.tsx 包含类型注解（如 `React.FC<{ children: React.ReactNode }>`），App.js 使用纯 JavaScript 语法
+- **验证方式**：修改后对比两个文件的功能逻辑，确保路由、导入、组件结构完全一致
+
 ## 执行原则
 
 每次响应必须以当前模式标签开始，严格按照工作流程推进，确保代码质量和项目一致性。。

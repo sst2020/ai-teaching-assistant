@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { analyzeProjectReport } from '../../services/api';
 import {
   ReportAnalysisRequest,
@@ -14,13 +14,16 @@ const ReportAnalysis: React.FC = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<ReportAnalysisResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [textContent, setTextContent] = useState('');
+  const [fileName, setFileName] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleAnalyze = async (content: string, fileName: string, fileType: ReportFileType) => {
+  const handleAnalyze = async (content: string, name: string, fileType: ReportFileType) => {
     setIsAnalyzing(true);
     setError(null);
     try {
       const request: ReportAnalysisRequest = {
-        file_name: fileName,
+        file_name: name,
         file_type: fileType,
         content,
       };
@@ -32,6 +35,34 @@ const ReportAnalysis: React.FC = () => {
     } finally {
       setIsAnalyzing(false);
     }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target?.result as string;
+      setTextContent(content);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleSubmit = () => {
+    if (!textContent.trim()) {
+      setError('请输入或上传报告内容');
+      return;
+    }
+    // 根据文件扩展名确定类型，默认为 markdown
+    let fileType: ReportFileType = 'markdown';
+    if (fileName.endsWith('.pdf')) {
+      fileType = 'pdf';
+    } else if (fileName.endsWith('.docx')) {
+      fileType = 'docx';
+    }
+    handleAnalyze(textContent, fileName || 'report.md', fileType);
   };
 
   return (
@@ -86,10 +117,71 @@ const ReportAnalysis: React.FC = () => {
       )}
 
       <div className="tab-content">
-        {/* TODO: 拆分为 Upload / Structure / Quality / Logic / Suggestions 子组件 */}
-        <div>
-          暂未实现详细子视图，此处已打通后端 API 调用链，可在后续步骤细化 UI。
-        </div>
+        {activeTab === 'upload' && (
+          <div className="upload-section">
+            <div className="upload-area">
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+                accept=".txt,.md,.markdown"
+                style={{ display: 'none' }}
+              />
+              <button
+                className="upload-btn"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isAnalyzing}
+              >
+                📁 选择文件
+              </button>
+              {fileName && <span className="file-name">{fileName}</span>}
+            </div>
+            <div className="text-input-area">
+              <textarea
+                placeholder="或直接粘贴报告内容..."
+                value={textContent}
+                onChange={(e) => setTextContent(e.target.value)}
+                disabled={isAnalyzing}
+                rows={10}
+              />
+            </div>
+            <button
+              className="analyze-btn"
+              onClick={handleSubmit}
+              disabled={isAnalyzing || !textContent.trim()}
+            >
+              {isAnalyzing ? '⏳ 分析中...' : '🔍 开始分析'}
+            </button>
+          </div>
+        )}
+
+        {activeTab === 'structure' && result && (
+          <div className="result-section">
+            <h3>📋 报告结构分析</h3>
+            <pre>{JSON.stringify(result.parsed, null, 2)}</pre>
+          </div>
+        )}
+
+        {activeTab === 'quality' && result && (
+          <div className="result-section">
+            <h3>📊 质量评估</h3>
+            <pre>{JSON.stringify(result.quality, null, 2)}</pre>
+          </div>
+        )}
+
+        {activeTab === 'logic' && result && (
+          <div className="result-section">
+            <h3>💡 逻辑与创新分析</h3>
+            <pre>{JSON.stringify({ logic: result.logic, innovation: result.innovation }, null, 2)}</pre>
+          </div>
+        )}
+
+        {activeTab === 'suggestions' && result && (
+          <div className="result-section">
+            <h3>✏️ 修改建议</h3>
+            <pre>{JSON.stringify(result.suggestions, null, 2)}</pre>
+          </div>
+        )}
       </div>
     </div>
   );

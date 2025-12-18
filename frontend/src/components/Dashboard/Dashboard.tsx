@@ -4,6 +4,9 @@ import { HealthResponse, ApiInfo } from '../../types/api';
 import { LoadingSpinner, ErrorMessage } from '../common';
 import './Dashboard.css';
 
+// 获取后端 API 基础 URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 const Dashboard: React.FC = () => {
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [apiInfo, setApiInfo] = useState<ApiInfo | null>(null);
@@ -81,7 +84,7 @@ const Dashboard: React.FC = () => {
             <p><strong>Version:</strong> {apiInfo?.version || 'N/A'}</p>
             <p><strong>Description:</strong> {apiInfo?.description || 'N/A'}</p>
             {apiInfo?.docs_url && (
-              <a href={apiInfo.docs_url} target="_blank" rel="noopener noreferrer" className="docs-link">
+              <a href={`${API_BASE_URL}${apiInfo.docs_url}`} target="_blank" rel="noopener noreferrer" className="docs-link">
                 📚 View API Documentation
               </a>
             )}

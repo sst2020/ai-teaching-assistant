@@ -1,10 +1,11 @@
 /**
- * Material Design 3 - Main Application Component (JavaScript version)
+ * Material Design 3 - Main Application Component
  *
- * Note: The primary application uses App.tsx (TypeScript).
- * This file is kept for compatibility but App.tsx is the main entry point.
+ * Main entry point for the AI Teaching Assistant frontend.
+ * Implements MD3 Expressive theme with routing and authentication.
  */
 
+import React, { useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
@@ -12,6 +13,11 @@ import { Header } from './components/layout';
 import { Dashboard } from './components/Dashboard';
 import { CodeAnalysis } from './components/CodeAnalysis';
 import { QAInterface } from './components/QAInterface';
+import { PlagiarismCheck } from './components/PlagiarismCheck';
+import { ReportAnalysis } from './components/ReportAnalysis';
+import { DebugPanel } from './components/common/DebugPanel';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import { KnowledgeBase, QATriage, TeacherDashboard } from './components';
 import { Login, Register, StudentDashboard, SubmitAssignment, Grades } from './pages';
 import './App.css';
 
@@ -27,6 +33,8 @@ const AuthenticatedLayout = ({ children }) => {
     const path = location.pathname;
     if (path.startsWith('/code-analysis')) return 'code-analysis';
     if (path.startsWith('/qa')) return 'qa';
+    if (path.startsWith('/plagiarism')) return 'plagiarism';
+    if (path.startsWith('/report-analysis')) return 'report-analysis';
     return 'dashboard';
   };
 
@@ -54,6 +62,12 @@ const AuthenticatedLayout = ({ children }) => {
  * - Elevation and shape specifications
  */
 function App() {
+  const [debugPanelVisible, setDebugPanelVisible] = useState(false);
+
+  // Check if debug panel is enabled
+  const isDebugMode = process.env.NODE_ENV === 'development' &&
+                     process.env.REACT_APP_ENABLE_DEBUG_PANEL === 'true';
+
   return (
     <AuthProvider>
       <ToastProvider>
@@ -68,55 +82,133 @@ function App() {
             <Route
               path="/dashboard"
               element={
-                <AuthenticatedLayout>
-                  <Dashboard />
-                </AuthenticatedLayout>
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <Dashboard />
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
               }
             />
             <Route
               path="/code-analysis"
               element={
-                <AuthenticatedLayout>
-                  <CodeAnalysis />
-                </AuthenticatedLayout>
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <CodeAnalysis />
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
               }
             />
             <Route
               path="/qa"
               element={
-                <AuthenticatedLayout>
-                  <QAInterface />
-                </AuthenticatedLayout>
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <QAInterface />
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/plagiarism"
+              element={
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <PlagiarismCheck />
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/report-analysis"
+              element={
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <ReportAnalysis />
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
               }
             />
             <Route
               path="/student-dashboard"
               element={
-                <AuthenticatedLayout>
-                  <StudentDashboard />
-                </AuthenticatedLayout>
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <StudentDashboard />
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
               }
             />
             <Route
               path="/submit/:assignmentId"
               element={
-                <AuthenticatedLayout>
-                  <SubmitAssignment />
-                </AuthenticatedLayout>
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <SubmitAssignment />
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
               }
             />
             <Route
               path="/grades"
               element={
-                <AuthenticatedLayout>
-                  <Grades />
-                </AuthenticatedLayout>
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <Grades />
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* 智能问答分诊系统路由 */}
+            <Route
+              path="/smart-qa"
+              element={
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <React.Suspense fallback={<div>加载中...</div>}>
+                      <QATriage userId="current_user" userName="当前用户" />
+                    </React.Suspense>
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/knowledge-base"
+              element={
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <React.Suspense fallback={<div>加载中...</div>}>
+                      <KnowledgeBase />
+                    </React.Suspense>
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher-dashboard"
+              element={
+                <ProtectedRoute>
+                  <AuthenticatedLayout>
+                    <React.Suspense fallback={<div>加载中...</div>}>
+                      <TeacherDashboard teacherId="teacher_001" teacherName="教师" />
+                    </React.Suspense>
+                  </AuthenticatedLayout>
+                </ProtectedRoute>
               }
             />
 
             {/* Fallback route */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
+
+          {/* Debug Panel - 仅在开发环境下显示 */}
+          {isDebugMode && (
+            <DebugPanel
+              isVisible={debugPanelVisible}
+              onToggle={() => setDebugPanelVisible(!debugPanelVisible)}
+            />
+          )}
         </div>
       </ToastProvider>
     </AuthProvider>

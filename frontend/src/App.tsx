@@ -9,6 +9,7 @@ import { QAInterface } from './components/QAInterface';
 import { PlagiarismCheck } from './components/PlagiarismCheck';
 import { ReportAnalysis } from './components/ReportAnalysis';
 import { DebugPanel } from './components/common/DebugPanel';
+import ProtectedRoute from './components/common/ProtectedRoute';
 import { KnowledgeBase, QATriage, TeacherDashboard } from './components';
 import { Login, Register, StudentDashboard, SubmitAssignment, Grades } from './pages';
 import './App.css';
@@ -62,65 +63,81 @@ const App: React.FC = () => {
           <Route
             path="/dashboard"
             element={
-              <AuthenticatedLayout>
-                <Dashboard />
-              </AuthenticatedLayout>
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <Dashboard />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/code-analysis"
             element={
-              <AuthenticatedLayout>
-                <CodeAnalysis />
-              </AuthenticatedLayout>
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <CodeAnalysis />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/qa"
             element={
-              <AuthenticatedLayout>
-                <QAInterface />
-              </AuthenticatedLayout>
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <QAInterface />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/plagiarism"
             element={
-              <AuthenticatedLayout>
-                <PlagiarismCheck />
-              </AuthenticatedLayout>
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <PlagiarismCheck />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
             }
           />
-	          <Route
-	            path="/report-analysis"
-	            element={
-	              <AuthenticatedLayout>
-	                <ReportAnalysis />
-	              </AuthenticatedLayout>
-	            }
-	          />
+          <Route
+            path="/report-analysis"
+            element={
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <ReportAnalysis />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/student-dashboard"
             element={
-              <AuthenticatedLayout>
-                <StudentDashboard />
-              </AuthenticatedLayout>
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <StudentDashboard />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/submit/:assignmentId"
             element={
-              <AuthenticatedLayout>
-                <SubmitAssignment />
-              </AuthenticatedLayout>
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <SubmitAssignment />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/grades"
             element={
-              <AuthenticatedLayout>
-                <Grades />
-              </AuthenticatedLayout>
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <Grades />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
             }
           />
 
@@ -128,31 +145,37 @@ const App: React.FC = () => {
           <Route
             path="/smart-qa"
             element={
-              <AuthenticatedLayout>
-                <React.Suspense fallback={<div>加载中...</div>}>
-                  <QATriage userId="current_user" userName="当前用户" />
-                </React.Suspense>
-              </AuthenticatedLayout>
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <React.Suspense fallback={<div>加载中...</div>}>
+                    <QATriage userId="current_user" userName="当前用户" />
+                  </React.Suspense>
+                </AuthenticatedLayout>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/knowledge-base"
             element={
-              <AuthenticatedLayout>
-                <React.Suspense fallback={<div>加载中...</div>}>
-                  <KnowledgeBase />
-                </React.Suspense>
-              </AuthenticatedLayout>
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <React.Suspense fallback={<div>加载中...</div>}>
+                    <KnowledgeBase />
+                  </React.Suspense>
+                </AuthenticatedLayout>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/teacher-dashboard"
             element={
-              <AuthenticatedLayout>
-                <React.Suspense fallback={<div>加载中...</div>}>
-                  <TeacherDashboard teacherId="teacher_001" teacherName="教师" />
-                </React.Suspense>
-              </AuthenticatedLayout>
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <React.Suspense fallback={<div>加载中...</div>}>
+                    <TeacherDashboard teacherId="teacher_001" teacherName="教师" />
+                  </React.Suspense>
+                </AuthenticatedLayout>
+              </ProtectedRoute>
             }
           />
 

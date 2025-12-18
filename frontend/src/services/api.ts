@@ -17,10 +17,8 @@ import {
   RegisterData,
   LoginResponse,
   RegisterResponse,
-  AuthTokens,
   User,
   RefreshTokenResponse,
-  ChangePasswordRequest,
   ChangePasswordResponse,
   RevokeAllTokensResponse,
 } from '../types/auth';
@@ -49,7 +47,6 @@ import {
   BatchAnalysisRequest,
   BatchAnalysisResponse,
   OriginalityReport,
-  SimilarityMatrix,
   PlagiarismSettings,
 } from '../types/plagiarism';
 import {

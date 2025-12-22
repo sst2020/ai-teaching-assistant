@@ -420,11 +420,12 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - Set `OPENAI_API_KEY` in `.env` file to enable AI-powered features
   - Without API key, the system uses local fallback responses
 
-- [ ] 🟢 **Run Feedback System Tests** (P1)
+- [x] 🟢 **Run Feedback System Tests** (P1) ✅ 2025-12-22
   ```bash
   cd backend
   python -m pytest tests/test_feedback_system.py -v
   ```
+  > 修复了所有 22 个测试，包括 schema 字段补全和测试 API 更新
 
 ---
 
@@ -868,6 +869,10 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - Test plagiarism service
   - **Files:** `backend/tests/test_services/`
 
+- [ ] 🟡 **Add feedback-style tests for other core systems** (P2)
+  - Mirror the coverage level of `backend/tests/test_feedback_system.py` for analysis, evaluation, and auth modules
+  - Ensure cross-module flows (analysis → feedback → evaluation) are covered end-to-end
+
 ### Frontend Tests
 
 - [ ] 🟡 **Add component tests** (P1)
@@ -916,6 +921,10 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - Configure pytest-cov
   - Add coverage badge to README
   - **Target:** 80% coverage
+
+- [ ] 🟡 **Fix Pydantic deprecation warnings** (P2)
+  - Migrate class-based `Config` to `ConfigDict` in Pydantic models
+  - Ensure test runs are free of Pydantic V2 deprecation warnings
 
 ---
 

@@ -146,6 +146,9 @@ class StructureResult(BaseModel):
     average_function_length: float = Field(0, description="Average function length in lines")
     max_class_methods: int = Field(0, description="Maximum methods in a single class")
     inheritance_depth: int = Field(0, description="Maximum inheritance depth")
+    unused_imports: List[str] = Field(default_factory=list, description="List of unused imports")
+    duplicate_patterns: int = Field(0, description="Number of duplicate code patterns detected")
+    cyclomatic_complexity: float = Field(0, description="Average cyclomatic complexity")
 
 
 
@@ -194,6 +197,16 @@ class FullAnalysisResult(BaseModel):
 
     # All Violations
     violations: List[RuleViolation] = Field(default_factory=list)
+
+    # Issue Lists (for feedback generation)
+    naming_issues: List[Any] = Field(default_factory=list, description="Naming convention issues")
+    security_issues: List[Any] = Field(default_factory=list, description="Security issues")
+
+    # Alias for line_metrics (for backward compatibility)
+    @property
+    def lines(self):
+        """Alias for line_metrics."""
+        return self.line_metrics
 
     # Recommendations
     recommendations: List[str] = Field(default_factory=list)

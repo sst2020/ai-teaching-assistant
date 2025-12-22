@@ -96,47 +96,49 @@ class MyClass:
     @pytest.mark.asyncio
     async def test_generate_feedback_basic(self, service, sample_python_code, sample_analysis_results):
         """Test basic feedback generation."""
-        feedback = await service.generate_feedback(
+        request = GenerateFeedbackRequest(
             code=sample_python_code,
             language="python",
-            analysis_results=sample_analysis_results,
             tone=FeedbackTone.PROFESSIONAL
         )
+        feedback = await service.generate_feedback(request)
 
         assert feedback is not None
-        assert "feedback_items" in feedback
-        assert "overall_score" in feedback
-        assert "summary" in feedback
-        assert "strengths" in feedback
-        assert "improvements" in feedback
+        assert hasattr(feedback, 'categories')
+        assert hasattr(feedback, 'overall_score')
+        assert hasattr(feedback, 'summary')
+        assert hasattr(feedback, 'strengths')
+        assert hasattr(feedback, 'improvements')
+        assert feedback.overall_score >= 0
+        assert feedback.overall_score <= 100
 
     @pytest.mark.asyncio
     async def test_generate_feedback_encouraging_tone(self, service, sample_python_code, sample_analysis_results):
         """Test feedback with encouraging tone."""
-        feedback = await service.generate_feedback(
+        request = GenerateFeedbackRequest(
             code=sample_python_code,
             language="python",
-            analysis_results=sample_analysis_results,
             tone=FeedbackTone.ENCOURAGING
         )
+        feedback = await service.generate_feedback(request)
 
         assert feedback is not None
         # Encouraging tone should have positive language
-        summary = feedback.get("summary", "")
-        assert isinstance(summary, str)
+        assert hasattr(feedback, 'summary')
+        assert isinstance(feedback.summary, str)
 
     @pytest.mark.asyncio
     async def test_generate_feedback_strict_tone(self, service, sample_python_code, sample_analysis_results):
         """Test feedback with strict tone."""
-        feedback = await service.generate_feedback(
+        request = GenerateFeedbackRequest(
             code=sample_python_code,
             language="python",
-            analysis_results=sample_analysis_results,
             tone=FeedbackTone.STRICT
         )
+        feedback = await service.generate_feedback(request)
 
         assert feedback is not None
-        assert "feedback_items" in feedback
+        assert hasattr(feedback, 'categories')
 
     @pytest.mark.asyncio
     async def test_generate_feedback_with_assignment_context(self, service, sample_python_code, sample_analysis_results):

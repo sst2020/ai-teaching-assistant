@@ -400,6 +400,63 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - `GET /api/v1/feedback-templates/stats/summary` - Template statistics
   - Enhanced list endpoint with tone, locale, and sorting filters
 
+### Plagiarism Detection & Originality Analysis System ✅
+
+> **Completed:** December 2024
+> **Task Document:** `issues/plagiarism-detection-system.md`
+
+#### Task 2.3.1: Code Similarity Detection ✅
+
+- [x] 🟡 **SimilarityAlgorithms** - `backend/services/similarity_algorithms.py`
+  - Levenshtein distance algorithm for text similarity
+  - Cosine similarity with TF-IDF for semantic comparison
+  - AST-based structural similarity analysis
+  - Token sequence similarity detection
+  - Variable/function renaming detection
+  - Code refactoring detection
+
+- [x] 🟡 **EnhancedPlagiarismService** - `backend/services/plagiarism_service.py`
+  - Multi-algorithm similarity calculation
+  - Similarity matrix generation
+  - Originality report generation
+  - Configurable detection settings
+
+- [x] 🟢 **Plagiarism Schemas** - `backend/schemas/plagiarism.py`
+  - SimilarityAlgorithm, CodeTransformationType enums
+  - DetailedCodeMatch, SimilarityMatrixEntry, SimilarityMatrix models
+  - OriginalityReport, BatchAnalysisRequest, BatchAnalysisResponse models
+  - PlagiarismSettings for configurable thresholds
+
+#### Task 2.3.2: Batch Plagiarism Engine ✅
+
+- [x] 🟡 **Batch Analysis API** - `backend/api/assignments.py`
+  - `POST /plagiarism/batch-analyze` - Batch similarity analysis
+  - `GET /plagiarism/originality-report/{submission_id}` - Get originality report
+  - `PUT /plagiarism/settings` - Update detection settings
+  - `GET /plagiarism/settings` - Get current settings
+
+#### Task 2.3.3: Originality Report Generation ✅
+
+- [x] 🟢 **Frontend Components** - `frontend/src/components/PlagiarismCheck/`
+  - `BatchUpload.tsx` - Drag-and-drop multi-file upload
+  - `SimilarityMatrix.tsx` - Heatmap visualization with recharts
+  - `RelationshipGraph.tsx` - Node-edge graph for similarity relationships
+  - `SuspiciousList.tsx` - Sortable/filterable suspicious submissions table
+  - `OriginalityReport.tsx` - Score dashboard with code comparison
+  - `PlagiarismCheck.tsx` - Main component integrating all sub-components
+
+- [x] 🟢 **Frontend Types** - `frontend/src/types/plagiarism.ts`
+  - TypeScript type definitions matching backend schemas
+
+- [x] 🟢 **Frontend API** - `frontend/src/services/api.ts`
+  - `batchAnalyzePlagiarism()` - Batch analysis API call
+  - `getOriginalityReport()` - Get originality report
+  - `getPlagiarismSettings()` / `updatePlagiarismSettings()` - Settings management
+
+- [x] 🟢 **Route Integration** - `frontend/src/App.tsx`, `frontend/src/components/layout/Header.tsx`
+  - Added `/plagiarism` route
+  - Added "🔍 查重分析" navigation link
+
 #### Remaining Setup Steps
 
 - [x] 🟢 **Run Database Migration** (P0) ✅ 2025-12-15
@@ -1056,12 +1113,33 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - Support Ollama
   - Reduce API costs
 
-- [ ] 🟡 **Improve plagiarism detection** (P3)
-  - Add cross-language detection
-  - Detect AI-generated content
-  - Integration with external services
+- [x] 🟡 **Plagiarism detection system** (P1) ✅ 2024-12
+  - ✅ Multi-algorithm similarity detection (AST, Levenshtein, Cosine, Token)
+  - ✅ Batch analysis and similarity matrix
+  - ✅ Originality report generation
+  - ✅ Frontend visualization (heatmap, relationship graph)
+  - **Future enhancements:**
+    - [ ] Add cross-language detection
+    - [ ] Detect AI-generated content
+    - [ ] Integration with external services (Moss, etc.)
 
 ### Features
+
+- [x] 🟡 **Q&A System Persistence & Analytics** (P1) ✅ 2024-12
+  - ✅ Persist Q&A records to database (QALog model)
+  - ✅ Student question history tracking (`GET /qa/history/{student_id}`)
+  - ✅ Knowledge weakness analysis and reporting (`GET /qa/weakness/{student_id}`)
+  - ✅ Smart Q&A with triage (`POST /qa/smart-ask`)
+  - ✅ Q&A statistics (`GET /qa/stats`)
+  - **Files:** `backend/models/qa_log.py`, `backend/api/qa.py`, `backend/services/qa_service.py`
+
+- [x] 🟡 **Project Report Analysis** (P2) ✅ 2024-12
+  - ✅ Analyze student project reports (PDF, DOCX, Markdown)
+  - ✅ Evaluate completeness and innovation
+  - ✅ Generate improvement suggestions
+  - ✅ Batch analysis support (`POST /analysis/report/batch-analyze`)
+  - **Files:** `backend/services/report_analysis_service.py`, `backend/api/analysis.py`
+  - **Schemas:** `backend/schemas/report_analysis.py`
 
 - [ ] 🟡 **Add course management** (P2)
   - Course CRUD

@@ -400,30 +400,89 @@
   - `GET /api/v1/feedback-templates/stats/summary` - 模板统计
   - 增强的列表端点（支持语气、本地化和排序过滤）
 
+### 查重与原创性分析系统 ✅
+
+> **完成时间：** 2024年12月
+> **任务文档：** `issues/plagiarism-detection-system.md`
+
+#### 任务 2.3.1：代码相似度检测 ✅
+
+- [x] 🟡 **相似度算法服务** - `backend/services/similarity_algorithms.py`
+  - 编辑距离算法（Levenshtein）用于文本相似度
+  - 余弦相似度（TF-IDF）用于语义比较
+  - 基于 AST 的结构相似度分析
+  - Token 序列相似度检测
+  - 变量/函数重命名检测
+  - 代码重构检测
+
+- [x] 🟡 **增强的查重服务** - `backend/services/plagiarism_service.py`
+  - 多算法相似度计算
+  - 相似度矩阵生成
+  - 原创性报告生成
+  - 可配置的检测设置
+
+- [x] 🟢 **查重 Schemas** - `backend/schemas/plagiarism.py`
+  - SimilarityAlgorithm、CodeTransformationType 枚举
+  - DetailedCodeMatch、SimilarityMatrixEntry、SimilarityMatrix 模型
+  - OriginalityReport、BatchAnalysisRequest、BatchAnalysisResponse 模型
+  - PlagiarismSettings 用于可配置阈值
+
+#### 任务 2.3.2：批量查重引擎 ✅
+
+- [x] 🟡 **批量分析 API** - `backend/api/assignments.py`
+  - `POST /plagiarism/batch-analyze` - 批量相似度分析
+  - `GET /plagiarism/originality-report/{submission_id}` - 获取原创性报告
+  - `PUT /plagiarism/settings` - 更新检测设置
+  - `GET /plagiarism/settings` - 获取当前设置
+
+#### 任务 2.3.3：原创性报告生成 ✅
+
+- [x] 🟢 **前端组件** - `frontend/src/components/PlagiarismCheck/`
+  - `BatchUpload.tsx` - 拖拽多文件上传
+  - `SimilarityMatrix.tsx` - 使用 recharts 的热力图可视化
+  - `RelationshipGraph.tsx` - 相似度关系的节点-边图
+  - `SuspiciousList.tsx` - 可排序/筛选的可疑提交表格
+  - `OriginalityReport.tsx` - 带代码对比的评分仪表盘
+  - `PlagiarismCheck.tsx` - 整合所有子组件的主组件
+
+- [x] 🟢 **前端类型** - `frontend/src/types/plagiarism.ts`
+  - 与后端 schemas 对应的 TypeScript 类型定义
+
+- [x] 🟢 **前端 API** - `frontend/src/services/api.ts`
+  - `batchAnalyzePlagiarism()` - 批量分析 API 调用
+  - `getOriginalityReport()` - 获取原创性报告
+  - `getPlagiarismSettings()` / `updatePlagiarismSettings()` - 设置管理
+
+- [x] 🟢 **路由集成** - `frontend/src/App.tsx`、`frontend/src/components/layout/Header.tsx`
+  - 添加 `/plagiarism` 路由
+  - 添加 "🔍 查重分析" 导航链接
+
 #### 剩余设置步骤
 
-- [ ] 🟢 **运行数据库迁移** (P0)
+- [x] 🟢 **运行数据库迁移** (P0) ✅ 2025-12-15
   ```bash
   cd backend
   python -m alembic revision --autogenerate -m "Add feedback_templates and ai_interactions tables"
   python -m alembic upgrade head
   ```
 
-- [ ] 🟢 **填充反馈模板** (P0)
+- [x] 🟢 **填充反馈模板** (P0) ✅ 2025-12-15
   ```bash
   cd backend
   python -m scripts.seed_feedback_templates
   ```
+  > 已成功填充 103 个反馈模板
 
 - [ ] 🟢 **配置 OPENAI_API_KEY**（可选）
   - 在 `.env` 文件中设置 `OPENAI_API_KEY` 以启用 AI 功能
   - 没有 API 密钥时，系统使用本地回退响应
 
-- [ ] 🟢 **运行反馈系统测试** (P1)
+- [x] 🟢 **运行反馈系统测试** (P1) ✅ 2025-12-22
   ```bash
   cd backend
   python -m pytest tests/test_feedback_system.py -v
   ```
+  > 修复了所有 22 个测试，包括 schema 字段补全和测试 API 更新
 
 ---
 
@@ -1046,12 +1105,33 @@
   - 支持 Ollama
   - 降低 API 成本
 
-- [ ] 🟡 **改进抄袭检测** (P3)
-  - 添加跨语言检测
-  - 检测 AI 生成的内容
-  - 与外部服务集成
+- [x] 🟡 **查重与原创性分析系统** (P1) ✅ 2024年12月
+  - ✅ 多算法相似度检测（AST、编辑距离、余弦相似度、Token）
+  - ✅ 批量分析和相似度矩阵
+  - ✅ 原创性报告生成
+  - ✅ 前端可视化（热力图、关系图）
+  - **未来增强：**
+    - [ ] 添加跨语言检测
+    - [ ] 检测 AI 生成的内容
+    - [ ] 与外部服务集成（Moss 等）
 
 ### 功能
+
+- [x] 🟡 **Q&A 系统持久化与分析** (P1) ✅ 2024年12月
+  - ✅ 将问答记录持久化到数据库（QALog 模型）
+  - ✅ 学生提问历史跟踪（`GET /qa/history/{student_id}`）
+  - ✅ 知识薄弱点分析与报告（`GET /qa/weakness/{student_id}`）
+  - ✅ 智能问答与分诊（`POST /qa/smart-ask`）
+  - ✅ 问答统计（`GET /qa/stats`）
+  - **文件：** `backend/models/qa_log.py`、`backend/api/qa.py`、`backend/services/qa_service.py`
+
+- [x] 🟡 **项目报告智能分析** (P2) ✅ 2024年12月
+  - ✅ 分析学生项目报告（PDF、DOCX、Markdown）
+  - ✅ 评估完整性和创新性
+  - ✅ 生成改进建议
+  - ✅ 批量分析支持（`POST /analysis/report/batch-analyze`）
+  - **文件：** `backend/services/report_analysis_service.py`、`backend/api/analysis.py`
+  - **Schemas：** `backend/schemas/report_analysis.py`
 
 - [ ] 🟡 **添加课程管理** (P2)
   - 课程 CRUD

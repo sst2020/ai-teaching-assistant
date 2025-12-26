@@ -562,3 +562,113 @@ async def analyze_comprehensive(request: ComprehensiveRequest):
     except Exception as e:
         logger.error(f"Comprehensive analysis failed: {e}")
         raise HTTPException(status_code=500, detail=f"综合分析失败: {str(e)}")
+
+
+# ============================================================================
+# 项目报告智能分析端点
+# ============================================================================
+
+from schemas.report_analysis import (
+    ReportAnalysisRequest,
+    ReportAnalysisResponse,
+    ReportFileType,
+    ReportLanguage,
+    ReferenceFormat
+)
+from services.report_analysis_service import report_analysis_service
+
+
+@router.post("/report/analyze", response_model=ReportAnalysisResponse)
+async def analyze_project_report(request: ReportAnalysisRequest):
+    """
+    分析项目报告（基于纯文本内容）
+
+    对项目报告进行全面分析，包括：
+    - 结构解析：识别摘要、引言、方法、结果、结论等章节
+    - 质量评估：字数统计、章节完整性、图表使用情况
+    - 逻辑分析：论证结构、段落连贯性、逻辑问题检测
+    - 创新性分析：识别创新点、与现有报告的差异
+    - 语言质量：句子长度、学术风格、可读性
+    - 格式检查：标题一致性、参考文献格式
+    - 改进建议：基于分析结果生成具体建议
+
+    Args:
+        request: 包含报告文件名、类型和纯文本内容的请求
+
+    Returns:
+        ReportAnalysisResponse: 完整的分析结果，包含各维度评分和建议
+    """
+    try:
+        result = await report_analysis_service.analyze_report(request)
+        return result
+    except Exception as e:
+        logger.error(f"Report analysis failed: {e}")
+        raise HTTPException(status_code=500, detail=f"报告分析失败: {str(e)}")
+
+
+@router.get("/report/file-types")
+async def get_supported_file_types():
+    """
+    获取支持的报告文件类型
+
+    Returns:
+        支持的文件类型列表
+    """
+    return {
+        "file_types": [ft.value for ft in ReportFileType],
+        "languages": [lang.value for lang in ReportLanguage],
+        "reference_formats": [rf.value for rf in ReferenceFormat]
+    }
+
+
+@router.post("/report/batch-analyze")
+async def batch_analyze_reports(
+    requests: List[ReportAnalysisRequest]
+):
+    """
+    批量分析多个项目报告
+
+    对多个报告进行并行分析，适用于教师批量评阅场景。
+
+    Args:
+        requests: 报告分析请求列表
+
+    Returns:
+        批量分析结果列表
+    """
+    if len(requests) > 20:
+        raise HTTPException(
+            status_code=400,
+            detail="批量分析最多支持20个报告"
+        )
+
+    try:
+        # 并行分析所有报告
+        tasks = [
+            report_analysis_service.analyze_report(req)
+            for req in requests
+        ]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # 处理结果
+        successful = []
+        failed = []
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                failed.append({
+                    "file_name": requests[i].file_name,
+                    "error": str(result)
+                })
+            else:
+                successful.append(result)
+
+        return {
+            "total": len(requests),
+            "successful_count": len(successful),
+            "failed_count": len(failed),
+            "results": successful,
+            "errors": failed
+        }
+    except Exception as e:
+        logger.error(f"Batch report analysis failed: {e}")
+        raise HTTPException(status_code=500, detail=f"批量报告分析失败: {str(e)}")

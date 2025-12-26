@@ -123,6 +123,87 @@ export interface QuestionResponse {
   answered_at: string | null;
 }
 
+// Q&A 智能问答请求（持久化版本）
+export interface QALogCreate {
+  user_id: string;
+  user_name?: string;
+  session_id?: string;
+  question: string;
+}
+
+// Q&A 日志响应
+export interface QALogResponse {
+  log_id: string;
+  user_id: string;
+  user_name?: string;
+  session_id?: string;
+  question: string;
+  question_keywords?: string[];
+  detected_category?: string;
+  detected_difficulty?: number;
+  matched_entry_id?: string;
+  match_score?: number;
+  match_method?: string;
+  answer?: string;
+  answer_source?: string;
+  triage_result?: string;
+  assigned_to?: string;
+  priority?: number;
+  is_urgent?: boolean;
+  status?: string;
+  is_helpful?: boolean;
+  feedback_text?: string;
+  handled_by?: string;
+  handled_at?: string;
+  response_time_seconds?: number;
+  created_at: string;
+  updated_at?: string;
+}
+
+// Q&A 统计信息
+export interface QALogStats {
+  total_questions: number;
+  auto_replied: number;
+  to_assistant: number;
+  to_teacher: number;
+  pending: number;
+  avg_response_time: number;
+  helpful_rate?: number;
+  questions_by_category: Record<string, number>;
+  questions_by_difficulty: Record<string, number>;
+}
+
+// 知识薄弱点
+export interface KnowledgeGap {
+  topic: string;
+  frequency: number;
+  difficulty_level: string;
+  sample_questions: string[];
+}
+
+// Q&A 分析报告
+export interface QAAnalyticsReport {
+  course_id: string;
+  period_start: string;
+  period_end: string;
+  total_questions: number;
+  ai_resolved_count: number;
+  teacher_resolved_count: number;
+  average_response_time_seconds: number;
+  knowledge_gaps: KnowledgeGap[];
+  common_topics: Array<{ topic: string; count: number }>;
+  recommendations: string[];
+}
+
+// 学生知识薄弱点报告
+export interface StudentWeaknessReport {
+  student_id: string;
+  total_questions: number;
+  resolution_rate?: number;
+  weakness_areas: Array<{ topic: string; frequency: number }>;
+  improvement_suggestions: string[];
+}
+
 // Plagiarism Types
 export interface PlagiarismRequest {
   submission_id: string;

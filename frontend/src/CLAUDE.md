@@ -31,13 +31,17 @@ Page-level components (routed views):
 
 ### `/services`
 API service layer:
-- **`api.ts`** - Axios-based API client with auth, student, submission, and assignment endpoints
+- **`api.ts`** - Axios-based API client with auth, student, submission, assignment, Q&A, and report analysis endpoints
+  - Q&A 端点：`askQuestion`, `smartAskQuestion`, `getQAStats`, `getStudentQAHistory`, `getStudentWeaknessReport`, `getCourseQAAnalytics`
+  - 报告分析端点：`analyzeProjectReport`, `getReportFileTypes`, `batchAnalyzeReports`
 
 ### `/types`
 TypeScript type definitions:
 - **`api.ts`** - API 响应类型定义，包括：
   - `AIAnswer` - AI 回答结构（answer, confidence, sources, needs_teacher_review）
   - `QuestionResponse` - 问答响应（ai_answer 为 AIAnswer 对象或 null）
+  - `QALogCreate`, `QALogResponse`, `QALogStats` - Q&A 日志相关类型
+  - `QAAnalyticsReport`, `StudentWeaknessReport`, `KnowledgeGap` - Q&A 分析报告类型
   - `CodeAnalysisResponse`, `GradingResult`, `PlagiarismResponse` 等
 - **`auth.ts`** - User, LoginCredentials, RegisterData, AuthTokens, AuthState
 - **`student.ts`** - Student, StudentProfile, Course, StudentStats

@@ -348,6 +348,41 @@ class TestStudentList:
         # 验证总数至少 15
         assert data["total"] >= 15
 
+    def test_list_filter_by_course_no_results(self, client, multiple_students):
+        """测试按 course_id 过滤但无匹配结果的情况"""
+        # 使用一个不会被创建的 course_id，确保过滤后结果为空
+        course_id = f"NO_SUCH_COURSE_{int(time.time() * 1000)}"
+        response = client.get(f"/api/v1/students?course_id={course_id}")
+
+        assert response.status_code == 200
+        data = response.json()
+
+        # 验证分页结构和空结果
+        assert "items" in data
+        assert "total" in data
+        assert "page" in data
+        assert "page_size" in data
+        assert "total_pages" in data
+        assert data["total"] == 0
+        assert isinstance(data["items"], list)
+        assert len(data["items"]) == 0
+
+    def test_list_page_out_of_range(self, client, multiple_students):
+        """测试 page 超过总页数时返回空结果但分页信息仍然合理"""
+        response = client.get("/api/v1/students?page=100&page_size=10")
+
+        assert response.status_code == 200
+        data = response.json()
+
+        # 验证分页参数按请求回显
+        assert data["page"] == 100
+        assert data["page_size"] == 10
+        # 由于 page 远超总页数，应无结果
+        assert len(data["items"]) == 0
+        # total/total_pages 仍反映真实总量
+        assert data["total"] >= 15
+        assert data["total_pages"] >= 2
+
 
 # ============================================================================
 # Test Class 4: Get Student

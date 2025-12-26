@@ -11,6 +11,11 @@ import {
   PlagiarismRequest,
   PlagiarismResponse,
   ApiError,
+  QALogCreate,
+  QALogResponse,
+  QALogStats,
+  QAAnalyticsReport,
+  StudentWeaknessReport,
 } from '../types/api';
 import {
   LoginCredentials,
@@ -302,6 +307,57 @@ export const askQuestion = async (request: QuestionRequest): Promise<QuestionRes
   return response.data;
 };
 
+// 智能问答（持久化版本）
+export const smartAskQuestion = async (request: QALogCreate): Promise<QALogResponse> => {
+  const response = await apiClient.post<QALogResponse>(
+    `${API_V1_PREFIX}/qa/smart-ask`,
+    request
+  );
+  return response.data;
+};
+
+// 获取 Q&A 统计信息
+export const getQAStats = async (): Promise<QALogStats> => {
+  const response = await apiClient.get<QALogStats>(
+    `${API_V1_PREFIX}/qa/stats`
+  );
+  return response.data;
+};
+
+// 获取学生问答历史
+export const getStudentQAHistory = async (
+  studentId: string,
+  limit: number = 50
+): Promise<QALogResponse[]> => {
+  const response = await apiClient.get<QALogResponse[]>(
+    `${API_V1_PREFIX}/qa/history/${studentId}`,
+    { params: { limit } }
+  );
+  return response.data;
+};
+
+// 获取学生知识薄弱点报告
+export const getStudentWeaknessReport = async (
+  studentId: string
+): Promise<StudentWeaknessReport> => {
+  const response = await apiClient.get<StudentWeaknessReport>(
+    `${API_V1_PREFIX}/qa/weakness/${studentId}`
+  );
+  return response.data;
+};
+
+// 获取课程 Q&A 分析报告
+export const getCourseQAAnalytics = async (
+  courseId: string,
+  days: number = 30
+): Promise<QAAnalyticsReport> => {
+  const response = await apiClient.get<QAAnalyticsReport>(
+    `${API_V1_PREFIX}/qa/analytics/${courseId}`,
+    { params: { days } }
+  );
+  return response.data;
+};
+
 // ============ Plagiarism Detection Endpoints ============
 
 export const checkPlagiarism = async (request: PlagiarismRequest): Promise<PlagiarismResponse> => {
@@ -318,8 +374,37 @@ export const analyzeProjectReport = async (
   request: ReportAnalysisRequest
 ): Promise<ReportAnalysisResponse> => {
   const response = await apiClient.post<ReportAnalysisResponse>(
-    `${API_V1_PREFIX}/report-analysis/analyze`,
+    `${API_V1_PREFIX}/analysis/report/analyze`,
     request
+  );
+  return response.data;
+};
+
+// 获取支持的报告文件类型
+export const getReportFileTypes = async (): Promise<{
+  file_types: string[];
+  languages: string[];
+  reference_formats: string[];
+}> => {
+  const response = await apiClient.get(
+    `${API_V1_PREFIX}/analysis/report/file-types`
+  );
+  return response.data;
+};
+
+// 批量分析项目报告
+export const batchAnalyzeReports = async (
+  requests: ReportAnalysisRequest[]
+): Promise<{
+  total: number;
+  successful_count: number;
+  failed_count: number;
+  results: ReportAnalysisResponse[];
+  errors: Array<{ file_name: string; error: string }>;
+}> => {
+  const response = await apiClient.post(
+    `${API_V1_PREFIX}/analysis/report/batch-analyze`,
+    requests
   );
   return response.data;
 };

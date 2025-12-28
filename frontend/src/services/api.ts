@@ -78,6 +78,14 @@ import {
   TriageStats,
   DifficultyLevelsResponse,
 } from '../types/triage';
+import {
+  GradingResultCreate,
+  GradingResultResponse,
+  GradingResultWithSubmission,
+  GradingResultListResponse,
+  GradingResultOverride,
+  GradingStatistics,
+} from '../types/grading';
 
 // 扩展 Axios 配置类型以支持 metadata
 declare module 'axios' {
@@ -808,6 +816,97 @@ export const getDifficultyLevels = async (): Promise<DifficultyLevelsResponse> =
   return response.data;
 };
 
+// ============ Grading Result Endpoints ============
+
+// 创建评分结果
+export const createGradingResult = async (
+  data: GradingResultCreate
+): Promise<GradingResultResponse> => {
+  const response = await apiClient.post<GradingResultResponse>(
+    `${API_V1_PREFIX}/grading`,
+    data
+  );
+  return response.data;
+};
+
+// 获取单个评分结果（包含提交详情）
+export const getGradingResult = async (
+  gradingId: number
+): Promise<GradingResultWithSubmission> => {
+  const response = await apiClient.get<GradingResultWithSubmission>(
+    `${API_V1_PREFIX}/grading/${gradingId}`
+  );
+  return response.data;
+};
+
+// 按提交 ID 获取评分结果
+export const getGradingBySubmission = async (
+  submissionId: number
+): Promise<GradingResultResponse> => {
+  const response = await apiClient.get<GradingResultResponse>(
+    `${API_V1_PREFIX}/grading/submission/${submissionId}`
+  );
+  return response.data;
+};
+
+// 按学生 ID 获取评分结果列表
+export const getGradingByStudent = async (
+  studentId: string,
+  page: number = 1,
+  pageSize: number = 20
+): Promise<GradingResultListResponse> => {
+  const params = new URLSearchParams();
+  params.append('page', page.toString());
+  params.append('page_size', pageSize.toString());
+
+  const response = await apiClient.get<GradingResultListResponse>(
+    `${API_V1_PREFIX}/grading/student/${studentId}?${params.toString()}`
+  );
+  return response.data;
+};
+
+// 按作业 ID 获取评分结果列表
+export const getGradingByAssignment = async (
+  assignmentId: string,
+  page: number = 1,
+  pageSize: number = 20
+): Promise<GradingResultListResponse> => {
+  const params = new URLSearchParams();
+  params.append('page', page.toString());
+  params.append('page_size', pageSize.toString());
+
+  const response = await apiClient.get<GradingResultListResponse>(
+    `${API_V1_PREFIX}/grading/assignment/${assignmentId}?${params.toString()}`
+  );
+  return response.data;
+};
+
+// 获取作业评分统计
+export const getGradingStatistics = async (
+  assignmentId: string
+): Promise<GradingStatistics> => {
+  const response = await apiClient.get<GradingStatistics>(
+    `${API_V1_PREFIX}/grading/assignment/${assignmentId}/statistics`
+  );
+  return response.data;
+};
+
+// 教师覆盖评分
+export const overrideGradingResult = async (
+  gradingId: number,
+  data: GradingResultOverride
+): Promise<GradingResultResponse> => {
+  const response = await apiClient.put<GradingResultResponse>(
+    `${API_V1_PREFIX}/grading/${gradingId}/override`,
+    data
+  );
+  return response.data;
+};
+
+// 删除评分结果
+export const deleteGradingResult = async (gradingId: number): Promise<void> => {
+  await apiClient.delete(`${API_V1_PREFIX}/grading/${gradingId}`);
+};
+
 // Export the axios instance for custom requests
 export default apiClient;
-

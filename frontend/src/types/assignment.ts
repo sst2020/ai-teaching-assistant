@@ -1,7 +1,8 @@
 // Assignment-related types
 
 export interface Assignment {
-  id: string;
+  id: number | string;  // 数据库 ID
+  assignment_id?: string;  // 唯一标识符（后端返回）
   course_id: string;
   title: string;
   description: string;
@@ -29,7 +30,8 @@ export interface AssignmentAttachment {
 }
 
 export interface AssignmentListResponse {
-  assignments: Assignment[];
+  items: Assignment[];
+  assignments?: Assignment[]; // 兼容旧字段名
   total: number;
   page: number;
   page_size: number;

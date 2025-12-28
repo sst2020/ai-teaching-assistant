@@ -28,12 +28,16 @@ Page-level components (routed views):
 - **`StudentDashboard.tsx`** - Student dashboard with stats, courses, assignments
 - **`SubmitAssignment.tsx`** - Assignment submission with code editor and file upload
 - **`Grades.tsx`** - View graded submissions and feedback
+- **`TeacherDashboard.tsx`** - 教师综合仪表板（作业统计、快速操作、最近作业）
+- **`ManageAssignments.tsx`** - 作业管理页面（创建、编辑、删除、筛选）
+- **`GradingInterface.tsx`** - 评分界面（查看提交、AI 评分、手动覆盖）
 
 ### `/services`
 API service layer:
-- **`api.ts`** - Axios-based API client with auth, student, submission, assignment, Q&A, and report analysis endpoints
+- **`api.ts`** - Axios-based API client with auth, student, submission, assignment, Q&A, grading, and report analysis endpoints
   - Q&A 端点：`askQuestion`, `smartAskQuestion`, `getQAStats`, `getStudentQAHistory`, `getStudentWeaknessReport`, `getCourseQAAnalytics`
   - 报告分析端点：`analyzeProjectReport`, `getReportFileTypes`, `batchAnalyzeReports`
+  - 评分端点：`createGradingResult`, `getGradingResult`, `getGradingBySubmission`, `getGradingByStudent`, `getGradingByAssignment`, `getGradingStatistics`, `overrideGradingResult`, `deleteGradingResult`
 
 ### `/types`
 TypeScript type definitions:
@@ -49,6 +53,7 @@ TypeScript type definitions:
 - **`assignment.ts`** - Assignment, AssignmentFilters, Rubric
 - **`triage.ts`** - 分诊相关类型（TriageResponse, TriageDecision 等）
 - **`reportAnalysis.ts`** - 报告分析类型（ReportFileType, ReportAnalysisResponse 等）
+- **`grading.ts`** - 评分相关类型（GradingResultResponse, GradingStatistics, GradingResultOverride 等）
 
 ### `/utils`
 Utility functions and helpers:
@@ -90,6 +95,10 @@ The application uses React Router v7 with the following routes:
 - `/student-dashboard` - Student-specific dashboard (authenticated)
 - `/submit/:assignmentId` - Assignment submission (authenticated)
 - `/grades` - View grades and feedback (authenticated)
+- `/teacher` - 教师综合仪表板 (authenticated)
+- `/manage-assignments` - 作业管理页面 (authenticated)
+- `/grading` - 评分界面 (authenticated)
+- `/question-queue` - 问题队列管理 (authenticated)
 
 ## Authentication
 

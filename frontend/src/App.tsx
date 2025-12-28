@@ -10,8 +10,17 @@ import { PlagiarismCheck } from './components/PlagiarismCheck';
 import { ReportAnalysis } from './components/ReportAnalysis';
 import { DebugPanel } from './components/common/DebugPanel';
 import ProtectedRoute from './components/common/ProtectedRoute';
-import { KnowledgeBase, QATriage, TeacherDashboard } from './components';
-import { Login, Register, StudentDashboard, SubmitAssignment, Grades } from './pages';
+import { KnowledgeBase, QATriage, TeacherDashboard as TeacherQuestionQueue } from './components';
+import {
+  Login,
+  Register,
+  StudentDashboard,
+  SubmitAssignment,
+  Grades,
+  TeacherDashboard,
+  ManageAssignments,
+  GradingInterface,
+} from './pages';
 import './App.css';
 
   // Layout component for authenticated pages
@@ -167,13 +176,45 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/teacher-dashboard"
+            path="/question-queue"
             element={
               <ProtectedRoute>
                 <AuthenticatedLayout>
                   <React.Suspense fallback={<div>加载中...</div>}>
-                    <TeacherDashboard teacherId="teacher_001" teacherName="教师" />
+                    <TeacherQuestionQueue teacherId="teacher_001" teacherName="教师" />
                   </React.Suspense>
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* 教师端路由 */}
+          <Route
+            path="/teacher"
+            element={
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <TeacherDashboard />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manage-assignments"
+            element={
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <ManageAssignments />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/grading"
+            element={
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <GradingInterface />
                 </AuthenticatedLayout>
               </ProtectedRoute>
             }

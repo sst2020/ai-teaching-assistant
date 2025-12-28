@@ -772,3 +772,138 @@ class CRUDRubric(CRUDBase[Rubric]):
 
 # Create CRUD instance
 crud_rubric = CRUDRubric(Rubric)
+
+
+# GradingResult CRUD
+class CRUDGradingResult(CRUDBase[GradingResult]):
+    """GradingResult 的 CRUD 操作"""
+
+    async def get_by_submission_id(
+        self, db: AsyncSession, submission_id: int
+    ) -> Optional[GradingResult]:
+        """通过 submission_id 获取评分结果"""
+        result = await db.execute(
+            select(GradingResult).where(GradingResult.submission_id == submission_id)
+        )
+        return result.scalar_one_or_none()
+
+    async def get_by_student_id(
+        self, db: AsyncSession, student_id: int, skip: int = 0, limit: int = 100
+    ) -> List[GradingResult]:
+        """获取学生的所有评分结果（通过 Submission 关联）"""
+        result = await db.execute(
+            select(GradingResult)
+            .join(Submission, GradingResult.submission_id == Submission.id)
+            .where(Submission.student_id == student_id)
+            .order_by(GradingResult.graded_at.desc())
+            .offset(skip).limit(limit)
+        )
+        return list(result.scalars().all())
+
+    async def count_by_student_id(self, db: AsyncSession, student_id: int) -> int:
+        """统计学生的评分结果数量"""
+        result = await db.execute(
+            select(func.count())
+            .select_from(GradingResult)
+            .join(Submission, GradingResult.submission_id == Submission.id)
+            .where(Submission.student_id == student_id)
+        )
+        return result.scalar() or 0
+
+    async def get_by_assignment_id(
+        self, db: AsyncSession, assignment_id: int, skip: int = 0, limit: int = 100
+    ) -> List[GradingResult]:
+        """获取作业的所有评分结果（通过 Submission 关联）"""
+        result = await db.execute(
+            select(GradingResult)
+            .join(Submission, GradingResult.submission_id == Submission.id)
+            .where(Submission.assignment_id == assignment_id)
+            .order_by(GradingResult.graded_at.desc())
+            .offset(skip).limit(limit)
+        )
+        return list(result.scalars().all())
+
+    async def count_by_assignment_id(self, db: AsyncSession, assignment_id: int) -> int:
+        """统计作业的评分结果数量"""
+        result = await db.execute(
+            select(func.count())
+            .select_from(GradingResult)
+            .join(Submission, GradingResult.submission_id == Submission.id)
+            .where(Submission.assignment_id == assignment_id)
+        )
+        return result.scalar() or 0
+
+    async def get_with_submission(
+        self, db: AsyncSession, grading_id: int
+    ) -> Optional[GradingResult]:
+        """获取评分结果及其关联的提交记录（使用 eager loading）"""
+        result = await db.execute(
+            select(GradingResult)
+            .options(
+                selectinload(GradingResult.submission)
+                .selectinload(Submission.student),
+                selectinload(GradingResult.submission)
+                .selectinload(Submission.assignment)
+            )
+            .where(GradingResult.id == grading_id)
+        )
+        return result.scalar_one_or_none()
+
+    async def get_statistics_by_assignment(
+        self, db: AsyncSession, assignment_id: int
+    ) -> Dict[str, Any]:
+        """获取作业的评分统计信息"""
+        from models.grading_result import GradedBy
+
+        # 基础统计
+        result = await db.execute(
+            select(
+                func.count(GradingResult.id).label('total'),
+                func.avg(GradingResult.overall_score).label('average'),
+                func.max(GradingResult.overall_score).label('highest'),
+                func.min(GradingResult.overall_score).label('lowest')
+            )
+            .join(Submission, GradingResult.submission_id == Submission.id)
+            .where(Submission.assignment_id == assignment_id)
+        )
+        row = result.one()
+
+        # AI vs 教师评分统计
+        ai_count_result = await db.execute(
+            select(func.count())
+            .select_from(GradingResult)
+            .join(Submission, GradingResult.submission_id == Submission.id)
+            .where(
+                and_(
+                    Submission.assignment_id == assignment_id,
+                    GradingResult.graded_by == GradedBy.AI
+                )
+            )
+        )
+        ai_count = ai_count_result.scalar() or 0
+
+        teacher_count_result = await db.execute(
+            select(func.count())
+            .select_from(GradingResult)
+            .join(Submission, GradingResult.submission_id == Submission.id)
+            .where(
+                and_(
+                    Submission.assignment_id == assignment_id,
+                    GradingResult.graded_by == GradedBy.TEACHER
+                )
+            )
+        )
+        teacher_count = teacher_count_result.scalar() or 0
+
+        return {
+            "total_graded": row.total or 0,
+            "average_score": float(row.average) if row.average else 0.0,
+            "highest_score": float(row.highest) if row.highest else 0.0,
+            "lowest_score": float(row.lowest) if row.lowest else 0.0,
+            "ai_graded_count": ai_count,
+            "teacher_graded_count": teacher_count,
+        }
+
+
+# Create CRUD instance
+crud_grading_result = CRUDGradingResult(GradingResult)

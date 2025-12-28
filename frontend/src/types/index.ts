@@ -7,4 +7,5 @@ export * from './plagiarism';
 export * from './reportAnalysis';
 export * from './knowledgeBase';
 export * from './triage';
+export * from './grading';
 

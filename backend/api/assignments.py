@@ -124,6 +124,53 @@ async def get_course_assignments(
     )
 
 
+@router.get("/stats")
+async def get_assignment_stats(
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    获取作业统计信息。
+
+    返回:
+    - total: 总作业数
+    - pending_grading: 待批改数量
+    - graded: 已批改数量
+    - by_type: 按类型分类统计
+    """
+    from sqlalchemy import select, func
+    from models.assignment import Assignment
+    from models.submission import Submission
+
+    # 获取总作业数
+    total_result = await db.execute(select(func.count(Assignment.id)))
+    total = total_result.scalar() or 0
+
+    # 获取提交统计
+    pending_result = await db.execute(
+        select(func.count(Submission.id)).where(Submission.status == "pending")
+    )
+    pending_grading = pending_result.scalar() or 0
+
+    graded_result = await db.execute(
+        select(func.count(Submission.id)).where(Submission.status == "graded")
+    )
+    graded = graded_result.scalar() or 0
+
+    # 按类型统计
+    type_result = await db.execute(
+        select(Assignment.assignment_type, func.count(Assignment.id))
+        .group_by(Assignment.assignment_type)
+    )
+    by_type = {str(row[0].value) if row[0] else "unknown": row[1] for row in type_result.fetchall()}
+
+    return {
+        "total_assignments": total,
+        "pending_count": pending_grading,
+        "graded_count": graded,
+        "by_type": by_type
+    }
+
+
 @router.get("/{assignment_id}", response_model=AssignmentResponse)
 async def get_assignment(
     assignment_id: str,

@@ -42,6 +42,14 @@ class Settings(BaseSettings):
     USE_LOCAL_LLM: bool = False
     LOCAL_LLM_MODEL_PATH: str = ""
 
+    # FastChat Local Deployment Settings
+    USE_FASTCHAT: bool = False
+    FASTCHAT_API_BASE: str = "http://localhost:8000/v1"
+    FASTCHAT_MODEL_NAME: str = "qwen2.5-7b"
+    FASTCHAT_TEMPERATURE: float = 0.7
+    FASTCHAT_MAX_TOKENS: int = 2000
+    FASTCHAT_TIMEOUT: int = 60
+
     # Database Settings
     DATABASE_URL: str = "sqlite:///./teaching_assistant.db"
     DATABASE_ECHO: bool = False
@@ -81,7 +89,9 @@ class Settings(BaseSettings):
     RATE_LIMIT_PERIOD: int = 60
 
     class Config:
-        env_file = ".env"
+        import os
+        # Support both backend/.env and .env paths
+        env_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
         case_sensitive = True
         extra = "ignore"
 

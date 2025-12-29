@@ -19,6 +19,7 @@ class AIProvider(str, Enum):
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
     LOCAL = "local"
+    FASTCHAT = "fastchat"
 
 
 @dataclass
@@ -104,14 +105,14 @@ Respond with only the category."""
 
 class LocalLLMProvider(BaseAIProvider):
     """Local LLM provider - placeholder for llama-cpp-python or transformers."""
-    
+
     def __init__(self, config: AIConfig):
         self.config = config
         self.model = None
-    
+
     async def generate_response(self, prompt: str, system_prompt: str = "", **kwargs) -> str:
         return "Local LLM not configured. Install llama-cpp-python."
-    
+
     async def generate_code_feedback(self, code: str, analysis_results: Dict[str, Any]) -> str:
         parts = []
         score = analysis_results.get('style_score', 0)
@@ -121,7 +122,7 @@ class LocalLLMProvider(BaseAIProvider):
         if analysis_results.get('complexity', 0) > 10:
             parts.append("Consider breaking down complex functions.")
         return "\n".join(parts)
-    
+
     async def answer_question(self, question: str, context: str = "") -> Dict[str, Any]:
         q = question.lower()
         responses = {
@@ -133,7 +134,7 @@ class LocalLLMProvider(BaseAIProvider):
             if kw in q:
                 return {"answer": resp, "confidence": 0.7, "needs_teacher_review": True, "sources": []}
         return {"answer": "Requires teacher assistance.", "confidence": 0.3, "needs_teacher_review": True, "sources": []}
-    
+
     async def categorize_question(self, question: str) -> str:
         q = question.lower()
         if any(k in q for k in ["deadline", "grade", "submit"]): return "administrative"
@@ -142,12 +143,170 @@ class LocalLLMProvider(BaseAIProvider):
         return "intermediate"
 
 
+class FastChatProvider(BaseAIProvider):
+    """FastChat local deployment provider - OpenAI-compatible API for local LLMs."""
+
+    def __init__(self, config: AIConfig):
+        self.config = config
+        base_url = settings.FASTCHAT_API_BASE
+        self.model_name = settings.FASTCHAT_MODEL_NAME
+        self.client = AsyncOpenAI(
+            api_key="EMPTY",  # FastChat doesn't require API key
+            base_url=base_url,
+            timeout=settings.FASTCHAT_TIMEOUT
+        )
+        logger.info(f"FastChatProvider initialized with base_url={base_url}, model={self.model_name}")
+
+    async def generate_response(self, prompt: str, system_prompt: str = "", **kwargs) -> str:
+        """Generate response using FastChat API."""
+        try:
+            messages = []
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": prompt})
+
+            response = await self.client.chat.completions.create(
+                model=kwargs.get("model", self.model_name),
+                messages=messages,
+                temperature=kwargs.get("temperature", settings.FASTCHAT_TEMPERATURE),
+                max_tokens=kwargs.get("max_tokens", settings.FASTCHAT_MAX_TOKENS)
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            logger.error(f"FastChat API error: {str(e)}")
+            return f"FastChat服务错误: {str(e)}"
+
+    async def generate_code_feedback(self, code: str, analysis_results: Dict[str, Any]) -> str:
+        """Generate code feedback optimized for Chinese programming education."""
+        system_prompt = """你是一位经验丰富的编程教学助手。请用中文提供代码反馈。
+要求：
+1. 语言友好、鼓励性强，但要诚实指出问题
+2. 适合中国学生的学习习惯
+3. 提供具体的改进建议和示例"""
+
+        # Format analysis results
+        style_score = analysis_results.get('style_score', 'N/A')
+        complexity = analysis_results.get('complexity', 'N/A')
+        issues = analysis_results.get('issues', [])
+        issues_str = "\n".join([f"- {issue}" for issue in issues]) if issues else "无明显问题"
+
+        prompt = f"""请分析以下代码并提供反馈：
+
+```python
+{code}
+```
+
+代码分析结果：
+- 代码风格评分: {style_score}
+- 复杂度: {complexity}
+- 发现的问题:
+{issues_str}
+
+请提供：
+1. 代码的优点（做得好的地方）
+2. 需要改进的地方
+3. 具体的改进建议（包括代码示例）
+4. 学习建议（推荐的学习资源或概念）"""
+
+        return await self.generate_response(prompt, system_prompt)
+
+    async def answer_question(self, question: str, context: str = "") -> Dict[str, Any]:
+        """Answer student questions with Chinese language optimization."""
+        system_prompt = """你是一位专业的编程教学助手。请用中文回答学生的问题。
+要求：
+1. 回答清晰、准确、易于理解
+2. 适合中国学生的认知水平
+3. 提供实际的代码示例
+4. 鼓励学生深入思考"""
+
+        prompt = f"学生问题: {question}\n"
+        if context:
+            prompt += f"\n相关背景: {context}\n"
+
+        prompt += "\n请提供详细的回答，包括概念解释和代码示例（如果适用）。"
+
+        try:
+            answer = await self.generate_response(prompt, system_prompt)
+
+            # Calculate confidence based on answer quality
+            confidence = 0.85 if len(answer) > 100 else 0.6
+
+            # Check if answer indicates uncertainty
+            uncertainty_keywords = ["不确定", "可能", "也许", "不太清楚", "需要确认"]
+            needs_review = any(keyword in answer for keyword in uncertainty_keywords)
+
+            return {
+                "answer": answer,
+                "confidence": confidence,
+                "needs_teacher_review": needs_review,
+                "sources": []
+            }
+        except Exception as e:
+            logger.error(f"Error answering question: {str(e)}")
+            return {
+                "answer": f"抱歉，回答问题时出现错误: {str(e)}",
+                "confidence": 0.0,
+                "needs_teacher_review": True,
+                "sources": []
+            }
+
+    async def categorize_question(self, question: str) -> str:
+        """Categorize student questions using AI."""
+        prompt = f"""请将以下学生问题分类到一个类别中：
+
+问题: {question}
+
+类别选项:
+- basic: 基础概念问题（如"什么是变量"、"如何定义函数"）
+- intermediate: 中级问题（如"如何优化代码"、"设计模式应用"）
+- advanced: 高级问题（如"系统架构"、"性能优化"、"算法复杂度"）
+- administrative: 行政管理问题（如"作业截止时间"、"成绩查询"）
+
+请只回复类别名称（basic/intermediate/advanced/administrative），不要有其他内容。"""
+
+        try:
+            response = await self.generate_response(prompt, max_tokens=20)
+            category = response.strip().lower()
+
+            # Validate category
+            valid_categories = ["basic", "intermediate", "advanced", "administrative"]
+            if category in valid_categories:
+                return category
+
+            # Fallback: simple keyword matching
+            q_lower = question.lower()
+            if any(k in q_lower for k in ["什么是", "定义", "基础", "入门"]):
+                return "basic"
+            elif any(k in q_lower for k in ["截止", "成绩", "提交", "分数"]):
+                return "administrative"
+            elif any(k in q_lower for k in ["优化", "架构", "设计", "性能"]):
+                return "advanced"
+            else:
+                return "intermediate"
+
+        except Exception as e:
+            logger.error(f"Error categorizing question: {str(e)}")
+            return "intermediate"
+
+
 class AIService:
     """Enhanced AI Service with extended functionality."""
 
     def __init__(self, config: Optional[AIConfig] = None):
         self.config = config or AIConfig()
-        self.provider = OpenAIProvider(self.config) if self.config.provider == AIProvider.OPENAI else LocalLLMProvider(self.config)
+
+        # Select provider based on configuration
+        if settings.USE_FASTCHAT:
+            logger.info("Using FastChat provider")
+            self.config.provider = AIProvider.FASTCHAT
+            self.provider = FastChatProvider(self.config)
+        elif self.config.provider == AIProvider.OPENAI:
+            logger.info("Using OpenAI provider")
+            self.provider = OpenAIProvider(self.config)
+        else:
+            logger.info("Using Local LLM provider")
+            self.provider = LocalLLMProvider(self.config)
+
         self._interaction_history: List[Dict[str, Any]] = []
 
     async def generate_code_feedback(self, code: str, analysis_results: Dict[str, Any]) -> str:

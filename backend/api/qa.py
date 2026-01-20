@@ -2,8 +2,11 @@
 Q&A Triage Router - Handles AI-powered Q&A endpoints
 """
 from fastapi import APIRouter, HTTPException, Query, Depends
-from typing import Optional, List
+from fastapi.responses import StreamingResponse
+from typing import Optional, List, AsyncGenerator
 from datetime import datetime, timedelta
+import logging
+import json
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -18,6 +21,9 @@ from schemas.qa_log import QALogCreate, QALogResponse, QALogStats
 from schemas.common import APIResponse
 from services.qa_service import qa_service
 from services.qa_engine_service import qa_engine_service
+from services.ai_service import ai_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/qa", tags=["Q&A Triage"])
 
@@ -26,7 +32,7 @@ router = APIRouter(prefix="/qa", tags=["Q&A Triage"])
 async def ask_question(request: QuestionRequest):
     """
     Submit a question for AI-powered answering.
-    
+
     - Automatically categorizes the question by complexity
     - Provides AI-generated answers for common questions
     - Escalates complex questions to teachers when needed
@@ -35,7 +41,51 @@ async def ask_question(request: QuestionRequest):
         response = await qa_service.answer_question(request)
         return response
     except Exception as e:
+        logger.error(f"Q&A 请求处理失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/ask-stream")
+async def ask_question_stream(request: QuestionRequest):
+    """
+    流式回答问题 - 使用 Server-Sent Events (SSE) 逐步返回答案
+
+    前端可以实时显示 AI 正在生成的内容，提升用户体验
+    """
+    async def generate() -> AsyncGenerator[str, None]:
+        try:
+            # 发送开始事件
+            yield f"data: {json.dumps({'type': 'start', 'question_id': request.student_id})}\n\n"
+
+            # 流式生成答案
+            full_answer = ""
+            async for chunk in ai_service.answer_question_stream(
+                request.question,
+                f"Course: {request.course_id}" if request.course_id else ""
+            ):
+                full_answer += chunk
+                yield f"data: {json.dumps({'type': 'chunk', 'content': chunk})}\n\n"
+
+            # 发送完成事件，包含完整答案和元数据
+            confidence = 0.85 if len(full_answer) > 100 else 0.6
+            uncertainty_keywords = ["不确定", "可能", "也许", "不太清楚", "需要确认"]
+            needs_review = any(keyword in full_answer for keyword in uncertainty_keywords)
+
+            yield f"data: {json.dumps({'type': 'done', 'confidence': confidence, 'needs_review': needs_review})}\n\n"
+
+        except Exception as e:
+            logger.error(f"流式 Q&A 请求处理失败: {str(e)}")
+            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+
+    return StreamingResponse(
+        generate(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
 
 
 @router.post("/escalate", response_model=QuestionResponse)

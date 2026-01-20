@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import BatchUpload from './BatchUpload';
 import SimilarityMatrix from './SimilarityMatrix';
 import RelationshipGraph from './RelationshipGraph';
@@ -18,6 +19,7 @@ import './PlagiarismCheck.css';
 type TabType = 'upload' | 'matrix' | 'graph' | 'list' | 'reports';
 
 const PlagiarismCheck: React.FC = () => {
+  const { t } = useTranslation('plagiarism');
   const [activeTab, setActiveTab] = useState<TabType>('upload');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<BatchAnalysisResponse | null>(null);
@@ -46,11 +48,11 @@ const PlagiarismCheck: React.FC = () => {
       setAnalysisResult(result);
       setActiveTab('matrix');
     } catch (err) {
-      setError(err instanceof Error ? err.message : '分析失败，请重试');
+      setError(err instanceof Error ? err.message : t('errors.analysisFailed'));
     } finally {
       setIsAnalyzing(false);
     }
-  }, [threshold]);
+  }, [threshold, t]);
 
   const handleCellClick = (entry: SimilarityMatrixEntry) => {
     console.log('Cell clicked:', entry);
@@ -66,24 +68,24 @@ const PlagiarismCheck: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'upload' as TabType, label: '📤 上传作业', icon: '📤' },
-    { id: 'matrix' as TabType, label: '📊 相似度矩阵', icon: '📊', disabled: !analysisResult },
-    { id: 'graph' as TabType, label: '🔗 关系图', icon: '🔗', disabled: !analysisResult },
-    { id: 'list' as TabType, label: '⚠️ 可疑列表', icon: '⚠️', disabled: !analysisResult },
-    { id: 'reports' as TabType, label: '📋 原创性报告', icon: '📋', disabled: !analysisResult },
+    { id: 'upload' as TabType, label: `📤 ${t('upload.title')}`, icon: '📤' },
+    { id: 'matrix' as TabType, label: `📊 ${t('matrix.title')}`, icon: '📊', disabled: !analysisResult },
+    { id: 'graph' as TabType, label: `🔗 ${t('graph.title')}`, icon: '🔗', disabled: !analysisResult },
+    { id: 'list' as TabType, label: `⚠️ ${t('suspicious.title')}`, icon: '⚠️', disabled: !analysisResult },
+    { id: 'reports' as TabType, label: `📋 ${t('report.title')}`, icon: '📋', disabled: !analysisResult },
   ];
 
   return (
     <div className="plagiarism-check">
       <div className="page-header">
-        <h1>🔍 查重与原创性分析系统</h1>
-        <p>批量检测代码相似度，生成原创性分析报告</p>
+        <h1>🔍 {t('title')}</h1>
+        <p>{t('subtitle')}</p>
       </div>
 
       {/* 设置栏 */}
       <div className="settings-bar">
         <div className="setting-item">
-          <label>相似度阈值：</label>
+          <label>{t('settings.threshold')}：</label>
           <input
             type="range"
             min="0.3"
@@ -96,8 +98,8 @@ const PlagiarismCheck: React.FC = () => {
         </div>
         {analysisResult && (
           <div className="result-summary">
-            <span>已分析 {analysisResult.total_submissions} 份作业</span>
-            <span className="flagged">发现 {analysisResult.flagged_count} 对可疑</span>
+            <span>{t('results.analyzed', { count: analysisResult.total_submissions })}</span>
+            <span className="flagged">{t('results.flagged', { count: analysisResult.flagged_count })}</span>
           </div>
         )}
       </div>
@@ -120,7 +122,7 @@ const PlagiarismCheck: React.FC = () => {
       {error && (
         <div className="error-message">
           <span>❌ {error}</span>
-          <button onClick={() => setError(null)}>关闭</button>
+          <button onClick={() => setError(null)}>{t('common.close')}</button>
         </div>
       )}
 

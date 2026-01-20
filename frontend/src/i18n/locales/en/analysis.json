@@ -1,0 +1,42 @@
+{
+  "title": "Code Analysis",
+  "subtitle": "Analyze your Python code for style issues, complexity, and code smells",
+  "input": {
+    "label": "Enter your code:",
+    "placeholder": "Paste your code here...",
+    "language": "Language",
+    "python": "Python"
+  },
+  "button": {
+    "analyze": "Analyze Code",
+    "analyzing": "Analyzing..."
+  },
+  "results": {
+    "qualityScore": "Quality Score",
+    "complexity": {
+      "title": "Complexity",
+      "cyclomatic": "Cyclomatic Complexity"
+    },
+    "linesOfCode": {
+      "title": "Lines of Code",
+      "total": "Total Lines"
+    },
+    "functions": {
+      "title": "Functions",
+      "count": "Function Count"
+    },
+    "styleIssues": {
+      "title": "Style Issues",
+      "total": "Total Issues"
+    },
+    "recommendations": {
+      "title": "Recommendations"
+    }
+  },
+  "errors": {
+    "emptyCode": "Please enter some code to analyze",
+    "analysisFailed": "Analysis failed, please try again"
+  },
+  "loading": "Analyzing your code..."
+}
+

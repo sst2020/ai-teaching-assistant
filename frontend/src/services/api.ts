@@ -101,9 +101,10 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const API_V1_PREFIX = '/api/v1';
 
 // Create axios instance with default config
+// 超时设置为 90 秒，以适应 DeepSeek API 的响应时间（通常需要 15-50 秒）
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 30000,
+  timeout: 90000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -313,6 +314,76 @@ export const askQuestion = async (request: QuestionRequest): Promise<QuestionRes
     request
   );
   return response.data;
+};
+
+// 流式问答接口
+export interface StreamCallbacks {
+  onStart?: (questionId: string) => void;
+  onChunk?: (chunk: string) => void;
+  onDone?: (confidence: number, needsReview: boolean) => void;
+  onError?: (error: string) => void;
+}
+
+export const askQuestionStream = async (
+  request: QuestionRequest,
+  callbacks: StreamCallbacks
+): Promise<void> => {
+  const response = await fetch(`${API_BASE_URL}${API_V1_PREFIX}/qa/ask-stream`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) {
+    throw new Error('No response body');
+  }
+
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const data = JSON.parse(line.slice(6));
+            switch (data.type) {
+              case 'start':
+                callbacks.onStart?.(data.question_id);
+                break;
+              case 'chunk':
+                callbacks.onChunk?.(data.content);
+                break;
+              case 'done':
+                callbacks.onDone?.(data.confidence, data.needs_review);
+                break;
+              case 'error':
+                callbacks.onError?.(data.message);
+                break;
+            }
+          } catch (e) {
+            console.error('Failed to parse SSE data:', e);
+          }
+        }
+      }
+    }
+  } finally {
+    reader.releaseLock();
+  }
 };
 
 // 智能问答（持久化版本）

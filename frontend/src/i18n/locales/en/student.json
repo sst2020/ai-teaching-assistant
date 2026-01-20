@@ -1,0 +1,78 @@
+{
+  "dashboard": {
+    "title": "Student Dashboard",
+    "welcome": "Welcome back",
+    "loading": "Loading...",
+    "error": "Failed to load, please try again",
+    "retry": "Retry"
+  },
+  "stats": {
+    "enrolledCourses": "Enrolled Courses",
+    "pendingAssignments": "Pending Assignments",
+    "submissions": "Submissions",
+    "averageGrade": "Average Grade"
+  },
+  "courses": {
+    "title": "My Courses",
+    "empty": "You're not enrolled in any courses yet",
+    "instructor": "Instructor",
+    "assignments": "Assignments",
+    "viewAll": "View All"
+  },
+  "assignments": {
+    "title": "Pending Assignments",
+    "upcoming": "Upcoming Assignments",
+    "empty": "No upcoming assignments. Great job staying on top of things!",
+    "dueDate": "Due Date",
+    "due": "Due",
+    "status": {
+      "pending": "Pending",
+      "submitted": "Submitted",
+      "graded": "Graded",
+      "late": "Late"
+    },
+    "submit": "Submit",
+    "view": "View Details",
+    "viewAll": "View All"
+  },
+  "grades": {
+    "title": "My Grades",
+    "course": "Course",
+    "assignment": "Assignment",
+    "score": "Score",
+    "feedback": "Feedback",
+    "submittedAt": "Submitted At",
+    "gradedAt": "Graded At",
+    "empty": "No grades available",
+    "average": "Average",
+    "highest": "Highest",
+    "lowest": "Lowest"
+  },
+  "submit": {
+    "title": "Submit Assignment",
+    "assignmentInfo": "Assignment Info",
+    "description": "Description",
+    "dueDate": "Due Date",
+    "maxScore": "Max Score",
+    "codeInput": {
+      "label": "Code Content",
+      "placeholder": "Enter or paste your code here..."
+    },
+    "fileUpload": {
+      "label": "Upload File",
+      "dragDrop": "Drag and drop files here or click to upload",
+      "supported": "Supported file types"
+    },
+    "buttons": {
+      "submit": "Submit",
+      "submitting": "Submitting...",
+      "cancel": "Cancel"
+    },
+    "success": "Assignment submitted successfully!",
+    "errors": {
+      "emptyCode": "Please enter code content",
+      "submitFailed": "Submission failed, please try again"
+    }
+  }
+}
+

@@ -1,0 +1,32 @@
+{
+  "title": "Q&A Assistant",
+  "subtitle": "Ask questions about programming, algorithms, or course material",
+  "emptyState": {
+    "icon": "🤖",
+    "message": "Ask me anything about programming!",
+    "suggestions": {
+      "recursion": "What is recursion?",
+      "bigO": "Explain Big O notation",
+      "debug": "How do I debug Python code?"
+    }
+  },
+  "input": {
+    "placeholder": "Type your question here...",
+    "send": "Send"
+  },
+  "confidence": {
+    "high": "High confidence",
+    "medium": "Medium confidence",
+    "low": "Low confidence"
+  },
+  "loading": "Thinking...",
+  "anonymousHint": "Tip: You are using anonymous mode.",
+  "loginPrompt": "Login",
+  "loginBenefit": "to save your Q&A history.",
+  "errors": {
+    "emptyQuestion": "Please enter a question",
+    "sendFailed": "Failed to send, please try again",
+    "connectionError": "Connection error, please check your network"
+  }
+}
+

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { LoadingSpinner, ErrorMessage } from '../components/common';
 import './Login.css';
@@ -9,14 +10,15 @@ interface LocationState {
 }
 
 const Login: React.FC = () => {
+  const { t } = useTranslation('auth');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formErrors, setFormErrors] = useState<{ email?: string; password?: string }>({});
-  
+
   const { login, isLoading, error, isAuthenticated, clearError } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const state = location.state as LocationState;
   const from = state?.from?.pathname || '/dashboard';
 
@@ -34,28 +36,28 @@ const Login: React.FC = () => {
 
   const validateForm = (): boolean => {
     const errors: { email?: string; password?: string } = {};
-    
+
     if (!email.trim()) {
-      errors.email = 'Email is required';
+      errors.email = t('login.errors.emailRequired');
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.email = 'Please enter a valid email address';
+      errors.email = t('login.errors.invalidEmail');
     }
-    
+
     if (!password) {
-      errors.password = 'Password is required';
+      errors.password = t('login.errors.passwordRequired');
     } else if (password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
+      errors.password = t('login.errors.passwordMinLength');
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     try {
       await login({ email, password });
       // Navigation will happen automatically via useEffect
@@ -69,15 +71,15 @@ const Login: React.FC = () => {
       <div className="login-container">
         <div className="login-header">
           <span className="login-logo">🎓</span>
-          <h1>Welcome Back</h1>
-          <p>Sign in to your AI Teaching Assistant account</p>
+          <h1>{t('login.title')}</h1>
+          <p>{t('login.subtitle')}</p>
         </div>
 
         <form className="login-form" onSubmit={handleSubmit}>
           {error && <ErrorMessage message={error} />}
-          
+
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">{t('login.emailLabel')}</label>
             <input
               type="email"
               id="email"
@@ -86,7 +88,7 @@ const Login: React.FC = () => {
                 setEmail(e.target.value);
                 if (formErrors.email) setFormErrors({ ...formErrors, email: undefined });
               }}
-              placeholder="Enter your email"
+              placeholder={t('login.emailPlaceholder')}
               disabled={isLoading}
               className={formErrors.email ? 'error' : ''}
             />
@@ -94,7 +96,7 @@ const Login: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t('login.passwordLabel')}</label>
             <input
               type="password"
               id="password"
@@ -103,27 +105,27 @@ const Login: React.FC = () => {
                 setPassword(e.target.value);
                 if (formErrors.password) setFormErrors({ ...formErrors, password: undefined });
               }}
-              placeholder="Enter your password"
+              placeholder={t('login.passwordPlaceholder')}
               disabled={isLoading}
               className={formErrors.password ? 'error' : ''}
             />
             {formErrors.password && <span className="field-error">{formErrors.password}</span>}
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="login-button"
             disabled={isLoading}
           >
-            {isLoading ? <LoadingSpinner size="small" message="" /> : 'Sign In'}
+            {isLoading ? <LoadingSpinner size="small" message="" /> : t('login.submitButton')}
           </button>
         </form>
 
         <div className="login-footer">
           <p>
-            Don't have an account?{' '}
+            {t('login.noAccount')}{' '}
             <Link to="/register" className="register-link">
-              Create one here
+              {t('login.createAccount')}
             </Link>
           </p>
         </div>

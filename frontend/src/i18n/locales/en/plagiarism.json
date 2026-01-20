@@ -1,0 +1,70 @@
+{
+  "title": "Plagiarism Detection",
+  "subtitle": "Detect code similarity and identify potential plagiarism",
+  "upload": {
+    "title": "Batch Upload",
+    "dragDrop": "Drag and drop files here or click to upload",
+    "supported": "Supports .py, .java, .cpp, .c, .js files",
+    "maxFiles": "Maximum {{count}} files",
+    "uploading": "Uploading...",
+    "success": "Upload successful",
+    "error": "Upload failed"
+  },
+  "analysis": {
+    "title": "Analysis Results",
+    "analyzing": "Analyzing...",
+    "noResults": "No analysis results",
+    "startAnalysis": "Start Analysis",
+    "reanalyze": "Reanalyze"
+  },
+  "matrix": {
+    "title": "Similarity Matrix",
+    "tooltip": "Similarity: {{value}}%"
+  },
+  "graph": {
+    "title": "Relationship Graph",
+    "legend": {
+      "high": "High Similarity (>80%)",
+      "medium": "Medium Similarity (50-80%)",
+      "low": "Low Similarity (<50%)"
+    }
+  },
+  "suspicious": {
+    "title": "Suspicious Submissions",
+    "empty": "No suspicious submissions found",
+    "similarity": "Similarity",
+    "files": "Related Files",
+    "viewDetails": "View Details"
+  },
+  "report": {
+    "title": "Originality Report",
+    "overall": "Overall Originality",
+    "details": "Details",
+    "matches": "Matches",
+    "export": "Export Report"
+  },
+  "settings": {
+    "title": "Detection Settings",
+    "threshold": "Similarity Threshold",
+    "algorithm": "Algorithm",
+    "algorithms": {
+      "ast": "AST Analysis",
+      "token": "Token Sequence",
+      "cosine": "Cosine Similarity",
+      "edit": "Edit Distance"
+    }
+  },
+  "results": {
+    "analyzed": "Analyzed {{count}} submissions",
+    "flagged": "Found {{count}} suspicious pairs"
+  },
+  "common": {
+    "close": "Close"
+  },
+  "errors": {
+    "noFiles": "Please upload files first",
+    "analysisFailed": "Analysis failed, please try again",
+    "minFiles": "At least 2 files required"
+  }
+}
+

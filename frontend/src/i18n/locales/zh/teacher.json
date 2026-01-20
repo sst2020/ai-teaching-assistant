@@ -1,0 +1,108 @@
+{
+  "dashboard": {
+    "title": "教师工作台",
+    "welcome": "欢迎回来",
+    "loading": "加载中...",
+    "error": "加载仪表板数据失败",
+    "retry": "重试",
+    "newAssignment": "新建作业",
+    "refresh": "刷新"
+  },
+  "stats": {
+    "totalAssignments": "总作业数",
+    "pendingGrading": "待批改",
+    "graded": "已批改",
+    "pendingQuestions": "待回答问题"
+  },
+  "quickActions": {
+    "title": "快速操作",
+    "manageAssignments": "作业管理",
+    "grading": "批改作业",
+    "questionQueue": "问题队列",
+    "analytics": "数据分析"
+  },
+  "recentAssignments": {
+    "title": "最近作业",
+    "viewAll": "查看全部",
+    "empty": "暂无作业",
+    "createFirst": "创建第一个作业",
+    "columns": {
+      "title": "作业标题",
+      "type": "类型",
+      "dueDate": "截止日期",
+      "status": "状态",
+      "actions": "操作"
+    },
+    "types": {
+      "code": "代码",
+      "essay": "论文",
+      "quiz": "测验",
+      "project": "项目"
+    },
+    "status": {
+      "draft": "草稿",
+      "expired": "已截止",
+      "active": "进行中"
+    }
+  },
+  "urgentAlerts": {
+    "title": "紧急问题待处理",
+    "message": "有 {{count}} 个紧急问题需要您的关注",
+    "action": "立即处理"
+  },
+  "courses": {
+    "title": "我的课程",
+    "empty": "暂无课程",
+    "students": "学生数",
+    "assignments": "作业数",
+    "create": "创建课程"
+  },
+  "assignments": {
+    "title": "作业管理",
+    "create": "创建作业",
+    "edit": "编辑",
+    "delete": "删除",
+    "view": "查看",
+    "empty": "暂无作业",
+    "form": {
+      "title": "作业标题",
+      "description": "作业描述",
+      "dueDate": "截止日期",
+      "maxScore": "满分",
+      "course": "所属课程",
+      "save": "保存",
+      "cancel": "取消"
+    },
+    "confirmDelete": "确定要删除这个作业吗？"
+  },
+  "grading": {
+    "title": "评分",
+    "submissions": "提交列表",
+    "empty": "暂无提交",
+    "student": "学生",
+    "submittedAt": "提交时间",
+    "status": {
+      "pending": "待评分",
+      "graded": "已评分"
+    },
+    "form": {
+      "score": "分数",
+      "feedback": "反馈意见",
+      "submit": "提交评分",
+      "submitting": "提交中..."
+    },
+    "success": "评分提交成功！",
+    "errors": {
+      "invalidScore": "请输入有效的分数",
+      "submitFailed": "评分提交失败，请重试"
+    }
+  },
+  "statistics": {
+    "title": "统计数据",
+    "totalStudents": "学生总数",
+    "totalAssignments": "作业总数",
+    "pendingGrading": "待评分",
+    "averageScore": "平均分"
+  }
+}
+

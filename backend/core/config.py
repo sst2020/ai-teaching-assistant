@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     RELOAD: bool = True
 
     # CORS Settings
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
+    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001", "http://localhost:3002", "http://127.0.0.1:3001", "http://127.0.0.1:3002"]
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: List[str] = ["*"]
     CORS_ALLOW_HEADERS: List[str] = ["*"]
@@ -49,6 +49,17 @@ class Settings(BaseSettings):
     FASTCHAT_TEMPERATURE: float = 0.7
     FASTCHAT_MAX_TOKENS: int = 2000
     FASTCHAT_TIMEOUT: int = 60
+
+    # DeepSeek API Settings
+    USE_DEEPSEEK: bool = False
+    DEEPSEEK_API_KEY: str = ""
+    DEEPSEEK_API_BASE: str = "https://api.deepseek.com"
+    DEEPSEEK_MODEL: str = "deepseek-chat"
+    DEEPSEEK_TEMPERATURE: float = 0.7
+    DEEPSEEK_MAX_TOKENS: int = 2000
+    DEEPSEEK_TIMEOUT: int = 60
+    DEEPSEEK_MAX_RETRIES: int = 3
+    DEEPSEEK_RETRY_DELAY: float = 1.0
 
     # Database Settings
     DATABASE_URL: str = "sqlite:///./teaching_assistant.db"

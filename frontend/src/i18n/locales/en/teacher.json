@@ -1,0 +1,108 @@
+{
+  "dashboard": {
+    "title": "Teacher Dashboard",
+    "welcome": "Welcome back",
+    "loading": "Loading...",
+    "error": "Failed to load dashboard data",
+    "retry": "Retry",
+    "newAssignment": "New Assignment",
+    "refresh": "Refresh"
+  },
+  "stats": {
+    "totalAssignments": "Total Assignments",
+    "pendingGrading": "Pending Grading",
+    "graded": "Graded",
+    "pendingQuestions": "Pending Questions"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "manageAssignments": "Manage Assignments",
+    "grading": "Grade Assignments",
+    "questionQueue": "Question Queue",
+    "analytics": "Analytics"
+  },
+  "recentAssignments": {
+    "title": "Recent Assignments",
+    "viewAll": "View All",
+    "empty": "No assignments",
+    "createFirst": "Create your first assignment",
+    "columns": {
+      "title": "Assignment Title",
+      "type": "Type",
+      "dueDate": "Due Date",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "types": {
+      "code": "Code",
+      "essay": "Essay",
+      "quiz": "Quiz",
+      "project": "Project"
+    },
+    "status": {
+      "draft": "Draft",
+      "expired": "Expired",
+      "active": "Active"
+    }
+  },
+  "urgentAlerts": {
+    "title": "Urgent Issues Pending",
+    "message": "{{count}} urgent issues need your attention",
+    "action": "Handle Now"
+  },
+  "courses": {
+    "title": "My Courses",
+    "empty": "No courses available",
+    "students": "Students",
+    "assignments": "Assignments",
+    "create": "Create Course"
+  },
+  "assignments": {
+    "title": "Assignment Management",
+    "create": "Create Assignment",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "empty": "No assignments available",
+    "form": {
+      "title": "Assignment Title",
+      "description": "Description",
+      "dueDate": "Due Date",
+      "maxScore": "Max Score",
+      "course": "Course",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "confirmDelete": "Are you sure you want to delete this assignment?"
+  },
+  "grading": {
+    "title": "Grading",
+    "submissions": "Submissions",
+    "empty": "No submissions available",
+    "student": "Student",
+    "submittedAt": "Submitted At",
+    "status": {
+      "pending": "Pending",
+      "graded": "Graded"
+    },
+    "form": {
+      "score": "Score",
+      "feedback": "Feedback",
+      "submit": "Submit Grade",
+      "submitting": "Submitting..."
+    },
+    "success": "Grade submitted successfully!",
+    "errors": {
+      "invalidScore": "Please enter a valid score",
+      "submitFailed": "Failed to submit grade, please try again"
+    }
+  },
+  "statistics": {
+    "title": "Statistics",
+    "totalStudents": "Total Students",
+    "totalAssignments": "Total Assignments",
+    "pendingGrading": "Pending Grading",
+    "averageScore": "Average Score"
+  }
+}
+

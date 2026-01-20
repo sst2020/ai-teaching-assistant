@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { getHealthStatus } from '../../services/api';
 import './Header.css';
 
@@ -8,6 +9,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = () => {
+  const { t, i18n } = useTranslation('navigation');
   const [backendStatus, setBackendStatus] = useState<'connected' | 'disconnected' | 'checking'>('checking');
 
   useEffect(() => {
@@ -26,13 +28,18 @@ const Header: React.FC<HeaderProps> = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'zh' ? 'en' : 'zh';
+    i18n.changeLanguage(newLang);
+  };
+
   return (
     <header className="app-header">
       <div className="header-content">
         <div className="header-brand">
           <NavLink to="/dashboard" className="brand-link">
             <span className="header-logo">🎓</span>
-            <h1 className="header-title">AI Teaching Assistant</h1>
+            <h1 className="header-title">{t('appTitle')}</h1>
           </NavLink>
         </div>
         <nav className="header-nav">
@@ -40,40 +47,49 @@ const Header: React.FC<HeaderProps> = () => {
             to="/dashboard"
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
           >
-            🏠 Dashboard
+            🏠 {t('menu.dashboard')}
           </NavLink>
           <NavLink
             to="/code-analysis"
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
           >
-            📊 Code Analysis
+            📊 {t('menu.codeAnalysis')}
           </NavLink>
           <NavLink
             to="/qa"
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
           >
-            💬 Q&A
+            💬 {t('menu.qa')}
           </NavLink>
           <NavLink
             to="/plagiarism"
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
           >
-            🔍 查重分析
+            🔍 {t('menu.plagiarism')}
           </NavLink>
           <NavLink
             to="/report-analysis"
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
           >
-            📑 报告分析
+            📑 {t('menu.reportAnalysis')}
           </NavLink>
         </nav>
-        <div className="header-status">
-          <span className={`status-indicator ${backendStatus}`}></span>
-          <span className="status-text">
-            {backendStatus === 'checking' && 'Checking...'}
-            {backendStatus === 'connected' && 'Backend Connected'}
-            {backendStatus === 'disconnected' && 'Backend Offline'}
-          </span>
+        <div className="header-actions">
+          <button
+            className="language-toggle"
+            onClick={toggleLanguage}
+            title={i18n.language === 'zh' ? 'Switch to English' : '切换到中文'}
+          >
+            🌐 {i18n.language === 'zh' ? 'EN' : '中'}
+          </button>
+          <div className="header-status">
+            <span className={`status-indicator ${backendStatus}`}></span>
+            <span className="status-text">
+              {backendStatus === 'checking' && t('status.checking')}
+              {backendStatus === 'connected' && t('status.backendConnected')}
+              {backendStatus === 'disconnected' && t('status.backendOffline')}
+            </span>
+          </div>
         </div>
       </div>
     </header>

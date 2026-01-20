@@ -272,3 +272,154 @@
   cursor: not-allowed;
 }
 
+/* Markdown 渲染样式 */
+.message-content h1,
+.message-content h2,
+.message-content h3,
+.message-content h4,
+.message-content h5,
+.message-content h6 {
+  margin-top: var(--md-sys-spacing-4);
+  margin-bottom: var(--md-sys-spacing-2);
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.message-content h1 { font-size: 1.5em; }
+.message-content h2 { font-size: 1.3em; }
+.message-content h3 { font-size: 1.15em; }
+.message-content h4 { font-size: 1.05em; }
+
+.message-content ul,
+.message-content ol {
+  margin: var(--md-sys-spacing-2) 0;
+  padding-left: var(--md-sys-spacing-6);
+}
+
+.message-content li {
+  margin-bottom: var(--md-sys-spacing-1);
+  line-height: 1.6;
+}
+
+.message-content code {
+  background-color: var(--md-sys-color-surface-container-highest);
+  padding: 2px 6px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.9em;
+}
+
+.message-content pre {
+  margin: var(--md-sys-spacing-3) 0;
+  border-radius: var(--md-sys-shape-corner-medium);
+  overflow-x: auto;
+}
+
+.message-content pre > div {
+  border-radius: var(--md-sys-shape-corner-medium) !important;
+  margin: 0 !important;
+}
+
+.message-content blockquote {
+  margin: var(--md-sys-spacing-3) 0;
+  padding: var(--md-sys-spacing-2) var(--md-sys-spacing-4);
+  border-left: 4px solid var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: 0 var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0;
+}
+
+.message-content blockquote p {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Markdown 表格样式 */
+.markdown-table-wrapper {
+  overflow-x: auto;
+  margin: var(--md-sys-spacing-3) 0;
+}
+
+.message-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.message-content th,
+.message-content td {
+  padding: var(--md-sys-spacing-2) var(--md-sys-spacing-3);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  text-align: left;
+}
+
+.message-content th {
+  background-color: var(--md-sys-color-surface-container-high);
+  font-weight: 600;
+}
+
+.message-content tr:nth-child(even) {
+  background-color: var(--md-sys-color-surface-container-low);
+}
+
+/* 链接样式 */
+.message-content a {
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+}
+
+.message-content a:hover {
+  text-decoration: underline;
+}
+
+/* 水平分割线 */
+.message-content hr {
+  border: none;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  margin: var(--md-sys-spacing-4) 0;
+}
+
+/* 强调文本 */
+.message-content strong {
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.message-content em {
+  font-style: italic;
+}
+
+/* 答案消息的最大宽度调整 */
+.message.answer {
+  max-width: 90%;
+}
+
+.message.answer .message-content {
+  max-width: 100%;
+}
+
+/* 流式响应样式 */
+.message.streaming .message-content {
+  position: relative;
+}
+
+.streaming-cursor {
+  display: inline-block;
+  animation: blink 1s step-end infinite;
+  color: var(--md-sys-color-primary);
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* 流式消息的渐入效果 */
+.message.streaming {
+  animation: none;
+}
+
+.message.streaming .message-content {
+  min-height: 40px;
+}

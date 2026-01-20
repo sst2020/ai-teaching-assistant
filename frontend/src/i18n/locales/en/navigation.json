@@ -1,0 +1,28 @@
+{
+  "appTitle": "AI Teaching Assistant",
+  "menu": {
+    "dashboard": "Dashboard",
+    "codeAnalysis": "Code Analysis",
+    "qa": "Q&A",
+    "plagiarism": "Plagiarism Check",
+    "reportAnalysis": "Report Analysis",
+    "studentDashboard": "Student Dashboard",
+    "teacherDashboard": "Teacher Dashboard",
+    "manageAssignments": "Manage Assignments",
+    "grading": "Grading",
+    "grades": "Grades",
+    "knowledgeBase": "Knowledge Base",
+    "questionQueue": "Question Queue"
+  },
+  "status": {
+    "checking": "Checking...",
+    "backendConnected": "Backend Connected",
+    "backendOffline": "Backend Offline"
+  },
+  "user": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  }
+}
+

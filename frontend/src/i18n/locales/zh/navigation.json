@@ -1,0 +1,28 @@
+{
+  "appTitle": "AI 教学助手",
+  "menu": {
+    "dashboard": "仪表板",
+    "codeAnalysis": "代码分析",
+    "qa": "智能问答",
+    "plagiarism": "查重分析",
+    "reportAnalysis": "报告分析",
+    "studentDashboard": "学生中心",
+    "teacherDashboard": "教师中心",
+    "manageAssignments": "作业管理",
+    "grading": "评分",
+    "grades": "成绩",
+    "knowledgeBase": "知识库",
+    "questionQueue": "问题队列"
+  },
+  "status": {
+    "checking": "检查中...",
+    "backendConnected": "后端已连接",
+    "backendOffline": "后端离线"
+  },
+  "user": {
+    "profile": "个人资料",
+    "settings": "设置",
+    "logout": "退出登录"
+  }
+}
+

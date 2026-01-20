@@ -1,0 +1,80 @@
+{
+  "title": "作业管理",
+  "back": "返回",
+  "newAssignment": "新建作业",
+  "loading": "加载中...",
+  "loadError": "加载作业列表失败",
+  "loadDetailError": "加载作业详情失败",
+  "saveError": "保存作业失败",
+  "deleteError": "删除作业失败",
+  "deleteConfirm": "确定要删除这个作业吗？此操作不可撤销。",
+  "filters": {
+    "allTypes": "全部类型",
+    "allStatus": "全部状态",
+    "published": "已发布",
+    "draft": "草稿"
+  },
+  "types": {
+    "code": "代码作业",
+    "essay": "论文作业",
+    "quiz": "测验",
+    "project": "项目"
+  },
+  "typeLabels": {
+    "code": "💻 代码",
+    "essay": "📝 论文",
+    "quiz": "❓ 测验",
+    "project": "🎯 项目"
+  },
+  "table": {
+    "title": "作业标题",
+    "type": "类型",
+    "maxScore": "满分",
+    "dueDate": "截止日期",
+    "status": "状态",
+    "actions": "操作"
+  },
+  "status": {
+    "published": "已发布",
+    "draft": "草稿"
+  },
+  "actions": {
+    "grade": "批改",
+    "edit": "编辑",
+    "delete": "删除"
+  },
+  "empty": {
+    "message": "暂无作业",
+    "createFirst": "创建第一个作业"
+  },
+  "pagination": {
+    "prev": "上一页",
+    "next": "下一页",
+    "pageInfo": "第 {{current}} / {{total}} 页"
+  },
+  "form": {
+    "createTitle": "新建作业",
+    "editTitle": "编辑作业",
+    "title": "作业标题",
+    "titlePlaceholder": "输入作业标题",
+    "titleRequired": "*",
+    "type": "作业类型",
+    "typeRequired": "*",
+    "maxScore": "满分",
+    "maxScoreRequired": "*",
+    "description": "作业描述",
+    "descriptionPlaceholder": "简要描述作业内容",
+    "instructions": "详细说明",
+    "instructionsPlaceholder": "详细的作业要求和评分标准",
+    "dueDate": "截止日期",
+    "dueDateRequired": "*",
+    "latePenalty": "迟交扣分 (%)",
+    "allowLate": "允许迟交",
+    "publishNow": "立即发布",
+    "cancel": "取消",
+    "saving": "保存中...",
+    "update": "更新作业",
+    "create": "创建作业"
+  }
+}
+

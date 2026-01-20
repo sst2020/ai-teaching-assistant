@@ -1,0 +1,43 @@
+{
+  "title": "Dashboard",
+  "welcome": "Welcome to the AI Teaching Assistant",
+  "loading": "Loading dashboard...",
+  "backendStatus": {
+    "title": "Backend Status",
+    "healthy": "Healthy",
+    "unhealthy": "Unhealthy",
+    "unknown": "Unknown",
+    "version": "Version",
+    "lastCheck": "Last Check"
+  },
+  "apiInfo": {
+    "title": "API Information",
+    "name": "Name",
+    "version": "Version",
+    "description": "Description",
+    "viewDocs": "View API Documentation"
+  },
+  "features": {
+    "codeAnalysis": {
+      "title": "Code Analysis",
+      "description": "Analyze Python code for style issues, complexity metrics, and code smells.",
+      "items": ["PEP 8 style checking", "Cyclomatic complexity", "Code smell detection"]
+    },
+    "qaAssistant": {
+      "title": "Q&A Assistant",
+      "description": "Get instant answers to programming questions with AI-powered assistance.",
+      "items": ["Natural language queries", "Context-aware responses", "Confidence scoring"]
+    },
+    "assignmentGrading": {
+      "title": "Assignment Grading",
+      "description": "Automated grading with detailed feedback for code and essay submissions.",
+      "items": ["Rubric-based grading", "Detailed feedback", "Plagiarism detection"]
+    },
+    "plagiarismDetection": {
+      "title": "Plagiarism Detection",
+      "description": "Detect code similarity using AST-based fingerprinting technology.",
+      "items": ["AST fingerprinting", "Similarity scoring", "Match highlighting"]
+    }
+  }
+}
+

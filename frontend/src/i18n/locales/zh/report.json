@@ -1,0 +1,71 @@
+{
+  "title": "项目报告智能分析系统",
+  "subtitle": "自动解析项目报告结构，评估质量并生成智能修改建议",
+  "tabs": {
+    "upload": "上传与解析",
+    "structure": "报告结构",
+    "quality": "质量评估",
+    "logic": "逻辑与创新",
+    "suggestions": "修改建议"
+  },
+  "upload": {
+    "title": "上传报告",
+    "selectFile": "选择文件",
+    "dragDrop": "拖拽文件到此处或点击上传",
+    "pasteContent": "或直接粘贴报告内容...",
+    "supported": "支持 .pdf, .docx, .doc, .txt 文件",
+    "uploading": "上传中...",
+    "success": "上传成功",
+    "error": "上传失败"
+  },
+  "analysis": {
+    "title": "分析结果",
+    "analyzing": "分析中...",
+    "startAnalysis": "开始分析",
+    "noResults": "暂无分析结果",
+    "reanalyze": "重新分析"
+  },
+  "structure": {
+    "title": "报告结构分析",
+    "sections": "章节",
+    "wordCount": "字数",
+    "paragraphs": "段落数",
+    "completeness": "完整性"
+  },
+  "content": {
+    "title": "内容分析",
+    "clarity": "清晰度",
+    "coherence": "连贯性",
+    "depth": "深度",
+    "relevance": "相关性"
+  },
+  "quality": {
+    "title": "质量评估",
+    "overall": "总体评分",
+    "grammar": "语法",
+    "formatting": "格式",
+    "citations": "引用"
+  },
+  "logic": {
+    "title": "逻辑与创新分析"
+  },
+  "suggestions": {
+    "title": "修改建议",
+    "empty": "暂无建议"
+  },
+  "export": {
+    "title": "导出",
+    "pdf": "导出 PDF",
+    "json": "导出 JSON"
+  },
+  "common": {
+    "close": "关闭"
+  },
+  "errors": {
+    "noContent": "请输入或上传报告内容",
+    "noFile": "请先上传文件",
+    "analysisFailed": "分析失败，请稍后重试",
+    "unsupportedFormat": "不支持的文件格式"
+  }
+}
+

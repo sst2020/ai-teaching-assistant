@@ -1,0 +1,71 @@
+{
+  "title": "Project Report Analysis System",
+  "subtitle": "Automatically parse report structure, assess quality and generate improvement suggestions",
+  "tabs": {
+    "upload": "Upload & Parse",
+    "structure": "Report Structure",
+    "quality": "Quality Assessment",
+    "logic": "Logic & Innovation",
+    "suggestions": "Suggestions"
+  },
+  "upload": {
+    "title": "Upload Report",
+    "selectFile": "Select File",
+    "dragDrop": "Drag and drop files here or click to upload",
+    "pasteContent": "Or paste report content directly...",
+    "supported": "Supports .pdf, .docx, .doc, .txt files",
+    "uploading": "Uploading...",
+    "success": "Upload successful",
+    "error": "Upload failed"
+  },
+  "analysis": {
+    "title": "Analysis Results",
+    "analyzing": "Analyzing...",
+    "startAnalysis": "Start Analysis",
+    "noResults": "No analysis results",
+    "reanalyze": "Reanalyze"
+  },
+  "structure": {
+    "title": "Report Structure Analysis",
+    "sections": "Sections",
+    "wordCount": "Word Count",
+    "paragraphs": "Paragraphs",
+    "completeness": "Completeness"
+  },
+  "content": {
+    "title": "Content Analysis",
+    "clarity": "Clarity",
+    "coherence": "Coherence",
+    "depth": "Depth",
+    "relevance": "Relevance"
+  },
+  "quality": {
+    "title": "Quality Assessment",
+    "overall": "Overall Score",
+    "grammar": "Grammar",
+    "formatting": "Formatting",
+    "citations": "Citations"
+  },
+  "logic": {
+    "title": "Logic & Innovation Analysis"
+  },
+  "suggestions": {
+    "title": "Improvement Suggestions",
+    "empty": "No suggestions"
+  },
+  "export": {
+    "title": "Export",
+    "pdf": "Export PDF",
+    "json": "Export JSON"
+  },
+  "common": {
+    "close": "Close"
+  },
+  "errors": {
+    "noContent": "Please enter or upload report content",
+    "noFile": "Please upload a file first",
+    "analysisFailed": "Analysis failed, please try again later",
+    "unsupportedFormat": "Unsupported file format"
+  }
+}
+

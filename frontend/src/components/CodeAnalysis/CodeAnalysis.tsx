@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { analyzeCode, handleApiError } from '../../services/api';
 import { CodeAnalysisResponse } from '../../types/api';
 import { LoadingSpinner, ErrorMessage } from '../common';
@@ -21,6 +22,7 @@ def fibonacci(n):
 `;
 
 const CodeAnalysis: React.FC = () => {
+  const { t } = useTranslation('analysis');
   const [code, setCode] = useState<string>(SAMPLE_CODE);
   const [language, setLanguage] = useState<string>('python');
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,7 +31,7 @@ const CodeAnalysis: React.FC = () => {
 
   const handleAnalyze = async () => {
     if (!code.trim()) {
-      setError('Please enter some code to analyze');
+      setError(t('errors.emptyCode'));
       return;
     }
 
@@ -62,20 +64,20 @@ const CodeAnalysis: React.FC = () => {
   return (
     <div className="code-analysis">
       <div className="analysis-header">
-        <h2>📊 Code Analysis</h2>
-        <p>Analyze your Python code for style issues, complexity, and code smells</p>
+        <h2>📊 {t('title')}</h2>
+        <p>{t('subtitle')}</p>
       </div>
 
       <div className="analysis-content">
         <div className="code-input-section">
           <div className="input-header">
-            <label htmlFor="code-input">Enter your code:</label>
-            <select 
-              value={language} 
+            <label htmlFor="code-input">{t('input.label')}</label>
+            <select
+              value={language}
               onChange={(e) => setLanguage(e.target.value)}
               className="language-select"
             >
-              <option value="python">Python</option>
+              <option value="python">{t('input.python')}</option>
             </select>
           </div>
           <textarea
@@ -83,67 +85,67 @@ const CodeAnalysis: React.FC = () => {
             className="code-textarea"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            placeholder="Paste your code here..."
+            placeholder={t('input.placeholder')}
             rows={15}
           />
-          <button 
+          <button
             className="analyze-button"
             onClick={handleAnalyze}
             disabled={loading}
           >
-            {loading ? 'Analyzing...' : '🔍 Analyze Code'}
+            {loading ? t('button.analyzing') : `🔍 ${t('button.analyze')}`}
           </button>
         </div>
 
         <div className="results-section">
-          {loading && <LoadingSpinner message="Analyzing your code..." />}
+          {loading && <LoadingSpinner message={t('loading')} />}
           {error && <ErrorMessage message={error} onRetry={handleAnalyze} />}
           {result && (
             <div className="analysis-results">
               <div className="score-card">
-                <div 
+                <div
                   className="score-circle"
                   style={{ borderColor: getScoreColor(result.overall_quality_score) }}
                 >
                   <span className="score-value">{result.overall_quality_score}</span>
-                  <span className="score-label">Quality Score</span>
+                  <span className="score-label">{t('results.qualityScore')}</span>
                 </div>
               </div>
 
               <div className="metrics-grid">
                 <div className="metric-card">
-                  <h4>📈 Complexity</h4>
+                  <h4>📈 {t('results.complexity.title')}</h4>
                   <div className="metric-value">
                     {result.complexity_metrics.cyclomatic_complexity}
                   </div>
-                  <div className="metric-label">Cyclomatic Complexity</div>
+                  <div className="metric-label">{t('results.complexity.cyclomatic')}</div>
                 </div>
                 <div className="metric-card">
-                  <h4>📏 Lines of Code</h4>
+                  <h4>📏 {t('results.linesOfCode.title')}</h4>
                   <div className="metric-value">
                     {result.complexity_metrics.lines_of_code}
                   </div>
-                  <div className="metric-label">Total Lines</div>
+                  <div className="metric-label">{t('results.linesOfCode.total')}</div>
                 </div>
                 <div className="metric-card">
-                  <h4>🔧 Functions</h4>
+                  <h4>🔧 {t('results.functions.title')}</h4>
                   <div className="metric-value">
                     {result.complexity_metrics.function_count}
                   </div>
-                  <div className="metric-label">Function Count</div>
+                  <div className="metric-label">{t('results.functions.count')}</div>
                 </div>
                 <div className="metric-card">
-                  <h4>⚠️ Style Issues</h4>
+                  <h4>⚠️ {t('results.styleIssues.title')}</h4>
                   <div className="metric-value">
                     {result.style_analysis.total_issues}
                   </div>
-                  <div className="metric-label">Total Issues</div>
+                  <div className="metric-label">{t('results.styleIssues.total')}</div>
                 </div>
               </div>
 
               {result.recommendations.length > 0 && (
                 <div className="recommendations">
-                  <h4>💡 Recommendations</h4>
+                  <h4>💡 {t('results.recommendations.title')}</h4>
                   <ul>
                     {result.recommendations.map((rec, index) => (
                       <li key={index}>{rec}</li>

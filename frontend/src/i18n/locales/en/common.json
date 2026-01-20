@@ -1,0 +1,52 @@
+{
+  "loading": "Loading...",
+  "error": "Error",
+  "success": "Success",
+  "warning": "Warning",
+  "info": "Info",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "submit": "Submit",
+  "retry": "Retry",
+  "tryAgain": "Try Again",
+  "back": "Back",
+  "next": "Next",
+  "previous": "Previous",
+  "close": "Close",
+  "search": "Search",
+  "filter": "Filter",
+  "reset": "Reset",
+  "refresh": "Refresh",
+  "download": "Download",
+  "upload": "Upload",
+  "view": "View",
+  "details": "Details",
+  "status": {
+    "checking": "Checking...",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "online": "Online",
+    "offline": "Offline",
+    "pending": "Pending",
+    "completed": "Completed",
+    "failed": "Failed"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidStudentId": "Please enter a valid student ID (10 digits)",
+    "minLength": "Minimum {{count}} characters required",
+    "maxLength": "Maximum {{count}} characters allowed",
+    "passwordMismatch": "Passwords do not match",
+    "passwordRequirements": "Password must contain uppercase, lowercase, and number"
+  },
+  "language": {
+    "zh": "中文",
+    "en": "English",
+    "switchLanguage": "Switch Language"
+  }
+}
+

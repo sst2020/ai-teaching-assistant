@@ -5,6 +5,7 @@ from typing import List, Optional, Dict
 from datetime import datetime, timedelta
 from collections import Counter
 import uuid
+import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_
@@ -17,6 +18,8 @@ from schemas.qa import (
 from schemas.qa_log import QALogCreate, QALogResponse
 from services.ai_service import ai_service
 from services.qa_engine_service import qa_engine_service
+
+logger = logging.getLogger(__name__)
 
 
 class QAService:

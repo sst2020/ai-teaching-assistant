@@ -1,6 +1,6 @@
 /**
  * 教师仪表板页面 - 综合管理界面
- * 
+ *
  * 功能:
  * - 作业管理概览
  * - 评分统计
@@ -9,6 +9,7 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   getAssignments,
   getAssignmentStats,
@@ -24,6 +25,7 @@ interface DashboardStats {
 }
 
 const TeacherDashboard: React.FC = () => {
+  const { t, i18n } = useTranslation('teacher');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,12 +51,12 @@ const TeacherDashboard: React.FC = () => {
       });
       setRecentAssignments(assignmentsResponse.items || assignmentsResponse.assignments || []);
     } catch (err) {
-      setError('加载仪表板数据失败');
+      setError(t('dashboard.error'));
       console.error(err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     loadDashboardData();
@@ -62,7 +64,8 @@ const TeacherDashboard: React.FC = () => {
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('zh-CN', {
+    const locale = i18n.language === 'zh' ? 'zh-CN' : 'en-US';
+    return date.toLocaleDateString(locale, {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
@@ -74,12 +77,12 @@ const TeacherDashboard: React.FC = () => {
     const now = new Date();
     const dueDate = new Date(assignment.due_date);
     if (!assignment.is_published) {
-      return <span className="badge draft">草稿</span>;
+      return <span className="badge draft">{t('recentAssignments.status.draft')}</span>;
     }
     if (dueDate < now) {
-      return <span className="badge expired">已截止</span>;
+      return <span className="badge expired">{t('recentAssignments.status.expired')}</span>;
     }
-    return <span className="badge active">进行中</span>;
+    return <span className="badge active">{t('recentAssignments.status.active')}</span>;
   };
 
   if (loading) {
@@ -87,7 +90,7 @@ const TeacherDashboard: React.FC = () => {
       <div className="teacher-dashboard">
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p>加载中...</p>
+          <p>{t('dashboard.loading')}</p>
         </div>
       </div>
     );
@@ -96,13 +99,13 @@ const TeacherDashboard: React.FC = () => {
   return (
     <div className="teacher-dashboard">
       <header className="dashboard-header">
-        <h1>📚 教师工作台</h1>
+        <h1>📚 {t('dashboard.title')}</h1>
         <div className="header-actions">
           <button className="btn-primary" onClick={() => navigate('/manage-assignments')}>
-            ➕ 新建作业
+            ➕ {t('dashboard.newAssignment')}
           </button>
           <button className="btn-secondary" onClick={loadDashboardData}>
-            🔄 刷新
+            🔄 {t('dashboard.refresh')}
           </button>
         </div>
       </header>
@@ -115,51 +118,51 @@ const TeacherDashboard: React.FC = () => {
           <div className="stat-icon">📝</div>
           <div className="stat-content">
             <h3>{stats.assignments?.total_assignments || 0}</h3>
-            <p>总作业数</p>
+            <p>{t('stats.totalAssignments')}</p>
           </div>
         </div>
         <div className="stat-card">
           <div className="stat-icon">⏳</div>
           <div className="stat-content">
             <h3>{stats.assignments?.pending_count || 0}</h3>
-            <p>待批改</p>
+            <p>{t('stats.pendingGrading')}</p>
           </div>
         </div>
         <div className="stat-card highlight">
           <div className="stat-icon">✅</div>
           <div className="stat-content">
             <h3>{stats.assignments?.graded_count || 0}</h3>
-            <p>已批改</p>
+            <p>{t('stats.graded')}</p>
           </div>
         </div>
         <div className="stat-card warning">
           <div className="stat-icon">❓</div>
           <div className="stat-content">
             <h3>{stats.triage?.pending || 0}</h3>
-            <p>待回答问题</p>
+            <p>{t('stats.pendingQuestions')}</p>
           </div>
         </div>
       </section>
 
       {/* 快速操作 */}
       <section className="quick-actions">
-        <h2>快速操作</h2>
+        <h2>{t('quickActions.title')}</h2>
         <div className="action-grid">
           <Link to="/manage-assignments" className="action-card">
             <span className="action-icon">📋</span>
-            <span className="action-label">作业管理</span>
+            <span className="action-label">{t('quickActions.manageAssignments')}</span>
           </Link>
           <Link to="/grading" className="action-card">
             <span className="action-icon">✏️</span>
-            <span className="action-label">批改作业</span>
+            <span className="action-label">{t('quickActions.grading')}</span>
           </Link>
           <Link to="/question-queue" className="action-card">
             <span className="action-icon">💬</span>
-            <span className="action-label">问题队列</span>
+            <span className="action-label">{t('quickActions.questionQueue')}</span>
           </Link>
           <Link to="/analytics" className="action-card">
             <span className="action-icon">📊</span>
-            <span className="action-label">数据分析</span>
+            <span className="action-label">{t('quickActions.analytics')}</span>
           </Link>
         </div>
       </section>
@@ -167,19 +170,19 @@ const TeacherDashboard: React.FC = () => {
       {/* 最近作业 */}
       <section className="recent-assignments">
         <div className="section-header">
-          <h2>最近作业</h2>
-          <Link to="/manage-assignments" className="view-all">查看全部 →</Link>
+          <h2>{t('recentAssignments.title')}</h2>
+          <Link to="/manage-assignments" className="view-all">{t('recentAssignments.viewAll')} →</Link>
         </div>
         <div className="assignments-table">
           {recentAssignments.length > 0 ? (
             <table>
               <thead>
                 <tr>
-                  <th>作业标题</th>
-                  <th>类型</th>
-                  <th>截止日期</th>
-                  <th>状态</th>
-                  <th>操作</th>
+                  <th>{t('recentAssignments.columns.title')}</th>
+                  <th>{t('recentAssignments.columns.type')}</th>
+                  <th>{t('recentAssignments.columns.dueDate')}</th>
+                  <th>{t('recentAssignments.columns.status')}</th>
+                  <th>{t('recentAssignments.columns.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -188,10 +191,10 @@ const TeacherDashboard: React.FC = () => {
                     <td className="assignment-title">{assignment.title}</td>
                     <td>
                       <span className={`type-badge ${assignment.assignment_type}`}>
-                        {assignment.assignment_type === 'code' && '💻 代码'}
-                        {assignment.assignment_type === 'essay' && '📝 论文'}
-                        {assignment.assignment_type === 'quiz' && '❓ 测验'}
-                        {assignment.assignment_type === 'project' && '🎯 项目'}
+                        {assignment.assignment_type === 'code' && `💻 ${t('recentAssignments.types.code')}`}
+                        {assignment.assignment_type === 'essay' && `📝 ${t('recentAssignments.types.essay')}`}
+                        {assignment.assignment_type === 'quiz' && `❓ ${t('recentAssignments.types.quiz')}`}
+                        {assignment.assignment_type === 'project' && `🎯 ${t('recentAssignments.types.project')}`}
                       </span>
                     </td>
                     <td>{formatDate(assignment.due_date)}</td>
@@ -200,14 +203,14 @@ const TeacherDashboard: React.FC = () => {
                       <button
                         className="btn-icon"
                         onClick={() => navigate(`/grading?assignment=${assignment.id}`)}
-                        title="批改"
+                        title={t('quickActions.grading')}
                       >
                         ✏️
                       </button>
                       <button
                         className="btn-icon"
                         onClick={() => navigate(`/manage-assignments?edit=${assignment.id}`)}
-                        title="编辑"
+                        title={t('assignments.edit')}
                       >
                         ⚙️
                       </button>
@@ -218,9 +221,9 @@ const TeacherDashboard: React.FC = () => {
             </table>
           ) : (
             <div className="empty-state">
-              <p>暂无作业</p>
+              <p>{t('recentAssignments.empty')}</p>
               <button className="btn-primary" onClick={() => navigate('/manage-assignments')}>
-                创建第一个作业
+                {t('recentAssignments.createFirst')}
               </button>
             </div>
           )}
@@ -233,11 +236,11 @@ const TeacherDashboard: React.FC = () => {
           <div className="alert-card urgent">
             <span className="alert-icon">🚨</span>
             <div className="alert-content">
-              <h4>紧急问题待处理</h4>
-              <p>有 {stats.triage?.urgent_pending} 个紧急问题需要您的关注</p>
+              <h4>{t('urgentAlerts.title')}</h4>
+              <p>{t('urgentAlerts.message', { count: stats.triage?.urgent_pending })}</p>
             </div>
             <Link to="/question-queue" className="alert-action">
-              立即处理
+              {t('urgentAlerts.action')}
             </Link>
           </div>
         </section>

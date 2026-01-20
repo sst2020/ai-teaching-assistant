@@ -1,0 +1,43 @@
+{
+  "title": "仪表板",
+  "welcome": "欢迎使用 AI 教学助手",
+  "loading": "正在加载仪表板...",
+  "backendStatus": {
+    "title": "后端状态",
+    "healthy": "健康",
+    "unhealthy": "异常",
+    "unknown": "未知",
+    "version": "版本",
+    "lastCheck": "最后检查"
+  },
+  "apiInfo": {
+    "title": "API 信息",
+    "name": "名称",
+    "version": "版本",
+    "description": "描述",
+    "viewDocs": "查看 API 文档"
+  },
+  "features": {
+    "codeAnalysis": {
+      "title": "代码分析",
+      "description": "分析 Python 代码的风格问题、复杂度指标和代码异味。",
+      "items": ["PEP 8 风格检查", "圈复杂度分析", "代码异味检测"]
+    },
+    "qaAssistant": {
+      "title": "智能问答",
+      "description": "通过 AI 驱动的助手即时获取编程问题的答案。",
+      "items": ["自然语言查询", "上下文感知回复", "置信度评分"]
+    },
+    "assignmentGrading": {
+      "title": "作业评分",
+      "description": "自动评分并为代码和论文提交提供详细反馈。",
+      "items": ["基于评分标准", "详细反馈", "查重检测"]
+    },
+    "plagiarismDetection": {
+      "title": "查重检测",
+      "description": "使用基于 AST 的指纹技术检测代码相似度。",
+      "items": ["AST 指纹分析", "相似度评分", "匹配高亮"]
+    }
+  }
+}
+

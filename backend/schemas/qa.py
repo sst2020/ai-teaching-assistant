@@ -28,7 +28,7 @@ class QuestionRequest(BaseModel):
     """Schema for submitting a question."""
     student_id: str = Field(..., description="Unique identifier for the student")
     course_id: str = Field(..., description="Course identifier")
-    question: str = Field(..., min_length=10, description="The question text")
+    question: str = Field(..., min_length=1, description="The question text")
     context: Optional[str] = Field(None, description="Additional context for the question")
     tags: List[str] = Field(default_factory=list, description="Tags for categorization")
 

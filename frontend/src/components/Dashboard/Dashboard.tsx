@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getHealthStatus, getApiInfo, handleApiError } from '../../services/api';
 import { HealthResponse, ApiInfo } from '../../types/api';
 import { LoadingSpinner, ErrorMessage } from '../common';
@@ -8,6 +9,7 @@ import './Dashboard.css';
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation('dashboard');
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [apiInfo, setApiInfo] = useState<ApiInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -37,7 +39,7 @@ const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="dashboard">
-        <LoadingSpinner message="Loading dashboard..." />
+        <LoadingSpinner message={t('loading')} />
       </div>
     );
   }
@@ -50,26 +52,32 @@ const Dashboard: React.FC = () => {
     );
   }
 
+  const getStatusText = (status: string | undefined) => {
+    if (status === 'healthy') return t('backendStatus.healthy');
+    if (status === 'unhealthy') return t('backendStatus.unhealthy');
+    return t('backendStatus.unknown');
+  };
+
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h2>🏠 Dashboard</h2>
-        <p>Welcome to the AI Teaching Assistant</p>
+        <h2>🏠 {t('title')}</h2>
+        <p>{t('welcome')}</p>
       </div>
 
       <div className="dashboard-grid">
         <div className="status-card">
           <div className="card-header">
             <span className="card-icon">🔌</span>
-            <h3>Backend Status</h3>
+            <h3>{t('backendStatus.title')}</h3>
           </div>
           <div className="card-content">
             <div className={`status-badge ${health?.status === 'healthy' ? 'healthy' : 'unhealthy'}`}>
-              {health?.status || 'Unknown'}
+              {getStatusText(health?.status)}
             </div>
             <div className="status-details">
-              <p><strong>Version:</strong> {health?.version || 'N/A'}</p>
-              <p><strong>Last Check:</strong> {health?.timestamp ? new Date(health.timestamp).toLocaleString() : 'N/A'}</p>
+              <p><strong>{t('backendStatus.version')}:</strong> {health?.version || 'N/A'}</p>
+              <p><strong>{t('backendStatus.lastCheck')}:</strong> {health?.timestamp ? new Date(health.timestamp).toLocaleString() : 'N/A'}</p>
             </div>
           </div>
         </div>
@@ -77,15 +85,15 @@ const Dashboard: React.FC = () => {
         <div className="info-card">
           <div className="card-header">
             <span className="card-icon">ℹ️</span>
-            <h3>API Information</h3>
+            <h3>{t('apiInfo.title')}</h3>
           </div>
           <div className="card-content">
-            <p><strong>Name:</strong> {apiInfo?.name || 'N/A'}</p>
-            <p><strong>Version:</strong> {apiInfo?.version || 'N/A'}</p>
-            <p><strong>Description:</strong> {apiInfo?.description || 'N/A'}</p>
+            <p><strong>{t('apiInfo.name')}:</strong> {apiInfo?.name || 'N/A'}</p>
+            <p><strong>{t('apiInfo.version')}:</strong> {apiInfo?.version || 'N/A'}</p>
+            <p><strong>{t('apiInfo.description')}:</strong> {apiInfo?.description || 'N/A'}</p>
             {apiInfo?.docs_url && (
               <a href={`${API_BASE_URL}${apiInfo.docs_url}`} target="_blank" rel="noopener noreferrer" className="docs-link">
-                📚 View API Documentation
+                📚 {t('apiInfo.viewDocs')}
               </a>
             )}
           </div>
@@ -94,14 +102,14 @@ const Dashboard: React.FC = () => {
         <div className="feature-card">
           <div className="card-header">
             <span className="card-icon">📊</span>
-            <h3>Code Analysis</h3>
+            <h3>{t('features.codeAnalysis.title')}</h3>
           </div>
           <div className="card-content">
-            <p>Analyze Python code for style issues, complexity metrics, and code smells.</p>
+            <p>{t('features.codeAnalysis.description')}</p>
             <ul>
-              <li>PEP 8 style checking</li>
-              <li>Cyclomatic complexity</li>
-              <li>Code smell detection</li>
+              {(t('features.codeAnalysis.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -109,14 +117,14 @@ const Dashboard: React.FC = () => {
         <div className="feature-card">
           <div className="card-header">
             <span className="card-icon">💬</span>
-            <h3>Q&A Assistant</h3>
+            <h3>{t('features.qaAssistant.title')}</h3>
           </div>
           <div className="card-content">
-            <p>Get instant answers to programming questions with AI-powered assistance.</p>
+            <p>{t('features.qaAssistant.description')}</p>
             <ul>
-              <li>Natural language queries</li>
-              <li>Context-aware responses</li>
-              <li>Confidence scoring</li>
+              {(t('features.qaAssistant.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -124,14 +132,14 @@ const Dashboard: React.FC = () => {
         <div className="feature-card">
           <div className="card-header">
             <span className="card-icon">📝</span>
-            <h3>Assignment Grading</h3>
+            <h3>{t('features.assignmentGrading.title')}</h3>
           </div>
           <div className="card-content">
-            <p>Automated grading with detailed feedback for code and essay submissions.</p>
+            <p>{t('features.assignmentGrading.description')}</p>
             <ul>
-              <li>Rubric-based grading</li>
-              <li>Detailed feedback</li>
-              <li>Plagiarism detection</li>
+              {(t('features.assignmentGrading.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -139,14 +147,14 @@ const Dashboard: React.FC = () => {
         <div className="feature-card">
           <div className="card-header">
             <span className="card-icon">🔍</span>
-            <h3>Plagiarism Detection</h3>
+            <h3>{t('features.plagiarismDetection.title')}</h3>
           </div>
           <div className="card-content">
-            <p>Detect code similarity using AST-based fingerprinting technology.</p>
+            <p>{t('features.plagiarismDetection.description')}</p>
             <ul>
-              <li>AST fingerprinting</li>
-              <li>Similarity scoring</li>
-              <li>Match highlighting</li>
+              {(t('features.plagiarismDetection.items', { returnObjects: true }) as string[]).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </div>
         </div>

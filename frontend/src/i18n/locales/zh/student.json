@@ -1,0 +1,78 @@
+{
+  "dashboard": {
+    "title": "学生中心",
+    "welcome": "欢迎回来",
+    "loading": "加载中...",
+    "error": "加载失败，请重试",
+    "retry": "重试"
+  },
+  "stats": {
+    "enrolledCourses": "已选课程",
+    "pendingAssignments": "待完成作业",
+    "submissions": "已提交",
+    "averageGrade": "平均成绩"
+  },
+  "courses": {
+    "title": "我的课程",
+    "empty": "您还没有选修任何课程",
+    "instructor": "教师",
+    "assignments": "作业数",
+    "viewAll": "查看全部"
+  },
+  "assignments": {
+    "title": "待完成作业",
+    "upcoming": "即将到期的作业",
+    "empty": "没有待完成的作业，做得好！",
+    "dueDate": "截止日期",
+    "due": "截止",
+    "status": {
+      "pending": "待提交",
+      "submitted": "已提交",
+      "graded": "已评分",
+      "late": "已逾期"
+    },
+    "submit": "提交",
+    "view": "查看详情",
+    "viewAll": "查看全部"
+  },
+  "grades": {
+    "title": "我的成绩",
+    "course": "课程",
+    "assignment": "作业",
+    "score": "分数",
+    "feedback": "反馈",
+    "submittedAt": "提交时间",
+    "gradedAt": "评分时间",
+    "empty": "暂无成绩记录",
+    "average": "平均分",
+    "highest": "最高分",
+    "lowest": "最低分"
+  },
+  "submit": {
+    "title": "提交作业",
+    "assignmentInfo": "作业信息",
+    "description": "作业描述",
+    "dueDate": "截止日期",
+    "maxScore": "满分",
+    "codeInput": {
+      "label": "代码内容",
+      "placeholder": "在此输入或粘贴您的代码..."
+    },
+    "fileUpload": {
+      "label": "上传文件",
+      "dragDrop": "拖拽文件到此处或点击上传",
+      "supported": "支持的文件类型"
+    },
+    "buttons": {
+      "submit": "提交",
+      "submitting": "提交中...",
+      "cancel": "取消"
+    },
+    "success": "作业提交成功！",
+    "errors": {
+      "emptyCode": "请输入代码内容",
+      "submitFailed": "提交失败，请重试"
+    }
+  }
+}
+

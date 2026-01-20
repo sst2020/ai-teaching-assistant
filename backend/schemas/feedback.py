@@ -61,6 +61,7 @@ class AIProvider(str, Enum):
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
     LOCAL = "local"
+    DEEPSEEK = "deepseek"
 
 
 class AIInteractionType(str, Enum):

@@ -1,0 +1,62 @@
+{
+  "title": "批改作业",
+  "back": "返回",
+  "selectAssignment": "选择作业",
+  "selectPlaceholder": "-- 请选择作业 --",
+  "statistics": {
+    "title": "评分统计",
+    "graded": "已评分",
+    "average": "平均分",
+    "highest": "最高分",
+    "lowest": "最低分",
+    "aiGraded": "AI 评分",
+    "teacherGraded": "教师评分",
+    "distribution": "分数分布"
+  },
+  "list": {
+    "title": "提交列表",
+    "loading": "加载中...",
+    "empty": "暂无评分记录",
+    "submission": "提交",
+    "prevPage": "上一页",
+    "nextPage": "下一页"
+  },
+  "detail": {
+    "title": "评分详情",
+    "override": "覆盖评分",
+    "loading": "加载详情中...",
+    "noSelection": "点击左侧列表查看评分详情",
+    "student": "学生",
+    "assignment": "作业",
+    "submittedAt": "提交时间",
+    "gradedAt": "评分时间",
+    "gradedBy": "评分者",
+    "aiGrader": "AI 自动评分",
+    "teacherGrader": "教师评分",
+    "unknown": "未知"
+  },
+  "feedback": {
+    "title": "反馈详情",
+    "strengths": "优点",
+    "improvements": "改进建议",
+    "overrideReason": "覆盖原因",
+    "originalScore": "原始分数"
+  },
+  "overrideModal": {
+    "title": "覆盖评分",
+    "currentScore": "当前分数",
+    "newScore": "新分数",
+    "reason": "覆盖原因（可选）",
+    "reasonPlaceholder": "说明为什么需要修改分数...",
+    "cancel": "取消",
+    "confirm": "确认覆盖",
+    "submitting": "提交中..."
+  },
+  "errors": {
+    "loadAssignments": "加载作业列表失败",
+    "loadGrading": "加载评分数据失败",
+    "loadDetails": "加载评分详情失败",
+    "overrideFailed": "覆盖评分失败"
+  }
+}
+

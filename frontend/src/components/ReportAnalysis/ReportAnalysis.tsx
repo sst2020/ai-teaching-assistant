@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { analyzeProjectReport } from '../../services/api';
 import {
   ReportAnalysisRequest,
@@ -10,6 +11,7 @@ import './ReportAnalysis.css';
 type TabType = 'upload' | 'structure' | 'quality' | 'logic' | 'suggestions';
 
 const ReportAnalysis: React.FC = () => {
+  const { t } = useTranslation('report');
   const [activeTab, setActiveTab] = useState<TabType>('upload');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<ReportAnalysisResponse | null>(null);
@@ -31,7 +33,7 @@ const ReportAnalysis: React.FC = () => {
       setResult(resp);
       setActiveTab('structure');
     } catch (e) {
-      setError(e instanceof Error ? e.message : '分析失败，请稍后重试');
+      setError(e instanceof Error ? e.message : t('errors.analysisFailed'));
     } finally {
       setIsAnalyzing(false);
     }
@@ -52,7 +54,7 @@ const ReportAnalysis: React.FC = () => {
 
   const handleSubmit = () => {
     if (!textContent.trim()) {
-      setError('请输入或上传报告内容');
+      setError(t('errors.noContent'));
       return;
     }
     // 根据文件扩展名确定类型，默认为 markdown
@@ -68,8 +70,8 @@ const ReportAnalysis: React.FC = () => {
   return (
     <div className="report-analysis">
       <div className="page-header">
-        <h1>📑 项目报告智能分析系统</h1>
-        <p>自动解析项目报告结构，评估质量并生成智能修改建议</p>
+        <h1>📑 {t('title')}</h1>
+        <p>{t('subtitle')}</p>
       </div>
 
       <div className="tab-nav">
@@ -77,42 +79,42 @@ const ReportAnalysis: React.FC = () => {
           className={`tab-btn ${activeTab === 'upload' ? 'active' : ''}`}
           onClick={() => setActiveTab('upload')}
         >
-          上传与解析
+          {t('tabs.upload')}
         </button>
         <button
           className={`tab-btn ${activeTab === 'structure' ? 'active' : ''} ${!result ? 'disabled' : ''}`}
           disabled={!result}
           onClick={() => result && setActiveTab('structure')}
         >
-          报告结构
+          {t('tabs.structure')}
         </button>
         <button
           className={`tab-btn ${activeTab === 'quality' ? 'active' : ''} ${!result ? 'disabled' : ''}`}
           disabled={!result}
           onClick={() => result && setActiveTab('quality')}
         >
-          质量评估
+          {t('tabs.quality')}
         </button>
         <button
           className={`tab-btn ${activeTab === 'logic' ? 'active' : ''} ${!result ? 'disabled' : ''}`}
           disabled={!result}
           onClick={() => result && setActiveTab('logic')}
         >
-          逻辑与创新
+          {t('tabs.logic')}
         </button>
         <button
           className={`tab-btn ${activeTab === 'suggestions' ? 'active' : ''} ${!result ? 'disabled' : ''}`}
           disabled={!result}
           onClick={() => result && setActiveTab('suggestions')}
         >
-          修改建议
+          {t('tabs.suggestions')}
         </button>
       </div>
 
       {error && (
         <div className="error-message">
           <span>❌ {error}</span>
-          <button onClick={() => setError(null)}>关闭</button>
+          <button onClick={() => setError(null)}>{t('common.close')}</button>
         </div>
       )}
 
@@ -132,13 +134,13 @@ const ReportAnalysis: React.FC = () => {
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isAnalyzing}
               >
-                📁 选择文件
+                📁 {t('upload.selectFile')}
               </button>
               {fileName && <span className="file-name">{fileName}</span>}
             </div>
             <div className="text-input-area">
               <textarea
-                placeholder="或直接粘贴报告内容..."
+                placeholder={t('upload.pasteContent')}
                 value={textContent}
                 onChange={(e) => setTextContent(e.target.value)}
                 disabled={isAnalyzing}
@@ -150,35 +152,35 @@ const ReportAnalysis: React.FC = () => {
               onClick={handleSubmit}
               disabled={isAnalyzing || !textContent.trim()}
             >
-              {isAnalyzing ? '⏳ 分析中...' : '🔍 开始分析'}
+              {isAnalyzing ? `⏳ ${t('analysis.analyzing')}` : `🔍 ${t('analysis.startAnalysis')}`}
             </button>
           </div>
         )}
 
         {activeTab === 'structure' && result && (
           <div className="result-section">
-            <h3>📋 报告结构分析</h3>
+            <h3>📋 {t('structure.title')}</h3>
             <pre>{JSON.stringify(result.parsed, null, 2)}</pre>
           </div>
         )}
 
         {activeTab === 'quality' && result && (
           <div className="result-section">
-            <h3>📊 质量评估</h3>
+            <h3>📊 {t('quality.title')}</h3>
             <pre>{JSON.stringify(result.quality, null, 2)}</pre>
           </div>
         )}
 
         {activeTab === 'logic' && result && (
           <div className="result-section">
-            <h3>💡 逻辑与创新分析</h3>
+            <h3>💡 {t('logic.title')}</h3>
             <pre>{JSON.stringify({ logic: result.logic, innovation: result.innovation }, null, 2)}</pre>
           </div>
         )}
 
         {activeTab === 'suggestions' && result && (
           <div className="result-section">
-            <h3>✏️ 修改建议</h3>
+            <h3>✏️ {t('suggestions.title')}</h3>
             <pre>{JSON.stringify(result.suggestions, null, 2)}</pre>
           </div>
         )}

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Black">
     <option name="sdkName" value="D:\ProgramData\anaconda3\envs\ai_teaching_assistant_backend" />
@@ -8,7 +9,7 @@
     <option name="priority" value="Medium" />
     <option name="excludeFilter" value="" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="D:\ProgramData\anaconda3\envs\ai_teaching_assistant_backend" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (ai-teaching-assistant-frontend)" project-jdk-type="Python SDK" />
   <component name="SuppressionsComponent">
     <option name="suppComments" value="[]" />
   </component>

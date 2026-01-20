@@ -1,0 +1,62 @@
+{
+  "title": "Grade Assignments",
+  "back": "Back",
+  "selectAssignment": "Select Assignment",
+  "selectPlaceholder": "-- Select an assignment --",
+  "statistics": {
+    "title": "Grading Statistics",
+    "graded": "Graded",
+    "average": "Average",
+    "highest": "Highest",
+    "lowest": "Lowest",
+    "aiGraded": "AI Graded",
+    "teacherGraded": "Teacher Graded",
+    "distribution": "Score Distribution"
+  },
+  "list": {
+    "title": "Submission List",
+    "loading": "Loading...",
+    "empty": "No grading records",
+    "submission": "Submission",
+    "prevPage": "Previous",
+    "nextPage": "Next"
+  },
+  "detail": {
+    "title": "Grading Details",
+    "override": "Override Score",
+    "loading": "Loading details...",
+    "noSelection": "Click on a submission to view details",
+    "student": "Student",
+    "assignment": "Assignment",
+    "submittedAt": "Submitted At",
+    "gradedAt": "Graded At",
+    "gradedBy": "Graded By",
+    "aiGrader": "AI Auto-grading",
+    "teacherGrader": "Teacher Grading",
+    "unknown": "Unknown"
+  },
+  "feedback": {
+    "title": "Feedback Details",
+    "strengths": "Strengths",
+    "improvements": "Suggestions for Improvement",
+    "overrideReason": "Override Reason",
+    "originalScore": "Original Score"
+  },
+  "overrideModal": {
+    "title": "Override Score",
+    "currentScore": "Current Score",
+    "newScore": "New Score",
+    "reason": "Override Reason (Optional)",
+    "reasonPlaceholder": "Explain why the score needs to be changed...",
+    "cancel": "Cancel",
+    "confirm": "Confirm Override",
+    "submitting": "Submitting..."
+  },
+  "errors": {
+    "loadAssignments": "Failed to load assignments",
+    "loadGrading": "Failed to load grading data",
+    "loadDetails": "Failed to load grading details",
+    "overrideFailed": "Failed to override score"
+  }
+}
+

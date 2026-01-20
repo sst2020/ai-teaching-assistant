@@ -206,12 +206,22 @@ async def get_ai_config():
 
     Returns information about the configured AI provider, model, and settings.
     """
+    if settings.DEEPSEEK_API_KEY:
+        provider = AIProvider.DEEPSEEK
+        model = settings.DEEPSEEK_MODEL
+    elif settings.OPENAI_API_KEY:
+        provider = AIProvider.OPENAI
+        model = settings.AI_MODEL
+    else:
+        provider = AIProvider.LOCAL
+        model = "local"
+
     return AIConfigResponse(
-        provider=AIProvider.OPENAI if settings.OPENAI_API_KEY else AIProvider.LOCAL,
-        model=settings.AI_MODEL,
+        provider=provider,
+        model=model,
         temperature=settings.AI_TEMPERATURE,
         max_tokens=settings.AI_MAX_TOKENS,
-        available_models=["gpt-4", "gpt-4-turbo", "gpt-3.5-turbo"]
+        available_models=["gpt-4", "gpt-4-turbo", "gpt-3.5-turbo", "deepseek-chat", "deepseek-reasoner"]
     )
 
 
@@ -233,12 +243,29 @@ async def ai_health_check():
 
     Verifies that the AI service is properly configured and operational.
     """
-    has_api_key = bool(settings.OPENAI_API_KEY)
+    has_openai_key = bool(settings.OPENAI_API_KEY)
+    has_deepseek_key = bool(settings.DEEPSEEK_API_KEY)
+
+    if has_deepseek_key:
+        provider = "deepseek"
+        api_configured = True
+        status = "healthy"
+        message = "AI service is operational with DeepSeek"
+    elif has_openai_key:
+        provider = "openai"
+        api_configured = True
+        status = "healthy"
+        message = "AI service is operational with OpenAI"
+    else:
+        provider = "local"
+        api_configured = False
+        status = "degraded"
+        message = "Using local fallback (no API key configured)"
 
     return {
-        "status": "healthy" if has_api_key else "degraded",
-        "provider": "openai" if has_api_key else "local",
+        "status": status,
+        "provider": provider,
         "model": settings.AI_MODEL,
-        "api_configured": has_api_key,
-        "message": "AI service is operational" if has_api_key else "Using local fallback (no API key configured)"
+        "api_configured": api_configured,
+        "message": message
     }

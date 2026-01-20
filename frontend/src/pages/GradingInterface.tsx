@@ -1,6 +1,6 @@
 /**
  * 评分界面
- * 
+ *
  * 功能:
  * - 查看作业提交列表
  * - 查看 AI 评分结果
@@ -9,6 +9,7 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   getAssignments,
   getGradingByAssignment,
@@ -26,6 +27,7 @@ import {
 import './GradingInterface.css';
 
 const GradingInterface: React.FC = () => {
+  const { t, i18n } = useTranslation('grading');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const assignmentIdParam = searchParams.get('assignment');
@@ -55,14 +57,14 @@ const GradingInterface: React.FC = () => {
       const response = await getAssignments({ page: 1, page_size: 100 });
       setAssignments(response.items || response.assignments || []);
     } catch (err) {
-      console.error('加载作业列表失败', err);
+      console.error(t('errors.loadAssignments'), err);
     }
-  }, []);
+  }, [t]);
 
   // 加载评分结果
   const loadGradingResults = useCallback(async () => {
     if (!selectedAssignment) return;
-    
+
     setLoading(true);
     setError(null);
     try {
@@ -70,17 +72,17 @@ const GradingInterface: React.FC = () => {
         getGradingByAssignment(selectedAssignment, page, 20),
         getGradingStatistics(selectedAssignment),
       ]);
-      
+
       setGradingResults(resultsResponse.items || []);
       setTotalPages(resultsResponse.total_pages || 1);
       setStatistics(statsResponse);
     } catch (err) {
-      setError('加载评分数据失败');
+      setError(t('errors.loadGrading'));
       console.error(err);
     } finally {
       setLoading(false);
     }
-  }, [selectedAssignment, page]);
+  }, [selectedAssignment, page, t]);
 
   // 加载评分详情
   const loadGradingDetails = async (gradingId: number) => {
@@ -90,7 +92,7 @@ const GradingInterface: React.FC = () => {
       setSelectedGrading(details);
       setOverrideScore(details.overall_score);
     } catch (err) {
-      setError('加载评分详情失败');
+      setError(t('errors.loadDetails'));
       console.error(err);
     } finally {
       setLoadingDetails(false);
@@ -100,23 +102,23 @@ const GradingInterface: React.FC = () => {
   // 提交覆盖评分
   const handleOverrideSubmit = async () => {
     if (!selectedGrading) return;
-    
+
     setSubmitting(true);
     try {
       const overrideData: GradingResultOverride = {
         overall_score: overrideScore,
         override_reason: overrideReason || undefined,
       };
-      
+
       await overrideGradingResult(selectedGrading.id, overrideData);
-      
+
       // 刷新数据
       setShowOverrideForm(false);
       setOverrideReason('');
       loadGradingResults();
       loadGradingDetails(selectedGrading.id);
     } catch (err) {
-      setError('覆盖评分失败');
+      setError(t('errors.overrideFailed'));
       console.error(err);
     } finally {
       setSubmitting(false);
@@ -142,7 +144,8 @@ const GradingInterface: React.FC = () => {
   };
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleString('zh-CN', {
+    const locale = i18n.language === 'zh' ? 'zh-CN' : 'en-US';
+    return new Date(dateStr).toLocaleString(locale, {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
@@ -155,9 +158,9 @@ const GradingInterface: React.FC = () => {
       <header className="page-header">
         <div className="header-left">
           <button className="btn-back" onClick={() => navigate('/teacher')}>
-            ← 返回
+            ← {t('back')}
           </button>
-          <h1>✏️ 批改作业</h1>
+          <h1>✏️ {t('title')}</h1>
         </div>
       </header>
 
@@ -165,7 +168,7 @@ const GradingInterface: React.FC = () => {
 
       {/* 作业选择器 */}
       <div className="assignment-selector">
-        <label>选择作业：</label>
+        <label>{t('selectAssignment')}：</label>
         <select
           value={selectedAssignment || ''}
           onChange={(e) => {
@@ -174,7 +177,7 @@ const GradingInterface: React.FC = () => {
             setSelectedGrading(null);
           }}
         >
-          <option value="">-- 请选择作业 --</option>
+          <option value="">{t('selectPlaceholder')}</option>
           {assignments.map((a) => (
             <option key={a.id} value={a.assignment_id || String(a.id)}>
               {a.title}
@@ -188,31 +191,31 @@ const GradingInterface: React.FC = () => {
           {/* 统计概览 */}
           {statistics && (
             <section className="statistics-panel">
-              <h3>📊 评分统计</h3>
+              <h3>📊 {t('statistics.title')}</h3>
               <div className="stats-grid">
                 <div className="stat-item">
                   <span className="stat-value">{statistics.total_graded}</span>
-                  <span className="stat-label">已评分</span>
+                  <span className="stat-label">{t('statistics.graded')}</span>
                 </div>
                 <div className="stat-item">
                   <span className="stat-value">{statistics.average_score.toFixed(1)}</span>
-                  <span className="stat-label">平均分</span>
+                  <span className="stat-label">{t('statistics.average')}</span>
                 </div>
                 <div className="stat-item">
                   <span className="stat-value">{statistics.highest_score}</span>
-                  <span className="stat-label">最高分</span>
+                  <span className="stat-label">{t('statistics.highest')}</span>
                 </div>
                 <div className="stat-item">
                   <span className="stat-value">{statistics.lowest_score}</span>
-                  <span className="stat-label">最低分</span>
+                  <span className="stat-label">{t('statistics.lowest')}</span>
                 </div>
               </div>
               <div className="grader-stats">
-                <span>🤖 AI 评分: {statistics.ai_graded_count}</span>
-                <span>👨‍🏫 教师评分: {statistics.teacher_graded_count}</span>
+                <span>🤖 {t('statistics.aiGraded')}: {statistics.ai_graded_count}</span>
+                <span>👨‍🏫 {t('statistics.teacherGraded')}: {statistics.teacher_graded_count}</span>
               </div>
               <div className="score-distribution">
-                <span className="dist-label">分数分布:</span>
+                <span className="dist-label">{t('statistics.distribution')}:</span>
                 <span className="dist-item excellent">A: {statistics.score_distribution.A}</span>
                 <span className="dist-item good">B: {statistics.score_distribution.B}</span>
                 <span className="dist-item average">C: {statistics.score_distribution.C}</span>
@@ -225,11 +228,11 @@ const GradingInterface: React.FC = () => {
           <div className="main-content">
             {/* 评分列表 */}
             <section className="grading-list-panel">
-              <h3>📝 提交列表</h3>
+              <h3>📝 {t('list.title')}</h3>
               {loading ? (
-                <div className="loading">加载中...</div>
+                <div className="loading">{t('list.loading')}</div>
               ) : gradingResults.length === 0 ? (
-                <div className="empty-state">暂无评分记录</div>
+                <div className="empty-state">{t('list.empty')}</div>
               ) : (
                 <>
                   <div className="grading-list">
@@ -248,7 +251,7 @@ const GradingInterface: React.FC = () => {
                           </span>
                         </div>
                         <div className="item-meta">
-                          <span>提交 #{result.submission_id}</span>
+                          <span>{t('list.submission')} #{result.submission_id}</span>
                           <span>{formatDate(result.graded_at)}</span>
                         </div>
                       </div>
@@ -258,11 +261,11 @@ const GradingInterface: React.FC = () => {
                   {/* 分页 */}
                   <div className="pagination">
                     <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-                      上一页
+                      {t('list.prevPage')}
                     </button>
                     <span>{page} / {totalPages}</span>
                     <button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
-                      下一页
+                      {t('list.nextPage')}
                     </button>
                   </div>
                 </>
@@ -272,16 +275,16 @@ const GradingInterface: React.FC = () => {
             {/* 评分详情 */}
             <section className="grading-detail-panel">
               {loadingDetails ? (
-                <div className="loading">加载详情中...</div>
+                <div className="loading">{t('detail.loading')}</div>
               ) : selectedGrading ? (
                 <>
                   <div className="detail-header">
-                    <h3>评分详情</h3>
+                    <h3>{t('detail.title')}</h3>
                     <button
                       className="btn-override"
                       onClick={() => setShowOverrideForm(true)}
                     >
-                      ✏️ 覆盖评分
+                      ✏️ {t('detail.override')}
                     </button>
                   </div>
 
@@ -295,22 +298,22 @@ const GradingInterface: React.FC = () => {
                     </div>
 
                     <div className="detail-info">
-                      <p><strong>学生:</strong> {selectedGrading.student_name || selectedGrading.student_external_id || '未知'}</p>
-                      <p><strong>作业:</strong> {selectedGrading.assignment_title || '未知'}</p>
-                      <p><strong>提交时间:</strong> {selectedGrading.submitted_at ? formatDate(selectedGrading.submitted_at) : '未知'}</p>
-                      <p><strong>评分时间:</strong> {formatDate(selectedGrading.graded_at)}</p>
-                      <p><strong>评分者:</strong> {selectedGrading.graded_by === 'AI' ? '🤖 AI 自动评分' : '👨‍🏫 教师评分'}</p>
+                      <p><strong>{t('detail.student')}:</strong> {selectedGrading.student_name || selectedGrading.student_external_id || t('detail.unknown')}</p>
+                      <p><strong>{t('detail.assignment')}:</strong> {selectedGrading.assignment_title || t('detail.unknown')}</p>
+                      <p><strong>{t('detail.submittedAt')}:</strong> {selectedGrading.submitted_at ? formatDate(selectedGrading.submitted_at) : t('detail.unknown')}</p>
+                      <p><strong>{t('detail.gradedAt')}:</strong> {formatDate(selectedGrading.graded_at)}</p>
+                      <p><strong>{t('detail.gradedBy')}:</strong> {selectedGrading.graded_by === 'AI' ? `🤖 ${t('detail.aiGrader')}` : `👨‍🏫 ${t('detail.teacherGrader')}`}</p>
                     </div>
 
                     {selectedGrading.feedback && (
                       <div className="feedback-section">
-                        <h4>📋 反馈详情</h4>
+                        <h4>📋 {t('feedback.title')}</h4>
                         {selectedGrading.feedback.summary && (
                           <p className="feedback-summary">{selectedGrading.feedback.summary}</p>
                         )}
                         {selectedGrading.feedback.strengths && selectedGrading.feedback.strengths.length > 0 && (
                           <div className="feedback-list strengths">
-                            <h5>✅ 优点</h5>
+                            <h5>✅ {t('feedback.strengths')}</h5>
                             <ul>
                               {selectedGrading.feedback.strengths.map((s, i) => (
                                 <li key={i}>{s}</li>
@@ -320,7 +323,7 @@ const GradingInterface: React.FC = () => {
                         )}
                         {selectedGrading.feedback.improvements && selectedGrading.feedback.improvements.length > 0 && (
                           <div className="feedback-list improvements">
-                            <h5>💡 改进建议</h5>
+                            <h5>💡 {t('feedback.improvements')}</h5>
                             <ul>
                               {selectedGrading.feedback.improvements.map((s, i) => (
                                 <li key={i}>{s}</li>
@@ -330,8 +333,8 @@ const GradingInterface: React.FC = () => {
                         )}
                         {selectedGrading.feedback.override_reason && (
                           <div className="override-info">
-                            <p><strong>覆盖原因:</strong> {selectedGrading.feedback.override_reason}</p>
-                            <p><strong>原始分数:</strong> {selectedGrading.feedback.original_score}</p>
+                            <p><strong>{t('feedback.overrideReason')}:</strong> {selectedGrading.feedback.override_reason}</p>
+                            <p><strong>{t('feedback.originalScore')}:</strong> {selectedGrading.feedback.original_score}</p>
                           </div>
                         )}
                       </div>
@@ -340,7 +343,7 @@ const GradingInterface: React.FC = () => {
                 </>
               ) : (
                 <div className="no-selection">
-                  <p>👈 点击左侧列表查看评分详情</p>
+                  <p>👈 {t('detail.noSelection')}</p>
                 </div>
               )}
             </section>
@@ -353,14 +356,14 @@ const GradingInterface: React.FC = () => {
         <div className="modal-overlay" onClick={() => setShowOverrideForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>覆盖评分</h2>
+              <h2>{t('overrideModal.title')}</h2>
               <button className="btn-close" onClick={() => setShowOverrideForm(false)}>×</button>
             </div>
             <div className="modal-body">
-              <p>当前分数: <strong>{selectedGrading.overall_score}/{selectedGrading.max_score}</strong></p>
+              <p>{t('overrideModal.currentScore')}: <strong>{selectedGrading.overall_score}/{selectedGrading.max_score}</strong></p>
 
               <div className="form-group">
-                <label>新分数</label>
+                <label>{t('overrideModal.newScore')}</label>
                 <input
                   type="number"
                   value={overrideScore}
@@ -371,25 +374,25 @@ const GradingInterface: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label>覆盖原因（可选）</label>
+                <label>{t('overrideModal.reason')}</label>
                 <textarea
                   value={overrideReason}
                   onChange={(e) => setOverrideReason(e.target.value)}
                   rows={3}
-                  placeholder="说明为什么需要修改分数..."
+                  placeholder={t('overrideModal.reasonPlaceholder')}
                 />
               </div>
             </div>
             <div className="modal-footer">
               <button className="btn-secondary" onClick={() => setShowOverrideForm(false)}>
-                取消
+                {t('overrideModal.cancel')}
               </button>
               <button
                 className="btn-primary"
                 onClick={handleOverrideSubmit}
                 disabled={submitting}
               >
-                {submitting ? '提交中...' : '确认覆盖'}
+                {submitting ? t('overrideModal.submitting') : t('overrideModal.confirm')}
               </button>
             </div>
           </div>

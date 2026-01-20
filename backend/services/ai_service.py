@@ -4,6 +4,7 @@ Supports OpenAI API and local LLM models
 """
 import time
 import logging
+import asyncio
 from typing import Optional, Dict, Any, List
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -20,6 +21,7 @@ class AIProvider(str, Enum):
     ANTHROPIC = "anthropic"
     LOCAL = "local"
     FASTCHAT = "fastchat"
+    DEEPSEEK = "deepseek"
 
 
 @dataclass
@@ -289,6 +291,275 @@ class FastChatProvider(BaseAIProvider):
             return "intermediate"
 
 
+class DeepSeekProvider(BaseAIProvider):
+    """DeepSeek API provider - supports deepseek-chat and deepseek-reasoner models."""
+
+    def __init__(self, config: AIConfig):
+        self.config = config
+        api_key = config.api_key or settings.DEEPSEEK_API_KEY
+        base_url = settings.DEEPSEEK_API_BASE
+        self.model_name = settings.DEEPSEEK_MODEL
+        timeout = settings.DEEPSEEK_TIMEOUT if hasattr(settings, 'DEEPSEEK_TIMEOUT') else 60
+        self.client = AsyncOpenAI(
+            api_key=api_key,
+            base_url=base_url,
+            timeout=timeout
+        )
+        logger.info(f"DeepSeekProvider initialized with base_url={base_url}, model={self.model_name}, timeout={timeout}s")
+
+    async def generate_response(self, prompt: str, system_prompt: str = "", **kwargs) -> str:
+        """Generate response using DeepSeek API with retry mechanism."""
+        max_retries = settings.DEEPSEEK_MAX_RETRIES if hasattr(settings, 'DEEPSEEK_MAX_RETRIES') else 3
+        retry_delay = settings.DEEPSEEK_RETRY_DELAY if hasattr(settings, 'DEEPSEEK_RETRY_DELAY') else 1.0
+
+        for attempt in range(max_retries + 1):
+            try:
+                messages = []
+                if system_prompt:
+                    messages.append({"role": "system", "content": system_prompt})
+                messages.append({"role": "user", "content": prompt})
+
+                model = kwargs.get("model", self.model_name)
+                temperature = kwargs.get("temperature", settings.DEEPSEEK_TEMPERATURE)
+                max_tokens = kwargs.get("max_tokens", settings.DEEPSEEK_MAX_TOKENS)
+
+                # 记录请求详情
+                logger.info(f"DeepSeek API 请求 (尝试 {attempt + 1}/{max_retries + 1})")
+                logger.info(f"  模型: {model}")
+                logger.info(f"  温度: {temperature}")
+                logger.info(f"  最大令牌数: {max_tokens}")
+                logger.info(f"  消息数量: {len(messages)}")
+                logger.debug(f"  提示词长度: {len(prompt)} 字符")
+
+                start_time = time.time()
+                response = await self.client.chat.completions.create(
+                    model=model,
+                    messages=messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens
+                )
+                elapsed_time = time.time() - start_time
+
+                # 记录响应详情
+                response_content = response.choices[0].message.content
+                logger.info(f"DeepSeek API 响应成功")
+                logger.info(f"  耗时: {elapsed_time:.2f} 秒")
+                logger.info(f"  响应长度: {len(response_content)} 字符")
+                logger.debug(f"  响应内容预览: {response_content[:100]}...")
+
+                return response_content
+
+            except asyncio.TimeoutError as e:
+                logger.error(f"DeepSeek API 超时错误 (尝试 {attempt + 1}/{max_retries + 1})")
+                logger.error(f"  错误类型: 请求超时")
+                logger.error(f"  超时设置: {settings.DEEPSEEK_TIMEOUT if hasattr(settings, 'DEEPSEEK_TIMEOUT') else 60} 秒")
+
+                if attempt == max_retries:
+                    error_msg = f"DeepSeek服务超时: 请求超过 {settings.DEEPSEEK_TIMEOUT if hasattr(settings, 'DEEPSEEK_TIMEOUT') else 60} 秒未响应"
+                    logger.error(f"DeepSeek API 在 {max_retries + 1} 次尝试后仍然超时")
+                    return error_msg
+
+                await asyncio.sleep(retry_delay * (2 ** attempt))
+
+            except Exception as e:
+                error_type = type(e).__name__
+                logger.error(f"DeepSeek API 错误 (尝试 {attempt + 1}/{max_retries + 1})")
+                logger.error(f"  错误类型: {error_type}")
+                logger.error(f"  错误消息: {str(e)}")
+
+                # 记录完整的错误堆栈（仅在调试模式下）
+                import traceback
+                logger.debug(f"  错误堆栈:\n{traceback.format_exc()}")
+
+                # 如果是最后一次尝试，返回详细错误消息
+                if attempt == max_retries:
+                    error_msg = f"DeepSeek服务错误 ({error_type}): {str(e)}"
+                    logger.error(f"DeepSeek API 在 {max_retries + 1} 次尝试后失败")
+                    return error_msg
+
+                # 等待后重试（指数退避）
+                await asyncio.sleep(retry_delay * (2 ** attempt))
+
+        # 这行代码理论上不应该被执行到
+        return "DeepSeek服务错误: 无法连接到API"
+
+    async def generate_response_stream(
+        self,
+        prompt: str,
+        system_prompt: str = "",
+        temperature: float = 0.7,
+        max_tokens: int = 2000
+    ):
+        """
+        流式生成响应 - 使用 SSE 逐步返回内容
+
+        Yields:
+            str: 每次生成的文本片段
+        """
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": prompt})
+
+        model = settings.DEEPSEEK_MODEL if hasattr(settings, 'DEEPSEEK_MODEL') else "deepseek-chat"
+
+        try:
+            logger.info("DeepSeek API 流式请求开始")
+
+            stream = await self.client.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                stream=True
+            )
+
+            async for chunk in stream:
+                if chunk.choices[0].delta.content:
+                    yield chunk.choices[0].delta.content
+
+            logger.info("DeepSeek API 流式响应完成")
+
+        except Exception as e:
+            error_type = type(e).__name__
+            logger.error(f"DeepSeek API 流式错误: {error_type} - {str(e)}")
+            yield f"\n\n[错误: {str(e)}]"
+
+    async def answer_question_stream(self, question: str, context: str = ""):
+        """
+        流式回答学生问题
+
+        Yields:
+            str: 每次生成的文本片段
+        """
+        system_prompt = """你是一位专业的编程教学助手。请用中文回答学生的问题。
+要求：
+1. 回答清晰、准确、易于理解
+2. 适合中国学生的认知水平
+3. 提供实际的代码示例
+4. 鼓励学生深入思考"""
+
+        prompt = f"学生问题: {question}\n"
+        if context:
+            prompt += f"\n相关背景: {context}\n"
+        prompt += "\n请提供详细的回答，包括概念解释和代码示例（如果适用）。"
+
+        async for chunk in self.generate_response_stream(prompt, system_prompt):
+            yield chunk
+
+    async def generate_code_feedback(self, code: str, analysis_results: Dict[str, Any]) -> str:
+        """Generate code feedback optimized for Chinese programming education."""
+        system_prompt = """你是一位经验丰富的编程教学助手。请用中文提供代码反馈。
+要求：
+1. 语言友好、鼓励性强，但要诚实指出问题
+2. 适合中国学生的学习习惯
+3. 提供具体的改进建议和示例"""
+
+        # Format analysis results
+        style_score = analysis_results.get('style_score', 'N/A')
+        complexity = analysis_results.get('complexity', 'N/A')
+        issues = analysis_results.get('issues', [])
+        issues_str = "\n".join([f"- {issue}" for issue in issues]) if issues else "无明显问题"
+
+        prompt = f"""请分析以下代码并提供反馈：
+
+```python
+{code}
+```
+
+代码分析结果：
+- 代码风格评分: {style_score}
+- 复杂度: {complexity}
+- 发现的问题:
+{issues_str}
+
+请提供：
+1. 代码的优点（做得好的地方）
+2. 需要改进的地方
+3. 具体的改进建议（包括代码示例）
+4. 学习建议（推荐的学习资源或概念）"""
+
+        return await self.generate_response(prompt, system_prompt)
+
+    async def answer_question(self, question: str, context: str = "") -> Dict[str, Any]:
+        """Answer student questions with Chinese language optimization."""
+        system_prompt = """你是一位专业的编程教学助手。请用中文回答学生的问题。
+要求：
+1. 回答清晰、准确、易于理解
+2. 适合中国学生的认知水平
+3. 提供实际的代码示例
+4. 鼓励学生深入思考"""
+
+        prompt = f"学生问题: {question}\n"
+        if context:
+            prompt += f"\n相关背景: {context}\n"
+
+        prompt += "\n请提供详细的回答，包括概念解释和代码示例（如果适用）。"
+
+        try:
+            answer = await self.generate_response(prompt, system_prompt)
+
+            # Calculate confidence based on answer quality
+            confidence = 0.85 if len(answer) > 100 else 0.6
+
+            # Check if answer indicates uncertainty
+            uncertainty_keywords = ["不确定", "可能", "也许", "不太清楚", "需要确认"]
+            needs_review = any(keyword in answer for keyword in uncertainty_keywords)
+
+            return {
+                "answer": answer,
+                "confidence": confidence,
+                "needs_teacher_review": needs_review,
+                "sources": []
+            }
+        except Exception as e:
+            logger.error(f"Error answering question: {str(e)}")
+            return {
+                "answer": f"抱歉，回答问题时出现错误: {str(e)}",
+                "confidence": 0.0,
+                "needs_teacher_review": True,
+                "sources": []
+            }
+
+    async def categorize_question(self, question: str) -> str:
+        """Categorize student questions using AI."""
+        prompt = f"""请将以下学生问题分类到一个类别中：
+
+问题: {question}
+
+类别选项:
+- basic: 基础概念问题（如"什么是变量"、"如何定义函数"）
+- intermediate: 中级问题（如"如何优化代码"、"设计模式应用"）
+- advanced: 高级问题（如"系统架构"、"性能优化"、"算法复杂度"）
+- administrative: 行政管理问题（如"作业截止时间"、"成绩查询"）
+
+请只回复类别名称（basic/intermediate/advanced/administrative），不要有其他内容。"""
+
+        try:
+            response = await self.generate_response(prompt, max_tokens=20)
+            category = response.strip().lower()
+
+            # Validate category
+            valid_categories = ["basic", "intermediate", "advanced", "administrative"]
+            if category in valid_categories:
+                return category
+
+            # Fallback: simple keyword matching
+            q_lower = question.lower()
+            if any(k in q_lower for k in ["什么是", "定义", "基础", "入门"]):
+                return "basic"
+            elif any(k in q_lower for k in ["截止", "成绩", "提交", "分数"]):
+                return "administrative"
+            elif any(k in q_lower for k in ["优化", "架构", "设计", "性能"]):
+                return "advanced"
+            else:
+                return "intermediate"
+
+        except Exception as e:
+            logger.error(f"Error categorizing question: {str(e)}")
+            return "intermediate"
+
+
 class AIService:
     """Enhanced AI Service with extended functionality."""
 
@@ -296,7 +567,11 @@ class AIService:
         self.config = config or AIConfig()
 
         # Select provider based on configuration
-        if settings.USE_FASTCHAT:
+        if settings.USE_DEEPSEEK:
+            logger.info("Using DeepSeek provider")
+            self.config.provider = AIProvider.DEEPSEEK
+            self.provider = DeepSeekProvider(self.config)
+        elif settings.USE_FASTCHAT:
             logger.info("Using FastChat provider")
             self.config.provider = AIProvider.FASTCHAT
             self.provider = FastChatProvider(self.config)
@@ -314,6 +589,16 @@ class AIService:
 
     async def answer_question(self, question: str, context: str = "") -> Dict[str, Any]:
         return await self.provider.answer_question(question, context)
+
+    async def answer_question_stream(self, question: str, context: str = ""):
+        """流式回答学生问题"""
+        if hasattr(self.provider, 'answer_question_stream'):
+            async for chunk in self.provider.answer_question_stream(question, context):
+                yield chunk
+        else:
+            # 如果 provider 不支持流式，则一次性返回
+            result = await self.provider.answer_question(question, context)
+            yield result.get("answer", "")
 
     async def categorize_question(self, question: str) -> str:
         return await self.provider.categorize_question(question)

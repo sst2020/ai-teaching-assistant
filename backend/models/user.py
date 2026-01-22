@@ -26,12 +26,12 @@ class User(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     
     # 认证信息
-    email: Mapped[str] = mapped_column(
-        String(255),
+    student_id: Mapped[str] = mapped_column(
+        String(10),
         unique=True,
         index=True,
         nullable=False,
-        comment="用户邮箱 (登录凭证)"
+        comment="学号 (登录凭证，10位数字)"
     )
     password_hash: Mapped[str] = mapped_column(
         String(255),
@@ -53,6 +53,18 @@ class User(Base, TimestampMixin):
         comment="账户是否激活"
     )
     
+    # 用户资料
+    name: Mapped[Optional[str]] = mapped_column(
+        String(100),
+        nullable=True,
+        comment="用户姓名"
+    )
+    avatar_url: Mapped[Optional[str]] = mapped_column(
+        String(500),
+        nullable=True,
+        comment="用户头像 URL"
+    )
+
     # 登录追踪
     last_login: Mapped[Optional[datetime]] = mapped_column(
         DateTime,
@@ -84,5 +96,5 @@ class User(Base, TimestampMixin):
     )
 
     def __repr__(self) -> str:
-        return f"<User(id={self.id}, email='{self.email}', role='{self.role}')>"
+        return f"<User(id={self.id}, student_id='{self.student_id}', role='{self.role}')>"
 

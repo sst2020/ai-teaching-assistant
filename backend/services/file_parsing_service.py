@@ -1,5 +1,5 @@
 """
-File Parsing Service - Parses code files and extracts structure and metrics.
+File Parsing Service - Parses code files and project reports, extracting structure and metrics.
 
 Supports multiple programming languages:
 - Python (.py)
@@ -8,6 +8,11 @@ Supports multiple programming languages:
 - TypeScript (.ts, .tsx)
 - C (.c)
 - C++ (.cpp)
+
+Also supports project report formats:
+- PDF (.pdf)
+- DOCX (.docx)
+- Markdown (.md, .markdown)
 """
 import ast
 import re
@@ -16,11 +21,21 @@ import logging
 from typing import Optional, List, Tuple, Dict, Any
 from datetime import datetime
 from dataclasses import dataclass
+import os
 
 from schemas.file_upload import (
     ProgrammingLanguage, FileParseResult, CodeStructure,
     ImportInfo, FunctionInfo, ClassInfo, BasicMetrics, SyntaxValidation
 )
+
+# Import for document processing
+try:
+    import PyPDF2
+    from docx import Document
+except ImportError:
+    PyPDF2 = None
+    Document = None
+    logging.warning("Document processing libraries not available. Install python-docx and PyPDF2 for report analysis.")
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +54,11 @@ EXTENSION_LANGUAGE_MAP: Dict[str, ProgrammingLanguage] = {
     ".cxx": ProgrammingLanguage.CPP,
     ".h": ProgrammingLanguage.C,
     ".hpp": ProgrammingLanguage.CPP,
+    # Document formats - map to UNKNOWN for now, will be handled separately
+    ".pdf": ProgrammingLanguage.UNKNOWN,
+    ".docx": ProgrammingLanguage.UNKNOWN,
+    ".md": ProgrammingLanguage.UNKNOWN,
+    ".markdown": ProgrammingLanguage.UNKNOWN,
 }
 
 
@@ -689,6 +709,92 @@ class FileParsingService:
             classes=classes,
             global_variables=global_variables
         )
+
+    async def parse_document_file(self, file_path: str, extension: str) -> str:
+        """Parse document files (PDF, DOCX, Markdown) and extract text content."""
+        extension = extension.lower()
+
+        if extension == '.pdf':
+            return await self._parse_pdf(file_path)
+        elif extension in ['.docx', '.doc']:
+            return await self._parse_docx(file_path)
+        elif extension in ['.md', '.markdown']:
+            return await self._parse_markdown(file_path)
+        else:
+            # For unsupported formats, try to read as plain text
+            try:
+                with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
+                    return f.read()
+            except Exception:
+                return ""
+
+    async def _parse_pdf(self, file_path: str) -> str:
+        """Parse PDF file and extract text content."""
+        if PyPDF2 is None:
+            raise ImportError("PyPDF2 is not available. Please install it to parse PDF files.")
+
+        try:
+            text_content = ""
+            with open(file_path, 'rb') as pdf_file:
+                pdf_reader = PyPDF2.PdfReader(pdf_file)
+
+                for page_num in range(len(pdf_reader.pages)):
+                    page = pdf_reader.pages[page_num]
+                    text_content += page.extract_text() + "\n"
+
+            return text_content
+        except Exception as e:
+            logger.error(f"Error parsing PDF file {file_path}: {e}")
+            return ""
+
+    async def _parse_docx(self, file_path: str) -> str:
+        """Parse DOCX file and extract text content."""
+        if Document is None:
+            raise ImportError("python-docx is not available. Please install it to parse DOCX files.")
+
+        try:
+            doc = Document(file_path)
+            paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
+
+            # Also get text from tables
+            for table in doc.tables:
+                for row in table.rows:
+                    for cell in row.cells:
+                        if cell.text.strip():
+                            paragraphs.append(cell.text)
+
+            return "\n".join(paragraphs)
+        except Exception as e:
+            logger.error(f"Error parsing DOCX file {file_path}: {e}")
+            return ""
+
+    async def _parse_markdown(self, file_path: str) -> str:
+        """Parse Markdown file and extract text content."""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            # Remove markdown formatting to get plain text
+            # Remove headers
+            content = re.sub(r'^#+\s+', '', content, flags=re.MULTILINE)
+            # Remove bold/italic
+            content = re.sub(r'\*{1,2}([^*]+)\*{1,2}', r'\1', content)
+            content = re.sub(r'_+([^_]+)_+', r'\1', content)
+            # Remove code blocks
+            content = re.sub(r'```[\s\S]*?```', '', content)
+            # Remove inline code
+            content = re.sub(r'`([^`]+)`', r'\1', content)
+            # Remove links and images
+            content = re.sub(r'!\[([^\]]*)\]\([^)]*\)', r'\1', content)  # Images
+            content = re.sub(r'\[([^\]]+)\]\([^)]*\)', r'\1', content)   # Links
+            # Remove list markers
+            content = re.sub(r'^\s*[*+-]\s+', '', content, flags=re.MULTILINE)
+            content = re.sub(r'^\s*\d+\.\s+', '', content, flags=re.MULTILINE)
+
+            return content
+        except Exception as e:
+            logger.error(f"Error parsing Markdown file {file_path}: {e}")
+            return ""
 
 
 # Create singleton instance

@@ -14,6 +14,9 @@ import {
   logout as apiLogout,
   changePassword as apiChangePassword,
   revokeAllTokens as apiRevokeAllTokens,
+  updateProfile as apiUpdateProfile,
+  uploadAvatar as apiUploadAvatar,
+  deleteAccount as apiDeleteAccount,
   setAuthToken
 } from '../services/api';
 
@@ -37,7 +40,8 @@ type AuthAction =
   | { type: 'AUTH_FAILURE'; payload: string }
   | { type: 'LOGOUT' }
   | { type: 'CLEAR_ERROR' }
-  | { type: 'SET_LOADING'; payload: boolean };
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'UPDATE_USER'; payload: User };
 
 // Reducer
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
@@ -75,6 +79,8 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
       return { ...state, error: null };
     case 'SET_LOADING':
       return { ...state, isLoading: action.payload };
+    case 'UPDATE_USER':
+      return { ...state, user: action.payload };
     default:
       return state;
   }
@@ -233,6 +239,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [logout]);
 
+  // Update profile function
+  const updateProfile = useCallback(async (name: string) => {
+    try {
+      const response = await apiUpdateProfile(name);
+      // 更新本地用户信息
+      dispatch({ type: 'UPDATE_USER', payload: response.user });
+      // 更新 localStorage
+      localStorage.setItem(USER_KEY, JSON.stringify(response.user));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Update profile failed';
+      dispatch({ type: 'AUTH_FAILURE', payload: message });
+      throw error;
+    }
+  }, []);
+
+  // Upload avatar function
+  const uploadAvatar = useCallback(async (file: File): Promise<string> => {
+    try {
+      const response = await apiUploadAvatar(file);
+      // 更新本地用户信息
+      if (state.user) {
+        const updatedUser = { ...state.user, avatar_url: response.avatar_url };
+        dispatch({ type: 'UPDATE_USER', payload: updatedUser });
+        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+      }
+      return response.avatar_url;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Upload avatar failed';
+      dispatch({ type: 'AUTH_FAILURE', payload: message });
+      throw error;
+    }
+  }, [state.user]);
+
+  // Delete account function
+  const deleteAccount = useCallback(async (password: string) => {
+    try {
+      await apiDeleteAccount(password);
+      // 清除本地数据
+      clearAuthData();
+      dispatch({ type: 'LOGOUT' });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Delete account failed';
+      dispatch({ type: 'AUTH_FAILURE', payload: message });
+      throw error;
+    }
+  }, []);
+
   // Clear error function
   const clearError = useCallback(() => {
     dispatch({ type: 'CLEAR_ERROR' });
@@ -278,6 +331,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     refreshToken: refreshTokenFn,
     changePassword,
     revokeAllTokens,
+    updateProfile,
+    uploadAvatar,
+    deleteAccount,
     clearError,
   };
 

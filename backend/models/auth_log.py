@@ -18,7 +18,7 @@ class AuthLog(Base):
     
     # 用户信息
     user_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, index=True)
-    email: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    student_id: Mapped[str] = mapped_column(String(10), nullable=False, index=True, comment="学号")
     
     # 事件类型: login, logout, register, token_refresh, password_change, token_revoke, login_failed
     event_type: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
@@ -51,9 +51,9 @@ class AuthLog(Base):
         # 复合索引用于查询特定时间段的事件
         Index('idx_event_time', 'event_type', 'created_at'),
         # 复合索引用于查询失败的登录尝试
-        Index('idx_failed_login', 'email', 'event_type', 'status', 'created_at'),
+        Index('idx_failed_login', 'student_id', 'event_type', 'status', 'created_at'),
     )
-    
+
     def __repr__(self) -> str:
-        return f"<AuthLog(id={self.id}, email={self.email}, event={self.event_type}, status={self.status})>"
+        return f"<AuthLog(id={self.id}, student_id={self.student_id}, event={self.event_type}, status={self.status})>"
 

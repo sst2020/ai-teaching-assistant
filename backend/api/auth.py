@@ -7,7 +7,7 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Depends, status, Request
+from fastapi import APIRouter, HTTPException, Depends, status, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db
@@ -42,6 +42,11 @@ from schemas.auth import (
     RevokeAllTokensResponse,
     Token,
     UserResponse,
+    UpdateProfileRequest,
+    UpdateProfileResponse,
+    AvatarUploadResponse,
+    DeleteAccountRequest,
+    DeleteAccountResponse,
 )
 from services.auth_monitor import AuthMonitorService
 
@@ -86,7 +91,7 @@ async def _create_tokens_for_user(db: AsyncSession, user: User) -> Token:
     access_token = create_access_token(
         data={
             "sub": str(user.id),
-            "email": user.email,
+            "student_id": user.student_id,
             "role": user.role,
         },
         expires_delta=access_token_expires
@@ -126,18 +131,26 @@ async def register(
     注册新用户。
 
     - 创建 User 记录
-    - 如果提供了 student_id,同时创建 Student 记录
+    - 同时创建 Student 记录（使用相同的 student_id）
     - 返回 JWT tokens
     """
     ip_address = get_client_ip(request)
     user_agent = get_user_agent(request)
 
-    # 检查邮箱是否已存在
-    existing_user = await crud_user.get_by_email(db, data.email)
+    # 检查学号是否已存在
+    existing_user = await crud_user.get_by_student_id(db, data.student_id)
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="该邮箱已被注册"
+            detail="该学号已被注册"
+        )
+
+    # 检查 Student 表中 student_id 是否已存在
+    existing_student = await crud_student.get_by_student_id(db, data.student_id)
+    if existing_student:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"学号 '{data.student_id}' 已存在"
         )
 
     # 哈希密码
@@ -146,33 +159,21 @@ async def register(
     # 创建用户
     user = await crud_user.create_with_password(
         db=db,
-        email=data.email,
+        student_id=data.student_id,
         password_hash=password_hashed,
         role=data.role
     )
 
-    # 如果提供了 student_id,创建 Student 记录
-    if data.student_id:
-        # 检查 student_id 是否已存在
-        existing_student = await crud_student.get_by_student_id(db, data.student_id)
-        if existing_student:
-            # 回滚用户创建
-            await db.rollback()
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"学号 '{data.student_id}' 已存在"
-            )
+    # 创建 Student 记录（与 User 使用相同的 student_id）
+    student_data = {
+        "student_id": data.student_id,
+        "name": data.name,
+        "email": f"{data.student_id}@student.local"  # 使用学号生成占位邮箱
+    }
+    student = await crud_student.create(db, student_data)
 
-        # 创建 Student 记录
-        student_data = {
-            "student_id": data.student_id,
-            "name": data.name,
-            "email": data.email
-        }
-        student = await crud_student.create(db, student_data)
-
-        # 关联 User 和 Student
-        student.user_id = user.id
+    # 关联 User 和 Student
+    student.user_id = user.id
 
     # 提交事务
     await db.commit()
@@ -185,7 +186,7 @@ async def register(
     # 记录注册事件
     await AuthMonitorService.log_auth_event(
         db=db,
-        email=data.email,
+        student_id=data.student_id,
         event_type="register",
         status="success",
         user_id=user.id,
@@ -209,7 +210,7 @@ async def login(
     """
     用户登录。
 
-    - 验证邮箱和密码
+    - 验证学号和密码
     - 更新最后登录时间
     - 返回 JWT tokens
     """
@@ -219,14 +220,14 @@ async def login(
     # 检查是否被锁定
     lockout_info = await AuthMonitorService.check_failed_login_attempts(
         db=db,
-        email=credentials.email
+        student_id=credentials.student_id
     )
 
     if lockout_info['is_locked']:
         # 记录被锁定的登录尝试
         await AuthMonitorService.log_auth_event(
             db=db,
-            email=credentials.email,
+            student_id=credentials.student_id,
             event_type="login_failed",
             status="failure",
             ip_address=ip_address,
@@ -239,12 +240,12 @@ async def login(
         )
 
     # 查找用户
-    user = await crud_user.get_by_email(db, credentials.email)
+    user = await crud_user.get_by_student_id(db, credentials.student_id)
     if not user:
         # 记录失败的登录尝试(用户不存在)
         await AuthMonitorService.log_auth_event(
             db=db,
-            email=credentials.email,
+            student_id=credentials.student_id,
             event_type="login_failed",
             status="failure",
             ip_address=ip_address,
@@ -253,7 +254,7 @@ async def login(
         )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="邮箱或密码错误"
+            detail="学号或密码错误"
         )
 
     # 验证密码
@@ -261,7 +262,7 @@ async def login(
         # 记录失败的登录尝试(密码错误)
         await AuthMonitorService.log_auth_event(
             db=db,
-            email=credentials.email,
+            student_id=credentials.student_id,
             event_type="login_failed",
             status="failure",
             user_id=user.id,
@@ -271,7 +272,7 @@ async def login(
         )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="邮箱或密码错误"
+            detail="学号或密码错误"
         )
 
     # 检查用户是否激活
@@ -279,7 +280,7 @@ async def login(
         # 记录失败的登录尝试(账户未激活)
         await AuthMonitorService.log_auth_event(
             db=db,
-            email=credentials.email,
+            student_id=credentials.student_id,
             event_type="login_failed",
             status="failure",
             user_id=user.id,
@@ -305,7 +306,7 @@ async def login(
     # 记录成功的登录事件
     await AuthMonitorService.log_auth_event(
         db=db,
-        email=credentials.email,
+        student_id=credentials.student_id,
         event_type="login",
         status="success",
         user_id=user.id,
@@ -378,7 +379,7 @@ async def refresh_access_token(
     # 记录 token 刷新事件
     await AuthMonitorService.log_auth_event(
         db=db,
-        email=user.email,
+        student_id=user.student_id,
         event_type="token_refresh",
         status="success",
         user_id=user.id,
@@ -432,7 +433,7 @@ async def logout(
     # 记录登出事件
     await AuthMonitorService.log_auth_event(
         db=db,
-        email=current_user.email,
+        student_id=current_user.student_id,
         event_type="logout",
         status="success",
         user_id=current_user.id,
@@ -504,7 +505,7 @@ async def change_password(
     # 记录密码修改事件
     await AuthMonitorService.log_auth_event(
         db=db,
-        email=current_user.email,
+        student_id=current_user.student_id,
         event_type="password_change",
         status="success",
         user_id=current_user.id,
@@ -535,7 +536,7 @@ async def revoke_all_tokens(
     # 记录撤销所有 tokens 事件
     await AuthMonitorService.log_auth_event(
         db=db,
-        email=current_user.email,
+        student_id=current_user.student_id,
         event_type="token_revoke",
         status="success",
         user_id=current_user.id,
@@ -549,3 +550,204 @@ async def revoke_all_tokens(
         revoked_count=revoked_count
     )
 
+
+@router.patch("/profile", response_model=UpdateProfileResponse)
+async def update_profile(
+    request_data: UpdateProfileRequest,
+    http_request: Request,
+    current_user: User = Depends(get_current_active_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    更新用户资料。
+
+    - 可更新姓名
+    - 学号不可更改
+    """
+    ip_address = get_client_ip(http_request)
+    user_agent = get_user_agent(http_request)
+
+    # 更新用户信息
+    if request_data.name is not None:
+        current_user.name = request_data.name
+
+    await db.flush()
+    await db.refresh(current_user)
+    await db.commit()
+
+    # 记录资料更新事件
+    await AuthMonitorService.log_auth_event(
+        db=db,
+        student_id=current_user.student_id,
+        event_type="profile_update",
+        status="success",
+        user_id=current_user.id,
+        ip_address=ip_address,
+        user_agent=user_agent
+    )
+
+    return UpdateProfileResponse(
+        user=UserResponse.model_validate(current_user),
+        message="资料更新成功"
+    )
+
+
+@router.post("/avatar", response_model=AvatarUploadResponse)
+async def upload_avatar(
+    file: UploadFile,
+    http_request: Request,
+    current_user: User = Depends(get_current_active_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    上传用户头像。
+
+    - 接受 multipart/form-data 格式的图片文件
+    - 支持 jpg, jpeg, png, gif, webp 格式
+    - 最大文件大小 5MB
+    """
+    import os
+    import uuid
+    from pathlib import Path
+
+    # 验证文件类型
+    allowed_types = {"image/jpeg", "image/png", "image/gif", "image/webp"}
+    if file.content_type not in allowed_types:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"不支持的文件类型: {file.content_type}。支持的类型: jpg, png, gif, webp"
+        )
+
+    # 读取文件内容
+    content = await file.read()
+
+    # 验证文件大小 (5MB)
+    max_size = 5 * 1024 * 1024
+    if len(content) > max_size:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="文件大小超过限制 (最大 5MB)"
+        )
+
+    # 生成文件名
+    ext = file.filename.split(".")[-1] if file.filename and "." in file.filename else "jpg"
+    filename = f"avatar_{current_user.id}_{uuid.uuid4().hex[:8]}.{ext}"
+
+    # 确保目录存在
+    upload_dir = Path("uploads/avatars")
+    upload_dir.mkdir(parents=True, exist_ok=True)
+
+    # 删除旧头像文件（如果存在）
+    if current_user.avatar_url:
+        old_filename = current_user.avatar_url.split("/")[-1]
+        old_path = upload_dir / old_filename
+        if old_path.exists():
+            try:
+                old_path.unlink()
+            except Exception:
+                pass  # 忽略删除失败
+
+    # 保存文件
+    file_path = upload_dir / filename
+    with open(file_path, "wb") as f:
+        f.write(content)
+
+    # 更新用户头像 URL
+    avatar_url = f"/uploads/avatars/{filename}"
+    current_user.avatar_url = avatar_url
+    await db.flush()
+    await db.refresh(current_user)
+    await db.commit()
+
+    ip_address = get_client_ip(http_request)
+    user_agent = get_user_agent(http_request)
+
+    # 记录头像更新事件
+    await AuthMonitorService.log_auth_event(
+        db=db,
+        student_id=current_user.student_id,
+        event_type="avatar_update",
+        status="success",
+        user_id=current_user.id,
+        ip_address=ip_address,
+        user_agent=user_agent
+    )
+
+    return AvatarUploadResponse(
+        avatar_url=avatar_url,
+        message="头像上传成功"
+    )
+
+
+@router.delete("/account", response_model=DeleteAccountResponse)
+async def delete_account(
+    request_data: DeleteAccountRequest,
+    http_request: Request,
+    current_user: User = Depends(get_current_active_user),
+    authorization: str = Depends(oauth2_scheme),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    注销账户。
+
+    - 需要密码确认
+    - 删除用户及所有关联数据
+    - 此操作不可逆
+    """
+    ip_address = get_client_ip(http_request)
+    user_agent = get_user_agent(http_request)
+
+    # 验证密码
+    if not verify_password(request_data.password, current_user.password_hash):
+        # 记录失败的删除尝试
+        await AuthMonitorService.log_auth_event(
+            db=db,
+            student_id=current_user.student_id,
+            event_type="account_delete",
+            status="failure",
+            user_id=current_user.id,
+            ip_address=ip_address,
+            user_agent=user_agent,
+            failure_reason="密码错误"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="密码错误"
+        )
+
+    # 记录删除事件（在删除之前）
+    student_id = current_user.student_id
+    user_id = current_user.id
+
+    # 将当前 Access Token 加入黑名单
+    jti = get_token_jti(authorization)
+    if jti:
+        expires_at = get_token_expiration(authorization)
+        if expires_at:
+            await crud_token_blacklist.add_to_blacklist(
+                db=db,
+                jti=jti,
+                user_id=user_id,
+                token_type="access",
+                expires_at=expires_at
+            )
+
+    # 撤销所有 Refresh Tokens
+    await crud_refresh_token.revoke_all_user_tokens(db, user_id)
+
+    # 删除用户（级联删除关联数据）
+    await crud_user.delete(db, user_id)
+    await db.commit()
+
+    # 记录账户删除事件
+    await AuthMonitorService.log_auth_event(
+        db=db,
+        student_id=student_id,
+        event_type="account_delete",
+        status="success",
+        user_id=None,  # 用户已删除
+        ip_address=ip_address,
+        user_agent=user_agent
+    )
+
+    return DeleteAccountResponse(message="账户已注销")

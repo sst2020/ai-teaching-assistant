@@ -26,6 +26,9 @@ import {
   RefreshTokenResponse,
   ChangePasswordResponse,
   RevokeAllTokensResponse,
+  UpdateProfileResponse,
+  AvatarUploadResponse,
+  DeleteAccountResponse,
 } from '../types/auth';
 import {
   StudentProfile,
@@ -459,6 +462,29 @@ export const analyzeProjectReport = async (
   return response.data;
 };
 
+export const analyzeUploadedReport = async (
+  file: File,
+  referenceStylePreference?: string
+): Promise<ReportAnalysisResponse> => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  if (referenceStylePreference) {
+    formData.append('reference_style_preference', referenceStylePreference);
+  }
+
+  const response = await apiClient.post<ReportAnalysisResponse>(
+    `${API_V1_PREFIX}/analysis/report/analyze-file`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+  return response.data;
+};
+
 // 获取支持的报告文件类型
 export const getReportFileTypes = async (): Promise<{
   file_types: string[];
@@ -582,6 +608,37 @@ export const changePassword = async (
 export const revokeAllTokens = async (): Promise<RevokeAllTokensResponse> => {
   const response = await apiClient.post<RevokeAllTokensResponse>(
     `${API_V1_PREFIX}/auth/revoke-all`
+  );
+  return response.data;
+};
+
+export const updateProfile = async (name: string): Promise<UpdateProfileResponse> => {
+  const response = await apiClient.patch<UpdateProfileResponse>(
+    `${API_V1_PREFIX}/auth/profile`,
+    { name }
+  );
+  return response.data;
+};
+
+export const uploadAvatar = async (file: File): Promise<AvatarUploadResponse> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const response = await apiClient.post<AvatarUploadResponse>(
+    `${API_V1_PREFIX}/auth/avatar`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+  return response.data;
+};
+
+export const deleteAccount = async (password: string): Promise<DeleteAccountResponse> => {
+  const response = await apiClient.delete<DeleteAccountResponse>(
+    `${API_V1_PREFIX}/auth/account`,
+    { data: { password } }
   );
   return response.data;
 };

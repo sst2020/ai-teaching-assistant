@@ -6,3 +6,4 @@ export { default as Grades } from './Grades';
 export { default as TeacherDashboard } from './TeacherDashboard';
 export { default as ManageAssignments } from './ManageAssignments';
 export { default as GradingInterface } from './GradingInterface';
+export { default as Account } from './Account';

@@ -20,6 +20,7 @@ import {
   TeacherDashboard,
   ManageAssignments,
   GradingInterface,
+  Account,
 } from './pages';
 import './App.css';
 
@@ -215,6 +216,18 @@ const App: React.FC = () => {
               <ProtectedRoute>
                 <AuthenticatedLayout>
                   <GradingInterface />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* 账户设置路由 */}
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <Account />
                 </AuthenticatedLayout>
               </ProtectedRoute>
             }

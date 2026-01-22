@@ -7,7 +7,6 @@ import './Register.css';
 
 interface FormData {
   name: string;
-  email: string;
   studentId: string;
   password: string;
   confirmPassword: string;
@@ -15,7 +14,6 @@ interface FormData {
 
 interface FormErrors {
   name?: string;
-  email?: string;
   studentId?: string;
   password?: string;
   confirmPassword?: string;
@@ -25,7 +23,6 @@ const Register: React.FC = () => {
   const { t } = useTranslation('auth');
   const [formData, setFormData] = useState<FormData>({
     name: '',
-    email: '',
     studentId: '',
     password: '',
     confirmPassword: '',
@@ -65,13 +62,9 @@ const Register: React.FC = () => {
       errors.name = t('register.errors.nameMinLength');
     }
 
-    if (!formData.email.trim()) {
-      errors.email = t('register.errors.emailRequired');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = t('register.errors.invalidEmail');
-    }
-
-    if (formData.studentId && !/^[A-Za-z0-9-]+$/.test(formData.studentId)) {
+    if (!formData.studentId.trim()) {
+      errors.studentId = t('register.errors.studentIdRequired');
+    } else if (!/^\d{10}$/.test(formData.studentId)) {
       errors.studentId = t('register.errors.invalidStudentId');
     }
 
@@ -101,9 +94,8 @@ const Register: React.FC = () => {
     try {
       await register({
         name: formData.name.trim(),
-        email: formData.email.trim(),
+        student_id: formData.studentId.trim(),
         password: formData.password,
-        student_id: formData.studentId.trim() || undefined,
       });
       // Navigation will happen automatically via useEffect
     } catch (err) {
@@ -139,22 +131,7 @@ const Register: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">{t('register.emailLabel')} *</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder={t('register.emailPlaceholder')}
-              disabled={isLoading}
-              className={formErrors.email ? 'error' : ''}
-            />
-            {formErrors.email && <span className="field-error">{formErrors.email}</span>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="studentId">{t('register.studentIdLabel')}</label>
+            <label htmlFor="studentId">{t('register.studentIdLabel')} *</label>
             <input
               type="text"
               id="studentId"
@@ -164,6 +141,7 @@ const Register: React.FC = () => {
               placeholder={t('register.studentIdPlaceholder')}
               disabled={isLoading}
               className={formErrors.studentId ? 'error' : ''}
+              maxLength={10}
             />
             {formErrors.studentId && <span className="field-error">{formErrors.studentId}</span>}
           </div>

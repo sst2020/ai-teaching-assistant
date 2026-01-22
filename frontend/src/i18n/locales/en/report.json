@@ -30,7 +30,24 @@
     "sections": "Sections",
     "wordCount": "Word Count",
     "paragraphs": "Paragraphs",
-    "completeness": "Completeness"
+    "completeness": "Completeness",
+    "abstract": "Abstract",
+    "introduction": "Introduction",
+    "relatedWork": "Related Work",
+    "method": "Method",
+    "results": "Results",
+    "discussion": "Discussion",
+    "conclusion": "Conclusion",
+    "references": "References",
+    "appendix": "Appendix",
+    "other": "Other",
+    "defaultTitle": "Default Title",
+    "words": "words",
+    "figures": "Figures",
+    "tables": "Tables",
+    "proportion": "Proportion",
+    "evaluation": "Evaluation",
+    "chapterStats": "Chapter Statistics"
   },
   "content": {
     "title": "Content Analysis",
@@ -44,10 +61,24 @@
     "overall": "Overall Score",
     "grammar": "Grammar",
     "formatting": "Formatting",
-    "citations": "Citations"
+    "citations": "Citations",
+    "figureTableStats": "Figure/Table Stats"
   },
   "logic": {
-    "title": "Logic & Innovation Analysis"
+    "title": "Logic & Innovation Analysis",
+    "sectionOrder": "Section Order",
+    "coherence": "Coherence",
+    "argumentation": "Argumentation",
+    "innovation": "Innovation",
+    "summary": "Summary",
+    "issues": "Logic Issues",
+    "innovationPoints": "Innovation Points",
+    "description": "Description",
+    "suggestedFix": "Suggested Fix",
+    "noIssues": "No significant logic issues detected",
+    "noInnovation": "No clear innovation points identified",
+    "highlight": "Highlight",
+    "reason": "Reason"
   },
   "suggestions": {
     "title": "Improvement Suggestions",

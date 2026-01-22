@@ -30,7 +30,24 @@
     "sections": "章节",
     "wordCount": "字数",
     "paragraphs": "段落数",
-    "completeness": "完整性"
+    "completeness": "完整性",
+    "abstract": "摘要",
+    "introduction": "引言",
+    "relatedWork": "相关工作",
+    "method": "方法",
+    "results": "结果",
+    "discussion": "讨论",
+    "conclusion": "结论",
+    "references": "参考文献",
+    "appendix": "附录",
+    "other": "其他",
+    "defaultTitle": "默认标题",
+    "words": "字",
+    "figures": "图表数",
+    "tables": "表格数",
+    "proportion": "占比",
+    "evaluation": "评价",
+    "chapterStats": "章节统计"
   },
   "content": {
     "title": "内容分析",
@@ -44,10 +61,24 @@
     "overall": "总体评分",
     "grammar": "语法",
     "formatting": "格式",
-    "citations": "引用"
+    "citations": "引用",
+    "figureTableStats": "图表统计"
   },
   "logic": {
-    "title": "逻辑与创新分析"
+    "title": "逻辑与创新分析",
+    "sectionOrder": "章节顺序",
+    "coherence": "连贯性",
+    "argumentation": "论证",
+    "innovation": "创新性",
+    "summary": "分析摘要",
+    "issues": "逻辑问题",
+    "innovationPoints": "创新点",
+    "description": "描述",
+    "suggestedFix": "建议修复",
+    "noIssues": "未发现明显的逻辑问题",
+    "noInnovation": "未识别到明确的创新点",
+    "highlight": "高亮文本",
+    "reason": "原因"
   },
   "suggestions": {
     "title": "修改建议",

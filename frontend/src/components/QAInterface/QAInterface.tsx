@@ -68,7 +68,7 @@ const QAInterface: React.FC = () => {
 
       await askQuestionStream(
         {
-          student_id: user?.student_id || user?.email || 'anonymous',
+          student_id: user?.student_id || 'anonymous',
           course_id: 'general',
           question: currentQuestion,
         },

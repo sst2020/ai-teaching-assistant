@@ -1,3 +1,286 @@
 .report-analysis {
   padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.page-header h1 {
+  margin-bottom: 8px;
+  color: #1a1a1a;
+  font-size: 2rem;
+}
+
+.page-header p {
+  color: #666;
+  margin: 0;
+}
+
+.tab-nav {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  padding: 12px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.tab-btn.active {
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+}
+
+.tab-btn:hover:not(.disabled) {
+  background-color: #f5f5f5;
+}
+
+.tab-btn.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.tab-content {
+  min-height: 400px;
+}
+
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.upload-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.upload-btn {
+  padding: 10px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.upload-btn:hover {
+  background-color: #0056b3;
+}
+
+.upload-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.file-name {
+  color: #333;
+  font-weight: 500;
+}
+
+.text-input-area textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 200px;
+  font-family: inherit;
+}
+
+.analyze-btn {
+  padding: 12px 24px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  align-self: flex-start;
+}
+
+.analyze-btn:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.analyze-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.result-section {
+  padding: 16px;
+}
+
+.result-section h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.score-display {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.score-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-right: 16px;
+}
+
+.score-label {
+  color: #666;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #fafafa;
+}
+
+.metric-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.metric-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.section-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  background-color: #fff;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-weight: 600;
+  color: #333;
+}
+
+.section-type {
+  font-size: 0.85rem;
+  color: #666;
+  background-color: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.section-content {
+  color: #555;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.suggestions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.suggestion-item {
+  border-left: 4px solid #007bff;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 0 4px 4px 0;
+}
+
+.suggestion-category {
+  font-weight: 600;
+  color: #007bff;
+  margin-bottom: 4px;
+}
+
+.suggestion-summary {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.suggestion-details {
+  color: #555;
+  line-height: 1.5;
+}
+
+.error-message {
+  padding: 12px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.error-message button {
+  background: none;
+  border: none;
+  color: #721c24;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #007bff;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.chart-container {
+  margin: 16px 0;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }

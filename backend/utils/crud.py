@@ -559,22 +559,22 @@ class CRUDAIInteraction(CRUDBase[AIInteraction]):
 class CRUDUser(CRUDBase[User]):
     """CRUD operations for User model."""
 
-    async def get_by_email(self, db: AsyncSession, email: str) -> Optional[User]:
-        """通过邮箱查找用户"""
-        result = await db.execute(select(User).where(User.email == email))
+    async def get_by_student_id(self, db: AsyncSession, student_id: str) -> Optional[User]:
+        """通过学号查找用户"""
+        result = await db.execute(select(User).where(User.student_id == student_id))
         return result.scalar_one_or_none()
 
     async def create_with_password(
         self,
         db: AsyncSession,
-        email: str,
+        student_id: str,
         password_hash: str,
         role: str = "student",
         **kwargs
     ) -> User:
         """创建用户 (密码已哈希)"""
         user = User(
-            email=email,
+            student_id=student_id,
             password_hash=password_hash,
             role=role,
             is_active=True,

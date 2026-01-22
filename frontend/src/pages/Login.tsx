@@ -11,9 +11,9 @@ interface LocationState {
 
 const Login: React.FC = () => {
   const { t } = useTranslation('auth');
-  const [email, setEmail] = useState('');
+  const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
-  const [formErrors, setFormErrors] = useState<{ email?: string; password?: string }>({});
+  const [formErrors, setFormErrors] = useState<{ studentId?: string; password?: string }>({});
 
   const { login, isLoading, error, isAuthenticated, clearError } = useAuth();
   const navigate = useNavigate();
@@ -35,12 +35,12 @@ const Login: React.FC = () => {
   }, [clearError]);
 
   const validateForm = (): boolean => {
-    const errors: { email?: string; password?: string } = {};
+    const errors: { studentId?: string; password?: string } = {};
 
-    if (!email.trim()) {
-      errors.email = t('login.errors.emailRequired');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.email = t('login.errors.invalidEmail');
+    if (!studentId.trim()) {
+      errors.studentId = t('login.errors.studentIdRequired');
+    } else if (!/^\d{10}$/.test(studentId)) {
+      errors.studentId = t('login.errors.invalidStudentId');
     }
 
     if (!password) {
@@ -59,7 +59,7 @@ const Login: React.FC = () => {
     if (!validateForm()) return;
 
     try {
-      await login({ email, password });
+      await login({ student_id: studentId, password });
       // Navigation will happen automatically via useEffect
     } catch (err) {
       // Error is handled by AuthContext
@@ -79,20 +79,21 @@ const Login: React.FC = () => {
           {error && <ErrorMessage message={error} />}
 
           <div className="form-group">
-            <label htmlFor="email">{t('login.emailLabel')}</label>
+            <label htmlFor="studentId">{t('login.studentIdLabel')}</label>
             <input
-              type="email"
-              id="email"
-              value={email}
+              type="text"
+              id="studentId"
+              value={studentId}
               onChange={(e) => {
-                setEmail(e.target.value);
-                if (formErrors.email) setFormErrors({ ...formErrors, email: undefined });
+                setStudentId(e.target.value);
+                if (formErrors.studentId) setFormErrors({ ...formErrors, studentId: undefined });
               }}
-              placeholder={t('login.emailPlaceholder')}
+              placeholder={t('login.studentIdPlaceholder')}
               disabled={isLoading}
-              className={formErrors.email ? 'error' : ''}
+              className={formErrors.studentId ? 'error' : ''}
+              maxLength={10}
             />
-            {formErrors.email && <span className="field-error">{formErrors.email}</span>}
+            {formErrors.studentId && <span className="field-error">{formErrors.studentId}</span>}
           </div>
 
           <div className="form-group">

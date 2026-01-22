@@ -2,9 +2,9 @@
 
 export interface User {
   id: number;
-  email: string;
-  student_id?: string;
+  student_id: string;
   name?: string;
+  avatar_url?: string;
   role: 'student' | 'teacher' | 'admin';
   is_active: boolean;
   last_login: string | null;
@@ -13,15 +13,14 @@ export interface User {
 }
 
 export interface LoginCredentials {
-  email: string;
+  student_id: string;
   password: string;
 }
 
 export interface RegisterData {
-  email: string;
+  student_id: string;
   password: string;
   name: string;
-  student_id?: string;
 }
 
 export interface AuthTokens {
@@ -64,6 +63,28 @@ export interface RevokeAllTokensResponse {
   revoked_count: number;
 }
 
+export interface UpdateProfileRequest {
+  name?: string;
+}
+
+export interface UpdateProfileResponse {
+  user: User;
+  message: string;
+}
+
+export interface AvatarUploadResponse {
+  avatar_url: string;
+  message: string;
+}
+
+export interface DeleteAccountRequest {
+  password: string;
+}
+
+export interface DeleteAccountResponse {
+  message: string;
+}
+
 export interface AuthState {
   user: User | null;
   tokens: AuthTokens | null;
@@ -79,6 +100,9 @@ export interface AuthContextType extends AuthState {
   refreshToken: () => Promise<void>;
   changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
   revokeAllTokens: () => Promise<void>;
+  updateProfile: (name: string) => Promise<void>;
+  uploadAvatar: (file: File) => Promise<string>;
+  deleteAccount: (password: string) => Promise<void>;
   clearError: () => void;
 }
 

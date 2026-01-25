@@ -1,7 +1,7 @@
 # AI 智能教学助手 - 项目待办事项清单
 
-> **最后更新：** 2024年12月14日
-> **项目状态：** MVP 已完成 ✅ + 增强调试环境 ✅ + 生产级 JWT 认证 ✅ + 认证监控 ✅
+> **最后更新：** 2026年1月25日
+> **项目状态：** MVP 已完成 ✅ + 增强调试环境 ✅ + 生产级 JWT 认证 ✅ + 认证监控 ✅ + Redis Cache ✅ + Grading API ✅ + 报告分析 DeepSeek 集成 ✅
 > **复杂度指标：** 🟢 简单 | 🟡 中等 | 🔴 困难 | ⏱️ 耗时较长
 
 本文档概述了 AI 智能教学助手项目的剩余任务、优先级和贡献机会。
@@ -753,17 +753,19 @@
   - 屏幕阅读器的 ARIA 属性
   - 可见的焦点指示器
 
-- [ ] 🟡 **添加深色模式支持** (P3)
-  - 头部主题切换
-  - 持久化偏好设置
-  - CSS 变量已准备好用于主题切换
+- [x] 🟡 **添加深色模式支持** (P3) ✅ 已完成
+  - ✅ 创建 `frontend/src/contexts/ThemeContext.tsx` (主题上下文)
+  - ✅ 头部主题切换按钮
+  - ✅ 持久化偏好设置 (localStorage)
+  - ✅ CSS 变量主题切换支持
 
 ### 开发工具增强
 
-- [ ] 🟡 **创建API测试工具页面** (P2)
-  - 创建 `frontend/src/components/DevTools/ApiTester.tsx`
-  - 在线API测试和请求构建器
-  - 响应查看器和历史记录
+- [x] 🟡 **创建API测试工具页面** (P2) ✅ 已完成
+  - ✅ 创建 `frontend/src/components/DevTools/ApiTester.tsx`
+  - ✅ 在线API测试和请求构建器
+  - ✅ 响应查看器和历史记录
+  - ✅ 路由: `/api-tester`
   - **文件：** `frontend/src/components/DevTools/ApiTester.tsx`
 
 - [ ] 🟡 **添加性能监控组件** (P2)
@@ -984,10 +986,15 @@
 
 ### API 文档
 
-- [ ] 🟢 **添加 OpenAPI 描述** (P2)
-  - 为所有端点添加详细描述
-  - 添加请求/响应示例
-  - **文件：** 所有路由文件
+- [x] 🟢 **添加 OpenAPI 描述** (P2) ✅ 已完成
+  - ✅ 为所有端点添加详细中文描述
+  - ✅ 添加请求/响应示例
+  - **已增强文件：**
+    - `backend/api/health.py`
+    - `backend/api/knowledge_base.py`
+    - `backend/api/report_analysis.py`
+    - `backend/api/students.py`
+    - `backend/api/submissions.py`
 
 - [ ] 🟡 **创建 API 使用指南** (P2)
   - 创建 `docs/api-guide.md`

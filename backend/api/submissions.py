@@ -25,11 +25,21 @@ async def create_submission(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Submit an assignment.
-    
-    - Creates a new submission record
-    - Validates student and assignment exist
-    - Auto-generates submission_id if not provided
+    提交作业。
+
+    创建新的作业提交记录，验证学生和作业是否存在，
+    如未提供 submission_id 则自动生成。
+
+    Args:
+        submission_in: 提交信息，包含学生ID、作业ID、提交内容等
+        db: 数据库会话依赖
+
+    Returns:
+        SubmissionResponse: 创建的提交记录
+
+    Raises:
+        HTTPException 404: 学生或作业不存在
+        HTTPException 400: 提交ID已存在
     """
     # Validate student exists
     student = await crud_student.get_by_student_id(db, submission_in.student_id)
@@ -79,10 +89,19 @@ async def get_submission(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Get submission details by submission_id.
-    
-    - Returns submission with related student and assignment info
-    - Returns 404 if submission not found
+    获取提交详情。
+
+    根据提交ID获取提交详细信息，包含关联的学生和作业信息。
+
+    Args:
+        submission_id: 提交的唯一标识符
+        db: 数据库会话依赖
+
+    Returns:
+        SubmissionDetailResponse: 包含学生和作业信息的提交详情
+
+    Raises:
+        HTTPException 404: 提交记录不存在
     """
     submission = await crud_submission.get_by_submission_id(db, submission_id)
     if not submission:
@@ -121,10 +140,21 @@ async def get_student_submissions(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Get all submissions for a student.
-    
-    - Returns paginated list of submissions
-    - Uses external student_id for lookup
+    获取学生的所有提交记录。
+
+    根据学生外部ID查询该学生的所有作业提交，支持分页。
+
+    Args:
+        student_id: 学生的外部唯一标识符
+        page: 页码，从1开始
+        page_size: 每页记录数，范围1-100
+        db: 数据库会话依赖
+
+    Returns:
+        SubmissionListResponse: 分页的提交记录列表
+
+    Raises:
+        HTTPException 404: 学生不存在
     """
     # Get student by external ID
     student = await crud_student.get_by_student_id(db, student_id)
@@ -156,10 +186,21 @@ async def get_assignment_submissions(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Get all submissions for an assignment.
+    获取作业的所有提交记录。
 
-    - Returns paginated list of submissions
-    - Uses external assignment_id for lookup
+    根据作业外部ID查询该作业的所有学生提交，支持分页。
+
+    Args:
+        assignment_id: 作业的外部唯一标识符
+        page: 页码，从1开始
+        page_size: 每页记录数，范围1-100
+        db: 数据库会话依赖
+
+    Returns:
+        SubmissionListResponse: 分页的提交记录列表
+
+    Raises:
+        HTTPException 404: 作业不存在
     """
     # Get assignment by external ID
     assignment = await crud_assignment.get_by_assignment_id(db, assignment_id)
@@ -190,10 +231,21 @@ async def update_submission_status(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Update submission status.
+    更新提交状态。
 
-    - Updates the status of a submission (pending/graded/flagged)
-    - Returns the updated submission
+    更新指定提交记录的状态，可选状态包括：待批改、已批改、已标记。
+
+    Args:
+        submission_id: 提交的唯一标识符
+        status_update: 状态更新信息，包含新状态值
+        db: 数据库会话依赖
+
+    Returns:
+        SubmissionResponse: 更新后的提交记录
+
+    Raises:
+        HTTPException 400: 无效的状态值
+        HTTPException 404: 提交记录不存在
     """
     # Map string status to enum
     status_map = {

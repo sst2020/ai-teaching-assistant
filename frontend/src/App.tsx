@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { Header } from './components/layout';
 import { Dashboard } from './components/Dashboard';
 import { CodeAnalysis } from './components/CodeAnalysis';
@@ -11,6 +12,7 @@ import { ReportAnalysis } from './components/ReportAnalysis';
 import { DebugPanel } from './components/common/DebugPanel';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { KnowledgeBase, QATriage, TeacherDashboard as TeacherQuestionQueue } from './components';
+import { ApiTester } from './components/DevTools';
 import {
   Login,
   Register,
@@ -21,11 +23,12 @@ import {
   ManageAssignments,
   GradingInterface,
   Account,
+  Forbidden,
 } from './pages';
 import './App.css';
 
-  // Layout component for authenticated pages
-  const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+// Layout component for authenticated pages
+const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
 
   // Helper to determine active tab based on current path
@@ -35,6 +38,10 @@ import './App.css';
     if (path.startsWith('/qa')) return 'qa';
     if (path.startsWith('/plagiarism')) return 'plagiarism';
     if (path.startsWith('/report-analysis')) return 'report-analysis';
+    if (path.startsWith('/teacher')) return 'teacher';
+    if (path.startsWith('/grading')) return 'grading';
+    if (path.startsWith('/manage-assignments')) return 'manage-assignments';
+    if (path.startsWith('/question-queue')) return 'question-queue';
     return 'dashboard';
   };
 
@@ -62,68 +69,28 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <ToastProvider>
-        <div className="app">
+        <ThemeProvider>
+          <div className="app">
         <Routes>
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Authenticated routes with layout */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          {/* Default redirect based on user role */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Navigate to="/dashboard" replace />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Student routes */}
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
-                <AuthenticatedLayout>
-                  <Dashboard />
-                </AuthenticatedLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/code-analysis"
-            element={
-              <ProtectedRoute>
-                <AuthenticatedLayout>
-                  <CodeAnalysis />
-                </AuthenticatedLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/qa"
-            element={
-              <ProtectedRoute>
-                <AuthenticatedLayout>
-                  <QAInterface />
-                </AuthenticatedLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/plagiarism"
-            element={
-              <ProtectedRoute>
-                <AuthenticatedLayout>
-                  <PlagiarismCheck />
-                </AuthenticatedLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/report-analysis"
-            element={
-              <ProtectedRoute>
-                <AuthenticatedLayout>
-                  <ReportAnalysis />
-                </AuthenticatedLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/student-dashboard"
-            element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['student', 'teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <StudentDashboard />
                 </AuthenticatedLayout>
@@ -133,7 +100,7 @@ const App: React.FC = () => {
           <Route
             path="/submit/:assignmentId"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['student']}>
                 <AuthenticatedLayout>
                   <SubmitAssignment />
                 </AuthenticatedLayout>
@@ -143,7 +110,7 @@ const App: React.FC = () => {
           <Route
             path="/grades"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['student']}>
                 <AuthenticatedLayout>
                   <Grades />
                 </AuthenticatedLayout>
@@ -151,11 +118,11 @@ const App: React.FC = () => {
             }
           />
 
-          {/* 智能问答分诊系统路由 */}
+          {/* Common routes for students and teachers */}
           <Route
             path="/smart-qa"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['student', 'teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <React.Suspense fallback={<div>加载中...</div>}>
                     <QATriage userId="current_user" userName="当前用户" />
@@ -167,7 +134,7 @@ const App: React.FC = () => {
           <Route
             path="/knowledge-base"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['student', 'teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <React.Suspense fallback={<div>加载中...</div>}>
                     <KnowledgeBase />
@@ -176,24 +143,12 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/question-queue"
-            element={
-              <ProtectedRoute>
-                <AuthenticatedLayout>
-                  <React.Suspense fallback={<div>加载中...</div>}>
-                    <TeacherQuestionQueue teacherId="teacher_001" teacherName="教师" />
-                  </React.Suspense>
-                </AuthenticatedLayout>
-              </ProtectedRoute>
-            }
-          />
 
-          {/* 教师端路由 */}
+          {/* Teacher/Admin routes */}
           <Route
             path="/teacher"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
                 <AuthenticatedLayout>
                   <TeacherDashboard />
                 </AuthenticatedLayout>
@@ -203,7 +158,7 @@ const App: React.FC = () => {
           <Route
             path="/manage-assignments"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
                 <AuthenticatedLayout>
                   <ManageAssignments />
                 </AuthenticatedLayout>
@@ -213,15 +168,81 @@ const App: React.FC = () => {
           <Route
             path="/grading"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
                 <AuthenticatedLayout>
                   <GradingInterface />
                 </AuthenticatedLayout>
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/question-queue"
+            element={
+              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+                <AuthenticatedLayout>
+                  <React.Suspense fallback={<div>加载中...</div>}>
+                    <TeacherQuestionQueue teacherId="teacher_001" teacherName="教师" />
+                  </React.Suspense>
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
 
-          {/* 账户设置路由 */}
+          {/* Advanced features for teachers and admins */}
+          <Route
+            path="/code-analysis"
+            element={
+              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+                <AuthenticatedLayout>
+                  <CodeAnalysis />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/qa"
+            element={
+              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+                <AuthenticatedLayout>
+                  <QAInterface />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/plagiarism"
+            element={
+              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+                <AuthenticatedLayout>
+                  <PlagiarismCheck />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/report-analysis"
+            element={
+              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+                <AuthenticatedLayout>
+                  <ReportAnalysis />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Developer tools - development environment only */}
+          <Route
+            path="/dev/api-tester"
+            element={
+              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+                <AuthenticatedLayout>
+                  <ApiTester />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Account settings - accessible to all authenticated users */}
           <Route
             path="/account"
             element={
@@ -233,8 +254,25 @@ const App: React.FC = () => {
             }
           />
 
+          {/* 403 Forbidden route */}
+          <Route
+            path="/forbidden"
+            element={
+              <ProtectedRoute showForbiddenPage={true}>
+                <Forbidden />
+              </ProtectedRoute>
+            }
+          />
+
           {/* Fallback route for unknown paths */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <Navigate to="/dashboard" replace />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
 
         {/* Debug Panel - 仅在开发环境下显示 */}
@@ -244,7 +282,8 @@ const App: React.FC = () => {
             onToggle={() => setDebugPanelVisible(!debugPanelVisible)}
           />
         )}
-        </div>
+          </div>
+        </ThemeProvider>
       </ToastProvider>
     </AuthProvider>
   );

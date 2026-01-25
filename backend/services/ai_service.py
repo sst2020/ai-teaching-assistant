@@ -603,8 +603,8 @@ class AIService:
     async def categorize_question(self, question: str) -> str:
         return await self.provider.categorize_question(question)
 
-    async def generate_response(self, prompt: str, system_prompt: str = "") -> str:
-        return await self.provider.generate_response(prompt, system_prompt)
+    async def generate_response(self, prompt: str, system_prompt: str = "", **kwargs) -> str:
+        return await self.provider.generate_response(prompt, system_prompt, **kwargs)
 
     async def explain_code(
         self,

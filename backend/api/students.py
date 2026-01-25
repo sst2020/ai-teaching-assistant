@@ -23,10 +23,24 @@ async def register_student(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Register a new student.
-    
-    - Creates a new student record with the provided information
-    - Returns the created student data
+    注册新学生账户。
+
+    创建新的学生记录，包含学号、姓名、邮箱等基本信息。
+    系统会自动检查学号和邮箱的唯一性。
+
+    Args:
+        student_in: 学生注册信息，包含：
+            - student_id: 学号（必填，唯一）
+            - name: 姓名（必填）
+            - email: 邮箱地址（必填，唯一）
+            - course_id: 课程ID（可选）
+        db: 异步数据库会话（自动注入）
+
+    Returns:
+        StudentResponse: 创建成功的学生信息
+
+    Raises:
+        HTTPException 400: 学号或邮箱已存在
     """
     # Check if student_id already exists
     existing = await crud_student.get_by_student_id(db, student_in.student_id)
@@ -56,11 +70,22 @@ async def login_student(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Student login/authentication.
-    
-    - Verifies student exists by student_id
-    - Optionally verifies email if provided
-    - Returns student information on success
+    学生登录认证。
+
+    通过学号验证学生身份，可选择性验证邮箱。
+    登录成功返回学生完整信息。
+
+    Args:
+        login_data: 登录凭据，包含：
+            - student_id: 学号（必填）
+            - email: 邮箱地址（可选，用于二次验证）
+        db: 异步数据库会话（自动注入）
+
+    Returns:
+        StudentLoginResponse: 登录结果，包含：
+            - success: 是否成功
+            - message: 结果消息
+            - student: 学生信息（成功时返回）
     """
     student = await crud_student.get_by_student_id(db, login_data.student_id)
     
@@ -94,10 +119,23 @@ async def list_students(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    List all students with pagination.
-    
-    - Supports filtering by course_id
-    - Returns paginated results
+    获取学生列表（分页）。
+
+    支持按课程ID筛选，返回分页结果。
+
+    Args:
+        page: 页码（默认1，最小1）
+        page_size: 每页数量（默认20，范围1-100）
+        course_id: 课程ID筛选条件（可选）
+        db: 异步数据库会话（自动注入）
+
+    Returns:
+        StudentListResponse: 分页学生列表，包含：
+            - items: 学生列表
+            - total: 总数量
+            - page: 当前页码
+            - page_size: 每页数量
+            - total_pages: 总页数
     """
     skip = (page - 1) * page_size
     filters = {"course_id": course_id} if course_id else None
@@ -121,10 +159,17 @@ async def get_student(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Get student information by student_id.
-    
-    - Returns student details if found
-    - Returns 404 if student not found
+    根据学号获取学生信息。
+
+    Args:
+        student_id: 学号
+        db: 异步数据库会话（自动注入）
+
+    Returns:
+        StudentResponse: 学生详细信息
+
+    Raises:
+        HTTPException 404: 学生不存在
     """
     student = await crud_student.get_by_student_id(db, student_id)
     if not student:
@@ -142,10 +187,25 @@ async def update_student(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Update student information.
-    
-    - Updates only the provided fields
-    - Returns the updated student data
+    更新学生信息。
+
+    仅更新请求中提供的字段，未提供的字段保持不变。
+    更新邮箱时会检查唯一性。
+
+    Args:
+        student_id: 学号
+        student_in: 更新数据，可包含：
+            - name: 姓名
+            - email: 邮箱地址
+            - course_id: 课程ID
+        db: 异步数据库会话（自动注入）
+
+    Returns:
+        StudentResponse: 更新后的学生信息
+
+    Raises:
+        HTTPException 404: 学生不存在
+        HTTPException 400: 邮箱已被使用
     """
     student = await crud_student.get_by_student_id(db, student_id)
     if not student:
@@ -174,10 +234,21 @@ async def delete_student(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Delete a student.
+    删除学生账户。
 
-    - Removes the student and all associated data
-    - Returns success message on deletion
+    删除指定学号的学生及其所有关联数据。
+
+    Args:
+        student_id: 学号
+        db: 异步数据库会话（自动注入）
+
+    Returns:
+        APIResponse: 操作结果，包含：
+            - success: 是否成功
+            - message: 结果消息
+
+    Raises:
+        HTTPException 404: 学生不存在
     """
     student = await crud_student.get_by_student_id(db, student_id)
     if not student:

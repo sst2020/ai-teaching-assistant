@@ -1,0 +1,188 @@
+/* API 测试工具样式 */
+.api-tester {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.api-tester-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.api-tester-header h1 {
+  margin: 0;
+  color: var(--md-sys-color-on-surface);
+}
+
+.history-toggle {
+  padding: 8px 16px;
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.history-toggle:hover {
+  opacity: 0.9;
+}
+
+.api-tester-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* 请求构建器 */
+.request-builder {
+  background: var(--md-sys-color-surface-container);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.request-line {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.method-select {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.method-get { background: #4caf50; color: white; }
+.method-post { background: #2196f3; color: white; }
+.method-put { background: #ff9800; color: white; }
+.method-patch { background: #9c27b0; color: white; }
+.method-delete { background: #f44336; color: white; }
+
+.url-input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: 8px;
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font-size: 14px;
+}
+
+.send-button {
+  padding: 10px 24px;
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.request-sections .section {
+  margin-bottom: 16px;
+}
+
+.request-sections label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.headers-input,
+.body-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: 8px;
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 13px;
+  resize: vertical;
+}
+
+/* 响应查看器 */
+.response-viewer {
+  background: var(--md-sys-color-surface-container);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.response-viewer h2 {
+  margin: 0 0 16px 0;
+  color: var(--md-sys-color-on-surface);
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--md-sys-color-primary);
+}
+
+.error-message {
+  padding: 16px;
+  background: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+  border-radius: 8px;
+}
+
+.response-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.status-success { background: #4caf50; color: white; }
+.status-client-error { background: #ff9800; color: white; }
+.status-server-error { background: #f44336; color: white; }
+.status-info { background: #2196f3; color: white; }
+
+.response-time {
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 13px;
+}
+
+.response-headers h3,
+.response-body h3 {
+  margin: 12px 0 8px 0;
+  font-size: 14px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.response-headers pre,
+.response-body pre {
+  background: var(--md-sys-color-surface);
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+

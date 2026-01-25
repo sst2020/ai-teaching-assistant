@@ -289,3 +289,96 @@
   --md-comp-dialog-min-width: 280px;
 }
 
+/* ============================================
+ * DARK THEME - MD3 Expressive Dark Palette
+ * Inverted colors for dark mode support
+ * ============================================ */
+
+[data-theme="dark"] {
+  /* Primary Colors - Lighter for dark backgrounds */
+  --md-sys-color-primary: #CFBCFF;
+  --md-sys-color-on-primary: #381E72;
+  --md-sys-color-primary-container: #4F378B;
+  --md-sys-color-on-primary-container: #E8DDFF;
+  --md-sys-color-primary-fixed: #E8DDFF;
+  --md-sys-color-primary-fixed-dim: #CFBCFF;
+  --md-sys-color-on-primary-fixed: #21005D;
+  --md-sys-color-on-primary-fixed-variant: #5B2EBF;
+
+  /* Secondary Colors - Adjusted for dark */
+  --md-sys-color-secondary: #CCC2DC;
+  --md-sys-color-on-secondary: #332D41;
+  --md-sys-color-secondary-container: #4A4458;
+  --md-sys-color-on-secondary-container: #E8DEF8;
+
+  /* Tertiary Colors - Coral/Pink adjusted */
+  --md-sys-color-tertiary: #FFB3B3;
+  --md-sys-color-on-tertiary: #680014;
+  --md-sys-color-tertiary-container: #8C1D28;
+  --md-sys-color-on-tertiary-container: #FFD9D9;
+
+  /* Error Colors - Lighter for visibility */
+  --md-sys-color-error: #FFB4AB;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000A;
+  --md-sys-color-on-error-container: #FFDAD6;
+
+  /* Surface Colors - Dark backgrounds */
+  --md-sys-color-surface: #1C1B1F;
+  --md-sys-color-on-surface: #E6E1E5;
+  --md-sys-color-surface-variant: #49454F;
+  --md-sys-color-on-surface-variant: #CAC4D0;
+  --md-sys-color-surface-container-lowest: #0F0D13;
+  --md-sys-color-surface-container-low: #1D1B20;
+  --md-sys-color-surface-container: #211F26;
+  --md-sys-color-surface-container-high: #2B2930;
+  --md-sys-color-surface-container-highest: #36343B;
+
+  /* Outline Colors - Adjusted for dark */
+  --md-sys-color-outline: #938F99;
+  --md-sys-color-outline-variant: #49454F;
+
+  /* Inverse Colors */
+  --md-sys-color-inverse-surface: #E6E1E5;
+  --md-sys-color-inverse-on-surface: #313033;
+  --md-sys-color-inverse-primary: #7C4DFF;
+
+  /* Background & Scrim */
+  --md-sys-color-background: #1C1B1F;
+  --md-sys-color-on-background: #E6E1E5;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-shadow: #000000;
+
+  /* Success/Warning/Info - Adjusted for dark theme */
+  --md-sys-color-success: #81C784;
+  --md-sys-color-on-success: #1B5E20;
+  --md-sys-color-success-container: #2E7D32;
+  --md-sys-color-on-success-container: #C8E6C9;
+
+  --md-sys-color-warning: #FFB74D;
+  --md-sys-color-on-warning: #E65100;
+  --md-sys-color-warning-container: #F57C00;
+  --md-sys-color-on-warning-container: #FFE0B2;
+
+  --md-sys-color-info: #4FC3F7;
+  --md-sys-color-on-info: #01579B;
+  --md-sys-color-info-container: #0288D1;
+  --md-sys-color-on-info-container: #B3E5FC;
+
+  /* Elevation - Adjusted shadows for dark mode */
+  --md-sys-elevation-level1:
+    0px 1px 3px 1px rgba(0, 0, 0, 0.5),
+    0px 1px 2px rgba(0, 0, 0, 0.6);
+  --md-sys-elevation-level2:
+    0px 2px 6px 2px rgba(0, 0, 0, 0.5),
+    0px 1px 2px rgba(0, 0, 0, 0.6);
+  --md-sys-elevation-level3:
+    0px 4px 8px 3px rgba(0, 0, 0, 0.5),
+    0px 1px 3px rgba(0, 0, 0, 0.6);
+  --md-sys-elevation-level4:
+    0px 6px 10px 4px rgba(0, 0, 0, 0.5),
+    0px 2px 3px rgba(0, 0, 0, 0.6);
+  --md-sys-elevation-level5:
+    0px 8px 12px 6px rgba(0, 0, 0, 0.5),
+    0px 4px 4px rgba(0, 0, 0, 0.6);
+}

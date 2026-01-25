@@ -12,7 +12,10 @@
     "grading": "评分",
     "grades": "成绩",
     "knowledgeBase": "知识库",
-    "questionQueue": "问题队列"
+    "questionQueue": "问题队列",
+    "submitAssignment": "提交作业",
+    "smartQA": "智能问答",
+    "gradingInterface": "评分界面"
   },
   "status": {
     "checking": "检查中...",

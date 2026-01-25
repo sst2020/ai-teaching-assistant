@@ -12,7 +12,10 @@
     "grading": "Grading",
     "grades": "Grades",
     "knowledgeBase": "Knowledge Base",
-    "questionQueue": "Question Queue"
+    "questionQueue": "Question Queue",
+    "submitAssignment": "Submit Assignment",
+    "smartQA": "Smart Q&A",
+    "gradingInterface": "Grading Interface"
   },
   "status": {
     "checking": "Checking...",

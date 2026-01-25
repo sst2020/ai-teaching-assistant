@@ -20,10 +20,31 @@ router = APIRouter(prefix="/report-analysis", tags=["Report Analysis"])
 
 @router.post("/analyze", response_model=ReportAnalysisResponse)
 async def analyze_project_report(request: ReportAnalysisRequest) -> ReportAnalysisResponse:
-    """Analyze a project report and return a comprehensive analysis result.
+    """分析项目报告并返回综合分析结果。
 
-    当前端已经完成基础解析（或直接提供纯文本）时，可以使用该端点。
-    未来将扩展支持文件上传（PDF/DOCX/Markdown）形式的分析接口。
+    使用 DeepSeek AI 对项目报告进行多维度智能分析，包括逻辑结构、
+    创新性、语言质量等方面的评估，并生成个性化改进建议。
+
+    当前端已完成文档解析（或直接提供纯文本）时，调用此端点进行分析。
+    支持的分析维度：逻辑分析、创新性评估、改进建议、语言质量评分。
+
+    Args:
+        request: 报告分析请求对象
+            - file_name: 文件名称（用于识别和记录）
+            - file_type: 文件类型（PDF/DOCX/MARKDOWN/TEXT）
+            - content: 报告文本内容
+            - reference_style_preference: 可选的参考文献格式偏好
+
+    Returns:
+        ReportAnalysisResponse: 综合分析结果
+            - overall_score: 总体评分（0-100）
+            - logic_analysis: 逻辑结构分析结果
+            - innovation_analysis: 创新性评估结果
+            - improvement_suggestions: 个性化改进建议列表
+            - language_quality: 语言质量评估结果
+
+    Raises:
+        HTTPException(500): 分析过程中发生内部错误
     """
 
     try:
@@ -35,13 +56,39 @@ async def analyze_project_report(request: ReportAnalysisRequest) -> ReportAnalys
 
 @router.post("/analyze-file", response_model=ReportAnalysisResponse)
 async def analyze_uploaded_report(
-    file: UploadFile = File(..., description="Project report file to analyze (PDF, DOCX, or Markdown)"),
-    reference_style_preference: Optional[str] = Form(None, description="Preferred reference style for formatting checks"),
+    file: UploadFile = File(..., description="待分析的项目报告文件（PDF、DOCX 或 Markdown）"),
+    reference_style_preference: Optional[str] = Form(None, description="参考文献格式偏好"),
 ) -> ReportAnalysisResponse:
-    """Upload and analyze a project report file.
+    """上传并分析项目报告文件。
 
-    Supports PDF, DOCX, and Markdown formats. The file is parsed to extract
-    text content, then analyzed using the same pipeline as the text-based endpoint.
+    支持 PDF、DOCX 和 Markdown 格式的文件上传。系统会自动解析文件内容，
+    提取文本后使用与文本端点相同的 AI 分析管道进行智能分析。
+
+    文件处理流程：
+    1. 验证文件类型（仅允许 .pdf/.docx/.md/.markdown）
+    2. 临时保存上传文件
+    3. 根据文件类型调用相应解析器提取文本
+    4. 执行多维度 AI 智能分析
+    5. 清理临时文件并返回结果
+
+    Args:
+        file: 上传的报告文件
+            - 支持格式：PDF、DOCX、Markdown (.md/.markdown)
+            - 大小限制：由服务器配置决定
+        reference_style_preference: 可选的参考文献格式偏好
+            - 用于检查报告中引用格式的一致性
+
+    Returns:
+        ReportAnalysisResponse: 综合分析结果
+            - overall_score: 总体评分（0-100）
+            - logic_analysis: 逻辑结构分析结果
+            - innovation_analysis: 创新性评估结果
+            - improvement_suggestions: 个性化改进建议列表
+            - language_quality: 语言质量评估结果
+
+    Raises:
+        HTTPException(400): 不支持的文件类型或文件内容为空
+        HTTPException(500): 文件解析失败或分析过程发生错误
     """
 
     # Validate file type

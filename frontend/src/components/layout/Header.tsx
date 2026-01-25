@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getHealthStatus } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import './Header.css';
 
 interface HeaderProps {
@@ -14,6 +15,7 @@ const Header: React.FC<HeaderProps> = () => {
   const { t: tAuth } = useTranslation('auth');
   const navigate = useNavigate();
   const { user, logout, isAuthenticated } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [backendStatus, setBackendStatus] = useState<'connected' | 'disconnected' | 'checking'>('checking');
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -71,16 +73,16 @@ const Header: React.FC<HeaderProps> = () => {
     return null;
   };
 
-  return (
-    <header className="app-header">
-      <div className="header-content">
-        <div className="header-brand">
-          <NavLink to="/dashboard" className="brand-link">
-            <span className="header-logo">🎓</span>
-            <h1 className="header-title">{t('appTitle')}</h1>
-          </NavLink>
-        </div>
-        <nav className="header-nav">
+  // 根据用户角色渲染导航项
+  const renderNavigationItems = () => {
+    if (!isAuthenticated || !user) return null;
+
+    const role = user.role;
+
+    // 学生导航项
+    if (role === 'student') {
+      return (
+        <>
           <NavLink
             to="/dashboard"
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
@@ -88,16 +90,60 @@ const Header: React.FC<HeaderProps> = () => {
             🏠 {t('menu.dashboard')}
           </NavLink>
           <NavLink
+            to="/submit/assignment" // 使用通用路径，实际应用中应根据实际情况调整
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            📝 {t('menu.submitAssignment')}
+          </NavLink>
+          <NavLink
+            to="/grades"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            📊 {t('menu.grades')}
+          </NavLink>
+          <NavLink
+            to="/smart-qa"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            💬 {t('menu.smartQA')}
+          </NavLink>
+        </>
+      );
+    }
+
+    // 教师和管理员导航项
+    if (role === 'teacher' || role === 'admin') {
+      return (
+        <>
+          <NavLink
+            to="/teacher"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            👨‍🏫 {t('menu.teacherDashboard')}
+          </NavLink>
+          <NavLink
+            to="/grading"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            ✍️ {t('menu.grading')}
+          </NavLink>
+          <NavLink
+            to="/manage-assignments"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            📋 {t('menu.manageAssignments')}
+          </NavLink>
+          <NavLink
+            to="/question-queue"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            ❓ {t('menu.questionQueue')}
+          </NavLink>
+          <NavLink
             to="/code-analysis"
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
           >
             📊 {t('menu.codeAnalysis')}
-          </NavLink>
-          <NavLink
-            to="/qa"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            💬 {t('menu.qa')}
           </NavLink>
           <NavLink
             to="/plagiarism"
@@ -111,6 +157,41 @@ const Header: React.FC<HeaderProps> = () => {
           >
             📑 {t('menu.reportAnalysis')}
           </NavLink>
+          {/* 教师也可以访问学生功能进行演示 */}
+          <NavLink
+            to="/smart-qa"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            💬 {t('menu.smartQA')}
+          </NavLink>
+          {/* 开发工具 - 仅开发环境显示 */}
+          {process.env.NODE_ENV === 'development' && (
+            <NavLink
+              to="/dev/api-tester"
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+            >
+              🔧 API 测试
+            </NavLink>
+          )}
+        </>
+      );
+    }
+
+    // 默认返回空导航
+    return null;
+  };
+
+  return (
+    <header className="app-header">
+      <div className="header-content">
+        <div className="header-brand">
+          <NavLink to={user?.role === 'teacher' || user?.role === 'admin' ? '/teacher' : '/dashboard'} className="brand-link">
+            <span className="header-logo">🎓</span>
+            <h1 className="header-title">{t('appTitle')}</h1>
+          </NavLink>
+        </div>
+        <nav className="header-nav">
+          {renderNavigationItems()}
         </nav>
         <div className="header-actions">
           <button
@@ -119,6 +200,13 @@ const Header: React.FC<HeaderProps> = () => {
             title={i18n.language === 'zh' ? 'Switch to English' : '切换到中文'}
           >
             🌐 {i18n.language === 'zh' ? 'EN' : '中'}
+          </button>
+          <button
+            className="theme-toggle"
+            onClick={toggleTheme}
+            title={theme === 'light' ? '切换到深色模式' : '切换到浅色模式'}
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
           </button>
           <div className="header-status">
             <span className={`status-indicator ${backendStatus}`}></span>

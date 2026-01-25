@@ -14,45 +14,134 @@ method signatures. Detailed logic will be implemented incrementally.
 
 from __future__ import annotations
 
+import json
+import logging
 import re
 import uuid
-from typing import Tuple
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
 from schemas import report_analysis as schemas
+
+if TYPE_CHECKING:
+    from services.ai_service import AIService
+
+# 配置日志
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class ReportAnalysisConfig:
+    """报告分析服务的配置选项。"""
+
+    # AI 分析开关（默认禁用，需显式启用）
+    use_ai_for_logic: bool = False  # 是否使用 AI 进行逻辑分析
+    use_ai_for_innovation: bool = False  # 是否使用 AI 进行创新性分析
+    use_ai_for_suggestions: bool = False  # 是否使用 AI 生成改进建议
+    use_ai_for_language: bool = False  # 是否使用 AI 进行语言质量评估
+
+    # AI 调用配置
+    ai_timeout: int = 30  # AI API 调用超时时间（秒）
+    fallback_to_rules: bool = True  # AI 失败时是否回退到规则分析
+
+    # 提示词配置
+    max_content_length: int = 8000  # 发送给 AI 的最大内容长度
 
 
 class ReportAnalysisService:
     """Core service for project report analysis."""
 
-    def __init__(self) -> None:
-        # Placeholder for future configuration and dependencies
-        # e.g., AI model clients, reference corpora, etc.
-        pass
+    def __init__(
+        self,
+        ai_service: Optional["AIService"] = None,
+        config: Optional[ReportAnalysisConfig] = None,
+    ) -> None:
+        """初始化报告分析服务。
+
+        Args:
+            ai_service: AI 服务实例，用于智能分析。如果为 None，将在需要时延迟加载。
+            config: 服务配置选项。如果为 None，使用默认配置。
+        """
+        self.config = config or ReportAnalysisConfig()
+        self._ai_service = ai_service
+        self._ai_service_loaded = ai_service is not None
+
+    @property
+    def ai_service(self) -> Optional["AIService"]:
+        """延迟加载 AI 服务，避免循环导入问题。"""
+        if not self._ai_service_loaded:
+            try:
+                from services.ai_service import ai_service as default_ai_service
+                self._ai_service = default_ai_service
+                self._ai_service_loaded = True
+                logger.info("AI 服务已成功加载")
+            except ImportError as e:
+                logger.warning(f"无法加载 AI 服务: {e}")
+                self._ai_service = None
+                self._ai_service_loaded = True
+        return self._ai_service
 
     async def analyze_report(
         self,
         request: schemas.ReportAnalysisRequest,
+        config: Optional[ReportAnalysisConfig] = None,
     ) -> schemas.ReportAnalysisResponse:
         """Analyze a project report based on plain text content.
 
         This is the main entry point when analysis is triggered via API.
         File-based analysis (PDF/DOCX/Markdown) will be supported by
         dedicated endpoints that first parse the file, then call this method.
+
+        Args:
+            request: The analysis request containing report content
+            config: Optional configuration for AI-powered analysis features.
+                    If None, defaults to ReportAnalysisConfig() with all AI
+                    features disabled.
         """
+        # Use default config if not provided
+        if config is None:
+            config = ReportAnalysisConfig()
 
         # Step 1: basic parse result from plain text
         parsed = await self._parse_from_text(request)
 
-        # Step 2: quality metrics (completeness etc.)
+        # Get report content for AI analysis
+        report_content = request.content
+
+        # Step 2: quality metrics (completeness etc.) - rule-based only
         quality = self._evaluate_quality(parsed)
 
-        # Step 3: logic and innovation analysis
+        # Step 3: logic and innovation analysis (with optional AI enhancement)
         logic, innovation = await self._analyze_logic_and_innovation(parsed)
+
+        # Try AI-enhanced logic analysis if enabled
+        if config.use_ai_for_logic:
+            ai_logic = await self._analyze_logic_with_ai(parsed)
+            if ai_logic is not None:
+                logic = ai_logic
+
+        # Try AI-enhanced innovation analysis if enabled
+        if config.use_ai_for_innovation:
+            ai_innovation = await self._analyze_innovation_with_ai(parsed)
+            if ai_innovation is not None:
+                innovation = ai_innovation
 
         # Step 4: language quality, formatting checks and suggestions
         language_quality, formatting, suggestions = await self._generate_suggestions(parsed)
 
-        # Step 5: aggregate overall score and summary (simple placeholder for now)
+        # Try AI-enhanced language quality analysis if enabled
+        if config.use_ai_for_language:
+            ai_language = await self._evaluate_language_with_ai(report_content)
+            if ai_language is not None:
+                language_quality = ai_language
+
+        # Try AI-enhanced suggestions generation if enabled
+        if config.use_ai_for_suggestions:
+            ai_suggestions = await self._generate_suggestions_with_ai(parsed)
+            if ai_suggestions is not None:
+                suggestions = ai_suggestions
+
+        # Step 5: aggregate overall score and summary
         overall_score = float(
             min(
                 100.0,
@@ -66,7 +155,21 @@ class ReportAnalysisService:
             )
         )
 
-        summary = "项目报告分析结果：已完成结构解析、质量评估、逻辑与创新性分析，以及语言和格式检查。"  # noqa: E501
+        # Generate summary based on whether AI was used
+        ai_features_used = []
+        if config.use_ai_for_logic:
+            ai_features_used.append("逻辑分析")
+        if config.use_ai_for_innovation:
+            ai_features_used.append("创新性分析")
+        if config.use_ai_for_language:
+            ai_features_used.append("语言质量评估")
+        if config.use_ai_for_suggestions:
+            ai_features_used.append("改进建议生成")
+
+        if ai_features_used:
+            summary = f"项目报告分析结果：已完成结构解析、质量评估、逻辑与创新性分析，以及语言和格式检查。AI 增强功能已启用：{', '.join(ai_features_used)}。"
+        else:
+            summary = "项目报告分析结果：已完成结构解析、质量评估、逻辑与创新性分析，以及语言和格式检查。"
 
         return schemas.ReportAnalysisResponse(
             report_id=str(uuid.uuid4()),
@@ -332,6 +435,603 @@ class ReportAnalysisService:
             reference_stats=ref_stats,
             overall_completeness_score=completeness_score,
         )
+
+    async def _analyze_logic_with_ai(
+        self, parsed: schemas.ReportParseResult
+    ) -> Optional[schemas.LogicAnalysisResult]:
+        """使用 DeepSeek AI 分析报告的逻辑结构。
+
+        Args:
+            parsed: 解析后的报告内容
+
+        Returns:
+            LogicAnalysisResult 或 None（如果 AI 分析失败）
+        """
+        if not self.ai_service or not self.config.use_ai_for_logic:
+            return None
+
+        try:
+            # 提取报告文本用于分析
+            report_text = parsed.raw_text or ""
+            if len(report_text) > 8000:
+                # 截取前后部分以保持上下文
+                report_text = report_text[:4000] + "\n\n...[中间内容省略]...\n\n" + report_text[-4000:]
+
+            # 构建分析提示词
+            prompt = f"""你是一位专业的学术报告评审专家。请分析以下项目报告的逻辑结构和论证质量。
+
+## 报告内容：
+{report_text}
+
+## 分析要求：
+请从以下维度评估报告的逻辑质量，并以 JSON 格式返回结果：
+
+1. **章节顺序评分 (section_order_score)**：评估章节的组织是否合理、逻辑是否清晰（0-100分）
+2. **连贯性评分 (coherence_score)**：评估段落之间的衔接是否流畅、过渡是否自然（0-100分）
+3. **论证完整性评分 (argumentation_score)**：评估论点是否有充分的证据支撑、论证是否完整（0-100分）
+4. **逻辑问题列表 (issues)**：识别报告中存在的逻辑问题，每个问题包含：
+   - issue_type: 问题类型，可选值为 "missing_evidence"（缺乏证据）、"logical_gap"（逻辑跳跃）、"weak_conclusion"（结论薄弱）、"redundant_content"（冗余内容）
+   - description: 问题描述
+   - suggested_fix: 修改建议
+5. **总结 (summary)**：用一段话总结报告的逻辑质量
+
+## 输出格式（严格按照 JSON 格式）：
+```json
+{{
+    "section_order_score": 85,
+    "coherence_score": 78,
+    "argumentation_score": 82,
+    "issues": [
+        {{
+            "issue_type": "missing_evidence",
+            "description": "第二章中关于系统架构优势的论述缺乏具体数据支撑",
+            "suggested_fix": "建议添加性能测试数据或对比实验结果"
+        }}
+    ],
+    "summary": "报告整体逻辑结构清晰，但部分论证需要加强证据支撑..."
+}}
+```
+
+请直接输出 JSON，不要包含其他解释文字。"""
+
+            # 调用 AI 服务
+            response = await self.ai_service.generate_response(
+                prompt=prompt,
+                system_prompt="你是一位严谨的学术报告评审专家，擅长分析学术文章的逻辑结构和论证质量。请以 JSON 格式输出分析结果。",
+                max_tokens=2000,
+                temperature=0.3  # 低温度以获得更稳定的输出
+            )
+
+            if not response:
+                logger.warning("AI 逻辑分析返回空响应")
+                return None
+
+            # 解析 JSON 响应
+            result = self._parse_logic_analysis_json(response)
+            if result:
+                logger.info("AI 逻辑分析成功完成")
+            return result
+
+        except Exception as e:
+            logger.error(f"AI 逻辑分析失败: {e}")
+            return None
+
+    def _parse_logic_analysis_json(self, response: str) -> Optional[schemas.LogicAnalysisResult]:
+        """解析 AI 返回的逻辑分析 JSON 响应。
+
+        Args:
+            response: AI 返回的原始响应文本
+
+        Returns:
+            LogicAnalysisResult 或 None（如果解析失败）
+        """
+        try:
+            # 尝试提取 JSON 内容
+            json_str = response.strip()
+
+            # 处理可能包含 markdown 代码块的情况
+            if "```json" in json_str:
+                start = json_str.find("```json") + 7
+                end = json_str.find("```", start)
+                if end > start:
+                    json_str = json_str[start:end].strip()
+            elif "```" in json_str:
+                start = json_str.find("```") + 3
+                end = json_str.find("```", start)
+                if end > start:
+                    json_str = json_str[start:end].strip()
+
+            # 解析 JSON
+            data = json.loads(json_str)
+
+            # 构建 LogicIssue 列表
+            issues = []
+            for issue_data in data.get("issues", []):
+                issue_type_str = issue_data.get("issue_type", "logical_gap")
+                try:
+                    issue_type = schemas.LogicIssueType(issue_type_str)
+                except ValueError:
+                    issue_type = schemas.LogicIssueType.LOGICAL_GAP
+
+                issues.append(schemas.LogicIssue(
+                    issue_type=issue_type,
+                    section_id=issue_data.get("section_id"),
+                    paragraph_index=issue_data.get("paragraph_index"),
+                    description=issue_data.get("description", "未知问题"),
+                    suggested_fix=issue_data.get("suggested_fix")
+                ))
+
+            # 构建结果
+            return schemas.LogicAnalysisResult(
+                section_order_score=float(data.get("section_order_score", 70.0)),
+                coherence_score=float(data.get("coherence_score", 70.0)),
+                argumentation_score=float(data.get("argumentation_score", 70.0)),
+                issues=issues,
+                summary=data.get("summary", "逻辑分析完成")
+            )
+
+        except json.JSONDecodeError as e:
+            logger.warning(f"JSON 解析失败: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"逻辑分析结果解析失败: {e}")
+            return None
+
+    async def _analyze_innovation_with_ai(
+        self, parsed: schemas.ReportParseResult
+    ) -> Optional[schemas.InnovationAnalysisResult]:
+        """使用 DeepSeek AI 分析报告的创新点。
+
+        Args:
+            parsed: 解析后的报告结构
+
+        Returns:
+            创新性分析结果，如果 AI 分析失败则返回 None（将回退到规则分析）
+        """
+        if not self.ai_service:
+            logger.warning("AI 服务不可用，跳过 AI 创新性分析")
+            return None
+
+        # 准备报告内容摘要
+        report_content = parsed.raw_text or ""
+        if len(report_content) > 8000:
+            report_content = report_content[:4000] + "\n...[内容过长已截断]...\n" + report_content[-4000:]
+
+        # 收集各章节标题和摘要
+        sections_info = []
+        for section in parsed.sections:
+            section_text = section.text[:500] if section.text else ""
+            sections_info.append(f"- {section.title}: {section_text[:200]}...")
+        sections_summary = "\n".join(sections_info[:10])  # 最多10个章节
+
+        prompt = f"""请分析以下学术/项目报告的创新性和独特之处。
+
+## 报告章节结构：
+{sections_summary}
+
+## 报告全文摘要：
+{report_content}
+
+## 分析要求：
+1. 评估报告的整体创新程度（0-100分）
+2. 总结报告与同类报告的差异点
+3. 识别报告中具体的创新点（技术创新、方法创新、思路创新等）
+
+## 评分标准：
+- 90-100分：具有突破性创新，提出了全新的概念或方法
+- 70-89分：有明显创新，在现有基础上有显著改进
+- 50-69分：有一定创新，但主要是常规改进
+- 30-49分：创新性较弱，主要是已有方法的应用
+- 0-29分：缺乏创新，完全是常规内容
+
+请以 JSON 格式输出分析结果：
+```json
+{{
+    "novelty_score": <0-100的创新性评分>,
+    "difference_summary": "<与同类报告的差异总结，200字以内>",
+    "innovation_points": [
+        {{
+            "section_id": "<所在章节ID，如无法确定则为null>",
+            "highlight_text": "<创新点的原文引用或描述，50字以内>",
+            "reason": "<为什么这是创新点，100字以内>"
+        }}
+    ]
+}}
+```
+
+请确保输出的 JSON 格式正确，innovation_points 数组包含 0-5 个最重要的创新点。"""
+
+        system_prompt = """你是一位资深的学术评审专家，擅长评估学术报告和项目文档的创新性。
+你需要客观、专业地分析报告的创新程度，识别真正有价值的创新点。
+评分时要严格但公正，既不过于苛刻也不过于宽松。
+请务必以有效的 JSON 格式输出分析结果。"""
+
+        try:
+            response = await self.ai_service.generate_response(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                max_tokens=2000,
+                temperature=0.3
+            )
+
+            if not response:
+                logger.warning("AI 创新性分析返回空响应")
+                return None
+
+            return self._parse_innovation_analysis_json(response)
+
+        except Exception as e:
+            logger.error(f"AI 创新性分析失败: {e}")
+            return None
+
+    def _parse_innovation_analysis_json(
+        self, response: str
+    ) -> Optional[schemas.InnovationAnalysisResult]:
+        """解析 AI 返回的创新性分析 JSON 结果。
+
+        Args:
+            response: AI 返回的原始响应文本
+
+        Returns:
+            解析后的创新性分析结果，解析失败返回 None
+        """
+        try:
+            # 尝试从 markdown 代码块中提取 JSON
+            json_text = response
+            if "```json" in response:
+                start = response.find("```json") + 7
+                end = response.find("```", start)
+                if end > start:
+                    json_text = response[start:end].strip()
+            elif "```" in response:
+                start = response.find("```") + 3
+                end = response.find("```", start)
+                if end > start:
+                    json_text = response[start:end].strip()
+
+            data = json.loads(json_text)
+
+            # 解析创新点列表
+            innovation_points = []
+            for point_data in data.get("innovation_points", []):
+                if not isinstance(point_data, dict):
+                    continue
+                # highlight_text 和 reason 是必填字段
+                highlight_text = point_data.get("highlight_text", "")
+                reason = point_data.get("reason", "")
+                if not highlight_text or not reason:
+                    continue
+
+                innovation_points.append(schemas.InnovationPoint(
+                    section_id=point_data.get("section_id"),
+                    highlight_text=highlight_text,
+                    reason=reason
+                ))
+
+            # 构建结果
+            return schemas.InnovationAnalysisResult(
+                novelty_score=float(data.get("novelty_score", 50.0)),
+                difference_summary=data.get("difference_summary", ""),
+                innovation_points=innovation_points
+            )
+
+        except json.JSONDecodeError as e:
+            logger.warning(f"创新性分析 JSON 解析失败: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"创新性分析结果解析失败: {e}")
+            return None
+
+    async def _generate_suggestions_with_ai(
+        self, parsed: schemas.ReportParseResult
+    ) -> Optional[List[schemas.ImprovementSuggestion]]:
+        """使用 DeepSeek AI 生成个性化改进建议。
+
+        Args:
+            parsed: 解析后的报告结构
+
+        Returns:
+            改进建议列表，如果 AI 分析失败则返回 None（将回退到规则分析）
+        """
+        if not self.ai_service:
+            logger.warning("AI 服务不可用，跳过 AI 改进建议生成")
+            return None
+
+        # 准备报告内容摘要
+        report_content = parsed.raw_text or ""
+        if len(report_content) > 8000:
+            report_content = report_content[:4000] + "\n...[内容过长已截断]...\n" + report_content[-4000:]
+
+        # 收集各章节信息
+        sections_info = []
+        for section in parsed.sections:
+            section_text = section.text[:300] if section.text else ""
+            sections_info.append(f"- [{section.id}] {section.title}: {section_text}...")
+        sections_summary = "\n".join(sections_info[:15])  # 最多15个章节
+
+        prompt = f"""请分析以下学术/项目报告，并提供具体的改进建议。
+
+## 报告章节结构：
+{sections_summary}
+
+## 报告全文摘要：
+{report_content}
+
+## 分析要求：
+请从以下四个维度提供改进建议：
+1. **content（内容）**：内容完整性、深度、准确性方面的改进
+2. **logic（逻辑）**：论证结构、逻辑连贯性、推理过程的改进
+3. **language（语言）**：学术写作规范、表达清晰度、专业术语使用的改进
+4. **formatting（格式）**：排版、图表、引用格式等方面的改进
+
+## 建议要求：
+- 每个建议要具体、可操作
+- 尽量关联到具体的章节（提供 section_id）
+- 提供简洁的建议摘要和详细的改进说明
+- 总共提供 4-8 条最重要的建议
+
+请以 JSON 格式输出：
+```json
+{{
+    "suggestions": [
+        {{
+            "category": "<content|logic|language|formatting>",
+            "section_id": "<相关章节ID，如 'section_1'，如无特定章节则为 null>",
+            "summary": "<建议摘要，20字以内>",
+            "details": "<详细说明，包含具体的改进方法和示例，100-200字>"
+        }}
+    ]
+}}
+```
+
+请确保每个维度至少提供1条建议，优先关注最需要改进的方面。"""
+
+        system_prompt = """你是一位经验丰富的学术写作导师，擅长提供建设性的改进建议。
+你的建议应该：
+1. 具体且可操作，避免空泛的评价
+2. 平衡指出问题与提供解决方案
+3. 考虑不同水平作者的接受能力
+4. 以鼓励为主，同时不回避关键问题
+请务必以有效的 JSON 格式输出建议。"""
+
+        try:
+            response = await self.ai_service.generate_response(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                max_tokens=2500,
+                temperature=0.4
+            )
+
+            if not response:
+                logger.warning("AI 改进建议生成返回空响应")
+                return None
+
+            return self._parse_suggestions_json(response)
+
+        except Exception as e:
+            logger.error(f"AI 改进建议生成失败: {e}")
+            return None
+
+    def _parse_suggestions_json(
+        self, response: str
+    ) -> Optional[List[schemas.ImprovementSuggestion]]:
+        """解析 AI 返回的改进建议 JSON 结果。
+
+        Args:
+            response: AI 返回的原始响应文本
+
+        Returns:
+            解析后的改进建议列表，解析失败返回 None
+        """
+        try:
+            # 尝试从 markdown 代码块中提取 JSON
+            json_text = response
+            if "```json" in response:
+                start = response.find("```json") + 7
+                end = response.find("```", start)
+                if end > start:
+                    json_text = response[start:end].strip()
+            elif "```" in response:
+                start = response.find("```") + 3
+                end = response.find("```", start)
+                if end > start:
+                    json_text = response[start:end].strip()
+
+            data = json.loads(json_text)
+
+            # 解析建议列表
+            suggestions = []
+            valid_categories = {"content", "logic", "language", "formatting"}
+
+            for sugg_data in data.get("suggestions", []):
+                if not isinstance(sugg_data, dict):
+                    continue
+
+                # 验证必填字段
+                category = sugg_data.get("category", "").lower()
+                summary = sugg_data.get("summary", "")
+                details = sugg_data.get("details", "")
+
+                if not summary or not details:
+                    continue
+
+                # 验证 category 值
+                if category not in valid_categories:
+                    category = "content"  # 默认归类为内容类建议
+
+                suggestions.append(schemas.ImprovementSuggestion(
+                    category=category,
+                    section_id=sugg_data.get("section_id"),
+                    summary=summary,
+                    details=details
+                ))
+
+            return suggestions if suggestions else None
+
+        except json.JSONDecodeError as e:
+            logger.warning(f"改进建议 JSON 解析失败: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"改进建议结果解析失败: {e}")
+            return None
+
+
+    async def _evaluate_language_with_ai(
+        self, report_content: str
+    ) -> Optional[schemas.LanguageQualityMetrics]:
+        """
+        使用 DeepSeek AI 评估报告语言质量。
+
+        Args:
+            report_content: 报告文本内容
+
+        Returns:
+            LanguageQualityMetrics 或 None（如果 AI 分析失败）
+        """
+        if not self._ai_service:
+            logger.warning("AI 服务不可用，无法进行语言质量评估")
+            return None
+
+        # 限制报告内容长度，避免超出上下文限制
+        max_content_length = 8000
+        if len(report_content) > max_content_length:
+            # 取首尾各 4000 字符，保留开头和结尾的信息
+            report_content = (
+                report_content[:4000]
+                + "\n\n... [内容已截断] ...\n\n"
+                + report_content[-4000:]
+            )
+
+        system_prompt = """你是一位专业的学术写作评估专家，精通语言质量分析和可读性评估。
+你的任务是评估学术报告的语言质量，包括句子结构、词汇使用、语法规范性、学术风格和可读性。
+
+请严格按照 JSON 格式输出评估结果，不要包含任何其他文字说明。"""
+
+        user_prompt = f"""请分析以下学术报告的语言质量，并提供详细的评估指标。
+
+## 报告内容
+{report_content}
+
+## 评估要求
+请从以下维度评估语言质量：
+
+1. **句子平均长度** (average_sentence_length)
+   - 统计报告中句子的平均字数
+   - 一般学术报告句子长度在 15-30 字为宜
+
+2. **长句比例** (long_sentence_ratio)
+   - 计算超过 40 字的长句占总句子数的比例
+   - 值范围：0.0-1.0
+   - 过多长句会影响可读性
+
+3. **词汇丰富度** (vocabulary_richness)
+   - 评估词汇的多样性和专业性
+   - 值范围：0.0-1.0
+   - 1.0 表示词汇非常丰富多样
+
+4. **语法问题数量** (grammar_issue_count)
+   - 统计明显的语法错误、标点错误、用词不当等问题
+   - 整数，0 表示没有发现问题
+
+5. **学术语调分数** (academic_tone_score)
+   - 评估写作风格的学术性和正式性
+   - 值范围：0-100
+   - 考虑：客观性、专业术语使用、被动语态使用、引用规范等
+
+6. **可读性分数** (readability_score)
+   - 综合评估报告的可读性
+   - 值范围：0-100
+   - 考虑：段落结构、逻辑清晰度、过渡词使用、信息密度等
+
+## 输出格式
+请严格按以下 JSON 格式输出，不要包含任何额外说明：
+
+```json
+{{
+    "average_sentence_length": <浮点数>,
+    "long_sentence_ratio": <0.0-1.0 的浮点数>,
+    "vocabulary_richness": <0.0-1.0 的浮点数>,
+    "grammar_issue_count": <非负整数>,
+    "academic_tone_score": <0-100 的浮点数>,
+    "readability_score": <0-100 的浮点数>
+}}
+```"""
+
+        try:
+            response = await self._ai_service.generate_response(
+                prompt=user_prompt,
+                system_prompt=system_prompt,
+                max_tokens=500,
+                temperature=0.3  # 低温度以获得更稳定的评分
+            )
+
+            if not response:
+                logger.warning("AI 语言质量评估返回空响应")
+                return None
+
+            return self._parse_language_analysis_json(response)
+
+        except Exception as e:
+            logger.error(f"AI 语言质量评估失败: {e}")
+            return None
+
+    def _parse_language_analysis_json(
+        self, response: str
+    ) -> Optional[schemas.LanguageQualityMetrics]:
+        """解析 AI 语言质量评估的 JSON 响应。"""
+        try:
+            # 尝试提取 JSON 内容（处理 markdown 代码块情况）
+            json_content = response.strip()
+            if "```json" in json_content:
+                start = json_content.find("```json") + 7
+                end = json_content.find("```", start)
+                if end > start:
+                    json_content = json_content[start:end].strip()
+            elif "```" in json_content:
+                start = json_content.find("```") + 3
+                end = json_content.find("```", start)
+                if end > start:
+                    json_content = json_content[start:end].strip()
+
+            data = json.loads(json_content)
+
+            # 提取并验证各字段值
+            avg_sentence_length = float(data.get("average_sentence_length", 0.0))
+            if avg_sentence_length < 0:
+                avg_sentence_length = 0.0
+
+            long_sentence_ratio = float(data.get("long_sentence_ratio", 0.0))
+            long_sentence_ratio = max(0.0, min(1.0, long_sentence_ratio))
+
+            vocabulary_richness = float(data.get("vocabulary_richness", 0.0))
+            vocabulary_richness = max(0.0, min(1.0, vocabulary_richness))
+
+            grammar_issue_count = int(data.get("grammar_issue_count", 0))
+            if grammar_issue_count < 0:
+                grammar_issue_count = 0
+
+            academic_tone_score = float(data.get("academic_tone_score", 0.0))
+            academic_tone_score = max(0.0, min(100.0, academic_tone_score))
+
+            readability_score = float(data.get("readability_score", 0.0))
+            readability_score = max(0.0, min(100.0, readability_score))
+
+            return schemas.LanguageQualityMetrics(
+                average_sentence_length=avg_sentence_length,
+                long_sentence_ratio=long_sentence_ratio,
+                vocabulary_richness=vocabulary_richness,
+                grammar_issue_count=grammar_issue_count,
+                academic_tone_score=academic_tone_score,
+                readability_score=readability_score
+            )
+
+        except json.JSONDecodeError as e:
+            logger.warning(f"语言质量评估 JSON 解析失败: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"语言质量评估结果解析失败: {e}")
+            return None
+
 
     async def _analyze_logic_and_innovation(
         self, parsed: schemas.ReportParseResult
@@ -1105,4 +1805,4 @@ class ReportAnalysisService:
 report_analysis_service = ReportAnalysisService()
 
 
-__all__ = ["ReportAnalysisService", "report_analysis_service"]
+__all__ = ["ReportAnalysisService", "ReportAnalysisConfig", "report_analysis_service"]

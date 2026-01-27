@@ -17,20 +17,16 @@ async def init_test_db():
     """Initialize the test database with all required tables."""
     global _test_engine, _test_sessionmaker
 
+    # Import all models at the start to ensure they are registered with Base.metadata
+    # This is critical to ensure all tables (including code_files) are created
+    import models
+
     # Create a test-specific engine
     _test_engine = create_async_engine(
         "sqlite+aiosqlite:///:memory:",
         echo=False,
         poolclass=StaticPool,
         connect_args={"check_same_thread": False}
-    )
-
-    # Import all models to ensure they are registered with Base.metadata
-    from models import (
-        Student, Assignment, Submission, GradingResult,
-        Question, Answer, PlagiarismCheck, Rubric, CodeFile,
-        AnalysisResult, FeedbackTemplate, AIInteraction,
-        KnowledgeBaseEntry, QALog
     )
 
     # Create all tables
@@ -56,12 +52,7 @@ async def override_get_db():
 
     # Ensure all tables exist before each session
     async with _test_engine.begin() as conn:
-        from models import (
-            Student, Assignment, Submission, GradingResult,
-            Question, Answer, PlagiarismCheck, Rubric, CodeFile,
-            AnalysisResult, FeedbackTemplate, AIInteraction,
-            KnowledgeBaseEntry, QALog
-        )
+        import models  # Re-import to ensure models are registered
         await conn.run_sync(Base.metadata.create_all)
 
     async with _test_sessionmaker() as session:

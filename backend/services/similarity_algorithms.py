@@ -5,7 +5,7 @@ import ast
 import re
 import math
 from typing import List, Dict, Tuple, Optional, Set
-from collections import Counter
+from collections import Counter, defaultdict
 from difflib import SequenceMatcher
 
 from schemas.plagiarism import (
@@ -64,7 +64,7 @@ class SimilarityAlgorithms:
         code = re.sub(r'#.*$', '', code, flags=re.MULTILINE)
         code = re.sub(r'"""[\s\S]*?"""', '', code)
         code = re.sub(r"'''[\s\S]*?'''", '', code)
-        
+
         # 分词：标识符、数字、运算符、标点
         tokens = re.findall(r'[a-zA-Z_][a-zA-Z0-9_]*|[0-9]+\.?[0-9]*|[^\s\w]', code)
         return tokens
@@ -110,11 +110,11 @@ class SimilarityAlgorithms:
         code = re.sub(r'#.*$', '', code, flags=re.MULTILINE)
         code = re.sub(r'"""[\s\S]*?"""', '', code)
         code = re.sub(r"'''[\s\S]*?'''", '', code)
-        
+
         # 移除多余空白
         code = re.sub(r'\s+', ' ', code)
         code = code.strip()
-        
+
         return code
 
     @staticmethod
@@ -284,6 +284,23 @@ class SimilarityAlgorithms:
         except SyntaxError:
             pass
 
+        # 检测函数提取/内联
+        try:
+            tree1 = ast.parse(code1)
+            tree2 = ast.parse(code2)
+
+            # 检测函数数量变化
+            funcs1 = [n.name for n in ast.walk(tree1) if isinstance(n, ast.FunctionDef)]
+            funcs2 = [n.name for n in ast.walk(tree2) if isinstance(n, ast.FunctionDef)]
+
+            if len(funcs1) != len(funcs2):
+                if len(funcs1) > len(funcs2):
+                    transformations.append(CodeTransformationType.EXTRACT_FUNCTION)
+                else:
+                    transformations.append(CodeTransformationType.INLINE_VARIABLE)
+        except SyntaxError:
+            pass
+
         return transformations
 
     @staticmethod
@@ -316,14 +333,134 @@ class SimilarityAlgorithms:
         return matches
 
     @staticmethod
+    def semantic_similarity(code1: str, code2: str) -> float:
+        """
+        基于语义的相似度计算
+        通过分析代码的控制流和数据流来判断语义相似性
+        """
+        try:
+            tree1 = ast.parse(code1)
+            tree2 = ast.parse(code2)
+
+            # 提取控制流结构
+            cfg1 = SimilarityAlgorithms._extract_control_flow_graph(tree1)
+            cfg2 = SimilarityAlgorithms._extract_control_flow_graph(tree2)
+
+            # 计算控制流图的相似度
+            cfg_similarity = SimilarityAlgorithms._control_flow_similarity(cfg1, cfg2)
+
+            # 提取数据流信息
+            df1 = SimilarityAlgorithms._extract_data_flow_info(tree1)
+            df2 = SimilarityAlgorithms._extract_data_flow_info(tree2)
+
+            # 计算数据流相似度
+            df_similarity = SimilarityAlgorithms._data_flow_similarity(df1, df2)
+
+            # 综合语义相似度
+            semantic_sim = (cfg_similarity + df_similarity) / 2.0
+            return semantic_sim
+
+        except SyntaxError:
+            # 如果语法解析失败，返回0
+            return 0.0
+
+    @staticmethod
+    def _extract_control_flow_graph(tree: ast.AST) -> List[str]:
+        """
+        提取控制流图的简化表示
+        """
+        nodes = []
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.If, ast.For, ast.While, ast.With, ast.Try, ast.ExceptHandler)):
+                nodes.append(type(node).__name__)
+        return nodes
+
+    @staticmethod
+    def _control_flow_similarity(cfg1: List[str], cfg2: List[str]) -> float:
+        """
+        计算控制流图的相似度
+        """
+        if not cfg1 and not cfg2:
+            return 1.0
+        if not cfg1 or not cfg2:
+            return 0.0
+
+        # 使用最长公共子序列来计算相似度
+        matcher = SequenceMatcher(None, cfg1, cfg2)
+        return matcher.ratio()
+
+    @staticmethod
+    def _extract_data_flow_info(tree: ast.AST) -> Dict[str, Set[str]]:
+        """
+        提取数据流信息
+        """
+        info = {
+            'variables': set(),
+            'operations': set(),
+            'function_calls': set()
+        }
+
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Name):
+                info['variables'].add(node.id)
+            elif isinstance(node, ast.BinOp):
+                op_type = type(node.op).__name__
+                info['operations'].add(op_type)
+            elif isinstance(node, ast.Call):
+                if isinstance(node.func, ast.Name):
+                    info['function_calls'].add(node.func.id)
+                elif isinstance(node.func, ast.Attribute):
+                    info['function_calls'].add(node.func.attr)
+
+        return info
+
+    @staticmethod
+    def _data_flow_similarity(df1: Dict[str, Set[str]], df2: Dict[str, Set[str]]) -> float:
+        """
+        计算数据流相似度
+        """
+        similarities = []
+
+        for key in df1:
+            if key in df2:
+                set1, set2 = df1[key], df2[key]
+                if set1 or set2:
+                    intersection = len(set1 & set2)
+                    union = len(set1 | set2)
+                    jaccard_sim = intersection / union if union > 0 else 0.0
+                    similarities.append(jaccard_sim)
+
+        return sum(similarities) / len(similarities) if similarities else 0.0
+
+    @staticmethod
+    def order_invariant_similarity(code1: str, code2: str) -> float:
+        """
+        对代码片段顺序不敏感的相似度计算
+        """
+        lines1 = [line.strip() for line in code1.split('\n') if line.strip()]
+        lines2 = [line.strip() for line in code2.split('\n') if line.strip()]
+
+        # 将代码行转换为集合，忽略顺序
+        set1 = set(lines1)
+        set2 = set(lines2)
+
+        # 计算Jaccard相似度
+        intersection = len(set1 & set2)
+        union = len(set1 | set2)
+
+        return intersection / union if union > 0 else 0.0
+
+    @staticmethod
     def combined_similarity(
         code1: str, code2: str,
-        ast_weight: float = 0.4,
-        token_weight: float = 0.35,
-        text_weight: float = 0.25
+        ast_weight: float = 0.3,
+        token_weight: float = 0.25,
+        text_weight: float = 0.2,
+        semantic_weight: float = 0.15,
+        order_invariant_weight: float = 0.1
     ) -> Tuple[float, Dict[str, float]]:
         """
-        综合相似度计算
+        综合相似度计算 - 改进版本
         返回: (综合相似度, 各算法分数字典)
         """
         scores = {}
@@ -342,12 +479,68 @@ class SimilarityAlgorithms:
         norm2 = SimilarityAlgorithms.normalize_code(code2)
         scores["levenshtein"] = SimilarityAlgorithms.levenshtein_similarity(norm1, norm2)
 
-        # 综合分数
+        # 语义相似度
+        scores["semantic"] = SimilarityAlgorithms.semantic_similarity(code1, code2)
+
+        # 顺序不变相似度
+        scores["order_invariant"] = SimilarityAlgorithms.order_invariant_similarity(code1, code2)
+
+        # 综合分数 - 使用新的权重配置
         combined = (
             scores["ast"] * ast_weight +
             scores["token"] * token_weight +
-            (scores["cosine"] + scores["levenshtein"]) / 2 * text_weight
+            scores["cosine"] * text_weight +
+            scores["semantic"] * semantic_weight +
+            scores["order_invariant"] * order_invariant_weight
         )
+
+        scores["combined"] = round(combined, 4)
+
+        return combined, scores
+
+    @staticmethod
+    def advanced_combined_similarity(
+        code1: str, code2: str,
+        weights: Optional[Dict[str, float]] = None
+    ) -> Tuple[float, Dict[str, float]]:
+        """
+        高级综合相似度计算，支持动态权重调整
+        """
+        if weights is None:
+            weights = {
+                "ast": 0.3,
+                "token": 0.25,
+                "cosine": 0.2,
+                "semantic": 0.15,
+                "order_invariant": 0.1
+            }
+
+        # 确保权重总和为1
+        total_weight = sum(weights.values())
+        if total_weight != 1.0:
+            # 重新归一化权重
+            normalized_weights = {k: v/total_weight for k, v in weights.items()}
+        else:
+            normalized_weights = weights
+
+        scores = {}
+
+        # 计算各种相似度
+        scores["ast"] = SimilarityAlgorithms.ast_similarity(code1, code2)
+        scores["token"] = SimilarityAlgorithms.token_sequence_similarity(code1, code2)
+        scores["cosine"] = SimilarityAlgorithms.cosine_similarity(code1, code2)
+        scores["levenshtein"] = SimilarityAlgorithms.levenshtein_similarity(
+            SimilarityAlgorithms.normalize_code(code1),
+            SimilarityAlgorithms.normalize_code(code2)
+        )
+        scores["semantic"] = SimilarityAlgorithms.semantic_similarity(code1, code2)
+        scores["order_invariant"] = SimilarityAlgorithms.order_invariant_similarity(code1, code2)
+
+        # 计算加权综合分数
+        combined = 0.0
+        for alg, score in scores.items():
+            weight = normalized_weights.get(alg, 0.0)
+            combined += score * weight
 
         scores["combined"] = round(combined, 4)
 

@@ -283,9 +283,11 @@ class PlagiarismSettings(BaseModel):
         default_factory=lambda: [SimilarityAlgorithm.COMBINED],
         description="启用的算法"
     )
-    ast_weight: float = Field(0.4, ge=0, le=1, description="AST算法权重")
-    token_weight: float = Field(0.35, ge=0, le=1, description="Token算法权重")
-    text_weight: float = Field(0.25, ge=0, le=1, description="文本算法权重")
+    ast_weight: float = Field(0.3, ge=0, le=1, description="AST算法权重")
+    token_weight: float = Field(0.25, ge=0, le=1, description="Token算法权重")
+    text_weight: float = Field(0.2, ge=0, le=1, description="文本算法权重")
+    semantic_weight: float = Field(0.15, ge=0, le=1, description="语义算法权重")
+    order_invariant_weight: float = Field(0.1, ge=0, le=1, description="顺序不变算法权重")
     detect_renaming: bool = Field(True, description="检测变量/函数重命名")
     detect_refactoring: bool = Field(True, description="检测代码重构")
 

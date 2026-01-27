@@ -197,8 +197,8 @@ class PlagiarismDetectionService:
         # Normalized code similarity
         code_sim = SequenceMatcher(None, fp1.normalized_code, fp2.normalized_code).ratio()
 
-        # Weighted average
-        overall = struct_sim * 0.4 + token_sim * 0.35 + code_sim * 0.25
+        # Weighted average - 使用新权重配置
+        overall = struct_sim * 0.3 + token_sim * 0.25 + code_sim * 0.2
 
         if struct_sim > 0.8:
             matches.append(CodeMatch(
@@ -247,7 +247,14 @@ class EnhancedPlagiarismService:
     """
 
     def __init__(self):
-        self.settings = PlagiarismSettings()
+        # 使用更新后的默认权重配置
+        self.settings = PlagiarismSettings(
+            ast_weight=0.3,
+            token_weight=0.25,
+            text_weight=0.2,
+            semantic_weight=0.15,
+            order_invariant_weight=0.1
+        )
         self._submission_cache: Dict[str, Dict[str, str]] = {}  # assignment_id -> {student_id: code}
 
     def update_settings(self, settings: PlagiarismSettings):
@@ -282,12 +289,16 @@ class EnhancedPlagiarismService:
                 code1 = submissions[i].code
                 code2 = submissions[j].code
 
-                # 计算综合相似度
-                similarity, scores = similarity_algorithms.combined_similarity(
+                # 使用改进的综合相似度算法
+                similarity, scores = similarity_algorithms.advanced_combined_similarity(
                     code1, code2,
-                    self.settings.ast_weight,
-                    self.settings.token_weight,
-                    self.settings.text_weight
+                    {
+                        "ast": self.settings.ast_weight,
+                        "token": self.settings.token_weight,
+                        "cosine": self.settings.text_weight,
+                        "semantic": 0.15,  # 固定语义权重
+                        "order_invariant": 0.1  # 固定顺序不变权重
+                    }
                 )
 
                 matrix[i][j] = round(similarity, 4)

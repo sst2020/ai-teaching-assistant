@@ -14,6 +14,10 @@ from schemas.assignment import (
 from schemas.assignment_crud import (
     AssignmentCreate, AssignmentUpdate, AssignmentResponse, AssignmentListResponse
 )
+from schemas.assignment_transfer import (
+    TeacherAssignmentSubmit, BatchUploadRequest, FileManagerSyncRequest,
+    AssignmentTransferResponse, BatchUploadResponse, FileManagerSyncResponse
+)
 from schemas.code_analysis import CodeAnalysisRequest, CodeAnalysisResult
 from schemas.plagiarism import (
     PlagiarismCheckRequest, PlagiarismReport, BatchPlagiarismReport,
@@ -24,6 +28,7 @@ from schemas.common import APIResponse
 from services.grading_service import grading_service
 from services.code_analysis_service import code_analysis_service
 from services.plagiarism_service import plagiarism_service, enhanced_plagiarism_service
+from services.assignment_transfer_service import assignment_transfer_service
 from utils.crud import crud_assignment
 from models.assignment import AssignmentType as DBAssignmentType
 
@@ -489,4 +494,206 @@ async def get_plagiarism_settings():
     获取当前查重设置
     """
     return enhanced_plagiarism_service.settings
+
+
+# ============================================
+# 教师端和文件管理的作业传输端点
+# ============================================
+
+@router.post("/teacher/submit", response_model=APIResponse)
+async def teacher_submit_assignment(
+    assignment_id: str = Form(..., description="作业ID"),
+    course_id: str = Form(..., description="课程ID"),
+    title: str = Form(..., description="作业标题"),
+    description: str = Form(..., description="作业描述"),
+    due_date: str = Form(..., description="截止日期 (YYYY-MM-DDTHH:MM:SS)"),
+    max_score: float = Form(100.0, description="最高分"),
+    assignment_type: AssignmentType = Form(AssignmentType.code, description="作业类型"),
+    file: UploadFile = File(None, description="作业附件")
+):
+    """
+    教师提交作业定义
+
+    用于教师创建新的作业，可以包含附件。
+    """
+    try:
+        # 读取文件内容（如果有）
+        file_content = None
+        if file:
+            file_content = await file.read()
+
+        # 创建请求对象
+        assignment_data = TeacherAssignmentSubmit(
+            assignment_id=assignment_id,
+            course_id=course_id,
+            title=title,
+            description=description,
+            due_date=due_date,
+            max_score=max_score,
+            assignment_type=assignment_type.value,
+            file_attachment=file_content,
+            file_name=file.filename if file else None
+        )
+
+        # 调用服务处理提交
+        result = await assignment_transfer_service.submit_assignment_from_teacher(assignment_data)
+
+        if result["success"]:
+            return APIResponse(
+                success=True,
+                message=result["message"],
+                data={
+                    "assignment_id": result["assignment_id"],
+                    "course_id": result["course_id"]
+                }
+            )
+        else:
+            raise HTTPException(status_code=400, detail=result["message"])
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/teacher/batch-upload", response_model=BatchUploadResponse)
+async def batch_upload_student_submissions(
+    assignment_id: str = Form(..., description="作业ID"),
+    course_id: str = Form(..., description="课程ID"),
+    files: List[UploadFile] = File(..., description="学生作业文件列表"),
+    student_ids: List[str] = Form(..., description="对应的学生ID列表"),
+    sync_to_file_manager: bool = Form(True, description="是否同步到文件管理系统")
+):
+    """
+    批量上传学生作业文件
+
+    用于教师批量上传学生的作业文件。
+    """
+    try:
+        if len(files) != len(student_ids):
+            raise HTTPException(
+                status_code=400,
+                detail="文件数量与学生ID数量不匹配"
+            )
+
+        # 构建学生提交列表
+        student_submissions = []
+        for i, file in enumerate(files):
+            # 验证文件扩展名
+            allowed_extensions = [".py", ".java", ".cpp", ".c", ".js", ".ts", ".pdf", ".docx", ".txt"]
+            file_ext = "." + file.filename.split(".")[-1].lower() if "." in file.filename else ""
+
+            if file_ext not in allowed_extensions:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"文件类型不被允许: {file_ext}. 允许的类型: {allowed_extensions}"
+                )
+
+            # 读取文件内容
+            content = await file.read()
+            content_str = content.decode("utf-8", errors="ignore")
+
+            student_submissions.append({
+                "student_id": student_ids[i],
+                "student_name": f"Student {student_ids[i]}",  # 实际应用中应从数据库获取
+                "file_content": content_str,
+                "file_name": file.filename
+            })
+
+        # 创建批量上传请求对象
+        batch_request = BatchUploadRequest(
+            assignment_id=assignment_id,
+            course_id=course_id,
+            student_submissions=student_submissions,
+            sync_to_file_manager=sync_to_file_manager
+        )
+
+        # 调用服务处理批量上传
+        result = await assignment_transfer_service.batch_upload_student_submissions(batch_request)
+
+        return result
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/teacher/{assignment_id}/submissions", response_model=List[Dict])
+async def get_assignment_submissions(
+    assignment_id: str,
+    course_id: str = Query(..., description="课程ID"),
+    page: int = Query(1, ge=1, description="页码"),
+    page_size: int = Query(20, ge=1, le=100, description="每页大小")
+):
+    """
+    获取作业提交列表
+
+    返回指定作业的所有提交记录。
+    """
+    try:
+        # 调用服务获取提交列表
+        submissions = await assignment_transfer_service.get_assignment_submissions(
+            assignment_id, course_id, page, page_size
+        )
+
+        return submissions
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/file-manager/sync", response_model=FileManagerSyncResponse)
+async def sync_with_file_manager(
+    assignment_id: str = Form(..., description="作业ID"),
+    course_id: str = Form(..., description="课程ID"),
+    sync_type: str = Form("full", description="同步类型: full, incremental"),
+    target_path: str = Form(..., description="目标路径")
+):
+    """
+    与文件管理系统同步
+
+    用于将作业数据与外部文件管理系统同步。
+    """
+    try:
+        # 创建同步请求对象
+        sync_request = FileManagerSyncRequest(
+            assignment_id=assignment_id,
+            course_id=course_id,
+            sync_type=sync_type,
+            target_path=target_path
+        )
+
+        # 调用服务执行同步
+        result = await assignment_transfer_service.sync_with_file_manager(sync_request)
+
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/file-manager/status", response_model=Dict)
+async def get_sync_status(
+    assignment_id: str = Query(..., description="作业ID"),
+    sync_id: str = Query(None, description="同步ID")
+):
+    """
+    查询同步状态
+
+    返回与文件管理系统的同步状态。
+    """
+    try:
+        # 这里应该有查询同步状态的逻辑
+        # 暂时返回模拟数据
+        return {
+            "assignment_id": assignment_id,
+            "sync_id": sync_id or "sync_001",
+            "status": "completed",
+            "progress": 100,
+            "total_files": 25,
+            "processed_files": 25,
+            "failed_files": 0,
+            "last_updated": "2023-05-15T11:00:00"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 

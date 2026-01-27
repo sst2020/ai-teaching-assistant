@@ -67,7 +67,7 @@ jobs:
         working-directory: ./frontend
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [24.x]
     steps:
     - name: Checkout code
       uses: actions/checkout@v4

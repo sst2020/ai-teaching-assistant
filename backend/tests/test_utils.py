@@ -54,6 +54,16 @@ async def override_get_db():
     if _test_engine is None or _test_sessionmaker is None:
         await init_test_db()
 
+    # Ensure all tables exist before each session
+    async with _test_engine.begin() as conn:
+        from models import (
+            Student, Assignment, Submission, GradingResult,
+            Question, Answer, PlagiarismCheck, Rubric, CodeFile,
+            AnalysisResult, FeedbackTemplate, AIInteraction,
+            KnowledgeBaseEntry, QALog
+        )
+        await conn.run_sync(Base.metadata.create_all)
+
     async with _test_sessionmaker() as session:
         try:
             yield session

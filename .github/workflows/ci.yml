@@ -91,7 +91,7 @@ jobs:
       shell: bash
 
     - name: Install additional dependencies
-      run: npm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev
+      run: npm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev --legacy-peer-deps
       working-directory: ./frontend
 
     - name: Run frontend tests

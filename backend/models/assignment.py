@@ -21,6 +21,7 @@ class AssignmentType(str, Enum):
     CODE = "code"
     ESSAY = "essay"
     QUIZ = "quiz"
+    PROJECT = "project"
 
 
 class Assignment(Base, TimestampMixin):

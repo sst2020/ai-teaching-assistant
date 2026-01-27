@@ -12,6 +12,7 @@ class AssignmentTypeEnum(str, Enum):
     CODE = "code"
     ESSAY = "essay"
     QUIZ = "quiz"
+    PROJECT = "project"
 
 
 class AssignmentBase(BaseModel):

@@ -1037,35 +1037,8 @@ export const deleteGradingResult = async (gradingId: number): Promise<void> => {
 };
 
 // 与文件管理系统同步
-export const syncWithFileManager = async (
-  syncData: FormData
-): Promise<FileManagerSyncResponse> => {
-  const response = await apiClient.post<FileManagerSyncResponse>(
-    `${API_V1_PREFIX}/assignments/file-manager/sync`,
-    syncData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  );
-  return response.data;
-};
-
-// 查询同步状态
-export const getSyncStatus = async (
-  assignmentId: string,
-  syncId?: string
-): Promise<FileManagerSyncResponse> => {
-  const params = new URLSearchParams();
-  params.append('assignment_id', assignmentId);
-  if (syncId) params.append('sync_id', syncId);
-
-  const response = await apiClient.get<FileManagerSyncResponse>(
-    `${API_V1_PREFIX}/assignments/file-manager/status?${params.toString()}`
-  );
-  return response.data;
-};
+// Note: File manager sync functions removed as part of refactoring
+// These endpoints are no longer available in the backend
 
 // Export the axios instance for custom requests
 export default apiClient;

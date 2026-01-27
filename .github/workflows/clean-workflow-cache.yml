@@ -1,0 +1,84 @@
+name: 清理全部 workflow 缓存
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "输入DELETE确认清理所有工作流缓存"
+        required: true
+        default: ""
+
+jobs:
+  clean-caches:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+
+    steps:
+      - name: 验证确认输入
+        if: ${{ github.event.inputs.confirm != 'DELETE' }}
+        run: |
+          echo "::error::必须输入DELETE确认清理操作!"
+          exit 1
+
+      - name: 获取并删除所有工作流缓存
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            let totalDeleted = 0;
+
+            // 获取所有缓存
+            const caches = await github.rest.actions.getActionsCacheList({
+              owner,
+              repo,
+              per_page: 100
+            });
+
+            // 删除所有缓存
+            for (const cache of caches.data.actions_caches) {
+              console.log(`删除缓存: ${cache.key} (ID: ${cache.id})`);
+              await github.rest.actions.deleteActionsCacheById({
+                owner,
+                repo,
+                cache_id: cache.id
+              });
+              totalDeleted++;
+            }
+
+            console.log(`总共删除了 ${totalDeleted} 个工作流缓存`);
+            return `成功清理 ${totalDeleted} 个缓存条目`;
+
+      - name: 清理 Docker 缓存
+        run: |
+          echo "清理 Docker 缓存..."
+          docker system prune -af || true
+          docker volume prune -f || true
+          docker network prune -f || true
+          docker builder prune -af || true
+          echo "Docker 缓存清理完成"
+
+      - name: 清理系统缓存目录
+        run: |
+          echo "清理系统缓存目录..."
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/tmp/*
+          sudo rm -rf /var/log/*
+          sudo apt clean
+          sudo journalctl --vacuum-time=1s
+          
+          # 清理用户缓存
+          rm -rf $HOME/.cache/*
+          rm -rf $HOME/.npm/*
+          rm -rf $HOME/.gradle/*
+          rm -rf $HOME/.m2/repository/*
+          rm -rf $HOME/.cargo/registry/*
+          rm -rf $HOME/.rustup/toolchains/*
+          
+          echo "系统缓存清理完成"
+
+      - name: 显示清理后状态
+        run: |
+          echo "清理后磁盘空间:"
+          df -h
+          echo "系统缓存清理完成！"

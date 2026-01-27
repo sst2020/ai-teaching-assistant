@@ -1,13 +1,13 @@
-﻿2026-01-27T12:43:19.0976640Z ##[group]Run npx eslint src/ --ext .ts,.tsx --fix
-2026-01-27T12:43:19.0977036Z [36;1mnpx eslint src/ --ext .ts,.tsx --fix[0m
-2026-01-27T12:43:19.1009634Z shell: /usr/bin/bash -e {0}
-2026-01-27T12:43:19.1009870Z ##[endgroup]
-2026-01-27T12:43:21.8892780Z 
-2026-01-27T12:43:21.8893922Z /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/frontend/src/App.tsx
-2026-01-27T12:43:21.8918566Z ##[warning]  7:10  warning  'Dashboard' is defined but never used  @typescript-eslint/no-unused-vars
-2026-01-27T12:43:21.8925158Z 
-2026-01-27T12:43:21.8925675Z /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/frontend/src/contexts/ThemeContext.tsx
-2026-01-27T12:43:21.8927855Z ##[warning]  84:6  warning  React Hook useEffect has missing dependencies: 'applyTheme' and 'theme'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
-2026-01-27T12:43:21.8928995Z 
-2026-01-27T12:43:21.8929381Z ✖ 2 problems (0 errors, 2 warnings)
-2026-01-27T12:43:21.8929580Z 
+﻿2026-01-27T12:54:21.1845155Z ##[group]Run npx eslint src/ --ext .ts,.tsx --fix
+2026-01-27T12:54:21.1845767Z [36;1mnpx eslint src/ --ext .ts,.tsx --fix[0m
+2026-01-27T12:54:21.1890898Z shell: /usr/bin/bash -e {0}
+2026-01-27T12:54:21.1891285Z ##[endgroup]
+2026-01-27T12:54:24.0795129Z 
+2026-01-27T12:54:24.0796258Z /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/frontend/src/App.tsx
+2026-01-27T12:54:24.0821690Z ##[warning]  7:10  warning  'Dashboard' is defined but never used  @typescript-eslint/no-unused-vars
+2026-01-27T12:54:24.0828682Z 
+2026-01-27T12:54:24.0829196Z /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/frontend/src/contexts/ThemeContext.tsx
+2026-01-27T12:54:24.0831001Z ##[warning]  84:6  warning  React Hook useEffect has missing dependencies: 'applyTheme' and 'theme'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+2026-01-27T12:54:24.0832038Z 
+2026-01-27T12:54:24.0832419Z ✖ 2 problems (0 errors, 2 warnings)
+2026-01-27T12:54:24.0832605Z 

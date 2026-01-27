@@ -1,6 +1,0 @@
-﻿2026-01-27T12:43:53.4460219Z Post job cleanup.
-2026-01-27T12:43:53.6505568Z ##[group]Removing temp folder /home/runner/work/_temp/docker-actions-toolkit-IpTkJI
-2026-01-27T12:43:53.6518759Z ##[endgroup]
-2026-01-27T12:43:53.6519402Z ##[group]Post cache
-2026-01-27T12:43:53.6520010Z State not set
-2026-01-27T12:43:53.6520595Z ##[endgroup]

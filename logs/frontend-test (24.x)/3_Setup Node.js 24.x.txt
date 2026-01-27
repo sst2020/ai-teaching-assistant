@@ -1,23 +1,24 @@
-﻿2026-01-27T12:42:29.5986388Z ##[group]Run actions/setup-node@v4
-2026-01-27T12:42:29.5986995Z with:
-2026-01-27T12:42:29.5987369Z   node-version: 24.x
-2026-01-27T12:42:29.5987793Z   cache: npm
-2026-01-27T12:42:29.5988282Z   cache-dependency-path: ./frontend/package-lock.json
-2026-01-27T12:42:29.5988907Z   always-auth: false
-2026-01-27T12:42:29.5989334Z   check-latest: false
-2026-01-27T12:42:29.5990121Z   token: ***
-2026-01-27T12:42:29.5990513Z ##[endgroup]
-2026-01-27T12:42:29.7727764Z Found in cache @ /opt/hostedtoolcache/node/24.13.0/x64
-2026-01-27T12:42:29.7734219Z ##[group]Environment details
-2026-01-27T12:42:31.8537561Z node: v24.13.0
-2026-01-27T12:42:31.8538262Z npm: 11.6.2
-2026-01-27T12:42:31.8538710Z yarn: 1.22.22
-2026-01-27T12:42:31.8542068Z ##[endgroup]
-2026-01-27T12:42:31.8565552Z [command]/opt/hostedtoolcache/node/24.13.0/x64/bin/npm config get cache
-2026-01-27T12:42:32.1168088Z /home/runner/.npm
-2026-01-27T12:42:32.2284866Z Cache hit for: node-cache-Linux-x64-npm-bf92a1fabd0a94ea3f1beaae3e7d54efe4b2f3183b12409d8f49d87d4fc83a03
-2026-01-27T12:42:32.9154439Z Received 119291861 of 119291861 (100.0%), 179.2 MBs/sec
-2026-01-27T12:42:32.9156253Z Cache Size: ~114 MB (119291861 B)
-2026-01-27T12:42:32.9200297Z [command]/usr/bin/tar -xf /home/runner/work/_temp/6366bb97-43e1-442b-a468-bb21694e79bd/cache.tzst -P -C /home/runner/work/ai-teaching-assistant/ai-teaching-assistant --use-compress-program unzstd
-2026-01-27T12:42:33.8192592Z Cache restored successfully
-2026-01-27T12:42:33.8426171Z Cache restored from key: node-cache-Linux-x64-npm-bf92a1fabd0a94ea3f1beaae3e7d54efe4b2f3183b12409d8f49d87d4fc83a03
+﻿2026-01-27T12:53:39.6131666Z ##[group]Run actions/setup-node@v4
+2026-01-27T12:53:39.6132344Z with:
+2026-01-27T12:53:39.6132735Z   node-version: 24.x
+2026-01-27T12:53:39.6133180Z   cache: npm
+2026-01-27T12:53:39.6133704Z   cache-dependency-path: ./frontend/package-lock.json
+2026-01-27T12:53:39.6134430Z   always-auth: false
+2026-01-27T12:53:39.6134890Z   check-latest: false
+2026-01-27T12:53:39.6135753Z   token: ***
+2026-01-27T12:53:39.6136169Z ##[endgroup]
+2026-01-27T12:53:39.7916824Z Found in cache @ /opt/hostedtoolcache/node/24.13.0/x64
+2026-01-27T12:53:39.7919152Z ##[group]Environment details
+2026-01-27T12:53:40.1608107Z node: v24.13.0
+2026-01-27T12:53:40.1609783Z npm: 11.6.2
+2026-01-27T12:53:40.1610354Z yarn: 1.22.22
+2026-01-27T12:53:40.1611669Z ##[endgroup]
+2026-01-27T12:53:40.1632804Z [command]/opt/hostedtoolcache/node/24.13.0/x64/bin/npm config get cache
+2026-01-27T12:53:40.2751386Z /home/runner/.npm
+2026-01-27T12:53:40.5818036Z Cache hit for: node-cache-Linux-x64-npm-bf92a1fabd0a94ea3f1beaae3e7d54efe4b2f3183b12409d8f49d87d4fc83a03
+2026-01-27T12:53:41.8776006Z Received 4194304 of 119291861 (3.5%), 4.0 MBs/sec
+2026-01-27T12:53:42.7795759Z Received 119291861 of 119291861 (100.0%), 59.8 MBs/sec
+2026-01-27T12:53:42.7797480Z Cache Size: ~114 MB (119291861 B)
+2026-01-27T12:53:42.7834676Z [command]/usr/bin/tar -xf /home/runner/work/_temp/8471bedf-b37a-4e04-b86c-0d1ee7758ac3/cache.tzst -P -C /home/runner/work/ai-teaching-assistant/ai-teaching-assistant --use-compress-program unzstd
+2026-01-27T12:53:43.7208090Z Cache restored successfully
+2026-01-27T12:53:43.7490095Z Cache restored from key: node-cache-Linux-x64-npm-bf92a1fabd0a94ea3f1beaae3e7d54efe4b2f3183b12409d8f49d87d4fc83a03

@@ -17,7 +17,11 @@ from app.main import create_app
 def client():
     """Synchronous test client for FastAPI."""
     from core.database import get_db
-    from tests.test_utils import override_get_db
+    from tests.test_utils import override_get_db, init_test_db, dispose_test_db
+    import asyncio
+
+    # Initialize the test database
+    asyncio.run(init_test_db())
 
     app = create_app(testing=True)
 
@@ -26,6 +30,9 @@ def client():
 
     with TestClient(app) as client:
         yield client
+
+    # Clean up the test database
+    asyncio.run(dispose_test_db())
 
 
 @pytest.fixture

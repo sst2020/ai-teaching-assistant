@@ -242,7 +242,7 @@ const Account: React.FC = () => {
           <h2 className="card-title">{`⚙️ ${t('account.actions')}`}</h2>
 
           <button onClick={handleLogout} className="btn-secondary logout-btn">
-            🚪 {t('logout')}
+            {`🚪 ${t('logout')}`}
           </button>
 
           <div className="danger-zone">

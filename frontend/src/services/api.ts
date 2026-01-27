@@ -1036,57 +1036,6 @@ export const deleteGradingResult = async (gradingId: number): Promise<void> => {
   await apiClient.delete(`${API_V1_PREFIX}/grading/${gradingId}`);
 };
 
-// 教师提交作业
-export const teacherSubmitAssignment = async (
-  assignmentData: FormData
-): Promise<APIResponse> => {
-  const response = await apiClient.post<APIResponse>(
-    `${API_V1_PREFIX}/assignments/teacher/submit`,
-    assignmentData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  );
-  return response.data;
-};
-
-// 批量上传学生作业
-export const batchUploadStudentSubmissions = async (
-  uploadData: FormData
-): Promise<BatchUploadResponse> => {
-  const response = await apiClient.post<BatchUploadResponse>(
-    `${API_V1_PREFIX}/assignments/teacher/batch-upload`,
-    uploadData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      timeout: 300000, // 5分钟超时，因为可能上传大量文件
-    }
-  );
-  return response.data;
-};
-
-// 获取作业提交列表
-export const getAssignmentSubmissions = async (
-  assignmentId: string,
-  courseId: string,
-  page: number = 1,
-  pageSize: number = 20
-): Promise<AssignmentSubmissionRecord[]> => {
-  const params = new URLSearchParams();
-  params.append('course_id', courseId);
-  params.append('page', page.toString());
-  params.append('page_size', pageSize.toString());
-
-  const response = await apiClient.get<AssignmentSubmissionRecord[]>(
-    `${API_V1_PREFIX}/assignments/teacher/${assignmentId}/submissions?${params.toString()}`
-  );
-  return response.data;
-};
-
 // 与文件管理系统同步
 export const syncWithFileManager = async (
   syncData: FormData

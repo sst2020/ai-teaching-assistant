@@ -16,7 +16,14 @@ from app.main import create_app
 @pytest.fixture
 def client():
     """Synchronous test client for FastAPI."""
+    from core.database import get_db
+    from tests.test_utils import override_get_db
+
     app = create_app(testing=True)
+
+    # Override the get_db dependency to use in-memory database for tests
+    app.dependency_overrides[get_db] = override_get_db
+
     with TestClient(app) as client:
         yield client
 

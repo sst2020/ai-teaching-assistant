@@ -1,0 +1,6 @@
+﻿2026-01-27T12:28:36.1240156Z Post job cleanup.
+2026-01-27T12:28:36.3815364Z ##[group]Post cache
+2026-01-27T12:28:36.3817941Z Caching docker.io--tonistiigi--binfmt-latest-linux-x64 to GitHub Actions cache
+2026-01-27T12:28:36.4003098Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/ai-teaching-assistant/ai-teaching-assistant --files-from manifest.txt --use-compress-program zstdmt
+2026-01-27T12:28:36.9063168Z Failed to save: Unable to reserve cache with key docker.io--tonistiigi--binfmt-latest-linux-x64, another job may be creating this cache.
+2026-01-27T12:28:36.9134338Z ##[endgroup]

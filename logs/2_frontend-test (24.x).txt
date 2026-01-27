@@ -1,0 +1,397 @@
+﻿2026-01-27T12:27:53.7005998Z Current runner version: '2.331.0'
+2026-01-27T12:27:53.7032009Z ##[group]Runner Image Provisioner
+2026-01-27T12:27:53.7032840Z Hosted Compute Agent
+2026-01-27T12:27:53.7033504Z Version: 20260115.477
+2026-01-27T12:27:53.7034136Z Commit: 4b342d620503cbe250a3154040964899ea7c9b00
+2026-01-27T12:27:53.7034788Z Build Date: 2026-01-15T22:32:41Z
+2026-01-27T12:27:53.7035513Z Worker ID: {3f5236f5-270c-4303-9237-b3888471e98a}
+2026-01-27T12:27:53.7036271Z Azure Region: northcentralus
+2026-01-27T12:27:53.7036813Z ##[endgroup]
+2026-01-27T12:27:53.7038385Z ##[group]Operating System
+2026-01-27T12:27:53.7038991Z Ubuntu
+2026-01-27T12:27:53.7039841Z 24.04.3
+2026-01-27T12:27:53.7040288Z LTS
+2026-01-27T12:27:53.7040909Z ##[endgroup]
+2026-01-27T12:27:53.7041386Z ##[group]Runner Image
+2026-01-27T12:27:53.7041922Z Image: ubuntu-24.04
+2026-01-27T12:27:53.7042526Z Version: 20260119.4.1
+2026-01-27T12:27:53.7043721Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260119.4/images/ubuntu/Ubuntu2404-Readme.md
+2026-01-27T12:27:53.7045257Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260119.4
+2026-01-27T12:27:53.7046165Z ##[endgroup]
+2026-01-27T12:27:53.7047301Z ##[group]GITHUB_TOKEN Permissions
+2026-01-27T12:27:53.7049601Z Contents: read
+2026-01-27T12:27:53.7050142Z Metadata: read
+2026-01-27T12:27:53.7050792Z Packages: read
+2026-01-27T12:27:53.7051264Z ##[endgroup]
+2026-01-27T12:27:53.7053356Z Secret source: Actions
+2026-01-27T12:27:53.7054584Z Prepare workflow directory
+2026-01-27T12:27:53.7559939Z Prepare all required actions
+2026-01-27T12:27:53.7614865Z Getting action download info
+2026-01-27T12:27:54.0826085Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-01-27T12:27:54.2109008Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-01-27T12:27:54.6558995Z Complete job name: frontend-test (24.x)
+2026-01-27T12:27:54.7287476Z ##[group]Run actions/checkout@v4
+2026-01-27T12:27:54.7288542Z with:
+2026-01-27T12:27:54.7289056Z   repository: sst2020/ai-teaching-assistant
+2026-01-27T12:27:54.7290364Z   token: ***
+2026-01-27T12:27:54.7290891Z   ssh-strict: true
+2026-01-27T12:27:54.7291385Z   ssh-user: git
+2026-01-27T12:27:54.7291878Z   persist-credentials: true
+2026-01-27T12:27:54.7292468Z   clean: true
+2026-01-27T12:27:54.7292988Z   sparse-checkout-cone-mode: true
+2026-01-27T12:27:54.7293648Z   fetch-depth: 1
+2026-01-27T12:27:54.7294132Z   fetch-tags: false
+2026-01-27T12:27:54.7294631Z   show-progress: true
+2026-01-27T12:27:54.7295135Z   lfs: false
+2026-01-27T12:27:54.7295577Z   submodules: false
+2026-01-27T12:27:54.7296107Z   set-safe-directory: true
+2026-01-27T12:27:54.7296950Z ##[endgroup]
+2026-01-27T12:27:54.8390750Z Syncing repository: sst2020/ai-teaching-assistant
+2026-01-27T12:27:54.8392938Z ##[group]Getting Git version info
+2026-01-27T12:27:54.8394283Z Working directory is '/home/runner/work/ai-teaching-assistant/ai-teaching-assistant'
+2026-01-27T12:27:54.8396147Z [command]/usr/bin/git version
+2026-01-27T12:27:54.8453852Z git version 2.52.0
+2026-01-27T12:27:54.8480502Z ##[endgroup]
+2026-01-27T12:27:54.8503254Z Temporarily overriding HOME='/home/runner/work/_temp/69e7686a-82e8-45d0-a506-ec992de1be7a' before making global git config changes
+2026-01-27T12:27:54.8505648Z Adding repository directory to the temporary git global config as a safe directory
+2026-01-27T12:27:54.8508369Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ai-teaching-assistant/ai-teaching-assistant
+2026-01-27T12:27:54.8546136Z Deleting the contents of '/home/runner/work/ai-teaching-assistant/ai-teaching-assistant'
+2026-01-27T12:27:54.8549568Z ##[group]Initializing the repository
+2026-01-27T12:27:54.8554004Z [command]/usr/bin/git init /home/runner/work/ai-teaching-assistant/ai-teaching-assistant
+2026-01-27T12:27:54.8661994Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-01-27T12:27:54.8664830Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-01-27T12:27:54.8667436Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-01-27T12:27:54.8668579Z hint: call:
+2026-01-27T12:27:54.8668986Z hint:
+2026-01-27T12:27:54.8670173Z hint: 	git config --global init.defaultBranch <name>
+2026-01-27T12:27:54.8671024Z hint:
+2026-01-27T12:27:54.8671858Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-01-27T12:27:54.8673736Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-01-27T12:27:54.8674803Z hint:
+2026-01-27T12:27:54.8675245Z hint: 	git branch -m <name>
+2026-01-27T12:27:54.8675791Z hint:
+2026-01-27T12:27:54.8676645Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-01-27T12:27:54.8679011Z Initialized empty Git repository in /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/.git/
+2026-01-27T12:27:54.8682357Z [command]/usr/bin/git remote add origin https://github.com/sst2020/ai-teaching-assistant
+2026-01-27T12:27:54.8715146Z ##[endgroup]
+2026-01-27T12:27:54.8716095Z ##[group]Disabling automatic garbage collection
+2026-01-27T12:27:54.8719105Z [command]/usr/bin/git config --local gc.auto 0
+2026-01-27T12:27:54.8748712Z ##[endgroup]
+2026-01-27T12:27:54.8749901Z ##[group]Setting up auth
+2026-01-27T12:27:54.8755941Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-01-27T12:27:54.8788037Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-01-27T12:27:54.9109834Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-01-27T12:27:54.9141795Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-01-27T12:27:54.9366536Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-01-27T12:27:54.9400299Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-01-27T12:27:54.9627462Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-01-27T12:27:54.9662967Z ##[endgroup]
+2026-01-27T12:27:54.9663932Z ##[group]Fetching the repository
+2026-01-27T12:27:54.9672182Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +27ec4e2e160bfcf97da2be74f1b1d16421e93d0d:refs/remotes/origin/main
+2026-01-27T12:27:55.4093365Z From https://github.com/sst2020/ai-teaching-assistant
+2026-01-27T12:27:55.4094653Z  * [new ref]         27ec4e2e160bfcf97da2be74f1b1d16421e93d0d -> origin/main
+2026-01-27T12:27:55.4125297Z ##[endgroup]
+2026-01-27T12:27:55.4126327Z ##[group]Determining the checkout info
+2026-01-27T12:27:55.4127666Z ##[endgroup]
+2026-01-27T12:27:55.4132106Z [command]/usr/bin/git sparse-checkout disable
+2026-01-27T12:27:55.4171374Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-01-27T12:27:55.4196258Z ##[group]Checking out the ref
+2026-01-27T12:27:55.4199683Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-01-27T12:27:55.4481145Z Switched to a new branch 'main'
+2026-01-27T12:27:55.4482528Z branch 'main' set up to track 'origin/main'.
+2026-01-27T12:27:55.4491387Z ##[endgroup]
+2026-01-27T12:27:55.4528427Z [command]/usr/bin/git log -1 --format=%H
+2026-01-27T12:27:55.4550259Z 27ec4e2e160bfcf97da2be74f1b1d16421e93d0d
+2026-01-27T12:27:55.4814056Z ##[group]Run actions/setup-node@v4
+2026-01-27T12:27:55.4814954Z with:
+2026-01-27T12:27:55.4815688Z   node-version: 24.x
+2026-01-27T12:27:55.4816465Z   cache: npm
+2026-01-27T12:27:55.4817269Z   cache-dependency-path: ./frontend/package-lock.json
+2026-01-27T12:27:55.4818175Z   always-auth: false
+2026-01-27T12:27:55.4818943Z   check-latest: false
+2026-01-27T12:27:55.4820318Z   token: ***
+2026-01-27T12:27:55.4821055Z ##[endgroup]
+2026-01-27T12:27:55.7961925Z Found in cache @ /opt/hostedtoolcache/node/24.13.0/x64
+2026-01-27T12:27:55.7973358Z ##[group]Environment details
+2026-01-27T12:28:00.7186368Z node: v24.13.0
+2026-01-27T12:28:00.7186811Z npm: 11.6.2
+2026-01-27T12:28:00.7187104Z yarn: 1.22.22
+2026-01-27T12:28:00.7188622Z ##[endgroup]
+2026-01-27T12:28:00.7212242Z [command]/opt/hostedtoolcache/node/24.13.0/x64/bin/npm config get cache
+2026-01-27T12:28:01.1618847Z /home/runner/.npm
+2026-01-27T12:28:01.2906955Z Cache hit for: node-cache-Linux-x64-npm-bf92a1fabd0a94ea3f1beaae3e7d54efe4b2f3183b12409d8f49d87d4fc83a03
+2026-01-27T12:28:02.2991514Z Received 119291861 of 119291861 (100.0%), 126.8 MBs/sec
+2026-01-27T12:28:02.2992423Z Cache Size: ~114 MB (119291861 B)
+2026-01-27T12:28:02.3032508Z [command]/usr/bin/tar -xf /home/runner/work/_temp/7dafc300-3fd9-470f-958e-942a24280911/cache.tzst -P -C /home/runner/work/ai-teaching-assistant/ai-teaching-assistant --use-compress-program unzstd
+2026-01-27T12:28:03.1699027Z Cache restored successfully
+2026-01-27T12:28:03.1934429Z Cache restored from key: node-cache-Linux-x64-npm-bf92a1fabd0a94ea3f1beaae3e7d54efe4b2f3183b12409d8f49d87d4fc83a03
+2026-01-27T12:28:03.2087802Z ##[group]Run if [ -d "node_modules" ]; then
+2026-01-27T12:28:03.2088216Z [36;1mif [ -d "node_modules" ]; then[0m
+2026-01-27T12:28:03.2088504Z [36;1m  rm -rf node_modules[0m
+2026-01-27T12:28:03.2088759Z [36;1mfi[0m
+2026-01-27T12:28:03.2088981Z [36;1mif [ -f "package-lock.json" ]; then[0m
+2026-01-27T12:28:03.2089269Z [36;1m  rm package-lock.json[0m
+2026-01-27T12:28:03.2089817Z [36;1mfi[0m
+2026-01-27T12:28:03.2090029Z [36;1mnpm install --legacy-peer-deps[0m
+2026-01-27T12:28:03.2133689Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-01-27T12:28:03.2134219Z ##[endgroup]
+2026-01-27T12:28:27.3220759Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-01-27T12:28:27.3714029Z npm warn deprecated stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+2026-01-27T12:28:27.3960093Z npm warn deprecated @babel/plugin-proposal-private-methods@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-methods instead.
+2026-01-27T12:28:27.3965112Z npm warn deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead.
+2026-01-27T12:28:27.3969627Z npm warn deprecated @babel/plugin-proposal-numeric-separator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-numeric-separator instead.
+2026-01-27T12:28:27.3976868Z npm warn deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.
+2026-01-27T12:28:27.4734563Z npm warn deprecated rollup-plugin-terser@7.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
+2026-01-27T12:28:27.4953034Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2026-01-27T12:28:27.5517755Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2026-01-27T12:28:27.6290951Z npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+2026-01-27T12:28:27.6407208Z npm warn deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead.
+2026-01-27T12:28:27.6586124Z npm warn deprecated @babel/plugin-proposal-private-property-in-object@7.21.11: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-property-in-object instead.
+2026-01-27T12:28:27.6707735Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2026-01-27T12:28:27.7024778Z npm warn deprecated whatwg-encoding@1.0.5: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-01-27T12:28:27.7638406Z npm warn deprecated q@1.5.1: You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+2026-01-27T12:28:27.7640934Z npm warn deprecated
+2026-01-27T12:28:27.7642161Z npm warn deprecated (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
+2026-01-27T12:28:27.8523131Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2026-01-27T12:28:27.8732820Z npm warn deprecated domexception@2.0.1: Use your platform's native DOMException instead
+2026-01-27T12:28:27.9588314Z npm warn deprecated w3c-hr-time@1.0.2: Use your platform's native performance.now() and performance.timeOrigin.
+2026-01-27T12:28:27.9974016Z npm warn deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-codec instead
+2026-01-27T12:28:28.3140463Z npm warn deprecated workbox-cacheable-response@6.6.0: workbox-background-sync@6.6.0
+2026-01-27T12:28:28.4248116Z npm warn deprecated workbox-google-analytics@6.6.0: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
+2026-01-27T12:28:28.5339888Z npm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions
+2026-01-27T12:28:29.4395978Z npm warn deprecated svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
+2026-01-27T12:28:31.3257766Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2026-01-27T12:28:33.7797428Z 
+2026-01-27T12:28:33.7798423Z added 1450 packages, and audited 1451 packages in 31s
+2026-01-27T12:28:33.7799077Z 
+2026-01-27T12:28:33.7799982Z 356 packages are looking for funding
+2026-01-27T12:28:33.7800458Z   run `npm fund` for details
+2026-01-27T12:28:33.7901807Z 
+2026-01-27T12:28:33.7902548Z 9 vulnerabilities (3 moderate, 6 high)
+2026-01-27T12:28:33.7907622Z 
+2026-01-27T12:28:33.7908055Z To address all issues (including breaking changes), run:
+2026-01-27T12:28:33.7908708Z   npm audit fix --force
+2026-01-27T12:28:33.7908969Z 
+2026-01-27T12:28:33.7909297Z Run `npm audit` for details.
+2026-01-27T12:28:33.9118655Z ##[group]Run npm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev --legacy-peer-deps
+2026-01-27T12:28:33.9119286Z [36;1mnpm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev --legacy-peer-deps[0m
+2026-01-27T12:28:33.9120018Z [36;1mnpm install i18next@^23.15.0 react-i18next@^14.1.3 --legacy-peer-deps[0m
+2026-01-27T12:28:33.9151579Z shell: /usr/bin/bash -e {0}
+2026-01-27T12:28:33.9151817Z ##[endgroup]
+2026-01-27T12:28:34.6738520Z npm warn idealTree Removing dependencies.ajv in favor of devDependencies.ajv
+2026-01-27T12:28:34.6742701Z npm warn idealTree Removing dependencies.ajv-keywords in favor of devDependencies.ajv-keywords
+2026-01-27T12:28:35.7520332Z 
+2026-01-27T12:28:35.7520903Z up to date, audited 1451 packages in 2s
+2026-01-27T12:28:35.7521183Z 
+2026-01-27T12:28:35.7521956Z 356 packages are looking for funding
+2026-01-27T12:28:35.7523456Z   run `npm fund` for details
+2026-01-27T12:28:35.7586659Z 
+2026-01-27T12:28:35.7587072Z 9 vulnerabilities (3 moderate, 6 high)
+2026-01-27T12:28:35.7588742Z 
+2026-01-27T12:28:35.7589183Z To address all issues (including breaking changes), run:
+2026-01-27T12:28:35.7590018Z   npm audit fix --force
+2026-01-27T12:28:35.7590263Z 
+2026-01-27T12:28:35.7590472Z Run `npm audit` for details.
+2026-01-27T12:28:37.5689171Z 
+2026-01-27T12:28:37.5690015Z up to date, audited 1451 packages in 2s
+2026-01-27T12:28:37.5690295Z 
+2026-01-27T12:28:37.5691110Z 356 packages are looking for funding
+2026-01-27T12:28:37.5692245Z   run `npm fund` for details
+2026-01-27T12:28:37.5755586Z 
+2026-01-27T12:28:37.5756227Z 9 vulnerabilities (3 moderate, 6 high)
+2026-01-27T12:28:37.5757823Z 
+2026-01-27T12:28:37.5758290Z To address all issues (including breaking changes), run:
+2026-01-27T12:28:37.5758899Z   npm audit fix --force
+2026-01-27T12:28:37.5759164Z 
+2026-01-27T12:28:37.5759575Z Run `npm audit` for details.
+2026-01-27T12:28:37.5954598Z ##[group]Run npm test -- --passWithNoTests --coverage --watchAll=false
+2026-01-27T12:28:37.5955205Z [36;1mnpm test -- --passWithNoTests --coverage --watchAll=false[0m
+2026-01-27T12:28:37.5990759Z shell: /usr/bin/bash -e {0}
+2026-01-27T12:28:37.5991003Z ##[endgroup]
+2026-01-27T12:28:37.7135244Z 
+2026-01-27T12:28:37.7136016Z > ai-teaching-assistant-frontend@0.1.0 test
+2026-01-27T12:28:37.7136984Z > react-scripts test --passWithNoTests --coverage --watchAll=false
+2026-01-27T12:28:37.7137513Z 
+2026-01-27T12:28:39.3044677Z PASS src/App.test.js
+2026-01-27T12:28:39.3050277Z   ✓ simple test should pass (1 ms)
+2026-01-27T12:28:39.3050971Z   Simple utility tests
+2026-01-27T12:28:39.3051873Z     ✓ should correctly add two numbers
+2026-01-27T12:28:39.3052224Z 
+2026-01-27T12:28:42.7336553Z ---------------------------------|---------|----------|---------|---------|-------------------
+2026-01-27T12:28:42.7337820Z File                             | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+2026-01-27T12:28:42.7338904Z ---------------------------------|---------|----------|---------|---------|-------------------
+2026-01-27T12:28:42.7346076Z All files                        |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7346969Z  src                             |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7350451Z   App.tsx                        |       0 |        0 |       0 |       0 | 31-282            
+2026-01-27T12:28:42.7351912Z   index.tsx                      |       0 |        0 |     100 |       0 | 8-14              
+2026-01-27T12:28:42.7354773Z   reportWebVitals.js             |       0 |        0 |       0 |       0 | 1-8               
+2026-01-27T12:28:42.7356546Z  src/components                  |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7357402Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7358332Z  src/components/CodeAnalysis     |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7359289Z   CodeAnalysis.tsx               |       0 |        0 |       0 |       0 | 8-151             
+2026-01-27T12:28:42.7360465Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7361332Z  src/components/Dashboard        |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7362241Z   Dashboard.tsx                  |       0 |        0 |       0 |       0 | 9-156             
+2026-01-27T12:28:42.7363074Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7363981Z  src/components/DevTools         |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7364931Z   ApiTester.tsx                  |       0 |        0 |       0 |       0 | 28-306            
+2026-01-27T12:28:42.7365797Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7367095Z  src/components/KnowledgeBase    |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7368086Z   KnowledgeBase.tsx              |       0 |        0 |       0 |       0 | 25-213            
+2026-01-27T12:28:42.7368981Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7370176Z  src/components/PlagiarismCheck  |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7371169Z   BatchUpload.tsx                |       0 |        0 |       0 |       0 | 9-155             
+2026-01-27T12:28:42.7372112Z   OriginalityReport.tsx          |       0 |        0 |       0 |       0 | 9-153             
+2026-01-27T12:28:42.7373019Z   PlagiarismCheck.tsx            |       0 |        0 |       0 |       0 | 21-125            
+2026-01-27T12:28:42.7374292Z   RelationshipGraph.tsx          |       0 |        0 |       0 |       0 | 25-169            
+2026-01-27T12:28:42.7375245Z   SimilarityMatrix.tsx           |       0 |        0 |       0 |       0 | 9-114             
+2026-01-27T12:28:42.7376188Z   SuspiciousList.tsx             |       0 |        0 |       0 |       0 | 13-133            
+2026-01-27T12:28:42.7377058Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7377916Z  src/components/QAInterface      |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7378839Z   QAInterface.tsx                |       0 |        0 |       0 |       0 | 13-274            
+2026-01-27T12:28:42.7379868Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7380738Z  src/components/QATriage         |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7381689Z   QATriage.tsx                   |       0 |        0 |       0 |       0 | 15-140            
+2026-01-27T12:28:42.7382523Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7383430Z  src/components/ReportAnalysis   |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7384470Z   ReportAnalysis.tsx             |       0 |        0 |       0 |       0 | 16-405            
+2026-01-27T12:28:42.7385380Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7386344Z  src/components/TeacherDashboard |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7387395Z   TeacherDashboard.tsx           |       0 |        0 |       0 |       0 | 20-173            
+2026-01-27T12:28:42.7388306Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7388824Z  src/components/common           |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7389506Z   ConfirmDialog.tsx              |       0 |        0 |       0 |       0 | 15-82             
+2026-01-27T12:28:42.7390184Z   DebugPanel.tsx                 |       0 |        0 |       0 |       0 | 27-239            
+2026-01-27T12:28:42.7390667Z   ErrorMessage.tsx               |       0 |        0 |       0 |       0 | 10-11             
+2026-01-27T12:28:42.7391149Z   LoadingSpinner.tsx             |       0 |        0 |       0 |       0 | 9-13              
+2026-01-27T12:28:42.7391659Z   ProtectedRoute.tsx             |       0 |        0 |       0 |       0 | 21-65             
+2026-01-27T12:28:42.7392138Z   Skeleton.tsx                   |       0 |        0 |       0 |       0 | 16-100            
+2026-01-27T12:28:42.7392583Z   Toast.tsx                      |       0 |        0 |       0 |       0 | 14-48             
+2026-01-27T12:28:42.7393049Z   ToastContainer.tsx             |       0 |        0 |       0 |       0 | 10-16             
+2026-01-27T12:28:42.7393519Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7394215Z  src/components/layout           |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7394689Z   Header.tsx                     |       0 |        0 |       0 |       0 | 13-225            
+2026-01-27T12:28:42.7395118Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7395567Z  src/contexts                    |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7396067Z   AuthContext.tsx                |       0 |        0 |       0 |       0 | 24-349            
+2026-01-27T12:28:42.7396543Z   ThemeContext.tsx               |       0 |        0 |       0 |       0 | 15-123            
+2026-01-27T12:28:42.7397023Z   ToastContext.tsx               |       0 |        0 |       0 |       0 | 21-76             
+2026-01-27T12:28:42.7397599Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7398043Z  src/hooks                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7398465Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7398893Z   useAuth.ts                     |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7399553Z  src/i18n                        |       0 |      100 |     100 |       0 |                   
+2026-01-27T12:28:42.7400021Z   index.ts                       |       0 |      100 |     100 |       0 | 33-64             
+2026-01-27T12:28:42.7400536Z  src/pages                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7401016Z   Account.tsx                    |       0 |        0 |       0 |       0 | 8-274             
+2026-01-27T12:28:42.7401482Z   Forbidden.tsx                  |       0 |      100 |       0 |       0 | 6-18              
+2026-01-27T12:28:42.7401936Z   Grades.tsx                     |       0 |        0 |       0 |       0 | 16-474            
+2026-01-27T12:28:42.7402405Z   GradingInterface.tsx           |       0 |        0 |       0 |       0 | 29-387            
+2026-01-27T12:28:42.7402869Z   Login.tsx                      |       0 |        0 |       0 |       0 | 12-107            
+2026-01-27T12:28:42.7403342Z   ManageAssignments.tsx          |       0 |        0 |       0 |       0 | 37-329            
+2026-01-27T12:28:42.7403825Z   Register.tsx                   |       0 |        0 |       0 |       0 | 22-106            
+2026-01-27T12:28:42.7404296Z   StudentDashboard.tsx           |       0 |        0 |       0 |       0 | 14-164            
+2026-01-27T12:28:42.7404793Z   SubmitAssignment.tsx           |       0 |        0 |       0 |       0 | 11-526            
+2026-01-27T12:28:42.7405295Z   TeacherDashboard.tsx           |       0 |        0 |       0 |       0 | 27-225            
+2026-01-27T12:28:42.7405762Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7406205Z  src/services                    |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7406643Z   api.ts                         |       0 |        0 |       0 |       0 | 106-1121          
+2026-01-27T12:28:42.7407065Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7407974Z  src/types                       |       0 |      100 |     100 |       0 |                   
+2026-01-27T12:28:42.7408811Z   api.ts                         |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7409749Z   assignment.ts                  |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7410208Z   auth.ts                        |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7410653Z   grading.ts                     |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7411293Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7411750Z   knowledgeBase.ts               |       0 |      100 |     100 |       0 | 21-34             
+2026-01-27T12:28:42.7412219Z   plagiarism.ts                  |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7412686Z   reportAnalysis.ts              |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7413142Z   student.ts                     |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7413586Z   submission.ts                  |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7414028Z   triage.ts                      |       0 |      100 |     100 |       0 | 20-29             
+2026-01-27T12:28:42.7414587Z  src/utils                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7415039Z   cache.ts                       |       0 |        0 |       0 |       0 | 13-137            
+2026-01-27T12:28:42.7415471Z   index.ts                       |       0 |        0 |       0 |       0 |                   
+2026-01-27T12:28:42.7415981Z ---------------------------------|---------|----------|---------|---------|-------------------
+2026-01-27T12:28:42.8326897Z Test Suites: 1 passed, 1 total
+2026-01-27T12:28:42.8327506Z Tests:       2 passed, 2 total
+2026-01-27T12:28:42.8327918Z Snapshots:   0 total
+2026-01-27T12:28:42.8328295Z Time:        4.407 s
+2026-01-27T12:28:42.8328661Z Ran all test suites.
+2026-01-27T12:28:42.8690595Z ##[group]Run npx eslint src/ --ext .ts,.tsx --fix
+2026-01-27T12:28:42.8690965Z [36;1mnpx eslint src/ --ext .ts,.tsx --fix[0m
+2026-01-27T12:28:42.8722463Z shell: /usr/bin/bash -e {0}
+2026-01-27T12:28:42.8722720Z ##[endgroup]
+2026-01-27T12:28:45.7282435Z 
+2026-01-27T12:28:45.7283418Z /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/frontend/src/App.tsx
+2026-01-27T12:28:45.7314601Z ##[warning]  7:10  warning  'Dashboard' is defined but never used  @typescript-eslint/no-unused-vars
+2026-01-27T12:28:45.7324162Z 
+2026-01-27T12:28:45.7324930Z /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/frontend/src/contexts/ThemeContext.tsx
+2026-01-27T12:28:45.7327727Z ##[warning]  84:6  warning  React Hook useEffect has missing dependencies: 'applyTheme' and 'theme'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+2026-01-27T12:28:45.7329671Z 
+2026-01-27T12:28:45.7330222Z ✖ 2 problems (0 errors, 2 warnings)
+2026-01-27T12:28:45.7330577Z 
+2026-01-27T12:28:45.7882290Z ##[group]Run echo "Building frontend application..."
+2026-01-27T12:28:45.7882698Z [36;1mecho "Building frontend application..."[0m
+2026-01-27T12:28:45.7882975Z [36;1mnpm run build[0m
+2026-01-27T12:28:45.7914096Z shell: /usr/bin/bash -e {0}
+2026-01-27T12:28:45.7914324Z env:
+2026-01-27T12:28:45.7914502Z   SKIP_PREFLIGHT_CHECK: true
+2026-01-27T12:28:45.7914766Z   GENERATE_SOURCEMAP: false
+2026-01-27T12:28:45.7914970Z   CI: false
+2026-01-27T12:28:45.7915135Z ##[endgroup]
+2026-01-27T12:28:45.7966866Z Building frontend application...
+2026-01-27T12:28:45.8883531Z 
+2026-01-27T12:28:45.8884178Z > ai-teaching-assistant-frontend@0.1.0 build
+2026-01-27T12:28:45.8884611Z > react-scripts build
+2026-01-27T12:28:45.8884756Z 
+2026-01-27T12:28:46.8953890Z (node:2427) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+2026-01-27T12:28:46.8954804Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-01-27T12:28:46.8978626Z Creating an optimized production build...
+2026-01-27T12:29:05.2198125Z Compiled with warnings.
+2026-01-27T12:29:05.2199984Z 
+2026-01-27T12:29:05.2200164Z [eslint] 
+2026-01-27T12:29:05.2200515Z src/App.tsx
+2026-01-27T12:29:05.2201234Z   Line 7:10:  'Dashboard' is defined but never used  @typescript-eslint/no-unused-vars
+2026-01-27T12:29:05.2201822Z 
+2026-01-27T12:29:05.2202401Z src/contexts/ThemeContext.tsx
+2026-01-27T12:29:05.2203757Z   Line 84:6:  React Hook useEffect has missing dependencies: 'applyTheme' and 'theme'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+2026-01-27T12:29:05.2204839Z 
+2026-01-27T12:29:05.2205252Z Search for the keywords to learn more about each warning.
+2026-01-27T12:29:05.2206109Z To ignore, add // eslint-disable-next-line to the line before.
+2026-01-27T12:29:05.2206585Z 
+2026-01-27T12:29:05.2206778Z File sizes after gzip:
+2026-01-27T12:29:05.2207029Z 
+2026-01-27T12:29:05.2626619Z   428.61 kB  build/static/js/main.87f6b907.js
+2026-01-27T12:29:05.2627326Z   22.22 kB   build/static/css/main.f59a6356.css
+2026-01-27T12:29:05.2627549Z 
+2026-01-27T12:29:05.2628401Z The project was built assuming it is hosted at /.
+2026-01-27T12:29:05.2629167Z You can control this with the homepage field in your package.json.
+2026-01-27T12:29:05.2629754Z 
+2026-01-27T12:29:05.2629994Z The build folder is ready to be deployed.
+2026-01-27T12:29:05.2630540Z You may serve it with a static server:
+2026-01-27T12:29:05.2630831Z 
+2026-01-27T12:29:05.2630972Z   npm install -g serve
+2026-01-27T12:29:05.2631306Z   serve -s build
+2026-01-27T12:29:05.2631494Z 
+2026-01-27T12:29:05.2631718Z Find out more about deployment here:
+2026-01-27T12:29:05.2632003Z 
+2026-01-27T12:29:05.2632149Z   https://cra.link/deployment
+2026-01-27T12:29:05.2632318Z 
+2026-01-27T12:29:05.4046580Z Post job cleanup.
+2026-01-27T12:29:05.5567939Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-bf92a1fabd0a94ea3f1beaae3e7d54efe4b2f3183b12409d8f49d87d4fc83a03, not saving cache.
+2026-01-27T12:29:05.5682559Z Post job cleanup.
+2026-01-27T12:29:05.6601269Z [command]/usr/bin/git version
+2026-01-27T12:29:05.6636475Z git version 2.52.0
+2026-01-27T12:29:05.6678022Z Temporarily overriding HOME='/home/runner/work/_temp/9fb0ad97-43a2-4929-9ba9-a7e0a14f59f3' before making global git config changes
+2026-01-27T12:29:05.6678932Z Adding repository directory to the temporary git global config as a safe directory
+2026-01-27T12:29:05.6690346Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ai-teaching-assistant/ai-teaching-assistant
+2026-01-27T12:29:05.6722539Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-01-27T12:29:05.6753531Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-01-27T12:29:05.6978958Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-01-27T12:29:05.6998462Z http.https://github.com/.extraheader
+2026-01-27T12:29:05.7011177Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-01-27T12:29:05.7039966Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-01-27T12:29:05.7265184Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-01-27T12:29:05.7297941Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-01-27T12:29:05.7643035Z Cleaning up orphan processes

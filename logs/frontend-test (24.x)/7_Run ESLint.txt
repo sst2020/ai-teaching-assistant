@@ -1,0 +1,13 @@
+﻿2026-01-27T12:28:42.8690582Z ##[group]Run npx eslint src/ --ext .ts,.tsx --fix
+2026-01-27T12:28:42.8690962Z [36;1mnpx eslint src/ --ext .ts,.tsx --fix[0m
+2026-01-27T12:28:42.8722456Z shell: /usr/bin/bash -e {0}
+2026-01-27T12:28:42.8722717Z ##[endgroup]
+2026-01-27T12:28:45.7282390Z 
+2026-01-27T12:28:45.7283408Z /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/frontend/src/App.tsx
+2026-01-27T12:28:45.7314584Z ##[warning]  7:10  warning  'Dashboard' is defined but never used  @typescript-eslint/no-unused-vars
+2026-01-27T12:28:45.7324148Z 
+2026-01-27T12:28:45.7324923Z /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/frontend/src/contexts/ThemeContext.tsx
+2026-01-27T12:28:45.7327719Z ##[warning]  84:6  warning  React Hook useEffect has missing dependencies: 'applyTheme' and 'theme'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+2026-01-27T12:28:45.7329662Z 
+2026-01-27T12:28:45.7330215Z ✖ 2 problems (0 errors, 2 warnings)
+2026-01-27T12:28:45.7330573Z 

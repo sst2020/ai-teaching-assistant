@@ -1,0 +1,48 @@
+﻿2026-01-27T12:28:03.2087779Z ##[group]Run if [ -d "node_modules" ]; then
+2026-01-27T12:28:03.2088210Z [36;1mif [ -d "node_modules" ]; then[0m
+2026-01-27T12:28:03.2088493Z [36;1m  rm -rf node_modules[0m
+2026-01-27T12:28:03.2088755Z [36;1mfi[0m
+2026-01-27T12:28:03.2088978Z [36;1mif [ -f "package-lock.json" ]; then[0m
+2026-01-27T12:28:03.2089266Z [36;1m  rm package-lock.json[0m
+2026-01-27T12:28:03.2089812Z [36;1mfi[0m
+2026-01-27T12:28:03.2090021Z [36;1mnpm install --legacy-peer-deps[0m
+2026-01-27T12:28:03.2133672Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-01-27T12:28:03.2134213Z ##[endgroup]
+2026-01-27T12:28:27.3220714Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-01-27T12:28:27.3713899Z npm warn deprecated stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+2026-01-27T12:28:27.3960057Z npm warn deprecated @babel/plugin-proposal-private-methods@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-methods instead.
+2026-01-27T12:28:27.3965103Z npm warn deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead.
+2026-01-27T12:28:27.3969608Z npm warn deprecated @babel/plugin-proposal-numeric-separator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-numeric-separator instead.
+2026-01-27T12:28:27.3976841Z npm warn deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.
+2026-01-27T12:28:27.4734531Z npm warn deprecated rollup-plugin-terser@7.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
+2026-01-27T12:28:27.4952996Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2026-01-27T12:28:27.5517715Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2026-01-27T12:28:27.6290908Z npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+2026-01-27T12:28:27.6407175Z npm warn deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead.
+2026-01-27T12:28:27.6586041Z npm warn deprecated @babel/plugin-proposal-private-property-in-object@7.21.11: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-property-in-object instead.
+2026-01-27T12:28:27.6707702Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2026-01-27T12:28:27.7024736Z npm warn deprecated whatwg-encoding@1.0.5: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-01-27T12:28:27.7638367Z npm warn deprecated q@1.5.1: You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+2026-01-27T12:28:27.7640909Z npm warn deprecated
+2026-01-27T12:28:27.7641802Z npm warn deprecated (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
+2026-01-27T12:28:27.8523094Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2026-01-27T12:28:27.8732786Z npm warn deprecated domexception@2.0.1: Use your platform's native DOMException instead
+2026-01-27T12:28:27.9588274Z npm warn deprecated w3c-hr-time@1.0.2: Use your platform's native performance.now() and performance.timeOrigin.
+2026-01-27T12:28:27.9973974Z npm warn deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-codec instead
+2026-01-27T12:28:28.3140418Z npm warn deprecated workbox-cacheable-response@6.6.0: workbox-background-sync@6.6.0
+2026-01-27T12:28:28.4248076Z npm warn deprecated workbox-google-analytics@6.6.0: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
+2026-01-27T12:28:28.5339783Z npm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions
+2026-01-27T12:28:29.4395943Z npm warn deprecated svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
+2026-01-27T12:28:31.3257721Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2026-01-27T12:28:33.7797380Z 
+2026-01-27T12:28:33.7798413Z added 1450 packages, and audited 1451 packages in 31s
+2026-01-27T12:28:33.7799067Z 
+2026-01-27T12:28:33.7799973Z 356 packages are looking for funding
+2026-01-27T12:28:33.7800452Z   run `npm fund` for details
+2026-01-27T12:28:33.7901776Z 
+2026-01-27T12:28:33.7902538Z 9 vulnerabilities (3 moderate, 6 high)
+2026-01-27T12:28:33.7907611Z 
+2026-01-27T12:28:33.7908048Z To address all issues (including breaking changes), run:
+2026-01-27T12:28:33.7908700Z   npm audit fix --force
+2026-01-27T12:28:33.7908964Z 
+2026-01-27T12:28:33.7909289Z Run `npm audit` for details.

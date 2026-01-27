@@ -94,7 +94,7 @@ SyncSessionLocal = sessionmaker(
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
     FastAPI dependency that provides a database session.
-    
+
     Yields:
         AsyncSession: Database session for the request
     """

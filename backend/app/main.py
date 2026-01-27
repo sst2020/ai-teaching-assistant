@@ -144,10 +144,12 @@ def create_app(testing: bool = False) -> FastAPI:
             """测试模式的简化 lifespan"""
             # 测试模式下仍然需要初始化数据库表
             async with async_engine.begin() as conn:
+                # 导入所有模型以确保它们被注册到 Base.metadata
                 from models import (
                     Student, Assignment, Submission, GradingResult,
                     Question, Answer, PlagiarismCheck, Rubric, CodeFile,
-                    FeedbackTemplate, AIInteraction, KnowledgeBaseEntry, QALog
+                    AnalysisResult, FeedbackTemplate, AIInteraction,
+                    KnowledgeBaseEntry, QALog
                 )
                 await conn.run_sync(Base.metadata.create_all)
             yield

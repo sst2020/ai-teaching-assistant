@@ -1,0 +1,72 @@
+﻿2026-01-27T12:27:54.7287435Z ##[group]Run actions/checkout@v4
+2026-01-27T12:27:54.7288530Z with:
+2026-01-27T12:27:54.7289052Z   repository: sst2020/ai-teaching-assistant
+2026-01-27T12:27:54.7290359Z   token: ***
+2026-01-27T12:27:54.7290888Z   ssh-strict: true
+2026-01-27T12:27:54.7291381Z   ssh-user: git
+2026-01-27T12:27:54.7291867Z   persist-credentials: true
+2026-01-27T12:27:54.7292465Z   clean: true
+2026-01-27T12:27:54.7292984Z   sparse-checkout-cone-mode: true
+2026-01-27T12:27:54.7293645Z   fetch-depth: 1
+2026-01-27T12:27:54.7294130Z   fetch-tags: false
+2026-01-27T12:27:54.7294627Z   show-progress: true
+2026-01-27T12:27:54.7295133Z   lfs: false
+2026-01-27T12:27:54.7295562Z   submodules: false
+2026-01-27T12:27:54.7296103Z   set-safe-directory: true
+2026-01-27T12:27:54.7296938Z ##[endgroup]
+2026-01-27T12:27:54.8390682Z Syncing repository: sst2020/ai-teaching-assistant
+2026-01-27T12:27:54.8392919Z ##[group]Getting Git version info
+2026-01-27T12:27:54.8394187Z Working directory is '/home/runner/work/ai-teaching-assistant/ai-teaching-assistant'
+2026-01-27T12:27:54.8396138Z [command]/usr/bin/git version
+2026-01-27T12:27:54.8453824Z git version 2.52.0
+2026-01-27T12:27:54.8480478Z ##[endgroup]
+2026-01-27T12:27:54.8503226Z Temporarily overriding HOME='/home/runner/work/_temp/69e7686a-82e8-45d0-a506-ec992de1be7a' before making global git config changes
+2026-01-27T12:27:54.8505642Z Adding repository directory to the temporary git global config as a safe directory
+2026-01-27T12:27:54.8508354Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ai-teaching-assistant/ai-teaching-assistant
+2026-01-27T12:27:54.8546108Z Deleting the contents of '/home/runner/work/ai-teaching-assistant/ai-teaching-assistant'
+2026-01-27T12:27:54.8549544Z ##[group]Initializing the repository
+2026-01-27T12:27:54.8553988Z [command]/usr/bin/git init /home/runner/work/ai-teaching-assistant/ai-teaching-assistant
+2026-01-27T12:27:54.8661937Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-01-27T12:27:54.8664742Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-01-27T12:27:54.8667417Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-01-27T12:27:54.8668575Z hint: call:
+2026-01-27T12:27:54.8668982Z hint:
+2026-01-27T12:27:54.8670158Z hint: 	git config --global init.defaultBranch <name>
+2026-01-27T12:27:54.8671020Z hint:
+2026-01-27T12:27:54.8671849Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-01-27T12:27:54.8673731Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-01-27T12:27:54.8674800Z hint:
+2026-01-27T12:27:54.8675241Z hint: 	git branch -m <name>
+2026-01-27T12:27:54.8675787Z hint:
+2026-01-27T12:27:54.8676641Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-01-27T12:27:54.8679000Z Initialized empty Git repository in /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/.git/
+2026-01-27T12:27:54.8682329Z [command]/usr/bin/git remote add origin https://github.com/sst2020/ai-teaching-assistant
+2026-01-27T12:27:54.8715126Z ##[endgroup]
+2026-01-27T12:27:54.8716091Z ##[group]Disabling automatic garbage collection
+2026-01-27T12:27:54.8719083Z [command]/usr/bin/git config --local gc.auto 0
+2026-01-27T12:27:54.8748690Z ##[endgroup]
+2026-01-27T12:27:54.8749888Z ##[group]Setting up auth
+2026-01-27T12:27:54.8755921Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-01-27T12:27:54.8788001Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-01-27T12:27:54.9109742Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-01-27T12:27:54.9141366Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-01-27T12:27:54.9366491Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-01-27T12:27:54.9400268Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-01-27T12:27:54.9627387Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-01-27T12:27:54.9662934Z ##[endgroup]
+2026-01-27T12:27:54.9663927Z ##[group]Fetching the repository
+2026-01-27T12:27:54.9672161Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +27ec4e2e160bfcf97da2be74f1b1d16421e93d0d:refs/remotes/origin/main
+2026-01-27T12:27:55.4093280Z From https://github.com/sst2020/ai-teaching-assistant
+2026-01-27T12:27:55.4094645Z  * [new ref]         27ec4e2e160bfcf97da2be74f1b1d16421e93d0d -> origin/main
+2026-01-27T12:27:55.4125274Z ##[endgroup]
+2026-01-27T12:27:55.4126231Z ##[group]Determining the checkout info
+2026-01-27T12:27:55.4127660Z ##[endgroup]
+2026-01-27T12:27:55.4132088Z [command]/usr/bin/git sparse-checkout disable
+2026-01-27T12:27:55.4171348Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-01-27T12:27:55.4196238Z ##[group]Checking out the ref
+2026-01-27T12:27:55.4199646Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-01-27T12:27:55.4481086Z Switched to a new branch 'main'
+2026-01-27T12:27:55.4482516Z branch 'main' set up to track 'origin/main'.
+2026-01-27T12:27:55.4491371Z ##[endgroup]
+2026-01-27T12:27:55.4528400Z [command]/usr/bin/git log -1 --format=%H
+2026-01-27T12:27:55.4550206Z 27ec4e2e160bfcf97da2be74f1b1d16421e93d0d

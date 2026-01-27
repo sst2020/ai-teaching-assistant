@@ -1,0 +1,36 @@
+﻿2026-01-27T12:27:54.2699800Z Current runner version: '2.331.0'
+2026-01-27T12:27:54.2725482Z ##[group]Runner Image Provisioner
+2026-01-27T12:27:54.2726391Z Hosted Compute Agent
+2026-01-27T12:27:54.2727019Z Version: 20260115.477
+2026-01-27T12:27:54.2727604Z Commit: 4b342d620503cbe250a3154040964899ea7c9b00
+2026-01-27T12:27:54.2728299Z Build Date: 2026-01-15T22:32:41Z
+2026-01-27T12:27:54.2728993Z Worker ID: {918708e6-814a-4335-8088-32aa4deea8b2}
+2026-01-27T12:27:54.2729686Z Azure Region: westus
+2026-01-27T12:27:54.2730204Z ##[endgroup]
+2026-01-27T12:27:54.2731611Z ##[group]Operating System
+2026-01-27T12:27:54.2732181Z Ubuntu
+2026-01-27T12:27:54.2732650Z 24.04.3
+2026-01-27T12:27:54.2733337Z LTS
+2026-01-27T12:27:54.2733823Z ##[endgroup]
+2026-01-27T12:27:54.2734319Z ##[group]Runner Image
+2026-01-27T12:27:54.2734894Z Image: ubuntu-24.04
+2026-01-27T12:27:54.2735419Z Version: 20260119.4.1
+2026-01-27T12:27:54.2736353Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260119.4/images/ubuntu/Ubuntu2404-Readme.md
+2026-01-27T12:27:54.2738438Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260119.4
+2026-01-27T12:27:54.2739339Z ##[endgroup]
+2026-01-27T12:27:54.2740494Z ##[group]GITHUB_TOKEN Permissions
+2026-01-27T12:27:54.2742500Z Contents: read
+2026-01-27T12:27:54.2743409Z Metadata: read
+2026-01-27T12:27:54.2744135Z Packages: read
+2026-01-27T12:27:54.2744648Z ##[endgroup]
+2026-01-27T12:27:54.2746822Z Secret source: Actions
+2026-01-27T12:27:54.2747606Z Prepare workflow directory
+2026-01-27T12:27:54.3069042Z Prepare all required actions
+2026-01-27T12:27:54.3113621Z Getting action download info
+2026-01-27T12:27:54.8931086Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-01-27T12:27:54.9877031Z Download action repository 'docker/setup-qemu-action@v3' (SHA:c7c53464625b32c7a7e944ae62b3e17d2b600130)
+2026-01-27T12:27:55.5991676Z Download action repository 'docker/setup-buildx-action@v3' (SHA:8d2750c68a42422c14e847fe6c8ac0403b4cbd6f)
+2026-01-27T12:27:56.3803815Z Download action repository 'docker/login-action@v3' (SHA:5e57cd118135c172c3672efd75eb46360885c0ef)
+2026-01-27T12:27:57.0070580Z Download action repository 'docker/metadata-action@v5' (SHA:c299e40c65443455700f0fdfc63efafe5b349051)
+2026-01-27T12:27:57.9545062Z Download action repository 'docker/build-push-action@v5' (SHA:ca052bb54ab0790a636c9b5f226502c73d547a25)
+2026-01-27T12:27:58.6820583Z Complete job name: docker-build (backend)

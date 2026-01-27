@@ -1,0 +1,625 @@
+﻿2026-01-27T12:28:13.6846393Z ##[group]Run docker/build-push-action@v5
+2026-01-27T12:28:13.6846703Z with:
+2026-01-27T12:28:13.6846886Z   context: ./backend
+2026-01-27T12:28:13.6847088Z   file: ./backend/Dockerfile
+2026-01-27T12:28:13.6847309Z   push: true
+2026-01-27T12:28:13.6847586Z   tags: ***/ai-teaching-assistant-backend:main
+2026-01-27T12:28:13.6849822Z   labels: org.opencontainers.image.created=2026-01-27T12:28:13.608Z
+org.opencontainers.image.description=A web application for AI-based question judging.
+org.opencontainers.image.licenses=MIT
+org.opencontainers.image.revision=27ec4e2e160bfcf97da2be74f1b1d16421e93d0d
+org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant
+org.opencontainers.image.title=ai-teaching-assistant
+org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant
+org.opencontainers.image.version=main
+2026-01-27T12:28:13.6851827Z   cache-from: type=gha
+2026-01-27T12:28:13.6852042Z   cache-to: type=gha,mode=max
+2026-01-27T12:28:13.6852267Z   load: false
+2026-01-27T12:28:13.6852475Z   no-cache: false
+2026-01-27T12:28:13.6852659Z   pull: false
+2026-01-27T12:28:13.6853191Z   github-token: ***
+2026-01-27T12:28:13.6853399Z env:
+2026-01-27T12:28:13.6853587Z   DOCKER_METADATA_OUTPUT_VERSION: main
+2026-01-27T12:28:13.6853970Z   DOCKER_METADATA_OUTPUT_TAGS: ***/ai-teaching-assistant-backend:main
+2026-01-27T12:28:13.6854347Z   DOCKER_METADATA_OUTPUT_TAG_NAMES: main
+2026-01-27T12:28:13.6856421Z   DOCKER_METADATA_OUTPUT_LABELS: org.opencontainers.image.created=2026-01-27T12:28:13.608Z
+org.opencontainers.image.description=A web application for AI-based question judging.
+org.opencontainers.image.licenses=MIT
+org.opencontainers.image.revision=27ec4e2e160bfcf97da2be74f1b1d16421e93d0d
+org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant
+org.opencontainers.image.title=ai-teaching-assistant
+org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant
+org.opencontainers.image.version=main
+2026-01-27T12:28:13.6860608Z   DOCKER_METADATA_OUTPUT_ANNOTATIONS: manifest:org.opencontainers.image.created=2026-01-27T12:28:13.608Z
+manifest:org.opencontainers.image.description=A web application for AI-based question judging.
+manifest:org.opencontainers.image.licenses=MIT
+manifest:org.opencontainers.image.revision=27ec4e2e160bfcf97da2be74f1b1d16421e93d0d
+manifest:org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant
+manifest:org.opencontainers.image.title=ai-teaching-assistant
+manifest:org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant
+manifest:org.opencontainers.image.version=main
+2026-01-27T12:28:13.6867535Z   DOCKER_METADATA_OUTPUT_JSON: {"tags":["***/ai-teaching-assistant-backend:main"],"tag-names":["main"],"labels":{"org.opencontainers.image.created":"2026-01-27T12:28:13.608Z","org.opencontainers.image.description":"A web application for AI-based question judging.","org.opencontainers.image.licenses":"MIT","org.opencontainers.image.revision":"27ec4e2e160bfcf97da2be74f1b1d16421e93d0d","org.opencontainers.image.source":"https://github.com/sst2020/ai-teaching-assistant","org.opencontainers.image.title":"ai-teaching-assistant","org.opencontainers.image.url":"https://github.com/sst2020/ai-teaching-assistant","org.opencontainers.image.version":"main"},"annotations":["manifest:org.opencontainers.image.created=2026-01-27T12:28:13.608Z","manifest:org.opencontainers.image.description=A web application for AI-based question judging.","manifest:org.opencontainers.image.licenses=MIT","manifest:org.opencontainers.image.revision=27ec4e2e160bfcf97da2be74f1b1d16421e93d0d","manifest:org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant","manifest:org.opencontainers.image.title=ai-teaching-assistant","manifest:org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant","manifest:org.opencontainers.image.version=main"]}
+2026-01-27T12:28:13.6872629Z   DOCKER_METADATA_OUTPUT_BAKE_FILE_TAGS: /home/runner/work/_temp/docker-actions-toolkit-0hAM45/docker-metadata-action-bake-tags.json
+2026-01-27T12:28:13.6874030Z   DOCKER_METADATA_OUTPUT_BAKE_FILE_LABELS: /home/runner/work/_temp/docker-actions-toolkit-0hAM45/docker-metadata-action-bake-labels.json
+2026-01-27T12:28:13.6874997Z   DOCKER_METADATA_OUTPUT_BAKE_FILE_ANNOTATIONS: /home/runner/work/_temp/docker-actions-toolkit-0hAM45/docker-metadata-action-bake-annotations.json
+2026-01-27T12:28:13.6876049Z   DOCKER_METADATA_OUTPUT_BAKE_FILE: /home/runner/work/_temp/docker-actions-toolkit-0hAM45/docker-metadata-action-bake.json
+2026-01-27T12:28:13.6876589Z ##[endgroup]
+2026-01-27T12:28:13.9211369Z ##[group]GitHub Actions runtime token ACs
+2026-01-27T12:28:13.9222391Z refs/heads/main: read/write
+2026-01-27T12:28:13.9223506Z ##[endgroup]
+2026-01-27T12:28:13.9224476Z ##[group]Docker info
+2026-01-27T12:28:13.9265310Z [command]/usr/bin/docker version
+2026-01-27T12:28:13.9453336Z Client: Docker Engine - Community
+2026-01-27T12:28:13.9453871Z  Version:           28.0.4
+2026-01-27T12:28:13.9454132Z  API version:       1.48
+2026-01-27T12:28:13.9454364Z  Go version:        go1.23.7
+2026-01-27T12:28:13.9454627Z  Git commit:        b8034c0
+2026-01-27T12:28:13.9454863Z  Built:             Tue Mar 25 15:07:16 2025
+2026-01-27T12:28:13.9455134Z  OS/Arch:           linux/amd64
+2026-01-27T12:28:13.9455356Z  Context:           default
+2026-01-27T12:28:13.9455496Z 
+2026-01-27T12:28:13.9455603Z Server: Docker Engine - Community
+2026-01-27T12:28:13.9455834Z  Engine:
+2026-01-27T12:28:13.9456005Z   Version:          28.0.4
+2026-01-27T12:28:13.9456243Z   API version:      1.48 (minimum version 1.24)
+2026-01-27T12:28:13.9456508Z   Go version:       go1.23.7
+2026-01-27T12:28:13.9456729Z   Git commit:       6430e49
+2026-01-27T12:28:13.9456952Z   Built:            Tue Mar 25 15:07:16 2025
+2026-01-27T12:28:13.9457203Z   OS/Arch:          linux/amd64
+2026-01-27T12:28:13.9457425Z   Experimental:     false
+2026-01-27T12:28:13.9457634Z  containerd:
+2026-01-27T12:28:13.9457805Z   Version:          v2.2.1
+2026-01-27T12:28:13.9458081Z   GitCommit:        dea7da592f5d1d2b7755e3a161be07f43fad8f75
+2026-01-27T12:28:13.9458399Z  runc:
+2026-01-27T12:28:13.9458572Z   Version:          1.3.4
+2026-01-27T12:28:13.9458791Z   GitCommit:        v1.3.4-0-gd6d73eb8
+2026-01-27T12:28:13.9459165Z  docker-init:
+2026-01-27T12:28:13.9459502Z   Version:          0.19.0
+2026-01-27T12:28:13.9459724Z   GitCommit:        de40ad0
+2026-01-27T12:28:13.9495458Z [command]/usr/bin/docker info
+2026-01-27T12:28:13.9944756Z Client: Docker Engine - Community
+2026-01-27T12:28:13.9945429Z  Version:    28.0.4
+2026-01-27T12:28:13.9945789Z  Context:    default
+2026-01-27T12:28:13.9946245Z  Debug Mode: false
+2026-01-27T12:28:13.9946620Z  Plugins:
+2026-01-27T12:28:13.9946995Z   buildx: Docker Buildx (Docker Inc.)
+2026-01-27T12:28:13.9947469Z     Version:  v0.30.1
+2026-01-27T12:28:13.9947981Z     Path:     /usr/libexec/docker/cli-plugins/docker-buildx
+2026-01-27T12:28:13.9948590Z   compose: Docker Compose (Docker Inc.)
+2026-01-27T12:28:13.9949080Z     Version:  v2.38.2
+2026-01-27T12:28:13.9949820Z     Path:     /usr/libexec/docker/cli-plugins/docker-compose
+2026-01-27T12:28:13.9950288Z 
+2026-01-27T12:28:13.9950367Z Server:
+2026-01-27T12:28:13.9950552Z  Containers: 1
+2026-01-27T12:28:13.9950750Z   Running: 1
+2026-01-27T12:28:13.9950925Z   Paused: 0
+2026-01-27T12:28:13.9951093Z   Stopped: 0
+2026-01-27T12:28:13.9951266Z  Images: 3
+2026-01-27T12:28:13.9951460Z  Server Version: 28.0.4
+2026-01-27T12:28:13.9951688Z  Storage Driver: overlay2
+2026-01-27T12:28:13.9951922Z   Backing Filesystem: extfs
+2026-01-27T12:28:13.9952146Z   Supports d_type: true
+2026-01-27T12:28:13.9952358Z   Using metacopy: false
+2026-01-27T12:28:13.9952570Z   Native Overlay Diff: false
+2026-01-27T12:28:13.9952793Z   userxattr: false
+2026-01-27T12:28:13.9953233Z  Logging Driver: json-file
+2026-01-27T12:28:13.9953465Z  Cgroup Driver: systemd
+2026-01-27T12:28:13.9953669Z  Cgroup Version: 2
+2026-01-27T12:28:13.9953850Z  Plugins:
+2026-01-27T12:28:13.9954147Z   Volume: local
+2026-01-27T12:28:13.9954566Z   Network: bridge host ipvlan macvlan null overlay
+2026-01-27T12:28:13.9955178Z   Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
+2026-01-27T12:28:13.9955900Z  Swarm: inactive
+2026-01-27T12:28:13.9956115Z  Runtimes: io.containerd.runc.v2 runc
+2026-01-27T12:28:13.9956371Z  Default Runtime: runc
+2026-01-27T12:28:13.9956583Z  Init Binary: docker-init
+2026-01-27T12:28:13.9957015Z  containerd version: dea7da592f5d1d2b7755e3a161be07f43fad8f75
+2026-01-27T12:28:13.9957343Z  runc version: v1.3.4-0-gd6d73eb8
+2026-01-27T12:28:13.9957582Z  init version: de40ad0
+2026-01-27T12:28:13.9957798Z  Security Options:
+2026-01-27T12:28:13.9957988Z   apparmor
+2026-01-27T12:28:13.9958155Z   seccomp
+2026-01-27T12:28:13.9958317Z    Profile: builtin
+2026-01-27T12:28:13.9958500Z   cgroupns
+2026-01-27T12:28:13.9958790Z  Kernel Version: 6.11.0-1018-azure
+2026-01-27T12:28:13.9959189Z  Operating System: Ubuntu 24.04.3 LTS
+2026-01-27T12:28:13.9959442Z  OSType: linux
+2026-01-27T12:28:13.9959627Z  Architecture: x86_64
+2026-01-27T12:28:13.9959831Z  CPUs: 4
+2026-01-27T12:28:13.9960005Z  Total Memory: 15.62GiB
+2026-01-27T12:28:13.9960216Z  Name: runnervmymu0l
+2026-01-27T12:28:13.9960438Z  ID: 6d647f4b-a064-4489-8a08-7cb8635b8d79
+2026-01-27T12:28:13.9960697Z  Docker Root Dir: /var/lib/docker
+2026-01-27T12:28:13.9960927Z  Debug Mode: false
+2026-01-27T12:28:13.9961832Z  Username: ***
+2026-01-27T12:28:13.9962047Z  Experimental: false
+2026-01-27T12:28:13.9962259Z  Insecure Registries:
+2026-01-27T12:28:13.9962479Z   ::1/128
+2026-01-27T12:28:13.9962636Z   127.0.0.0/8
+2026-01-27T12:28:13.9962821Z  Live Restore Enabled: false
+2026-01-27T12:28:13.9963397Z 
+2026-01-27T12:28:13.9964051Z ##[endgroup]
+2026-01-27T12:28:13.9964655Z ##[group]Proxy configuration
+2026-01-27T12:28:13.9968653Z No proxy configuration found
+2026-01-27T12:28:13.9969403Z ##[endgroup]
+2026-01-27T12:28:14.0716309Z ##[group]Buildx version
+2026-01-27T12:28:14.0746967Z [command]/usr/bin/docker buildx version
+2026-01-27T12:28:14.1221295Z github.com/docker/buildx v0.30.1 9e66234aa13328a5e75b75aa5574e1ca6d6d9c01
+2026-01-27T12:28:14.1255482Z ##[endgroup]
+2026-01-27T12:28:14.1256166Z ##[group]Builder info
+2026-01-27T12:28:14.2215272Z {
+2026-01-27T12:28:14.2216217Z   "nodes": [
+2026-01-27T12:28:14.2216685Z     {
+2026-01-27T12:28:14.2217330Z       "name": "builder-3841e53e-0ba8-4181-bd61-297d188ecda30",
+2026-01-27T12:28:14.2217988Z       "endpoint": "unix:///var/run/docker.sock",
+2026-01-27T12:28:14.2218604Z       "status": "running",
+2026-01-27T12:28:14.2219568Z       "buildkitd-flags": "--allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host",
+2026-01-27T12:28:14.2220508Z       "buildkit": "v0.26.3",
+2026-01-27T12:28:14.2221830Z       "platforms": "linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/arm64,linux/riscv64,linux/ppc64le,linux/s390x,linux/386,linux/mips64le,linux/mips64,linux/loong64,linux/arm/v7,linux/arm/v6",
+2026-01-27T12:28:14.2223497Z       "features": {
+2026-01-27T12:28:14.2224054Z         "Automatically load images to the Docker Engine image store": true,
+2026-01-27T12:28:14.2224730Z         "Cache export": true,
+2026-01-27T12:28:14.2225139Z         "Direct push": true,
+2026-01-27T12:28:14.2225543Z         "Docker exporter": true,
+2026-01-27T12:28:14.2226066Z         "Multi-platform build": true,
+2026-01-27T12:28:14.2226540Z         "OCI exporter": true
+2026-01-27T12:28:14.2226923Z       },
+2026-01-27T12:28:14.2227224Z       "labels": {
+2026-01-27T12:28:14.2227686Z         "org.mobyproject.buildkit.worker.executor": "oci",
+2026-01-27T12:28:14.2228416Z         "org.mobyproject.buildkit.worker.hostname": "d7bfb5bdcaf4",
+2026-01-27T12:28:14.2229117Z         "org.mobyproject.buildkit.worker.network": "host",
+2026-01-27T12:28:14.2229873Z         "org.mobyproject.buildkit.worker.oci.process-mode": "sandbox",
+2026-01-27T12:28:14.2230674Z         "org.mobyproject.buildkit.worker.selinux.enabled": "false",
+2026-01-27T12:28:14.2231435Z         "org.mobyproject.buildkit.worker.snapshotter": "overlayfs"
+2026-01-27T12:28:14.2232041Z       },
+2026-01-27T12:28:14.2232361Z       "gcPolicy": [
+2026-01-27T12:28:14.2232704Z         {
+2026-01-27T12:28:14.2233660Z           "all": false,
+2026-01-27T12:28:14.2234030Z           "filter": [
+2026-01-27T12:28:14.2234416Z             "type==source.local",
+2026-01-27T12:28:14.2234859Z             "type==exec.cachemount",
+2026-01-27T12:28:14.2235333Z             "type==source.git.checkout"
+2026-01-27T12:28:14.2236040Z           ],
+2026-01-27T12:28:14.2236369Z           "keepDuration": "48h0m0s"
+2026-01-27T12:28:14.2236794Z         },
+2026-01-27T12:28:14.2237088Z         {
+2026-01-27T12:28:14.2237391Z           "all": false,
+2026-01-27T12:28:14.2237779Z           "keepDuration": "1440h0m0s"
+2026-01-27T12:28:14.2238213Z         },
+2026-01-27T12:28:14.2238513Z         {
+2026-01-27T12:28:14.2238807Z           "all": false
+2026-01-27T12:28:14.2239107Z         },
+2026-01-27T12:28:14.2239393Z         {
+2026-01-27T12:28:14.2239673Z           "all": true
+2026-01-27T12:28:14.2240000Z         }
+2026-01-27T12:28:14.2240285Z       ]
+2026-01-27T12:28:14.2240563Z     }
+2026-01-27T12:28:14.2240853Z   ],
+2026-01-27T12:28:14.2241253Z   "name": "builder-3841e53e-0ba8-4181-bd61-297d188ecda3",
+2026-01-27T12:28:14.2241885Z   "driver": "docker-container",
+2026-01-27T12:28:14.2242350Z   "lastActivity": "2026-01-27T12:28:08.000Z"
+2026-01-27T12:28:14.2242812Z }
+2026-01-27T12:28:14.2244988Z ##[endgroup]
+2026-01-27T12:28:14.3695233Z [command]/usr/bin/docker buildx build --cache-from type=gha --cache-to type=gha,mode=max --file ./backend/Dockerfile --iidfile /home/runner/work/_temp/docker-actions-toolkit-M9sIoF/build-iidfile-b01c22e0f2.txt --label org.opencontainers.image.created=2026-01-27T12:28:13.608Z --label org.opencontainers.image.description=A web application for AI-based question judging. --label org.opencontainers.image.licenses=MIT --label org.opencontainers.image.revision=27ec4e2e160bfcf97da2be74f1b1d16421e93d0d --label org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant --label org.opencontainers.image.title=ai-teaching-assistant --label org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant --label org.opencontainers.image.version=main --attest type=provenance,mode=max,builder-id=https://github.com/sst2020/ai-teaching-assistant/actions/runs/21397172644 --tag ***/ai-teaching-assistant-backend:main --metadata-file /home/runner/work/_temp/docker-actions-toolkit-M9sIoF/build-metadata-dabc4eab3b.json --push ./backend
+2026-01-27T12:28:14.6332016Z #0 building with "builder-3841e53e-0ba8-4181-bd61-297d188ecda3" instance using docker-container driver
+2026-01-27T12:28:14.6332734Z 
+2026-01-27T12:28:14.6332879Z #1 [internal] load build definition from Dockerfile
+2026-01-27T12:28:14.6333422Z #1 transferring dockerfile: 923B done
+2026-01-27T12:28:14.6333689Z #1 DONE 0.0s
+2026-01-27T12:28:14.6333799Z 
+2026-01-27T12:28:14.6333986Z #2 [internal] load metadata for docker.io/library/python:3.11-slim
+2026-01-27T12:28:14.8525463Z #2 ...
+2026-01-27T12:28:14.8525696Z 
+2026-01-27T12:28:14.8525908Z #3 [auth] library/python:pull token for registry-1.docker.io
+2026-01-27T12:28:14.8526239Z #3 DONE 0.0s
+2026-01-27T12:28:15.0026478Z 
+2026-01-27T12:28:15.0027139Z #2 [internal] load metadata for docker.io/library/python:3.11-slim
+2026-01-27T12:28:15.4483274Z #2 DONE 1.0s
+2026-01-27T12:28:15.6152456Z 
+2026-01-27T12:28:15.6153194Z #4 [internal] load .dockerignore
+2026-01-27T12:28:15.6153703Z #4 transferring context: 2B done
+2026-01-27T12:28:15.6154151Z #4 DONE 0.0s
+2026-01-27T12:28:15.6154343Z 
+2026-01-27T12:28:15.6154488Z #5 [internal] load build context
+2026-01-27T12:28:15.6154863Z #5 DONE 0.0s
+2026-01-27T12:28:15.6155037Z 
+2026-01-27T12:28:15.6155661Z #6 [1/6] FROM docker.io/library/python:3.11-slim@sha256:5be45dbade29bebd6886af6b438fd7e0b4eb7b611f39ba62b430263f82de36d2
+2026-01-27T12:28:15.6157073Z #6 resolve docker.io/library/python:3.11-slim@sha256:5be45dbade29bebd6886af6b438fd7e0b4eb7b611f39ba62b430263f82de36d2 done
+2026-01-27T12:28:15.6157658Z #6 DONE 0.0s
+2026-01-27T12:28:15.6157774Z 
+2026-01-27T12:28:15.6157922Z #7 importing cache manifest from gha:13477956023233325417
+2026-01-27T12:28:15.9569269Z #7 DONE 0.5s
+2026-01-27T12:28:16.1536893Z 
+2026-01-27T12:28:16.1537434Z #5 [internal] load build context
+2026-01-27T12:28:16.1538886Z #5 transferring context: 1.27MB 0.0s done
+2026-01-27T12:28:16.1539289Z #5 DONE 0.0s
+2026-01-27T12:28:16.1539411Z 
+2026-01-27T12:28:16.1539495Z #8 [2/6] WORKDIR /app
+2026-01-27T12:28:16.1540122Z #8 CACHED
+2026-01-27T12:28:16.1540238Z 
+2026-01-27T12:28:16.1540622Z #9 [3/6] RUN apt-get update && apt-get install -y --no-install-recommends     gcc     && rm -rf /var/lib/apt/lists/*
+2026-01-27T12:28:16.1541183Z #9 CACHED
+2026-01-27T12:28:16.1541290Z 
+2026-01-27T12:28:16.1541393Z #10 [4/6] COPY requirements.txt .
+2026-01-27T12:28:16.1541663Z #10 CACHED
+2026-01-27T12:28:16.1541769Z 
+2026-01-27T12:28:16.1542107Z #11 [5/6] RUN pip install --no-cache-dir --upgrade pip &&     pip install --no-cache-dir -r requirements.txt
+2026-01-27T12:28:16.1920614Z #11 CACHED
+2026-01-27T12:28:16.3429089Z 
+2026-01-27T12:28:16.3429935Z #11 [5/6] RUN pip install --no-cache-dir --upgrade pip &&     pip install --no-cache-dir -r requirements.txt
+2026-01-27T12:28:16.3453508Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 0B / 93.76MB 0.2s
+2026-01-27T12:28:16.4692017Z #11 sha256:6165a0e6284b9ec1fc538b3ba532ff8eceb637062d98b16b505cf9517322fea5 0B / 767B 0.2s
+2026-01-27T12:28:16.4693507Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 0B / 67.79MB 0.2s
+2026-01-27T12:28:16.4694410Z #11 sha256:1aa7ff6b56452e710f6ebb8df239185f8e3be65d6bd277d2a8739e606dc112c0 93B / 93B 0.3s done
+2026-01-27T12:28:16.6200411Z #11 sha256:6165a0e6284b9ec1fc538b3ba532ff8eceb637062d98b16b505cf9517322fea5 767B / 767B 0.3s done
+2026-01-27T12:28:16.6201589Z #11 sha256:0b2bf04f68e9f306a8a83f57c6ced322a23968bf3d5acebc07e055c090240826 0B / 250B 0.2s
+2026-01-27T12:28:16.7217501Z #11 sha256:0b2bf04f68e9f306a8a83f57c6ced322a23968bf3d5acebc07e055c090240826 250B / 250B 0.3s done
+2026-01-27T12:28:16.7218725Z #11 sha256:3e731abb5c1dd05aef62585d392d31ad26089dc4c031730e5ab0225aef80b3f2 0B / 14.36MB 0.2s
+2026-01-27T12:28:16.8727119Z #11 sha256:5b09819094bb89d5b2416ff2fb03f68666a5372c358cfd22f2b62d7f6660d906 0B / 1.29MB 0.2s
+2026-01-27T12:28:17.4727813Z #11 sha256:3e731abb5c1dd05aef62585d392d31ad26089dc4c031730e5ab0225aef80b3f2 1.05MB / 14.36MB 0.9s
+2026-01-27T12:28:17.6222217Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 5.24MB / 93.76MB 1.4s
+2026-01-27T12:28:17.6224092Z #11 sha256:3e731abb5c1dd05aef62585d392d31ad26089dc4c031730e5ab0225aef80b3f2 2.10MB / 14.36MB 1.1s
+2026-01-27T12:28:17.6225033Z #11 sha256:5b09819094bb89d5b2416ff2fb03f68666a5372c358cfd22f2b62d7f6660d906 1.13MB / 1.29MB 0.9s
+2026-01-27T12:28:17.7766836Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 4.19MB / 67.79MB 1.5s
+2026-01-27T12:28:17.7768162Z #11 sha256:3e731abb5c1dd05aef62585d392d31ad26089dc4c031730e5ab0225aef80b3f2 3.15MB / 14.36MB 1.2s
+2026-01-27T12:28:17.7769402Z #11 sha256:5b09819094bb89d5b2416ff2fb03f68666a5372c358cfd22f2b62d7f6660d906 1.29MB / 1.29MB 0.9s done
+2026-01-27T12:28:17.7770376Z #11 sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 0B / 29.77MB 0.2s
+2026-01-27T12:28:17.9305358Z #11 sha256:3e731abb5c1dd05aef62585d392d31ad26089dc4c031730e5ab0225aef80b3f2 5.24MB / 14.36MB 1.4s
+2026-01-27T12:28:18.0761876Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 11.53MB / 93.76MB 1.8s
+2026-01-27T12:28:18.0762795Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 8.39MB / 67.79MB 1.8s
+2026-01-27T12:28:18.0763761Z #11 sha256:3e731abb5c1dd05aef62585d392d31ad26089dc4c031730e5ab0225aef80b3f2 7.34MB / 14.36MB 1.5s
+2026-01-27T12:28:18.0764555Z #11 sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 3.15MB / 29.77MB 0.5s
+2026-01-27T12:28:18.2263144Z #11 sha256:3e731abb5c1dd05aef62585d392d31ad26089dc4c031730e5ab0225aef80b3f2 10.49MB / 14.36MB 1.7s
+2026-01-27T12:28:18.2264178Z #11 sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 5.24MB / 29.77MB 0.6s
+2026-01-27T12:28:18.3768321Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 16.78MB / 93.76MB 2.1s
+2026-01-27T12:28:18.3769652Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 12.58MB / 67.79MB 2.1s
+2026-01-27T12:28:18.3770431Z #11 sha256:3e731abb5c1dd05aef62585d392d31ad26089dc4c031730e5ab0225aef80b3f2 14.36MB / 14.36MB 1.8s done
+2026-01-27T12:28:18.3771379Z #11 sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 8.39MB / 29.77MB 0.8s
+2026-01-27T12:28:18.5267955Z #11 sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 12.58MB / 29.77MB 0.9s
+2026-01-27T12:28:18.6763222Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 16.78MB / 67.79MB 2.4s
+2026-01-27T12:28:18.6764070Z #11 sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 16.78MB / 29.77MB 1.1s
+2026-01-27T12:28:18.8264812Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 23.07MB / 93.76MB 2.6s
+2026-01-27T12:28:18.8265861Z #11 sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 19.92MB / 29.77MB 1.2s
+2026-01-27T12:28:18.9765350Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 20.97MB / 67.79MB 2.7s
+2026-01-27T12:28:18.9766330Z #11 sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 24.12MB / 29.77MB 1.4s
+2026-01-27T12:28:19.1264102Z #11 sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 28.31MB / 29.77MB 1.5s
+2026-01-27T12:28:19.2767387Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 29.36MB / 93.76MB 3.0s
+2026-01-27T12:28:19.2768305Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 25.17MB / 67.79MB 3.0s
+2026-01-27T12:28:19.4960569Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 34.60MB / 93.76MB 3.3s
+2026-01-27T12:28:19.4961857Z #11 sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 29.77MB / 29.77MB 1.7s done
+2026-01-27T12:28:19.4963126Z #11 extracting sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533
+2026-01-27T12:28:19.6456765Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 29.36MB / 67.79MB 3.3s
+2026-01-27T12:28:19.9453185Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 40.89MB / 93.76MB 3.8s
+2026-01-27T12:28:20.0719020Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 34.60MB / 67.79MB 3.8s
+2026-01-27T12:28:20.0720322Z #11 extracting sha256:119d43eec815e5f9a47da3a7d59454581b1e204b0c34db86f171b7ceb3336533 0.6s done
+2026-01-27T12:28:20.0721445Z #11 extracting sha256:5b09819094bb89d5b2416ff2fb03f68666a5372c358cfd22f2b62d7f6660d906 0.1s done
+2026-01-27T12:28:20.2455848Z #11 extracting sha256:3e731abb5c1dd05aef62585d392d31ad26089dc4c031730e5ab0225aef80b3f2
+2026-01-27T12:28:20.3954403Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 47.19MB / 93.76MB 4.2s
+2026-01-27T12:28:20.3956321Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 38.80MB / 67.79MB 4.1s
+2026-01-27T12:28:20.5296713Z #11 extracting sha256:3e731abb5c1dd05aef62585d392d31ad26089dc4c031730e5ab0225aef80b3f2 0.5s done
+2026-01-27T12:28:20.6955247Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 52.43MB / 93.76MB 4.5s
+2026-01-27T12:28:20.6956245Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 42.99MB / 67.79MB 4.4s
+2026-01-27T12:28:20.6957037Z #11 extracting sha256:0b2bf04f68e9f306a8a83f57c6ced322a23968bf3d5acebc07e055c090240826 done
+2026-01-27T12:28:20.6957779Z #11 extracting sha256:1aa7ff6b56452e710f6ebb8df239185f8e3be65d6bd277d2a8739e606dc112c0 done
+2026-01-27T12:28:20.9958083Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 47.19MB / 67.79MB 4.7s
+2026-01-27T12:28:21.1464214Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 58.72MB / 93.76MB 5.0s
+2026-01-27T12:28:21.2962559Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 51.38MB / 67.79MB 5.0s
+2026-01-27T12:28:21.5957522Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 65.01MB / 93.76MB 5.4s
+2026-01-27T12:28:21.5958678Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 55.57MB / 67.79MB 5.3s
+2026-01-27T12:28:21.8960104Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 70.25MB / 93.76MB 5.7s
+2026-01-27T12:28:21.8961212Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 59.77MB / 67.79MB 5.6s
+2026-01-27T12:28:22.1953676Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 63.96MB / 67.79MB 5.9s
+2026-01-27T12:28:22.3288320Z #11 sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 67.79MB / 67.79MB 6.1s done
+2026-01-27T12:28:22.4953984Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 76.55MB / 93.76MB 6.2s
+2026-01-27T12:28:22.4955147Z #11 extracting sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a
+2026-01-27T12:28:22.7958679Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 82.84MB / 93.76MB 6.6s
+2026-01-27T12:28:23.0955057Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 88.08MB / 93.76MB 6.9s
+2026-01-27T12:28:23.2458849Z #11 extracting sha256:a6210ede12e84e88c6ea6127a4b3415d5dc59374c7f62d2971258d39340cf48a 0.8s done
+2026-01-27T12:28:23.2460090Z #11 extracting sha256:6165a0e6284b9ec1fc538b3ba532ff8eceb637062d98b16b505cf9517322fea5 done
+2026-01-27T12:28:23.5426595Z #11 sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 93.76MB / 93.76MB 7.3s done
+2026-01-27T12:28:23.5427340Z #11 DONE 7.5s
+2026-01-27T12:28:23.6944275Z 
+2026-01-27T12:28:23.6944991Z #11 [5/6] RUN pip install --no-cache-dir --upgrade pip &&     pip install --no-cache-dir -r requirements.txt
+2026-01-27T12:28:23.6946375Z #11 extracting sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25
+2026-01-27T12:28:26.2633891Z #11 extracting sha256:209a3416ffd88cc551e776ab924dd2edfb53589ae48c2ae85d36591d4782ea25 2.7s done
+2026-01-27T12:28:26.2634753Z #11 DONE 10.3s
+2026-01-27T12:28:26.4139166Z 
+2026-01-27T12:28:26.4139635Z #12 [6/6] COPY . .
+2026-01-27T12:28:27.6271159Z #12 DONE 1.4s
+2026-01-27T12:28:27.7782112Z 
+2026-01-27T12:28:27.7783416Z #13 [auth] ***/ai-teaching-assistant-backend:pull,push token for registry-1.docker.io
+2026-01-27T12:28:27.9286105Z #13 DONE 0.0s
+2026-01-27T12:28:27.9286383Z 
+2026-01-27T12:28:27.9286550Z #14 exporting to image
+2026-01-27T12:28:27.9287004Z #14 exporting layers 0.1s done
+2026-01-27T12:28:27.9287947Z #14 exporting manifest sha256:de1cae518d235ac05f533a10754a247395a4b498fb882b09783a00ac027133ab done
+2026-01-27T12:28:27.9289347Z #14 exporting config sha256:b6e092c485ef343c54466da11cc15127e3ff9ad13d49ad3649555fede2900b3e done
+2026-01-27T12:28:27.9290820Z #14 exporting attestation manifest sha256:acea86d16a5859cdbb45d3da851f7f64edfafb8252b2888d344b429b815d849f done
+2026-01-27T12:28:27.9291782Z #14 exporting manifest list sha256:8d60e07fa2e00cccbc08c5d1dc908642d58ca5760f0b9cf421e3d30275009b8c done
+2026-01-27T12:28:27.9292402Z #14 pushing layers
+2026-01-27T12:28:29.0073122Z #14 pushing layers 1.3s done
+2026-01-27T12:28:29.0074343Z #14 pushing manifest for docker.io/***/ai-teaching-assistant-backend:main@sha256:8d60e07fa2e00cccbc08c5d1dc908642d58ca5760f0b9cf421e3d30275009b8c
+2026-01-27T12:28:31.8297319Z #14 pushing manifest for docker.io/***/ai-teaching-assistant-backend:main@sha256:8d60e07fa2e00cccbc08c5d1dc908642d58ca5760f0b9cf421e3d30275009b8c 2.8s done
+2026-01-27T12:28:31.8298694Z #14 DONE 4.2s
+2026-01-27T12:28:31.8298891Z 
+2026-01-27T12:28:31.8299064Z #15 exporting to GitHub Actions Cache
+2026-01-27T12:28:31.8299554Z #15 preparing build cache for export
+2026-01-27T12:28:32.6838653Z #15 writing layer sha256:c490fe2ca136767488eab940845ed6dbacbee8e481976b1230a81ca9a824e697
+2026-01-27T12:28:33.6512867Z #15 writing layer sha256:c490fe2ca136767488eab940845ed6dbacbee8e481976b1230a81ca9a824e697 1.0s done
+2026-01-27T12:28:34.3500663Z #15 preparing build cache for export 2.5s done
+2026-01-27T12:28:34.3501271Z #15 DONE 2.5s
+2026-01-27T12:28:34.3725235Z 
+2026-01-27T12:28:34.3725621Z #16 resolving provenance for metadata file
+2026-01-27T12:28:34.3726110Z #16 DONE 0.0s
+2026-01-27T12:28:34.3799120Z ##[group]ImageID
+2026-01-27T12:28:34.3799734Z sha256:8d60e07fa2e00cccbc08c5d1dc908642d58ca5760f0b9cf421e3d30275009b8c
+2026-01-27T12:28:34.3801221Z ##[endgroup]
+2026-01-27T12:28:34.3801819Z ##[group]Digest
+2026-01-27T12:28:34.3802409Z sha256:8d60e07fa2e00cccbc08c5d1dc908642d58ca5760f0b9cf421e3d30275009b8c
+2026-01-27T12:28:34.3803658Z ##[endgroup]
+2026-01-27T12:28:34.3804016Z ##[group]Metadata
+2026-01-27T12:28:34.3804728Z {
+2026-01-27T12:28:34.3805071Z   "buildx.build.provenance": {
+2026-01-27T12:28:34.3805457Z     "builder": {
+2026-01-27T12:28:34.3805982Z       "id": "https://github.com/sst2020/ai-teaching-assistant/actions/runs/21397172644"
+2026-01-27T12:28:34.3806422Z     },
+2026-01-27T12:28:34.3806690Z     "buildType": "https://mobyproject.org/buildkit@v1",
+2026-01-27T12:28:34.3806988Z     "materials": [
+2026-01-27T12:28:34.3829921Z       {
+2026-01-27T12:28:34.3830410Z         "uri": "pkg:docker/python@3.11-slim?platform=linux%2Famd64",
+2026-01-27T12:28:34.3831063Z         "digest": {
+2026-01-27T12:28:34.3831790Z           "sha256": "5be45dbade29bebd6886af6b438fd7e0b4eb7b611f39ba62b430263f82de36d2"
+2026-01-27T12:28:34.3832475Z         }
+2026-01-27T12:28:34.3832749Z       }
+2026-01-27T12:28:34.3833539Z     ],
+2026-01-27T12:28:34.3833853Z     "invocation": {
+2026-01-27T12:28:34.3834171Z       "configSource": {
+2026-01-27T12:28:34.3834501Z         "entryPoint": "Dockerfile"
+2026-01-27T12:28:34.3834853Z       },
+2026-01-27T12:28:34.3835117Z       "parameters": {
+2026-01-27T12:28:34.3835448Z         "frontend": "dockerfile.v0",
+2026-01-27T12:28:34.3835813Z         "args": {
+2026-01-27T12:28:34.3836264Z           "label:org.opencontainers.image.created": "2026-01-27T12:28:13.608Z",
+2026-01-27T12:28:34.3837243Z           "label:org.opencontainers.image.description": "A web application for AI-based question judging.",
+2026-01-27T12:28:34.3838163Z           "label:org.opencontainers.image.licenses": "MIT",
+2026-01-27T12:28:34.3839006Z           "label:org.opencontainers.image.revision": "27ec4e2e160bfcf97da2be74f1b1d16421e93d0d",
+2026-01-27T12:28:34.3840172Z           "label:org.opencontainers.image.source": "https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:28:34.3841177Z           "label:org.opencontainers.image.title": "ai-teaching-assistant",
+2026-01-27T12:28:34.3842144Z           "label:org.opencontainers.image.url": "https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:28:34.3843224Z           "label:org.opencontainers.image.version": "main"
+2026-01-27T12:28:34.3843749Z         },
+2026-01-27T12:28:34.3844084Z         "locals": [
+2026-01-27T12:28:34.3844402Z           {
+2026-01-27T12:28:34.3844653Z             "name": "context"
+2026-01-27T12:28:34.3844882Z           },
+2026-01-27T12:28:34.3845073Z           {
+2026-01-27T12:28:34.3845249Z             "name": "dockerfile"
+2026-01-27T12:28:34.3845466Z           }
+2026-01-27T12:28:34.3845629Z         ]
+2026-01-27T12:28:34.3845788Z       },
+2026-01-27T12:28:34.3845954Z       "environment": {
+2026-01-27T12:28:34.3846159Z         "github_actor": "sst2020",
+2026-01-27T12:28:34.3846407Z         "github_actor_id": "77180679",
+2026-01-27T12:28:34.3846661Z         "github_event_name": "push",
+2026-01-27T12:28:34.3846913Z         "github_event_payload": {
+2026-01-27T12:28:34.3847204Z           "after": "27ec4e2e160bfcf97da2be74f1b1d16421e93d0d",
+2026-01-27T12:28:34.3847499Z           "base_ref": null,
+2026-01-27T12:28:34.3847775Z           "before": "200d57cab5dd3c9928d3c8ed2b1bae0c6f6824b0",
+2026-01-27T12:28:34.3848074Z           "commits": [
+2026-01-27T12:28:34.3848267Z             {
+2026-01-27T12:28:34.3848445Z               "author": {
+2026-01-27T12:28:34.3848668Z                 "email": "2024040340@buct.edu.cn",
+2026-01-27T12:28:34.3848939Z                 "name": "sst2020",
+2026-01-27T12:28:34.3849405Z                 "username": "sst2020"
+2026-01-27T12:28:34.3849637Z               },
+2026-01-27T12:28:34.3849824Z               "committer": {
+2026-01-27T12:28:34.3850057Z                 "email": "2024040340@buct.edu.cn",
+2026-01-27T12:28:34.3850698Z                 "name": "sst2020",
+2026-01-27T12:28:34.3851127Z                 "username": "sst2020"
+2026-01-27T12:28:34.3851494Z               },
+2026-01-27T12:28:34.3851811Z               "distinct": true,
+2026-01-27T12:28:34.3852126Z               "id": "27ec4e2e160bfcf97da2be74f1b1d16421e93d0d",
+2026-01-27T12:28:34.3852425Z               "message": "update ci.yml",
+2026-01-27T12:28:34.3852699Z               "timestamp": "2026-01-27T20:27:37+08:00",
+2026-01-27T12:28:34.3853253Z               "tree_id": "1432b08cdde6eac106099f47e3c7a63132003b8d",
+2026-01-27T12:28:34.3853835Z               "url": "https://github.com/sst2020/ai-teaching-assistant/commit/27ec4e2e160bfcf97da2be74f1b1d16421e93d0d"
+2026-01-27T12:28:34.3854349Z             }
+2026-01-27T12:28:34.3854519Z           ],
+2026-01-27T12:28:34.3854900Z           "compare": "https://github.com/sst2020/ai-teaching-assistant/compare/200d57cab5dd...27ec4e2e160b",
+2026-01-27T12:28:34.3855362Z           "created": false,
+2026-01-27T12:28:34.3855584Z           "deleted": false,
+2026-01-27T12:28:34.3855794Z           "forced": false,
+2026-01-27T12:28:34.3856004Z           "head_commit": {
+2026-01-27T12:28:34.3856198Z             "author": {
+2026-01-27T12:28:34.3856415Z               "email": "2024040340@buct.edu.cn",
+2026-01-27T12:28:34.3856675Z               "name": "sst2020",
+2026-01-27T12:28:34.3856903Z               "username": "sst2020"
+2026-01-27T12:28:34.3857123Z             },
+2026-01-27T12:28:34.3857298Z             "committer": {
+2026-01-27T12:28:34.3857514Z               "email": "2024040340@buct.edu.cn",
+2026-01-27T12:28:34.3857769Z               "name": "sst2020",
+2026-01-27T12:28:34.3857995Z               "username": "sst2020"
+2026-01-27T12:28:34.3858227Z             },
+2026-01-27T12:28:34.3858410Z             "distinct": true,
+2026-01-27T12:28:34.3858677Z             "id": "27ec4e2e160bfcf97da2be74f1b1d16421e93d0d",
+2026-01-27T12:28:34.3858991Z             "message": "update ci.yml",
+2026-01-27T12:28:34.3859264Z             "timestamp": "2026-01-27T20:27:37+08:00",
+2026-01-27T12:28:34.3859595Z             "tree_id": "1432b08cdde6eac106099f47e3c7a63132003b8d",
+2026-01-27T12:28:34.3860147Z             "url": "https://github.com/sst2020/ai-teaching-assistant/commit/27ec4e2e160bfcf97da2be74f1b1d16421e93d0d"
+2026-01-27T12:28:34.3860627Z           },
+2026-01-27T12:28:34.3860798Z           "pusher": {
+2026-01-27T12:28:34.3861055Z             "email": "77180679+sst2020@users.noreply.github.com",
+2026-01-27T12:28:34.3861353Z             "name": "sst2020"
+2026-01-27T12:28:34.3861562Z           },
+2026-01-27T12:28:34.3861743Z           "ref": "refs/heads/main",
+2026-01-27T12:28:34.3861975Z           "repository": {
+2026-01-27T12:28:34.3862192Z             "allow_forking": true,
+2026-01-27T12:28:34.3862640Z             "archive_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/{archive_format}{/ref}",
+2026-01-27T12:28:34.3863304Z             "archived": false,
+2026-01-27T12:28:34.3863746Z             "assignees_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/assignees{/user}",
+2026-01-27T12:28:34.3864381Z             "blobs_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/git/blobs{/sha}",
+2026-01-27T12:28:34.3865004Z             "branches_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/branches{/branch}",
+2026-01-27T12:28:34.3865554Z             "clone_url": "https://github.com/sst2020/ai-teaching-assistant.git",
+2026-01-27T12:28:34.3866174Z             "collaborators_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/collaborators{/collaborator}",
+2026-01-27T12:28:34.3866863Z             "comments_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/comments{/number}",
+2026-01-27T12:28:34.3867639Z             "commits_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/commits{/sha}",
+2026-01-27T12:28:34.3868266Z             "compare_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/compare/{base}...{head}",
+2026-01-27T12:28:34.3869029Z             "contents_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/contents/{+path}",
+2026-01-27T12:28:34.3870083Z             "contributors_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/contributors",
+2026-01-27T12:28:34.3870869Z             "created_at": 1764340901,
+2026-01-27T12:28:34.3871283Z             "default_branch": "main",
+2026-01-27T12:28:34.3871840Z             "deployments_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/deployments",
+2026-01-27T12:28:34.3872381Z             "description": "A web application for AI-based question judging.",
+2026-01-27T12:28:34.3872738Z             "disabled": false,
+2026-01-27T12:28:34.3873801Z             "downloads_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/downloads",
+2026-01-27T12:28:34.3874385Z             "events_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/events",
+2026-01-27T12:28:34.3874787Z             "fork": false,
+2026-01-27T12:28:34.3875006Z             "forks": 1,
+2026-01-27T12:28:34.3875217Z             "forks_count": 1,
+2026-01-27T12:28:34.3875572Z             "forks_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/forks",
+2026-01-27T12:28:34.3876011Z             "full_name": "sst2020/ai-teaching-assistant",
+2026-01-27T12:28:34.3876491Z             "git_commits_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/git/commits{/sha}",
+2026-01-27T12:28:34.3877118Z             "git_refs_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/git/refs{/sha}",
+2026-01-27T12:28:34.3877712Z             "git_tags_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/git/tags{/sha}",
+2026-01-27T12:28:34.3878225Z             "git_url": "git://github.com/sst2020/ai-teaching-assistant.git",
+2026-01-27T12:28:34.3878576Z             "has_discussions": false,
+2026-01-27T12:28:34.3878823Z             "has_downloads": true,
+2026-01-27T12:28:34.3879049Z             "has_issues": true,
+2026-01-27T12:28:34.3879280Z             "has_pages": false,
+2026-01-27T12:28:34.3879504Z             "has_projects": true,
+2026-01-27T12:28:34.3879733Z             "has_wiki": true,
+2026-01-27T12:28:34.3879948Z             "homepage": null,
+2026-01-27T12:28:34.3880303Z             "hooks_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/hooks",
+2026-01-27T12:28:34.3880783Z             "html_url": "https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:28:34.3881116Z             "id": 1106045712,
+2026-01-27T12:28:34.3881335Z             "is_template": false,
+2026-01-27T12:28:34.3881801Z             "issue_comment_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/issues/comments{/number}",
+2026-01-27T12:28:34.3882513Z             "issue_events_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/issues/events{/number}",
+2026-01-27T12:28:34.3883486Z             "issues_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/issues{/number}",
+2026-01-27T12:28:34.3884080Z             "keys_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/keys{/key_id}",
+2026-01-27T12:28:34.3884656Z             "labels_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/labels{/name}",
+2026-01-27T12:28:34.3885084Z             "language": "Python",
+2026-01-27T12:28:34.3885482Z             "languages_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/languages",
+2026-01-27T12:28:34.3885900Z             "license": {
+2026-01-27T12:28:34.3886105Z               "key": "mit",
+2026-01-27T12:28:34.3886316Z               "name": "MIT License",
+2026-01-27T12:28:34.3886582Z               "node_id": "MDc6TGljZW5zZTEz",
+2026-01-27T12:28:34.3886841Z               "spdx_id": "MIT",
+2026-01-27T12:28:34.3887278Z               "url": "https://api.github.com/licenses/mit"
+2026-01-27T12:28:34.3887570Z             },
+2026-01-27T12:28:34.3887758Z             "master_branch": "main",
+2026-01-27T12:28:34.3888145Z             "merges_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/merges",
+2026-01-27T12:28:34.3888868Z             "milestones_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/milestones{/number}",
+2026-01-27T12:28:34.3889333Z             "mirror_url": null,
+2026-01-27T12:28:34.3889569Z             "name": "ai-teaching-assistant",
+2026-01-27T12:28:34.3889837Z             "node_id": "R_kgDOQezrEA",
+2026-01-27T12:28:34.3890383Z             "notifications_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/notifications{?since,all,participating}",
+2026-01-27T12:28:34.3890941Z             "open_issues": 1,
+2026-01-27T12:28:34.3891170Z             "open_issues_count": 1,
+2026-01-27T12:28:34.3891400Z             "owner": {
+2026-01-27T12:28:34.3891713Z               "avatar_url": "https://avatars.githubusercontent.com/u/77180679?v=4",
+2026-01-27T12:28:34.3892136Z               "email": "77180679+sst2020@users.noreply.github.com",
+2026-01-27T12:28:34.3892547Z               "events_url": "https://api.github.com/users/sst2020/events{/privacy}",
+2026-01-27T12:28:34.3893218Z               "followers_url": "https://api.github.com/users/sst2020/followers",
+2026-01-27T12:28:34.3893712Z               "following_url": "https://api.github.com/users/sst2020/following{/other_user}",
+2026-01-27T12:28:34.3894197Z               "gists_url": "https://api.github.com/users/sst2020/gists{/gist_id}",
+2026-01-27T12:28:34.3894543Z               "gravatar_id": "",
+2026-01-27T12:28:34.3894813Z               "html_url": "https://github.com/sst2020",
+2026-01-27T12:28:34.3895092Z               "id": 77180679,
+2026-01-27T12:28:34.3895309Z               "login": "sst2020",
+2026-01-27T12:28:34.3895537Z               "name": "sst2020",
+2026-01-27T12:28:34.3895776Z               "node_id": "MDQ6VXNlcjc3MTgwNjc5",
+2026-01-27T12:28:34.3896145Z               "organizations_url": "https://api.github.com/users/sst2020/orgs",
+2026-01-27T12:28:34.3896637Z               "received_events_url": "https://api.github.com/users/sst2020/received_events",
+2026-01-27T12:28:34.3897106Z               "repos_url": "https://api.github.com/users/sst2020/repos",
+2026-01-27T12:28:34.3897431Z               "site_admin": false,
+2026-01-27T12:28:34.3897793Z               "starred_url": "https://api.github.com/users/sst2020/starred{/owner}{/repo}",
+2026-01-27T12:28:34.3898305Z               "subscriptions_url": "https://api.github.com/users/sst2020/subscriptions",
+2026-01-27T12:28:34.3898676Z               "type": "User",
+2026-01-27T12:28:34.3898940Z               "url": "https://api.github.com/users/sst2020",
+2026-01-27T12:28:34.3899239Z               "user_view_type": "public"
+2026-01-27T12:28:34.3899478Z             },
+2026-01-27T12:28:34.3899661Z             "private": false,
+2026-01-27T12:28:34.3900050Z             "pulls_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/pulls{/number}",
+2026-01-27T12:28:34.3900480Z             "pushed_at": 1769516867,
+2026-01-27T12:28:34.3900906Z             "releases_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/releases{/id}",
+2026-01-27T12:28:34.3901345Z             "size": 5879,
+2026-01-27T12:28:34.3901639Z             "ssh_url": "git@github.com:sst2020/ai-teaching-assistant.git",
+2026-01-27T12:28:34.3901972Z             "stargazers": 0,
+2026-01-27T12:28:34.3902190Z             "stargazers_count": 0,
+2026-01-27T12:28:34.3902595Z             "stargazers_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/stargazers",
+2026-01-27T12:28:34.3903567Z             "statuses_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/statuses/{sha}",
+2026-01-27T12:28:34.3904215Z             "subscribers_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/subscribers",
+2026-01-27T12:28:34.3904874Z             "subscription_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/subscription",
+2026-01-27T12:28:34.3905620Z             "svn_url": "https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:28:34.3906079Z             "tags_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/tags",
+2026-01-27T12:28:34.3906704Z             "teams_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/teams",
+2026-01-27T12:28:34.3907094Z             "topics": [],
+2026-01-27T12:28:34.3907479Z             "trees_url": "https://api.github.com/repos/sst2020/ai-teaching-assistant/git/trees{/sha}",
+2026-01-27T12:28:34.3907924Z             "updated_at": "2026-01-27T12:01:56Z",
+2026-01-27T12:28:34.3908283Z             "url": "https://api.github.com/repos/sst2020/ai-teaching-assistant",
+2026-01-27T12:28:34.3908641Z             "visibility": "public",
+2026-01-27T12:28:34.3908874Z             "watchers": 0,
+2026-01-27T12:28:34.3909090Z             "watchers_count": 0,
+2026-01-27T12:28:34.3909345Z             "web_commit_signoff_required": false
+2026-01-27T12:28:34.3909602Z           },
+2026-01-27T12:28:34.3909775Z           "sender": {
+2026-01-27T12:28:34.3910078Z             "avatar_url": "https://avatars.githubusercontent.com/u/77180679?v=4",
+2026-01-27T12:28:34.3910544Z             "events_url": "https://api.github.com/users/sst2020/events{/privacy}",
+2026-01-27T12:28:34.3911000Z             "followers_url": "https://api.github.com/users/sst2020/followers",
+2026-01-27T12:28:34.3911476Z             "following_url": "https://api.github.com/users/sst2020/following{/other_user}",
+2026-01-27T12:28:34.3911960Z             "gists_url": "https://api.github.com/users/sst2020/gists{/gist_id}",
+2026-01-27T12:28:34.3912311Z             "gravatar_id": "",
+2026-01-27T12:28:34.3912573Z             "html_url": "https://github.com/sst2020",
+2026-01-27T12:28:34.3912843Z             "id": 77180679,
+2026-01-27T12:28:34.3913381Z             "login": "sst2020",
+2026-01-27T12:28:34.3913633Z             "node_id": "MDQ6VXNlcjc3MTgwNjc5",
+2026-01-27T12:28:34.3913999Z             "organizations_url": "https://api.github.com/users/sst2020/orgs",
+2026-01-27T12:28:34.3914488Z             "received_events_url": "https://api.github.com/users/sst2020/received_events",
+2026-01-27T12:28:34.3914943Z             "repos_url": "https://api.github.com/users/sst2020/repos",
+2026-01-27T12:28:34.3915278Z             "site_admin": false,
+2026-01-27T12:28:34.3915632Z             "starred_url": "https://api.github.com/users/sst2020/starred{/owner}{/repo}",
+2026-01-27T12:28:34.3916140Z             "subscriptions_url": "https://api.github.com/users/sst2020/subscriptions",
+2026-01-27T12:28:34.3916522Z             "type": "User",
+2026-01-27T12:28:34.3916783Z             "url": "https://api.github.com/users/sst2020",
+2026-01-27T12:28:34.3917072Z             "user_view_type": "public"
+2026-01-27T12:28:34.3917304Z           }
+2026-01-27T12:28:34.3917469Z         },
+2026-01-27T12:28:34.3917651Z         "github_job": "docker-build",
+2026-01-27T12:28:34.3917914Z         "github_ref": "refs/heads/main",
+2026-01-27T12:28:34.3918175Z         "github_ref_name": "main",
+2026-01-27T12:28:34.3918416Z         "github_ref_protected": "false",
+2026-01-27T12:28:34.3918671Z         "github_ref_type": "branch",
+2026-01-27T12:28:34.3918973Z         "github_repository": "sst2020/ai-teaching-assistant",
+2026-01-27T12:28:34.3919301Z         "github_repository_id": "1106045712",
+2026-01-27T12:28:34.3919582Z         "github_repository_owner": "sst2020",
+2026-01-27T12:28:34.3919862Z         "github_repository_owner_id": "77180679",
+2026-01-27T12:28:34.3920137Z         "github_run_attempt": "1",
+2026-01-27T12:28:34.3920379Z         "github_run_id": "21397172644",
+2026-01-27T12:28:34.3920628Z         "github_run_number": "22",
+2026-01-27T12:28:34.3920867Z         "github_runner_arch": "X64",
+2026-01-27T12:28:34.3921144Z         "github_runner_environment": "github-hosted",
+2026-01-27T12:28:34.3921430Z         "github_runner_image_os": "ubuntu24",
+2026-01-27T12:28:34.3921893Z         "github_runner_image_version": "20260119.4.1",
+2026-01-27T12:28:34.3922205Z         "github_runner_name": "GitHub Actions 1000001439",
+2026-01-27T12:28:34.3922494Z         "github_runner_os": "Linux",
+2026-01-27T12:28:34.3922844Z         "github_runner_tracking_id": "github_6e0dc398-a5fc-412a-b381-3249d5af0e18",
+2026-01-27T12:28:34.3923614Z         "github_server_url": "https://github.com",
+2026-01-27T12:28:34.3923905Z         "github_triggering_actor": "sst2020",
+2026-01-27T12:28:34.3924181Z         "github_workflow": "CI/CD Pipeline",
+2026-01-27T12:28:34.3924637Z         "github_workflow_ref": "sst2020/ai-teaching-assistant/.github/workflows/ci.yml@refs/heads/main",
+2026-01-27T12:28:34.3925182Z         "github_workflow_sha": "27ec4e2e160bfcf97da2be74f1b1d16421e93d0d",
+2026-01-27T12:28:34.3925530Z         "platform": "linux/amd64"
+2026-01-27T12:28:34.3925751Z       }
+2026-01-27T12:28:34.3925909Z     }
+2026-01-27T12:28:34.3926063Z   },
+2026-01-27T12:28:34.3926587Z   "buildx.build.ref": "builder-3841e53e-0ba8-4181-bd61-297d188ecda3/builder-3841e53e-0ba8-4181-bd61-297d188ecda30/jo7tx4l0izjrzh1rfh38bd4d3",
+2026-01-27T12:28:34.3927228Z   "containerimage.descriptor": {
+2026-01-27T12:28:34.3927535Z     "mediaType": "application/vnd.oci.image.index.v1+json",
+2026-01-27T12:28:34.3927993Z     "digest": "sha256:8d60e07fa2e00cccbc08c5d1dc908642d58ca5760f0b9cf421e3d30275009b8c",
+2026-01-27T12:28:34.3928394Z     "size": 856
+2026-01-27T12:28:34.3928570Z   },
+2026-01-27T12:28:34.3928941Z   "containerimage.digest": "sha256:8d60e07fa2e00cccbc08c5d1dc908642d58ca5760f0b9cf421e3d30275009b8c",
+2026-01-27T12:28:34.3929613Z   "image.name": "***/ai-teaching-assistant-backend:main"
+2026-01-27T12:28:34.3929915Z }
+2026-01-27T12:28:34.3930282Z ##[endgroup]

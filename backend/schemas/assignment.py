@@ -10,8 +10,8 @@ from enum import Enum
 class AssignmentType(str, Enum):
     """Types of assignments."""
     CODE = "code"
-    REPORT = "report"
-    PROJECT = "project"
+    ESSAY = "essay"
+    QUIZ = "quiz"
 
 
 class GradingStatus(str, Enum):

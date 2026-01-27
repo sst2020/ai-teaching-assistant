@@ -3,7 +3,7 @@ Assignment Review Router - Handles assignment CRUD and automated grading endpoin
 """
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Query, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Optional, List
+from typing import Optional, List, Dict
 import math
 
 from core.database import get_db
@@ -508,7 +508,7 @@ async def teacher_submit_assignment(
     description: str = Form(..., description="作业描述"),
     due_date: str = Form(..., description="截止日期 (YYYY-MM-DDTHH:MM:SS)"),
     max_score: float = Form(100.0, description="最高分"),
-    assignment_type: AssignmentType = Form(AssignmentType.code, description="作业类型"),
+    assignment_type: AssignmentType = Form(AssignmentType.CODE, description="作业类型"),
     file: UploadFile = File(None, description="作业附件")
 ):
     """

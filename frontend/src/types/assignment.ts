@@ -19,7 +19,7 @@ export interface Assignment {
   attachments?: AssignmentAttachment[];
 }
 
-export type AssignmentType = 'code' | 'essay' | 'quiz' | 'project';
+export type AssignmentType = 'code' | 'essay' | 'quiz';
 
 export interface AssignmentAttachment {
   id: string;

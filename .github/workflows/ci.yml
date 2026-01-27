@@ -116,18 +116,42 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
       if: github.event_name != 'pull_request'
 
+    - name: Extract Docker metadata for backend
+      id: meta_backend
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ secrets.DOCKERHUB_USERNAME }}/ai-teaching-assistant-backend
+      if: matrix.service == 'backend'
+
+    - name: Extract Docker metadata for frontend
+      id: meta_frontend
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ secrets.DOCKERHUB_USERNAME }}/ai-teaching-assistant-frontend
+      if: matrix.service == 'frontend'
+
     - name: Build and push backend Docker image
       uses: docker/build-push-action@v5
       with:
         context: ./backend
         file: ./backend/Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/ai-teaching-assistant-backend:${{ github.sha }}
-          ${{ secrets.DOCKERHUB_USERNAME }}/ai-teaching-assistant-backend:latest
+        tags: ${{ steps.meta_backend.outputs.tags }}
+        labels: ${{ steps.meta_backend.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-      if: matrix.service == 'backend'
+      if: matrix.service == 'backend' && github.event_name != 'pull_request'
+
+    - name: Build and push backend Docker image (no push for PR)
+      uses: docker/build-push-action@v5
+      with:
+        context: ./backend
+        file: ./backend/Dockerfile
+        push: false
+        tags: ai-teaching-assistant-backend:local
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+      if: matrix.service == 'backend' && github.event_name == 'pull_request'
 
     - name: Build and push frontend Docker image
       uses: docker/build-push-action@v5
@@ -135,12 +159,22 @@ jobs:
         context: ./frontend
         file: ./frontend/Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/ai-teaching-assistant-frontend:${{ github.sha }}
-          ${{ secrets.DOCKERHUB_USERNAME }}/ai-teaching-assistant-frontend:latest
+        tags: ${{ steps.meta_frontend.outputs.tags }}
+        labels: ${{ steps.meta_frontend.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-      if: matrix.service == 'frontend'
+      if: matrix.service == 'frontend' && github.event_name != 'pull_request'
+
+    - name: Build and push frontend Docker image (no push for PR)
+      uses: docker/build-push-action@v5
+      with:
+        context: ./frontend
+        file: ./frontend/Dockerfile
+        push: false
+        tags: ai-teaching-assistant-frontend:local
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+      if: matrix.service == 'frontend' && github.event_name == 'pull_request'
 
   # 部署任务 (仅在推送到main分支时运行)
   deploy:

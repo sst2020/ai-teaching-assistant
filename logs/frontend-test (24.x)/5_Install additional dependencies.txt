@@ -1,31 +1,31 @@
-﻿2026-01-27T12:28:33.9118642Z ##[group]Run npm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev --legacy-peer-deps
-2026-01-27T12:28:33.9119283Z [36;1mnpm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev --legacy-peer-deps[0m
-2026-01-27T12:28:33.9120011Z [36;1mnpm install i18next@^23.15.0 react-i18next@^14.1.3 --legacy-peer-deps[0m
-2026-01-27T12:28:33.9151573Z shell: /usr/bin/bash -e {0}
-2026-01-27T12:28:33.9151814Z ##[endgroup]
-2026-01-27T12:28:34.6738472Z npm warn idealTree Removing dependencies.ajv in favor of devDependencies.ajv
-2026-01-27T12:28:34.6742682Z npm warn idealTree Removing dependencies.ajv-keywords in favor of devDependencies.ajv-keywords
-2026-01-27T12:28:35.7520284Z 
-2026-01-27T12:28:35.7520898Z up to date, audited 1451 packages in 2s
-2026-01-27T12:28:35.7521181Z 
-2026-01-27T12:28:35.7521952Z 356 packages are looking for funding
-2026-01-27T12:28:35.7523441Z   run `npm fund` for details
-2026-01-27T12:28:35.7586639Z 
-2026-01-27T12:28:35.7587064Z 9 vulnerabilities (3 moderate, 6 high)
-2026-01-27T12:28:35.7588532Z 
-2026-01-27T12:28:35.7589173Z To address all issues (including breaking changes), run:
-2026-01-27T12:28:35.7590009Z   npm audit fix --force
-2026-01-27T12:28:35.7590258Z 
-2026-01-27T12:28:35.7590469Z Run `npm audit` for details.
-2026-01-27T12:28:37.5689124Z 
-2026-01-27T12:28:37.5690008Z up to date, audited 1451 packages in 2s
-2026-01-27T12:28:37.5690292Z 
-2026-01-27T12:28:37.5691105Z 356 packages are looking for funding
-2026-01-27T12:28:37.5692239Z   run `npm fund` for details
-2026-01-27T12:28:37.5755568Z 
-2026-01-27T12:28:37.5756218Z 9 vulnerabilities (3 moderate, 6 high)
-2026-01-27T12:28:37.5757814Z 
-2026-01-27T12:28:37.5758282Z To address all issues (including breaking changes), run:
-2026-01-27T12:28:37.5758890Z   npm audit fix --force
-2026-01-27T12:28:37.5759158Z 
-2026-01-27T12:28:37.5759568Z Run `npm audit` for details.
+﻿2026-01-27T12:43:09.9970679Z ##[group]Run npm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev --legacy-peer-deps
+2026-01-27T12:43:09.9971338Z [36;1mnpm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev --legacy-peer-deps[0m
+2026-01-27T12:43:09.9971834Z [36;1mnpm install i18next@^23.15.0 react-i18next@^14.1.3 --legacy-peer-deps[0m
+2026-01-27T12:43:10.0004721Z shell: /usr/bin/bash -e {0}
+2026-01-27T12:43:10.0004967Z ##[endgroup]
+2026-01-27T12:43:10.7964940Z npm warn idealTree Removing dependencies.ajv in favor of devDependencies.ajv
+2026-01-27T12:43:10.7968922Z npm warn idealTree Removing dependencies.ajv-keywords in favor of devDependencies.ajv-keywords
+2026-01-27T12:43:11.9598187Z 
+2026-01-27T12:43:11.9598851Z up to date, audited 1451 packages in 2s
+2026-01-27T12:43:11.9599421Z 
+2026-01-27T12:43:11.9599768Z 356 packages are looking for funding
+2026-01-27T12:43:11.9601668Z   run `npm fund` for details
+2026-01-27T12:43:11.9670658Z 
+2026-01-27T12:43:11.9671178Z 9 vulnerabilities (3 moderate, 6 high)
+2026-01-27T12:43:11.9671564Z 
+2026-01-27T12:43:11.9672048Z To address all issues (including breaking changes), run:
+2026-01-27T12:43:11.9672660Z   npm audit fix --force
+2026-01-27T12:43:11.9673146Z 
+2026-01-27T12:43:11.9673369Z Run `npm audit` for details.
+2026-01-27T12:43:13.8402809Z 
+2026-01-27T12:43:13.8403690Z up to date, audited 1451 packages in 2s
+2026-01-27T12:43:13.8404134Z 
+2026-01-27T12:43:13.8404863Z 356 packages are looking for funding
+2026-01-27T12:43:13.8405687Z   run `npm fund` for details
+2026-01-27T12:43:13.8467079Z 
+2026-01-27T12:43:13.8467700Z 9 vulnerabilities (3 moderate, 6 high)
+2026-01-27T12:43:13.8469662Z 
+2026-01-27T12:43:13.8470131Z To address all issues (including breaking changes), run:
+2026-01-27T12:43:13.8470776Z   npm audit fix --force
+2026-01-27T12:43:13.8471051Z 
+2026-01-27T12:43:13.8471254Z Run `npm audit` for details.

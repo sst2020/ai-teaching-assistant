@@ -1,47 +1,47 @@
-﻿2026-01-27T12:28:45.7882274Z ##[group]Run echo "Building frontend application..."
-2026-01-27T12:28:45.7882695Z [36;1mecho "Building frontend application..."[0m
-2026-01-27T12:28:45.7882972Z [36;1mnpm run build[0m
-2026-01-27T12:28:45.7914089Z shell: /usr/bin/bash -e {0}
-2026-01-27T12:28:45.7914321Z env:
-2026-01-27T12:28:45.7914500Z   SKIP_PREFLIGHT_CHECK: true
-2026-01-27T12:28:45.7914763Z   GENERATE_SOURCEMAP: false
-2026-01-27T12:28:45.7914967Z   CI: false
-2026-01-27T12:28:45.7915133Z ##[endgroup]
-2026-01-27T12:28:45.7966855Z Building frontend application...
-2026-01-27T12:28:45.8883484Z 
-2026-01-27T12:28:45.8884172Z > ai-teaching-assistant-frontend@0.1.0 build
-2026-01-27T12:28:45.8884604Z > react-scripts build
-2026-01-27T12:28:45.8884753Z 
-2026-01-27T12:28:46.8953852Z (node:2427) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
-2026-01-27T12:28:46.8954800Z (Use `node --trace-deprecation ...` to show where the warning was created)
-2026-01-27T12:28:46.8978546Z Creating an optimized production build...
-2026-01-27T12:29:05.2198088Z Compiled with warnings.
-2026-01-27T12:29:05.2199968Z 
-2026-01-27T12:29:05.2200159Z [eslint] 
-2026-01-27T12:29:05.2200509Z src/App.tsx
-2026-01-27T12:29:05.2201229Z   Line 7:10:  'Dashboard' is defined but never used  @typescript-eslint/no-unused-vars
-2026-01-27T12:29:05.2201816Z 
-2026-01-27T12:29:05.2202394Z src/contexts/ThemeContext.tsx
-2026-01-27T12:29:05.2203744Z   Line 84:6:  React Hook useEffect has missing dependencies: 'applyTheme' and 'theme'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
-2026-01-27T12:29:05.2204830Z 
-2026-01-27T12:29:05.2205244Z Search for the keywords to learn more about each warning.
-2026-01-27T12:29:05.2206100Z To ignore, add // eslint-disable-next-line to the line before.
-2026-01-27T12:29:05.2206577Z 
-2026-01-27T12:29:05.2206773Z File sizes after gzip:
-2026-01-27T12:29:05.2207023Z 
-2026-01-27T12:29:05.2626586Z   428.61 kB  build/static/js/main.87f6b907.js
-2026-01-27T12:29:05.2627292Z   22.22 kB   build/static/css/main.f59a6356.css
-2026-01-27T12:29:05.2627545Z 
-2026-01-27T12:29:05.2628396Z The project was built assuming it is hosted at /.
-2026-01-27T12:29:05.2629163Z You can control this with the homepage field in your package.json.
-2026-01-27T12:29:05.2629750Z 
-2026-01-27T12:29:05.2629991Z The build folder is ready to be deployed.
-2026-01-27T12:29:05.2630537Z You may serve it with a static server:
-2026-01-27T12:29:05.2630828Z 
-2026-01-27T12:29:05.2630969Z   npm install -g serve
-2026-01-27T12:29:05.2631303Z   serve -s build
-2026-01-27T12:29:05.2631491Z 
-2026-01-27T12:29:05.2631715Z Find out more about deployment here:
-2026-01-27T12:29:05.2632000Z 
-2026-01-27T12:29:05.2632145Z   https://cra.link/deployment
-2026-01-27T12:29:05.2632316Z 
+﻿2026-01-27T12:43:21.9485671Z ##[group]Run echo "Building frontend application..."
+2026-01-27T12:43:21.9486072Z [36;1mecho "Building frontend application..."[0m
+2026-01-27T12:43:21.9486358Z [36;1mnpm run build[0m
+2026-01-27T12:43:21.9517250Z shell: /usr/bin/bash -e {0}
+2026-01-27T12:43:21.9517483Z env:
+2026-01-27T12:43:21.9517661Z   SKIP_PREFLIGHT_CHECK: true
+2026-01-27T12:43:21.9517915Z   GENERATE_SOURCEMAP: false
+2026-01-27T12:43:21.9518119Z   CI: false
+2026-01-27T12:43:21.9518291Z ##[endgroup]
+2026-01-27T12:43:21.9570006Z Building frontend application...
+2026-01-27T12:43:22.0476242Z 
+2026-01-27T12:43:22.0476869Z > ai-teaching-assistant-frontend@0.1.0 build
+2026-01-27T12:43:22.0477309Z > react-scripts build
+2026-01-27T12:43:22.0477474Z 
+2026-01-27T12:43:23.0483062Z (node:2540) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+2026-01-27T12:43:23.0484644Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-01-27T12:43:23.0507173Z Creating an optimized production build...
+2026-01-27T12:43:40.9997538Z Compiled with warnings.
+2026-01-27T12:43:40.9999319Z 
+2026-01-27T12:43:40.9999499Z [eslint] 
+2026-01-27T12:43:40.9999837Z src/App.tsx
+2026-01-27T12:43:41.0000578Z   Line 7:10:  'Dashboard' is defined but never used  @typescript-eslint/no-unused-vars
+2026-01-27T12:43:41.0001209Z 
+2026-01-27T12:43:41.0001754Z src/contexts/ThemeContext.tsx
+2026-01-27T12:43:41.0003422Z   Line 84:6:  React Hook useEffect has missing dependencies: 'applyTheme' and 'theme'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+2026-01-27T12:43:41.0004631Z 
+2026-01-27T12:43:41.0005060Z Search for the keywords to learn more about each warning.
+2026-01-27T12:43:41.0005968Z To ignore, add // eslint-disable-next-line to the line before.
+2026-01-27T12:43:41.0006464Z 
+2026-01-27T12:43:41.0006670Z File sizes after gzip:
+2026-01-27T12:43:41.0006925Z 
+2026-01-27T12:43:41.0429267Z   428.61 kB  build/static/js/main.87f6b907.js
+2026-01-27T12:43:41.0430020Z   22.22 kB   build/static/css/main.f59a6356.css
+2026-01-27T12:43:41.0430420Z 
+2026-01-27T12:43:41.0431166Z The project was built assuming it is hosted at /.
+2026-01-27T12:43:41.0431960Z You can control this with the homepage field in your package.json.
+2026-01-27T12:43:41.0432416Z 
+2026-01-27T12:43:41.0432704Z The build folder is ready to be deployed.
+2026-01-27T12:43:41.0433439Z You may serve it with a static server:
+2026-01-27T12:43:41.0433759Z 
+2026-01-27T12:43:41.0433917Z   npm install -g serve
+2026-01-27T12:43:41.0434271Z   serve -s build
+2026-01-27T12:43:41.0434464Z 
+2026-01-27T12:43:41.0434698Z Find out more about deployment here:
+2026-01-27T12:43:41.0434998Z 
+2026-01-27T12:43:41.0435167Z   https://cra.link/deployment
+2026-01-27T12:43:41.0435402Z 

@@ -1,6 +1,6 @@
-﻿2026-01-27T12:29:41.0212931Z Post job cleanup.
-2026-01-27T12:29:41.2520449Z ##[group]Removing temp folder /home/runner/work/_temp/docker-actions-toolkit-eedkAH
-2026-01-27T12:29:41.2535650Z ##[endgroup]
-2026-01-27T12:29:41.2536960Z ##[group]Post cache
-2026-01-27T12:29:41.2538818Z State not set
-2026-01-27T12:29:41.2539562Z ##[endgroup]
+﻿2026-01-27T12:42:52.8107025Z Post job cleanup.
+2026-01-27T12:42:53.0387413Z ##[group]Removing temp folder /home/runner/work/_temp/docker-actions-toolkit-XoWdK2
+2026-01-27T12:42:53.0401766Z ##[endgroup]
+2026-01-27T12:42:53.0402451Z ##[group]Post cache
+2026-01-27T12:42:53.0403769Z State not set
+2026-01-27T12:42:53.0404553Z ##[endgroup]

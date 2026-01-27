@@ -1,8 +1,8 @@
-﻿2026-01-27T12:28:05.6876226Z ##[group]Run docker/login-action@v3
-2026-01-27T12:28:05.6876561Z with:
-2026-01-27T12:28:05.6876887Z   username: ***
-2026-01-27T12:28:05.6877158Z   password: ***
-2026-01-27T12:28:05.6877352Z   logout: true
-2026-01-27T12:28:05.6877541Z ##[endgroup]
-2026-01-27T12:28:05.9957698Z Logging into docker.io...
-2026-01-27T12:28:06.1070748Z Login Succeeded!
+﻿2026-01-27T12:42:44.5402359Z ##[group]Run docker/login-action@v3
+2026-01-27T12:42:44.5402687Z with:
+2026-01-27T12:42:44.5402979Z   username: ***
+2026-01-27T12:42:44.5403244Z   password: ***
+2026-01-27T12:42:44.5403491Z   logout: true
+2026-01-27T12:42:44.5403681Z ##[endgroup]
+2026-01-27T12:42:44.8463796Z Logging into docker.io...
+2026-01-27T12:42:45.1287341Z Login Succeeded!

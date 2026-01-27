@@ -1,540 +1,733 @@
-﻿2026-01-27T12:28:23.4975154Z ##[group]Run pytest tests/ --cov=app --cov-report=xml --cov-report=html
-2026-01-27T12:28:23.4975702Z [36;1mpytest tests/ --cov=app --cov-report=xml --cov-report=html[0m
-2026-01-27T12:28:23.5008304Z shell: /usr/bin/bash -e {0}
-2026-01-27T12:28:23.5008541Z env:
-2026-01-27T12:28:23.5008783Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
-2026-01-27T12:28:23.5009187Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
-2026-01-27T12:28:23.5009599Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
-2026-01-27T12:28:23.5009954Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
-2026-01-27T12:28:23.5010312Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
-2026-01-27T12:28:23.5010667Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
-2026-01-27T12:28:23.5010982Z ##[endgroup]
-2026-01-27T12:28:27.7408478Z ============================= test session starts ==============================
-2026-01-27T12:28:27.7409815Z platform linux -- Python 3.11.14, pytest-9.0.2, pluggy-1.6.0 -- /opt/hostedtoolcache/Python/3.11.14/x64/bin/python
-2026-01-27T12:28:27.7410551Z cachedir: .pytest_cache
-2026-01-27T12:28:27.7410986Z rootdir: /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend
-2026-01-27T12:28:27.7411473Z configfile: pyproject.toml
-2026-01-27T12:28:27.7411781Z plugins: cov-7.0.0, asyncio-1.3.0, anyio-4.12.1
-2026-01-27T12:28:27.7412432Z asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
-2026-01-27T12:28:28.7791246Z collecting ... collected 244 items
-2026-01-27T12:28:28.7791673Z 
-2026-01-27T12:28:28.7852412Z tests/test_advanced_analysis.py::TestCodeQualityAnalyzer::test_simple_code_analysis PASSED [  0%]
-2026-01-27T12:28:28.7902531Z tests/test_advanced_analysis.py::TestCodeQualityAnalyzer::test_complex_function_detection PASSED [  0%]
-2026-01-27T12:28:28.7942040Z tests/test_advanced_analysis.py::TestCodeQualityAnalyzer::test_maintainability_index PASSED [  1%]
-2026-01-27T12:28:28.7966223Z tests/test_advanced_analysis.py::TestCodeQualityAnalyzer::test_syntax_error_handling PASSED [  1%]
-2026-01-27T12:28:28.7979944Z tests/test_advanced_analysis.py::TestComplexityGrading::test_complexity_grade_a PASSED [  2%]
-2026-01-27T12:28:28.7993052Z tests/test_advanced_analysis.py::TestComplexityGrading::test_complexity_grade_b PASSED [  2%]
-2026-01-27T12:28:28.8005749Z tests/test_advanced_analysis.py::TestComplexityGrading::test_complexity_grade_c PASSED [  2%]
-2026-01-27T12:28:28.8018621Z tests/test_advanced_analysis.py::TestComplexityGrading::test_complexity_grade_f PASSED [  3%]
-2026-01-27T12:28:28.8031450Z tests/test_advanced_analysis.py::TestComplexityGrading::test_maintainability_excellent PASSED [  3%]
-2026-01-27T12:28:28.8044157Z tests/test_advanced_analysis.py::TestComplexityGrading::test_maintainability_poor PASSED [  4%]
-2026-01-27T12:28:28.8061645Z tests/test_advanced_analysis.py::TestDuplicateDetector::test_detect_duplicates PASSED [  4%]
-2026-01-27T12:28:28.8075173Z tests/test_advanced_analysis.py::TestDuplicateDetector::test_no_duplicates PASSED [  4%]
-2026-01-27T12:28:29.4603001Z tests/test_advanced_analysis.py::TestLinterService::test_lint_clean_code PASSED [  5%]
-2026-01-27T12:28:30.1704928Z tests/test_advanced_analysis.py::TestLinterService::test_lint_with_issues PASSED [  5%]
-2026-01-27T12:28:30.1726949Z tests/test_advanced_analysis.py::TestLinterService::test_unsupported_language PASSED [  6%]
-2026-01-27T12:28:30.3493229Z tests/test_advanced_analysis.py::TestSecurityAnalyzer::test_detect_hardcoded_password PASSED [  6%]
-2026-01-27T12:28:30.5223860Z tests/test_advanced_analysis.py::TestSecurityAnalyzer::test_detect_eval_usage PASSED [  6%]
-2026-01-27T12:28:30.6991317Z tests/test_advanced_analysis.py::TestSecurityAnalyzer::test_detect_shell_injection PASSED [  7%]
-2026-01-27T12:28:30.8736841Z tests/test_advanced_analysis.py::TestSecurityAnalyzer::test_clean_code_security PASSED [  7%]
-2026-01-27T12:28:30.8794132Z tests/test_advanced_analysis.py::TestPerformanceAnalyzer::test_detect_nested_loops PASSED [  8%]
-2026-01-27T12:28:30.8821153Z tests/test_advanced_analysis.py::TestPerformanceAnalyzer::test_detect_range_len_pattern PASSED [  8%]
-2026-01-27T12:28:30.8845740Z tests/test_advanced_analysis.py::TestPerformanceAnalyzer::test_detect_bare_except PASSED [  9%]
-2026-01-27T12:28:30.8871206Z tests/test_advanced_analysis.py::TestPerformanceAnalyzer::test_detect_print_statements PASSED [  9%]
-2026-01-27T12:28:30.8894527Z tests/test_advanced_analysis.py::TestPerformanceAnalyzer::test_clean_code_performance PASSED [  9%]
-2026-01-27T12:28:31.5153966Z tests/test_advanced_analysis.py::TestAnalysisIntegration::test_all_analyzers_work_together PASSED [ 10%]
-2026-01-27T12:28:31.8464332Z tests/test_analysis_api.py::TestAnalyzeEndpoint::test_analyze_python_code PASSED [ 10%]
-2026-01-27T12:28:32.0691051Z tests/test_analysis_api.py::TestAnalyzeEndpoint::test_analyze_javascript_code PASSED [ 11%]
-2026-01-27T12:28:32.2921250Z tests/test_analysis_api.py::TestAnalyzeEndpoint::test_analyze_with_rule_overrides PASSED [ 11%]
-2026-01-27T12:28:32.5153727Z tests/test_analysis_api.py::TestAnalyzeEndpoint::test_analyze_empty_code PASSED [ 11%]
-2026-01-27T12:28:32.7401630Z tests/test_analysis_api.py::TestAnalyzeEndpoint::test_analyze_invalid_language PASSED [ 12%]
-2026-01-27T12:28:32.9639081Z tests/test_analysis_api.py::TestRulesEndpoint::test_get_all_rules PASSED [ 12%]
-2026-01-27T12:28:33.3691089Z tests/test_analysis_api.py::TestRulesEndpoint::test_get_specific_rule PASSED [ 13%]
-2026-01-27T12:28:33.5861075Z tests/test_analysis_api.py::TestRulesEndpoint::test_get_nonexistent_rule PASSED [ 13%]
-2026-01-27T12:28:35.4551831Z tests/test_analysis_api.py::TestSummaryEndpoint::test_get_analysis_summary FAILED [ 13%]
-2026-01-27T12:28:35.8988497Z tests/test_assignments.py::test_grade_assignment PASSED                  [ 14%]
-2026-01-27T12:28:36.1341497Z tests/test_assignments.py::test_grade_assignment_missing_fields PASSED   [ 14%]
-2026-01-27T12:28:36.5212304Z tests/test_assignments.py::test_analyze_code PASSED                      [ 15%]
-2026-01-27T12:28:36.7656126Z tests/test_assignments.py::test_analyze_code_with_issues PASSED          [ 15%]
-2026-01-27T12:28:37.0063601Z tests/test_assignments.py::test_plagiarism_check PASSED                  [ 15%]
-2026-01-27T12:28:37.2496082Z tests/test_assignments.py::test_batch_grading PASSED                     [ 16%]
-2026-01-27T12:28:37.2531773Z tests/test_code_analysis.py::TestLineMetrics::test_basic_line_count PASSED [ 16%]
-2026-01-27T12:28:37.2561139Z tests/test_code_analysis.py::TestLineMetrics::test_comment_detection_python PASSED [ 17%]
-2026-01-27T12:28:37.2589061Z tests/test_code_analysis.py::TestLineMetrics::test_docstring_detection PASSED [ 17%]
-2026-01-27T12:28:37.2615119Z tests/test_code_analysis.py::TestComplexity::test_simple_function_complexity PASSED [ 18%]
-2026-01-27T12:28:37.2649543Z tests/test_code_analysis.py::TestComplexity::test_complex_function_detection PASSED [ 18%]
-2026-01-27T12:28:37.2683144Z tests/test_code_analysis.py::TestComplexity::test_cognitive_complexity PASSED [ 18%]
-2026-01-27T12:28:37.2712377Z tests/test_code_analysis.py::TestNamingConventions::test_valid_python_names PASSED [ 19%]
-2026-01-27T12:28:37.2738406Z tests/test_code_analysis.py::TestNamingConventions::test_invalid_function_name PASSED [ 19%]
-2026-01-27T12:28:37.2763682Z tests/test_code_analysis.py::TestNamingConventions::test_invalid_class_name PASSED [ 20%]
-2026-01-27T12:28:37.2790677Z tests/test_code_analysis.py::TestSecurityChecks::test_hardcoded_password_detection PASSED [ 20%]
-2026-01-27T12:28:37.2818967Z tests/test_code_analysis.py::TestSecurityChecks::test_eval_usage_detection PASSED [ 20%]
-2026-01-27T12:28:37.2849088Z tests/test_code_analysis.py::TestSecurityChecks::test_sql_injection_detection PASSED [ 21%]
-2026-01-27T12:28:37.2878299Z tests/test_code_analysis.py::TestStyleChecks::test_long_line_detection PASSED [ 21%]
-2026-01-27T12:28:37.2906209Z tests/test_code_analysis.py::TestStyleChecks::test_trailing_whitespace_detection PASSED [ 22%]
-2026-01-27T12:28:37.2939063Z tests/test_code_analysis.py::TestStructureAnalysis::test_class_and_function_count PASSED [ 22%]
-2026-01-27T12:28:37.2968930Z tests/test_code_analysis.py::TestStructureAnalysis::test_unused_import_detection PASSED [ 22%]
-2026-01-27T12:28:37.3002342Z tests/test_code_analysis.py::TestScoring::test_perfect_code_score PASSED [ 23%]
-2026-01-27T12:28:37.3041204Z tests/test_code_analysis.py::TestScoring::test_poor_code_score PASSED    [ 23%]
-2026-01-27T12:28:37.3065629Z tests/test_code_analysis.py::TestMultiLanguage::test_javascript_analysis PASSED [ 24%]
-2026-01-27T12:28:37.3095290Z tests/test_code_analysis.py::TestMultiLanguage::test_java_analysis PASSED [ 24%]
-2026-01-27T12:28:37.3129941Z tests/test_code_analysis.py::TestRecommendations::test_recommendations_generated PASSED [ 25%]
-2026-01-27T12:28:37.3156797Z tests/test_code_analysis.py::TestRecommendations::test_security_recommendation PASSED [ 25%]
-2026-01-27T12:28:37.3171565Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_service_initialization PASSED [ 25%]
-2026-01-27T12:28:37.3183885Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_singleton_instance PASSED [ 26%]
-2026-01-27T12:28:37.3246764Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_generate_feedback_basic PASSED [ 26%]
-2026-01-27T12:28:37.3303431Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_generate_feedback_encouraging_tone PASSED [ 27%]
-2026-01-27T12:28:37.3357332Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_generate_feedback_strict_tone PASSED [ 27%]
-2026-01-27T12:28:37.3381406Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_generate_feedback_with_assignment_context PASSED [ 27%]
-2026-01-27T12:28:37.3401378Z tests/test_feedback_system.py::TestAIService::test_explain_code PASSED   [ 28%]
-2026-01-27T12:28:37.3424858Z tests/test_feedback_system.py::TestAIService::test_suggest_improvements PASSED [ 28%]
-2026-01-27T12:28:37.3445220Z tests/test_feedback_system.py::TestAIService::test_answer_student_question PASSED [ 29%]
-2026-01-27T12:28:37.3457962Z tests/test_feedback_system.py::TestAIService::test_get_interaction_stats PASSED [ 29%]
-2026-01-27T12:28:37.3470404Z tests/test_feedback_system.py::TestFeedbackTemplates::test_template_category_enum PASSED [ 29%]
-2026-01-27T12:28:37.3482700Z tests/test_feedback_system.py::TestFeedbackTemplates::test_feedback_tone_enum PASSED [ 30%]
-2026-01-27T12:28:37.3494819Z tests/test_feedback_system.py::TestFeedbackTemplates::test_feedback_category_enum PASSED [ 30%]
-2026-01-27T12:28:37.3582724Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_generate_feedback_endpoint PASSED [ 31%]
-2026-01-27T12:28:37.3645919Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_explain_code_endpoint PASSED [ 31%]
-2026-01-27T12:28:37.3711235Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_suggest_improvements_endpoint PASSED [ 31%]
-2026-01-27T12:28:37.3776835Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_answer_question_endpoint PASSED [ 32%]
-2026-01-27T12:28:37.3830048Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_ai_config_endpoint PASSED [ 32%]
-2026-01-27T12:28:37.3890410Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_ai_health_endpoint PASSED [ 33%]
-2026-01-27T12:28:37.4076246Z tests/test_feedback_system.py::TestFeedbackTemplatesAPI::test_list_templates_endpoint PASSED [ 33%]
-2026-01-27T12:28:37.4140352Z tests/test_feedback_system.py::TestFeedbackTemplatesAPI::test_list_categories_endpoint PASSED [ 34%]
-2026-01-27T12:28:37.4356144Z tests/test_feedback_system.py::TestFeedbackTemplatesAPI::test_create_template_endpoint PASSED [ 34%]
-2026-01-27T12:28:37.4488475Z tests/test_file_api.py::TestFileUploadAPI::test_list_files_empty PASSED  [ 34%]
-2026-01-27T12:28:37.4952752Z tests/test_file_api.py::TestFileUploadAPI::test_upload_python_file PASSED [ 35%]
-2026-01-27T12:28:37.5186871Z tests/test_file_api.py::TestFileUploadAPI::test_upload_javascript_file PASSED [ 35%]
-2026-01-27T12:28:37.5256650Z tests/test_file_api.py::TestFileUploadAPI::test_upload_invalid_file_type PASSED [ 36%]
-2026-01-27T12:28:37.5548612Z tests/test_file_api.py::TestFileUploadAPI::test_get_file_metadata PASSED [ 36%]
-2026-01-27T12:28:37.5864450Z tests/test_file_api.py::TestFileUploadAPI::test_get_file_content PASSED  [ 36%]
-2026-01-27T12:28:37.6260127Z tests/test_file_api.py::TestFileUploadAPI::test_parse_file PASSED        [ 37%]
-2026-01-27T12:28:37.6283582Z tests/test_file_upload.py::TestFileParsingService::test_detect_language_python PASSED [ 37%]
-2026-01-27T12:28:37.6304040Z tests/test_file_upload.py::TestFileParsingService::test_detect_language_javascript PASSED [ 38%]
-2026-01-27T12:28:37.6324282Z tests/test_file_upload.py::TestFileParsingService::test_detect_language_java PASSED [ 38%]
-2026-01-27T12:28:37.6344226Z tests/test_file_upload.py::TestFileParsingService::test_detect_language_c_cpp PASSED [ 38%]
-2026-01-27T12:28:37.6369508Z tests/test_file_upload.py::TestFileParsingService::test_parse_python_file PASSED [ 39%]
-2026-01-27T12:28:37.6423765Z tests/test_file_upload.py::TestFileParsingService::test_parse_javascript_file PASSED [ 39%]
-2026-01-27T12:28:37.6474169Z tests/test_file_upload.py::TestFileParsingService::test_parse_java_file PASSED [ 40%]
-2026-01-27T12:28:37.6511291Z tests/test_file_upload.py::TestFileParsingService::test_parse_c_file PASSED [ 40%]
-2026-01-27T12:28:37.6537889Z tests/test_file_upload.py::TestFileParsingService::test_basic_metrics PASSED [ 40%]
-2026-01-27T12:28:37.8888178Z tests/test_health.py::test_root_endpoint PASSED                          [ 41%]
-2026-01-27T12:28:38.3156958Z tests/test_health.py::test_health_endpoint PASSED                        [ 41%]
-2026-01-27T12:28:38.5550041Z tests/test_health.py::test_docs_endpoint PASSED                          [ 42%]
-2026-01-27T12:28:40.9602045Z tests/test_health.py::test_openapi_schema PASSED                         [ 42%]
-2026-01-27T12:28:40.9616247Z tests/test_multi_dimensional_evaluation.py::TestEvaluationDimension::test_dimension_values PASSED [ 43%]
-2026-01-27T12:28:40.9629057Z tests/test_multi_dimensional_evaluation.py::TestEvaluationDimension::test_dimension_count PASSED [ 43%]
-2026-01-27T12:28:40.9641986Z tests/test_multi_dimensional_evaluation.py::TestDimensionMetadata::test_all_dimensions_have_metadata PASSED [ 43%]
-2026-01-27T12:28:40.9653750Z tests/test_multi_dimensional_evaluation.py::TestDimensionMetadata::test_metadata_has_required_fields PASSED [ 44%]
-2026-01-27T12:28:40.9666130Z tests/test_multi_dimensional_evaluation.py::TestDimensionMetadata::test_weights_sum_to_one PASSED [ 44%]
-2026-01-27T12:28:40.9679300Z tests/test_multi_dimensional_evaluation.py::TestDimensionScore::test_create_dimension_score PASSED [ 45%]
-2026-01-27T12:28:40.9693927Z tests/test_multi_dimensional_evaluation.py::TestDimensionScore::test_score_validation PASSED [ 45%]
-2026-01-27T12:28:40.9707007Z tests/test_multi_dimensional_evaluation.py::TestRadarChartData::test_create_radar_chart_data PASSED [ 45%]
-2026-01-27T12:28:40.9721375Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_score_to_grade PASSED [ 46%]
-2026-01-27T12:28:40.9756460Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_technical_ability PASSED [ 46%]
-2026-01-27T12:28:40.9792782Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_code_quality PASSED [ 47%]
-2026-01-27T12:28:40.9821198Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_innovation PASSED [ 47%]
-2026-01-27T12:28:40.9851829Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_best_practices PASSED [ 47%]
-2026-01-27T12:28:40.9880391Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_efficiency PASSED [ 48%]
-2026-01-27T12:28:40.9910472Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_documentation PASSED [ 48%]
-2026-01-27T12:28:40.9945486Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_dimension_scores PASSED [ 49%]
-2026-01-27T12:28:40.9985219Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_generate_radar_chart_data PASSED [ 49%]
-2026-01-27T12:28:41.0021623Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_generate_overall_summary PASSED [ 50%]
-2026-01-27T12:28:41.0056078Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_identify_top_strengths PASSED [ 50%]
-2026-01-27T12:28:41.0089905Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_identify_priority_improvements PASSED [ 50%]
-2026-01-27T12:28:41.0124971Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_recommend_focus_areas PASSED [ 51%]
-2026-01-27T12:28:41.0138798Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluationRequest::test_create_request_with_defaults PASSED [ 51%]
-2026-01-27T12:28:41.0151332Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluationRequest::test_create_request_with_class_comparison PASSED [ 52%]
-2026-01-27T12:28:41.0163817Z tests/test_multi_dimensional_evaluation.py::TestClassComparison::test_create_class_comparison PASSED [ 52%]
-2026-01-27T12:28:41.0177738Z tests/test_multi_dimensional_evaluation.py::TestAbilityAnalysisReport::test_create_report PASSED [ 52%]
-2026-01-27T12:28:41.0189941Z tests/test_personalized_feedback.py::TestFeedbackEnums::test_feedback_detail_level_values PASSED [ 53%]
-2026-01-27T12:28:41.0202105Z tests/test_personalized_feedback.py::TestFeedbackEnums::test_suggestion_difficulty_values PASSED [ 53%]
-2026-01-27T12:28:41.0214245Z tests/test_personalized_feedback.py::TestFeedbackEnums::test_student_level_values PASSED [ 54%]
-2026-01-27T12:28:41.0227596Z tests/test_personalized_feedback.py::TestFeedbackEnums::test_performance_trend_values PASSED [ 54%]
-2026-01-27T12:28:41.0239822Z tests/test_personalized_feedback.py::TestDetailLevelConfig::test_brief_config PASSED [ 54%]
-2026-01-27T12:28:41.0251797Z tests/test_personalized_feedback.py::TestDetailLevelConfig::test_comprehensive_config PASSED [ 55%]
-2026-01-27T12:28:41.0264097Z tests/test_personalized_feedback.py::TestLevelMessages::test_beginner_messages PASSED [ 55%]
-2026-01-27T12:28:41.0276827Z tests/test_personalized_feedback.py::TestLevelMessages::test_advanced_messages PASSED [ 56%]
-2026-01-27T12:28:41.0289213Z tests/test_personalized_feedback.py::TestTrendMessages::test_improving_trend PASSED [ 56%]
-2026-01-27T12:28:41.0301589Z tests/test_personalized_feedback.py::TestTrendMessages::test_declining_trend PASSED [ 56%]
-2026-01-27T12:28:41.0316217Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_trend_improving PASSED [ 57%]
-2026-01-27T12:28:41.0331045Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_trend_declining PASSED [ 57%]
-2026-01-27T12:28:41.0345569Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_trend_stable PASSED [ 58%]
-2026-01-27T12:28:41.0359462Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_trend_insufficient_data PASSED [ 58%]
-2026-01-27T12:28:41.0373220Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_determine_level_beginner PASSED [ 59%]
-2026-01-27T12:28:41.0387335Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_determine_level_intermediate PASSED [ 59%]
-2026-01-27T12:28:41.0401187Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_determine_level_advanced PASSED [ 59%]
-2026-01-27T12:28:41.0415260Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_determine_level_new_student PASSED [ 60%]
-2026-01-27T12:28:41.0429135Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_improvement_rate_positive PASSED [ 60%]
-2026-01-27T12:28:41.0442735Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_improvement_rate_negative PASSED [ 61%]
-2026-01-27T12:28:41.0456288Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_translate_to_chinese PASSED [ 61%]
-2026-01-27T12:28:41.0490310Z tests/test_personalized_feedback.py::TestProgressiveSuggestions::test_generate_progressive_suggestions PASSED [ 61%]
-2026-01-27T12:28:41.0522332Z tests/test_personalized_feedback.py::TestProgressiveSuggestions::test_suggestions_have_difficulty_levels PASSED [ 62%]
-2026-01-27T12:28:41.0552536Z tests/test_personalized_feedback.py::TestProgressiveSuggestions::test_suggestions_have_chinese_translations PASSED [ 62%]
-2026-01-27T12:28:41.0569293Z tests/test_personalized_feedback.py::TestLearningPath::test_create_learning_path PASSED [ 63%]
-2026-01-27T12:28:41.0584699Z tests/test_personalized_feedback.py::TestLearningPath::test_learning_path_sorts_by_difficulty PASSED [ 63%]
-2026-01-27T12:28:41.0600319Z tests/test_personalized_feedback.py::TestLearningPath::test_learning_path_calculates_total_time PASSED [ 63%]
-2026-01-27T12:28:41.0623375Z tests/test_personalized_feedback.py::TestPersonalizedMessage::test_first_submission_message PASSED [ 64%]
-2026-01-27T12:28:41.0645776Z tests/test_personalized_feedback.py::TestPersonalizedMessage::test_above_average_message PASSED [ 64%]
-2026-01-27T12:28:41.0665665Z tests/test_personalized_feedback.py::TestPersonalizedMessage::test_below_average_message PASSED [ 65%]
-2026-01-27T12:28:41.0688219Z tests/test_personalized_feedback.py::TestEncouragement::test_encouragement_for_new_student_high_score PASSED [ 65%]
-2026-01-27T12:28:41.0709924Z tests/test_personalized_feedback.py::TestEncouragement::test_encouragement_for_improving_student PASSED [ 65%]
-2026-01-27T12:28:41.0730568Z tests/test_personalized_feedback.py::TestEncouragement::test_encouragement_for_declining_student PASSED [ 66%]
-2026-01-27T12:28:41.0743470Z tests/test_personalized_feedback.py::TestStudentHistoryAnalysisSchema::test_create_history_analysis PASSED [ 66%]
-2026-01-27T12:28:41.0756099Z tests/test_personalized_feedback.py::TestPersonalizedFeedbackRequest::test_create_request_with_defaults PASSED [ 67%]
-2026-01-27T12:28:41.0770881Z tests/test_personalized_feedback.py::TestPersonalizedFeedbackRequest::test_create_request_with_custom_values PASSED [ 67%]
-2026-01-27T12:28:41.3190146Z tests/test_qa.py::test_ask_question PASSED                               [ 68%]
-2026-01-27T12:28:41.5593721Z tests/test_qa.py::test_ask_question_missing_fields PASSED                [ 68%]
-2026-01-27T12:28:41.8023525Z tests/test_qa.py::test_escalate_question PASSED                          [ 68%]
-2026-01-27T12:28:42.2442817Z tests/test_qa.py::test_qa_analytics PASSED                               [ 69%]
-2026-01-27T12:28:42.5067751Z tests/test_report_analysis.py::TestReportAnalysisAPI::test_analyze_endpoint_basic PASSED [ 69%]
-2026-01-27T12:28:42.7569408Z tests/test_report_analysis.py::TestReportAnalysisAPI::test_analyze_with_chinese_content PASSED [ 70%]
-2026-01-27T12:28:42.9998337Z tests/test_report_analysis.py::TestReportAnalysisAPI::test_analyze_empty_content PASSED [ 70%]
-2026-01-27T12:28:43.2456356Z tests/test_report_analysis.py::TestReportAnalysisAPI::test_analyze_file_upload_pdf_not_supported_yet PASSED [ 70%]
-2026-01-27T12:28:43.4868877Z tests/test_report_analysis.py::TestReportAnalysisAPI::test_analyze_file_upload_txt PASSED [ 71%]
-2026-01-27T12:28:43.4911411Z tests/test_report_analysis.py::TestReportAnalysisService::test_service_basic_analysis PASSED [ 71%]
-2026-01-27T12:28:43.4949452Z tests/test_report_analysis.py::TestReportAnalysisService::test_section_detection PASSED [ 72%]
-2026-01-27T12:28:43.4986089Z tests/test_report_analysis.py::TestReportAnalysisService::test_chinese_section_detection PASSED [ 72%]
-2026-01-27T12:28:43.5002080Z tests/test_report_analysis.py::TestJSONParsers::test_parse_logic_analysis_valid_json PASSED [ 72%]
-2026-01-27T12:28:43.5017488Z tests/test_report_analysis.py::TestJSONParsers::test_parse_logic_analysis_markdown_block PASSED [ 73%]
-2026-01-27T12:28:43.5032015Z tests/test_report_analysis.py::TestJSONParsers::test_parse_logic_analysis_invalid_enum PASSED [ 73%]
-2026-01-27T12:28:43.5048033Z tests/test_report_analysis.py::TestJSONParsers::test_parse_logic_analysis_invalid_json PASSED [ 74%]
-2026-01-27T12:28:43.5062544Z tests/test_report_analysis.py::TestJSONParsers::test_parse_innovation_valid PASSED [ 74%]
-2026-01-27T12:28:43.5077016Z tests/test_report_analysis.py::TestJSONParsers::test_parse_innovation_missing_required_fields PASSED [ 75%]
-2026-01-27T12:28:43.5091698Z tests/test_report_analysis.py::TestJSONParsers::test_parse_suggestions_valid PASSED [ 75%]
-2026-01-27T12:28:43.5105843Z tests/test_report_analysis.py::TestJSONParsers::test_parse_suggestions_invalid_category PASSED [ 75%]
-2026-01-27T12:28:43.5120190Z tests/test_report_analysis.py::TestJSONParsers::test_parse_language_valid PASSED [ 76%]
-2026-01-27T12:28:43.5134446Z tests/test_report_analysis.py::TestJSONParsers::test_parse_language_value_clamping PASSED [ 76%]
-2026-01-27T12:28:43.5147829Z tests/test_report_analysis.py::TestDeepSeekIntegration::test_analyze_logic_with_real_ai SKIPPED [ 77%]
-2026-01-27T12:28:43.5158834Z tests/test_report_analysis.py::TestDeepSeekIntegration::test_analyze_innovation_with_real_ai SKIPPED [ 77%]
-2026-01-27T12:28:43.5169862Z tests/test_report_analysis.py::TestDeepSeekIntegration::test_generate_suggestions_with_real_ai SKIPPED [ 77%]
-2026-01-27T12:28:43.5181628Z tests/test_report_analysis.py::TestDeepSeekIntegration::test_evaluate_language_with_real_ai SKIPPED [ 78%]
-2026-01-27T12:28:43.9877562Z tests/test_rubrics.py::TestRubricCreate::test_create_success PASSED      [ 78%]
-2026-01-27T12:28:44.2310944Z tests/test_rubrics.py::TestRubricCreate::test_create_with_criteria PASSED [ 79%]
-2026-01-27T12:28:44.4924063Z tests/test_rubrics.py::TestRubricCreate::test_create_duplicate_rubric_id PASSED [ 79%]
-2026-01-27T12:28:44.7313958Z tests/test_rubrics.py::TestRubricCreate::test_create_invalid_max_score PASSED [ 79%]
-2026-01-27T12:28:44.9641548Z tests/test_rubrics.py::TestRubricCreate::test_create_missing_required_fields PASSED [ 80%]
-2026-01-27T12:28:45.3980915Z tests/test_rubrics.py::TestRubricCreate::test_create_with_all_fields PASSED [ 80%]
-2026-01-27T12:28:45.6343573Z tests/test_rubrics.py::TestRubricList::test_list_empty PASSED            [ 81%]
-2026-01-27T12:28:45.9532152Z tests/test_rubrics.py::TestRubricList::test_list_with_data PASSED        [ 81%]
-2026-01-27T12:28:46.2875823Z tests/test_rubrics.py::TestRubricList::test_list_pagination PASSED       [ 81%]
-2026-01-27T12:28:46.6205951Z tests/test_rubrics.py::TestRubricList::test_list_pagination_last_page PASSED [ 82%]
-2026-01-27T12:28:47.0533885Z tests/test_rubrics.py::TestRubricList::test_list_invalid_page PASSED     [ 82%]
-2026-01-27T12:28:47.3148901Z tests/test_rubrics.py::TestRubricGet::test_get_success PASSED            [ 83%]
-2026-01-27T12:28:47.5526182Z tests/test_rubrics.py::TestRubricGet::test_get_not_found PASSED          [ 83%]
-2026-01-27T12:28:47.8002242Z tests/test_rubrics.py::TestRubricGet::test_get_with_criteria PASSED      [ 84%]
-2026-01-27T12:28:48.0522507Z tests/test_rubrics.py::TestRubricUpdate::test_update_success PASSED      [ 84%]
-2026-01-27T12:28:48.3064699Z tests/test_rubrics.py::TestRubricUpdate::test_update_partial_fields PASSED [ 84%]
-2026-01-27T12:28:48.7655482Z tests/test_rubrics.py::TestRubricUpdate::test_update_criteria PASSED     [ 85%]
-2026-01-27T12:28:49.0324405Z tests/test_rubrics.py::TestRubricUpdate::test_update_not_found PASSED    [ 85%]
-2026-01-27T12:28:49.2793309Z tests/test_rubrics.py::TestRubricUpdate::test_update_invalid_max_score PASSED [ 86%]
-2026-01-27T12:28:49.5382463Z tests/test_rubrics.py::TestRubricDelete::test_delete_success PASSED      [ 86%]
-2026-01-27T12:28:49.7765753Z tests/test_rubrics.py::TestRubricDelete::test_delete_not_found PASSED    [ 86%]
-2026-01-27T12:28:50.2340486Z tests/test_rubrics.py::TestRubricDelete::test_delete_with_assignments PASSED [ 87%]
-2026-01-27T12:28:50.4889367Z tests/test_rubrics.py::TestRubricAssignments::test_get_assignments_success PASSED [ 87%]
-2026-01-27T12:28:50.7474058Z tests/test_rubrics.py::TestRubricAssignments::test_get_assignments_empty PASSED [ 88%]
-2026-01-27T12:28:50.9896030Z tests/test_rubrics.py::TestRubricAssignments::test_get_assignments_not_found PASSED [ 88%]
-2026-01-27T12:28:51.2422255Z tests/test_students.py::TestStudentRegistration::test_register_success PASSED [ 88%]
-2026-01-27T12:28:51.7004061Z tests/test_students.py::TestStudentRegistration::test_register_with_all_fields PASSED [ 89%]
-2026-01-27T12:28:51.9540698Z tests/test_students.py::TestStudentRegistration::test_register_duplicate_student_id PASSED [ 89%]
-2026-01-27T12:28:52.2058855Z tests/test_students.py::TestStudentRegistration::test_register_duplicate_email PASSED [ 90%]
-2026-01-27T12:28:52.4527881Z tests/test_students.py::TestStudentRegistration::test_register_invalid_email_format PASSED [ 90%]
-2026-01-27T12:28:52.6924075Z tests/test_students.py::TestStudentRegistration::test_register_missing_required_fields PASSED [ 90%]
-2026-01-27T12:28:53.1476586Z tests/test_students.py::TestStudentLogin::test_login_success PASSED      [ 91%]
-2026-01-27T12:28:53.4050735Z tests/test_students.py::TestStudentLogin::test_login_with_email_verification PASSED [ 91%]
-2026-01-27T12:28:53.6485408Z tests/test_students.py::TestStudentLogin::test_login_student_not_found PASSED [ 92%]
-2026-01-27T12:28:53.9041140Z tests/test_students.py::TestStudentLogin::test_login_email_mismatch PASSED [ 92%]
-2026-01-27T12:28:54.3176784Z tests/test_students.py::TestStudentList::test_list_default_pagination PASSED [ 93%]
-2026-01-27T12:28:54.9257359Z tests/test_students.py::TestStudentList::test_list_custom_pagination PASSED [ 93%]
-2026-01-27T12:28:55.3318354Z tests/test_students.py::TestStudentList::test_list_second_page PASSED    [ 93%]
-2026-01-27T12:28:55.7369451Z tests/test_students.py::TestStudentList::test_list_filter_by_course PASSED [ 94%]
-2026-01-27T12:28:55.9897835Z tests/test_students.py::TestStudentList::test_list_empty_result PASSED   [ 94%]
-2026-01-27T12:28:56.3868263Z tests/test_students.py::TestStudentList::test_list_page_size_boundary PASSED [ 95%]
-2026-01-27T12:28:56.9767217Z tests/test_students.py::TestStudentList::test_list_filter_by_course_no_results PASSED [ 95%]
-2026-01-27T12:28:57.3842584Z tests/test_students.py::TestStudentList::test_list_page_out_of_range PASSED [ 95%]
-2026-01-27T12:28:57.6387592Z tests/test_students.py::TestStudentGet::test_get_success PASSED          [ 96%]
-2026-01-27T12:28:57.8822987Z tests/test_students.py::TestStudentGet::test_get_not_found PASSED        [ 96%]
-2026-01-27T12:28:58.1386555Z tests/test_students.py::TestStudentUpdate::test_update_success PASSED    [ 97%]
-2026-01-27T12:28:58.5945287Z tests/test_students.py::TestStudentUpdate::test_update_partial_fields PASSED [ 97%]
-2026-01-27T12:28:58.8536835Z tests/test_students.py::TestStudentUpdate::test_update_email PASSED      [ 97%]
-2026-01-27T12:28:59.1150672Z tests/test_students.py::TestStudentUpdate::test_update_duplicate_email PASSED [ 98%]
-2026-01-27T12:28:59.3647305Z tests/test_students.py::TestStudentUpdate::test_update_invalid_email PASSED [ 98%]
-2026-01-27T12:28:59.6031192Z tests/test_students.py::TestStudentUpdate::test_update_not_found PASSED  [ 99%]
-2026-01-27T12:28:59.8686579Z tests/test_students.py::TestStudentDelete::test_delete_success PASSED    [ 99%]
-2026-01-27T12:29:00.3904568Z tests/test_students.py::TestStudentDelete::test_delete_not_found PASSED  [100%]
-2026-01-27T12:29:00.3905265Z 
-2026-01-27T12:29:00.3905500Z =================================== FAILURES ===================================
-2026-01-27T12:29:00.3906266Z ________________ TestSummaryEndpoint.test_get_analysis_summary _________________
-2026-01-27T12:29:00.3907684Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1967: in _exec_single_context
-2026-01-27T12:29:00.3908592Z     self.dialect.do_execute(
-2026-01-27T12:29:00.3909314Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/default.py:952: in do_execute
-2026-01-27T12:29:00.3910204Z     cursor.execute(statement, parameters)
-2026-01-27T12:29:00.3911149Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:182: in execute
-2026-01-27T12:29:00.3912537Z     self._adapt_connection._handle_exception(error)
-2026-01-27T12:29:00.3913683Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:342: in _handle_exception
-2026-01-27T12:29:00.3914758Z     raise error
-2026-01-27T12:29:00.3915631Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:164: in execute
-2026-01-27T12:29:00.3916758Z     self.await_(_cursor.execute(operation, parameters))
-2026-01-27T12:29:00.3918175Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:132: in await_only
-2026-01-27T12:29:00.3919560Z     return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
-2026-01-27T12:29:00.3920397Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3921394Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:196: in greenlet_spawn
-2026-01-27T12:29:00.3922442Z     value = await result
-2026-01-27T12:29:00.3922788Z             ^^^^^^^^^^^^
-2026-01-27T12:29:00.3923482Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/cursor.py:40: in execute
-2026-01-27T12:29:00.3924424Z     await self._execute(self._cursor.execute, sql, parameters)
-2026-01-27T12:29:00.3925277Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/cursor.py:32: in _execute
-2026-01-27T12:29:00.3926204Z     return await self._conn._execute(fn, *args, **kwargs)
-2026-01-27T12:29:00.3926715Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3927724Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/core.py:160: in _execute
-2026-01-27T12:29:00.3928510Z     return await future
-2026-01-27T12:29:00.3928813Z            ^^^^^^^^^^^^
-2026-01-27T12:29:00.3929527Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/core.py:63: in _connection_worker_thread
-2026-01-27T12:29:00.3930340Z     result = function()
-2026-01-27T12:29:00.3930631Z              ^^^^^^^^^^
-2026-01-27T12:29:00.3930985Z E   sqlite3.OperationalError: no such table: code_files
-2026-01-27T12:29:00.3931338Z 
-2026-01-27T12:29:00.3931603Z The above exception was the direct cause of the following exception:
-2026-01-27T12:29:00.3932265Z tests/test_analysis_api.py:141: in test_get_analysis_summary
-2026-01-27T12:29:00.3932805Z     response = client.get("/api/v1/analysis/summary")
-2026-01-27T12:29:00.3933245Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3933959Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/testclient.py:473: in get
-2026-01-27T12:29:00.3934992Z     return super().get(
-2026-01-27T12:29:00.3935597Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:1053: in get
-2026-01-27T12:29:00.3936348Z     return self.request(
-2026-01-27T12:29:00.3937011Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/testclient.py:445: in request
-2026-01-27T12:29:00.3937916Z     return super().request(
-2026-01-27T12:29:00.3938554Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:825: in request
-2026-01-27T12:29:00.3939422Z     return self.send(request, auth=auth, follow_redirects=follow_redirects)
-2026-01-27T12:29:00.3940000Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3940722Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:914: in send
-2026-01-27T12:29:00.3941433Z     response = self._send_handling_auth(
-2026-01-27T12:29:00.3942205Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:942: in _send_handling_auth
-2026-01-27T12:29:00.3943022Z     response = self._send_handling_redirects(
-2026-01-27T12:29:00.3943829Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:979: in _send_handling_redirects
-2026-01-27T12:29:00.3944844Z     response = self._send_single_request(request)
-2026-01-27T12:29:00.3945258Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3946016Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:1014: in _send_single_request
-2026-01-27T12:29:00.3946814Z     response = transport.handle_request(request)
-2026-01-27T12:29:00.3947413Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3948153Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/testclient.py:348: in handle_request
-2026-01-27T12:29:00.3948910Z     raise exc
-2026-01-27T12:29:00.3949552Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/testclient.py:345: in handle_request
-2026-01-27T12:29:00.3950379Z     portal.call(self.app, scope, receive, send)
-2026-01-27T12:29:00.3951087Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/anyio/from_thread.py:334: in call
-2026-01-27T12:29:00.3951925Z     return cast(T_Retval, self.start_task_soon(func, *args).result())
-2026-01-27T12:29:00.3952456Z                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3953141Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/concurrent/futures/_base.py:456: in result
-2026-01-27T12:29:00.3953812Z     return self.__get_result()
-2026-01-27T12:29:00.3954133Z            ^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3954741Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
-2026-01-27T12:29:00.3955474Z     raise self._exception
-2026-01-27T12:29:00.3956115Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
-2026-01-27T12:29:00.3956845Z     retval = await retval_or_awaitable
-2026-01-27T12:29:00.3957393Z              ^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3958083Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/applications.py:1135: in __call__
-2026-01-27T12:29:00.3958874Z     await super().__call__(scope, receive, send)
-2026-01-27T12:29:00.3959627Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/applications.py:107: in __call__
-2026-01-27T12:29:00.3960440Z     await self.middleware_stack(scope, receive, send)
-2026-01-27T12:29:00.3961283Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/errors.py:186: in __call__
-2026-01-27T12:29:00.3962049Z     raise exc
-2026-01-27T12:29:00.3962726Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/errors.py:164: in __call__
-2026-01-27T12:29:00.3963525Z     await self.app(scope, receive, _send)
-2026-01-27T12:29:00.3964506Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/cors.py:85: in __call__
-2026-01-27T12:29:00.3965282Z     await self.app(scope, receive, send)
-2026-01-27T12:29:00.3966054Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/base.py:191: in __call__
-2026-01-27T12:29:00.3966904Z     with recv_stream, send_stream, collapse_excgroups():
-2026-01-27T12:29:00.3967733Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/contextlib.py:158: in __exit__
-2026-01-27T12:29:00.3968377Z     self.gen.throw(typ, value, traceback)
-2026-01-27T12:29:00.3969125Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/_utils.py:85: in collapse_excgroups
-2026-01-27T12:29:00.3969887Z     raise exc
-2026-01-27T12:29:00.3970528Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/base.py:193: in __call__
-2026-01-27T12:29:00.3971376Z     response = await self.dispatch_func(request, call_next)
-2026-01-27T12:29:00.3971863Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3972277Z app/main.py:101: in log_requests_middleware
-2026-01-27T12:29:00.3972685Z     response = await call_next(request)
-2026-01-27T12:29:00.3973223Z                ^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3973957Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/base.py:168: in call_next
-2026-01-27T12:29:00.3974844Z     raise app_exc from app_exc.__cause__ or app_exc.__context__
-2026-01-27T12:29:00.3975691Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/base.py:144: in coro
-2026-01-27T12:29:00.3976549Z     await self.app(scope, receive_or_disconnect, send_no_error)
-2026-01-27T12:29:00.3977585Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/exceptions.py:63: in __call__
-2026-01-27T12:29:00.3978588Z     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-2026-01-27T12:29:00.3979560Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
-2026-01-27T12:29:00.3980345Z     raise exc
-2026-01-27T12:29:00.3981033Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
-2026-01-27T12:29:00.3981864Z     await app(scope, receive, sender)
-2026-01-27T12:29:00.3982687Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
-2026-01-27T12:29:00.3983514Z     await self.app(scope, receive, send)
-2026-01-27T12:29:00.3984226Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/routing.py:716: in __call__
-2026-01-27T12:29:00.3985021Z     await self.middleware_stack(scope, receive, send)
-2026-01-27T12:29:00.3985738Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/routing.py:736: in app
-2026-01-27T12:29:00.3986457Z     await route.handle(scope, receive, send)
-2026-01-27T12:29:00.3987304Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/routing.py:290: in handle
-2026-01-27T12:29:00.3988037Z     await self.app(scope, receive, send)
-2026-01-27T12:29:00.3988747Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/routing.py:115: in app
-2026-01-27T12:29:00.3989606Z     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-2026-01-27T12:29:00.3990554Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
-2026-01-27T12:29:00.3991340Z     raise exc
-2026-01-27T12:29:00.3992074Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
-2026-01-27T12:29:00.3992879Z     await app(scope, receive, sender)
-2026-01-27T12:29:00.3993527Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/routing.py:101: in app
-2026-01-27T12:29:00.3994441Z     response = await f(request)
-2026-01-27T12:29:00.3994749Z                ^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3995353Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/routing.py:355: in app
-2026-01-27T12:29:00.3996065Z     raw_response = await run_endpoint_function(
-2026-01-27T12:29:00.3996879Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/routing.py:243: in run_endpoint_function
-2026-01-27T12:29:00.3997894Z     return await dependant.call(**values)
-2026-01-27T12:29:00.3998262Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.3998647Z api/analysis.py:289: in get_analysis_summary
-2026-01-27T12:29:00.3999057Z     files = await crud_code_file.get_multi(
-2026-01-27T12:29:00.3999444Z utils/crud.py:55: in get_multi
-2026-01-27T12:29:00.3999793Z     result = await db.execute(query)
-2026-01-27T12:29:00.4000132Z              ^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.4000872Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py:449: in execute
-2026-01-27T12:29:00.4001678Z     result = await greenlet_spawn(
-2026-01-27T12:29:00.4002499Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:201: in greenlet_spawn
-2026-01-27T12:29:00.4003603Z     result = context.throw(*sys.exc_info())
-2026-01-27T12:29:00.4003977Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.4004685Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2351: in execute
-2026-01-27T12:29:00.4005421Z     return self._execute_internal(
-2026-01-27T12:29:00.4006201Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2249: in _execute_internal
-2026-01-27T12:29:00.4007273Z     result: Result[Any] = compile_state_cls.orm_execute_statement(
-2026-01-27T12:29:00.4008212Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/orm/context.py:306: in orm_execute_statement
-2026-01-27T12:29:00.4009050Z     result = conn.execute(
-2026-01-27T12:29:00.4009734Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1419: in execute
-2026-01-27T12:29:00.4010478Z     return meth(
-2026-01-27T12:29:00.4011197Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:527: in _execute_on_connection
-2026-01-27T12:29:00.4012087Z     return connection._execute_clauseelement(
-2026-01-27T12:29:00.4012934Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1641: in _execute_clauseelement
-2026-01-27T12:29:00.4013779Z     ret = self._execute_context(
-2026-01-27T12:29:00.4014537Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1846: in _execute_context
-2026-01-27T12:29:00.4015345Z     return self._exec_single_context(
-2026-01-27T12:29:00.4016152Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1986: in _exec_single_context
-2026-01-27T12:29:00.4016999Z     self._handle_dbapi_exception(
-2026-01-27T12:29:00.4017937Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2363: in _handle_dbapi_exception
-2026-01-27T12:29:00.4018911Z     raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-2026-01-27T12:29:00.4019845Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1967: in _exec_single_context
-2026-01-27T12:29:00.4020668Z     self.dialect.do_execute(
-2026-01-27T12:29:00.4021386Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/default.py:952: in do_execute
-2026-01-27T12:29:00.4022202Z     cursor.execute(statement, parameters)
-2026-01-27T12:29:00.4023024Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:182: in execute
-2026-01-27T12:29:00.4023906Z     self._adapt_connection._handle_exception(error)
-2026-01-27T12:29:00.4025022Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:342: in _handle_exception
-2026-01-27T12:29:00.4025903Z     raise error
-2026-01-27T12:29:00.4026609Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:164: in execute
-2026-01-27T12:29:00.4027639Z     self.await_(_cursor.execute(operation, parameters))
-2026-01-27T12:29:00.4028501Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:132: in await_only
-2026-01-27T12:29:00.4029609Z     return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
-2026-01-27T12:29:00.4030261Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.4031066Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:196: in greenlet_spawn
-2026-01-27T12:29:00.4031920Z     value = await result
-2026-01-27T12:29:00.4032213Z             ^^^^^^^^^^^^
-2026-01-27T12:29:00.4032824Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/cursor.py:40: in execute
-2026-01-27T12:29:00.4033824Z     await self._execute(self._cursor.execute, sql, parameters)
-2026-01-27T12:29:00.4034633Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/cursor.py:32: in _execute
-2026-01-27T12:29:00.4035454Z     return await self._conn._execute(fn, *args, **kwargs)
-2026-01-27T12:29:00.4035966Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-01-27T12:29:00.4036671Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/core.py:160: in _execute
-2026-01-27T12:29:00.4037585Z     return await future
-2026-01-27T12:29:00.4037869Z            ^^^^^^^^^^^^
-2026-01-27T12:29:00.4038568Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/core.py:63: in _connection_worker_thread
-2026-01-27T12:29:00.4039368Z     result = function()
-2026-01-27T12:29:00.4039640Z              ^^^^^^^^^^
-2026-01-27T12:29:00.4040178Z E   sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: code_files
-2026-01-27T12:29:00.4042842Z E   [SQL: SELECT code_files.id, code_files.file_id, code_files.original_filename, code_files.stored_filename, code_files.file_path, code_files.file_size, code_files.file_extension, code_files.mime_type, code_files.language, code_files.status, code_files.uploader_id, code_files.assignment_id, code_files.content_hash, code_files.line_count, code_files.analysis_result, code_files.created_at, code_files.updated_at 
-2026-01-27T12:29:00.4045250Z E   FROM code_files
-2026-01-27T12:29:00.4045519Z E    LIMIT ? OFFSET ?]
-2026-01-27T12:29:00.4045799Z E   [parameters: (10, 0)]
-2026-01-27T12:29:00.4046246Z E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-01-27T12:29:00.4047177Z ----------------------------- Captured stdout call -----------------------------
-2026-01-27T12:29:00.4049006Z [31mERROR[0m | 12:28:33 | 6f0a3c17 | ai_teaching_assistant:125 | 💥 Request failed: GET http://testserver/api/v1/analysis/summary after 0.060s - (sqlite3.OperationalError) no such table: code_files
-2026-01-27T12:29:00.4052239Z [SQL: SELECT code_files.id, code_files.file_id, code_files.original_filename, code_files.stored_filename, code_files.file_path, code_files.file_size, code_files.file_extension, code_files.mime_type, code_files.language, code_files.status, code_files.uploader_id, code_files.assignment_id, code_files.content_hash, code_files.line_count, code_files.analysis_result, code_files.created_at, code_files.updated_at 
-2026-01-27T12:29:00.4054586Z FROM code_files
-2026-01-27T12:29:00.4054840Z  LIMIT ? OFFSET ?]
-2026-01-27T12:29:00.4055100Z [parameters: (10, 0)]
-2026-01-27T12:29:00.4055501Z (Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-01-27T12:29:00.4056092Z ------------------------------ Captured log call -------------------------------
-2026-01-27T12:29:00.4057882Z ERROR    ai_teaching_assistant:main.py:125 💥 Request failed: GET http://testserver/api/v1/analysis/summary after 0.060s - (sqlite3.OperationalError) no such table: code_files
-2026-01-27T12:29:00.4060928Z [SQL: SELECT code_files.id, code_files.file_id, code_files.original_filename, code_files.stored_filename, code_files.file_path, code_files.file_size, code_files.file_extension, code_files.mime_type, code_files.language, code_files.status, code_files.uploader_id, code_files.assignment_id, code_files.content_hash, code_files.line_count, code_files.analysis_result, code_files.created_at, code_files.updated_at 
-2026-01-27T12:29:00.4063299Z FROM code_files
-2026-01-27T12:29:00.4063558Z  LIMIT ? OFFSET ?]
-2026-01-27T12:29:00.4063823Z [parameters: (10, 0)]
-2026-01-27T12:29:00.4064222Z (Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-01-27T12:29:00.4064768Z =============================== warnings summary ===============================
-2026-01-27T12:29:00.4065219Z core/config.py:9
-2026-01-27T12:29:00.4067198Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/core/config.py:9: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.4068802Z     class Settings(BaseSettings):
-2026-01-27T12:29:00.4068974Z 
-2026-01-27T12:29:00.4069058Z schemas/grading.py:67
-2026-01-27T12:29:00.4070221Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/grading.py:67: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.4071476Z     class GradingResultResponse(GradingResultBase):
-2026-01-27T12:29:00.4071691Z 
-2026-01-27T12:29:00.4071768Z schemas/auth.py:55
-2026-01-27T12:29:00.4072905Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/auth.py:55: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.4074112Z     class UserResponse(UserBase):
-2026-01-27T12:29:00.4074267Z 
-2026-01-27T12:29:00.4074359Z schemas/assignment_crud.py:45
-2026-01-27T12:29:00.4075596Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/assignment_crud.py:45: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.9805750Z     class AssignmentResponse(AssignmentBase):
-2026-01-27T12:29:00.9806231Z 
-2026-01-27T12:29:00.9806384Z schemas/assignment_transfer.py:34
-2026-01-27T12:29:00.9809026Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/assignment_transfer.py:34: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.9811261Z     class BatchUploadRequest(BaseModel):
-2026-01-27T12:29:00.9811549Z 
-2026-01-27T12:29:00.9812066Z ../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/pydantic/_internal/_config.py:383
-2026-01-27T12:29:00.9813494Z   /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/pydantic/_internal/_config.py:383: UserWarning: Valid config keys have changed in V2:
-2026-01-27T12:29:00.9814589Z   * 'schema_extra' has been renamed to 'json_schema_extra'
-2026-01-27T12:29:00.9815059Z     warnings.warn(message, UserWarning)
-2026-01-27T12:29:00.9815326Z 
-2026-01-27T12:29:00.9815441Z schemas/qa_log.py:54
-2026-01-27T12:29:00.9817862Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/qa_log.py:54: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.9819844Z     class QALogResponse(BaseModel):
-2026-01-27T12:29:00.9820105Z 
-2026-01-27T12:29:00.9820222Z schemas/knowledge_base.py:72
-2026-01-27T12:29:00.9822146Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/knowledge_base.py:72: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.9824140Z     class KnowledgeBaseResponse(BaseModel):
-2026-01-27T12:29:00.9824428Z 
-2026-01-27T12:29:00.9824539Z schemas/student.py:51
-2026-01-27T12:29:00.9826428Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/student.py:51: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.9828827Z     class StudentResponse(StudentBase):
-2026-01-27T12:29:00.9829110Z 
-2026-01-27T12:29:00.9829225Z schemas/submission.py:42
-2026-01-27T12:29:00.9831098Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/submission.py:42: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.9833127Z     class SubmissionResponse(SubmissionBase):
-2026-01-27T12:29:00.9833412Z 
-2026-01-27T12:29:00.9833532Z schemas/file_upload.py:122
-2026-01-27T12:29:00.9835393Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/file_upload.py:122: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.9837579Z     class FileMetadataResponse(BaseModel):
-2026-01-27T12:29:00.9837852Z 
-2026-01-27T12:29:00.9838278Z ../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/PyPDF2/__init__.py:21
-2026-01-27T12:29:00.9839728Z   /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/PyPDF2/__init__.py:21: DeprecationWarning: PyPDF2 is deprecated. Please move to the pypdf library instead.
-2026-01-27T12:29:00.9840836Z     warnings.warn(
-2026-01-27T12:29:00.9841006Z 
-2026-01-27T12:29:00.9841120Z schemas/feedback.py:375
-2026-01-27T12:29:00.9843005Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/feedback.py:375: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.9845092Z     class FeedbackTemplateResponse(FeedbackTemplateBase):
-2026-01-27T12:29:00.9845451Z 
-2026-01-27T12:29:00.9845567Z schemas/feedback.py:430
-2026-01-27T12:29:00.9847638Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/feedback.py:430: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.9849648Z     class AIInteractionResponse(BaseModel):
-2026-01-27T12:29:00.9849928Z 
-2026-01-27T12:29:00.9850031Z schemas/rubric.py:46
-2026-01-27T12:29:00.9851868Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/rubric.py:46: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
-2026-01-27T12:29:00.9854198Z     class RubricResponse(RubricBase):
-2026-01-27T12:29:00.9854476Z 
-2026-01-27T12:29:00.9854760Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-2026-01-27T12:29:00.9855398Z ================================ tests coverage ================================
-2026-01-27T12:29:00.9856028Z _______________ coverage: platform linux, python 3.11.14-final-0 _______________
-2026-01-27T12:29:00.9856460Z 
-2026-01-27T12:29:00.9856591Z Coverage HTML written to dir htmlcov
-2026-01-27T12:29:00.9856984Z Coverage XML written to file coverage.xml
-2026-01-27T12:29:00.9857631Z =========================== short test summary info ============================
-2026-01-27T12:29:00.9858866Z FAILED tests/test_analysis_api.py::TestSummaryEndpoint::test_get_analysis_summary - sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: code_files
-2026-01-27T12:29:00.9862001Z [SQL: SELECT code_files.id, code_files.file_id, code_files.original_filename, code_files.stored_filename, code_files.file_path, code_files.file_size, code_files.file_extension, code_files.mime_type, code_files.language, code_files.status, code_files.uploader_id, code_files.assignment_id, code_files.content_hash, code_files.line_count, code_files.analysis_result, code_files.created_at, code_files.updated_at 
-2026-01-27T12:29:00.9864517Z FROM code_files
-2026-01-27T12:29:00.9864782Z  LIMIT ? OFFSET ?]
-2026-01-27T12:29:00.9865053Z [parameters: (10, 0)]
-2026-01-27T12:29:00.9865471Z (Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-01-27T12:29:00.9866108Z ============ 1 failed, 239 passed, 4 skipped, 15 warnings in 32.66s ============
-2026-01-27T12:29:01.5130732Z ##[error]Process completed with exit code 1.
+﻿2026-01-27T12:42:53.1867114Z ##[group]Run pytest tests/ --cov=app --cov-report=xml --cov-report=html
+2026-01-27T12:42:53.1867653Z [36;1mpytest tests/ --cov=app --cov-report=xml --cov-report=html[0m
+2026-01-27T12:42:53.1901362Z shell: /usr/bin/bash -e {0}
+2026-01-27T12:42:53.1901594Z env:
+2026-01-27T12:42:53.1901841Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+2026-01-27T12:42:53.1902383Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+2026-01-27T12:42:53.1902801Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2026-01-27T12:42:53.1903159Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2026-01-27T12:42:53.1903523Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+2026-01-27T12:42:53.1903884Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+2026-01-27T12:42:53.1904209Z ##[endgroup]
+2026-01-27T12:42:57.2421718Z ============================= test session starts ==============================
+2026-01-27T12:42:57.2423345Z platform linux -- Python 3.11.14, pytest-9.0.2, pluggy-1.6.0 -- /opt/hostedtoolcache/Python/3.11.14/x64/bin/python
+2026-01-27T12:42:57.2424312Z cachedir: .pytest_cache
+2026-01-27T12:42:57.2424928Z rootdir: /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend
+2026-01-27T12:42:57.2425602Z configfile: pyproject.toml
+2026-01-27T12:42:57.2426037Z plugins: cov-7.0.0, asyncio-1.3.0, anyio-4.12.1
+2026-01-27T12:42:57.2427013Z asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+2026-01-27T12:42:58.1463026Z collecting ... collected 244 items
+2026-01-27T12:42:58.1463431Z 
+2026-01-27T12:42:58.1521325Z tests/test_advanced_analysis.py::TestCodeQualityAnalyzer::test_simple_code_analysis PASSED [  0%]
+2026-01-27T12:42:58.1568634Z tests/test_advanced_analysis.py::TestCodeQualityAnalyzer::test_complex_function_detection PASSED [  0%]
+2026-01-27T12:42:58.1604138Z tests/test_advanced_analysis.py::TestCodeQualityAnalyzer::test_maintainability_index PASSED [  1%]
+2026-01-27T12:42:58.1628646Z tests/test_advanced_analysis.py::TestCodeQualityAnalyzer::test_syntax_error_handling PASSED [  1%]
+2026-01-27T12:42:58.1642712Z tests/test_advanced_analysis.py::TestComplexityGrading::test_complexity_grade_a PASSED [  2%]
+2026-01-27T12:42:58.1654698Z tests/test_advanced_analysis.py::TestComplexityGrading::test_complexity_grade_b PASSED [  2%]
+2026-01-27T12:42:58.1666410Z tests/test_advanced_analysis.py::TestComplexityGrading::test_complexity_grade_c PASSED [  2%]
+2026-01-27T12:42:58.1678293Z tests/test_advanced_analysis.py::TestComplexityGrading::test_complexity_grade_f PASSED [  3%]
+2026-01-27T12:42:58.1689747Z tests/test_advanced_analysis.py::TestComplexityGrading::test_maintainability_excellent PASSED [  3%]
+2026-01-27T12:42:58.1701205Z tests/test_advanced_analysis.py::TestComplexityGrading::test_maintainability_poor PASSED [  4%]
+2026-01-27T12:42:58.1716631Z tests/test_advanced_analysis.py::TestDuplicateDetector::test_detect_duplicates PASSED [  4%]
+2026-01-27T12:42:58.1729109Z tests/test_advanced_analysis.py::TestDuplicateDetector::test_no_duplicates PASSED [  4%]
+2026-01-27T12:42:58.6761946Z tests/test_advanced_analysis.py::TestLinterService::test_lint_clean_code PASSED [  5%]
+2026-01-27T12:42:59.1830567Z tests/test_advanced_analysis.py::TestLinterService::test_lint_with_issues PASSED [  5%]
+2026-01-27T12:42:59.1852700Z tests/test_advanced_analysis.py::TestLinterService::test_unsupported_language PASSED [  6%]
+2026-01-27T12:42:59.3536745Z tests/test_advanced_analysis.py::TestSecurityAnalyzer::test_detect_hardcoded_password PASSED [  6%]
+2026-01-27T12:42:59.5117469Z tests/test_advanced_analysis.py::TestSecurityAnalyzer::test_detect_eval_usage PASSED [  6%]
+2026-01-27T12:42:59.6706956Z tests/test_advanced_analysis.py::TestSecurityAnalyzer::test_detect_shell_injection PASSED [  7%]
+2026-01-27T12:42:59.8289407Z tests/test_advanced_analysis.py::TestSecurityAnalyzer::test_clean_code_security PASSED [  7%]
+2026-01-27T12:42:59.8341019Z tests/test_advanced_analysis.py::TestPerformanceAnalyzer::test_detect_nested_loops PASSED [  8%]
+2026-01-27T12:42:59.8365814Z tests/test_advanced_analysis.py::TestPerformanceAnalyzer::test_detect_range_len_pattern PASSED [  8%]
+2026-01-27T12:42:59.8388872Z tests/test_advanced_analysis.py::TestPerformanceAnalyzer::test_detect_bare_except PASSED [  9%]
+2026-01-27T12:42:59.8416717Z tests/test_advanced_analysis.py::TestPerformanceAnalyzer::test_detect_print_statements PASSED [  9%]
+2026-01-27T12:42:59.8439830Z tests/test_advanced_analysis.py::TestPerformanceAnalyzer::test_clean_code_performance PASSED [  9%]
+2026-01-27T12:43:00.3595170Z tests/test_advanced_analysis.py::TestAnalysisIntegration::test_all_analyzers_work_together PASSED [ 10%]
+2026-01-27T12:43:00.6439281Z tests/test_analysis_api.py::TestAnalyzeEndpoint::test_analyze_python_code PASSED [ 10%]
+2026-01-27T12:43:00.8512549Z tests/test_analysis_api.py::TestAnalyzeEndpoint::test_analyze_javascript_code PASSED [ 11%]
+2026-01-27T12:43:01.0606735Z tests/test_analysis_api.py::TestAnalyzeEndpoint::test_analyze_with_rule_overrides PASSED [ 11%]
+2026-01-27T12:43:01.2690483Z tests/test_analysis_api.py::TestAnalyzeEndpoint::test_analyze_empty_code PASSED [ 11%]
+2026-01-27T12:43:01.4766736Z tests/test_analysis_api.py::TestAnalyzeEndpoint::test_analyze_invalid_language PASSED [ 12%]
+2026-01-27T12:43:01.6837168Z tests/test_analysis_api.py::TestRulesEndpoint::test_get_all_rules PASSED [ 12%]
+2026-01-27T12:43:02.0082757Z tests/test_analysis_api.py::TestRulesEndpoint::test_get_specific_rule PASSED [ 13%]
+2026-01-27T12:43:02.2148719Z tests/test_analysis_api.py::TestRulesEndpoint::test_get_nonexistent_rule PASSED [ 13%]
+2026-01-27T12:43:03.9040515Z tests/test_analysis_api.py::TestSummaryEndpoint::test_get_analysis_summary FAILED [ 13%]
+2026-01-27T12:43:04.3030807Z tests/test_assignments.py::test_grade_assignment PASSED                  [ 14%]
+2026-01-27T12:43:04.5249095Z tests/test_assignments.py::test_grade_assignment_missing_fields PASSED   [ 14%]
+2026-01-27T12:43:04.8691315Z tests/test_assignments.py::test_analyze_code PASSED                      [ 15%]
+2026-01-27T12:43:05.0993665Z tests/test_assignments.py::test_analyze_code_with_issues PASSED          [ 15%]
+2026-01-27T12:43:05.3307565Z tests/test_assignments.py::test_plagiarism_check PASSED                  [ 15%]
+2026-01-27T12:43:05.5588237Z tests/test_assignments.py::test_batch_grading PASSED                     [ 16%]
+2026-01-27T12:43:05.5621038Z tests/test_code_analysis.py::TestLineMetrics::test_basic_line_count PASSED [ 16%]
+2026-01-27T12:43:05.5647615Z tests/test_code_analysis.py::TestLineMetrics::test_comment_detection_python PASSED [ 17%]
+2026-01-27T12:43:05.5674845Z tests/test_code_analysis.py::TestLineMetrics::test_docstring_detection PASSED [ 17%]
+2026-01-27T12:43:05.5699965Z tests/test_code_analysis.py::TestComplexity::test_simple_function_complexity PASSED [ 18%]
+2026-01-27T12:43:05.5732559Z tests/test_code_analysis.py::TestComplexity::test_complex_function_detection PASSED [ 18%]
+2026-01-27T12:43:05.5762401Z tests/test_code_analysis.py::TestComplexity::test_cognitive_complexity PASSED [ 18%]
+2026-01-27T12:43:05.5790131Z tests/test_code_analysis.py::TestNamingConventions::test_valid_python_names PASSED [ 19%]
+2026-01-27T12:43:05.5814729Z tests/test_code_analysis.py::TestNamingConventions::test_invalid_function_name PASSED [ 19%]
+2026-01-27T12:43:05.5837358Z tests/test_code_analysis.py::TestNamingConventions::test_invalid_class_name PASSED [ 20%]
+2026-01-27T12:43:05.5862059Z tests/test_code_analysis.py::TestSecurityChecks::test_hardcoded_password_detection PASSED [ 20%]
+2026-01-27T12:43:05.5887572Z tests/test_code_analysis.py::TestSecurityChecks::test_eval_usage_detection PASSED [ 20%]
+2026-01-27T12:43:05.5913496Z tests/test_code_analysis.py::TestSecurityChecks::test_sql_injection_detection PASSED [ 21%]
+2026-01-27T12:43:05.5938326Z tests/test_code_analysis.py::TestStyleChecks::test_long_line_detection PASSED [ 21%]
+2026-01-27T12:43:05.5963138Z tests/test_code_analysis.py::TestStyleChecks::test_trailing_whitespace_detection PASSED [ 22%]
+2026-01-27T12:43:05.5992843Z tests/test_code_analysis.py::TestStructureAnalysis::test_class_and_function_count PASSED [ 22%]
+2026-01-27T12:43:05.6019662Z tests/test_code_analysis.py::TestStructureAnalysis::test_unused_import_detection PASSED [ 22%]
+2026-01-27T12:43:05.6050352Z tests/test_code_analysis.py::TestScoring::test_perfect_code_score PASSED [ 23%]
+2026-01-27T12:43:05.6086359Z tests/test_code_analysis.py::TestScoring::test_poor_code_score PASSED    [ 23%]
+2026-01-27T12:43:05.6108307Z tests/test_code_analysis.py::TestMultiLanguage::test_javascript_analysis PASSED [ 24%]
+2026-01-27T12:43:05.6135825Z tests/test_code_analysis.py::TestMultiLanguage::test_java_analysis PASSED [ 24%]
+2026-01-27T12:43:05.6167048Z tests/test_code_analysis.py::TestRecommendations::test_recommendations_generated PASSED [ 25%]
+2026-01-27T12:43:05.6190930Z tests/test_code_analysis.py::TestRecommendations::test_security_recommendation PASSED [ 25%]
+2026-01-27T12:43:05.6204517Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_service_initialization PASSED [ 25%]
+2026-01-27T12:43:05.6216471Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_singleton_instance PASSED [ 26%]
+2026-01-27T12:43:05.6268997Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_generate_feedback_basic PASSED [ 26%]
+2026-01-27T12:43:05.6320080Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_generate_feedback_encouraging_tone PASSED [ 27%]
+2026-01-27T12:43:05.6371010Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_generate_feedback_strict_tone PASSED [ 27%]
+2026-01-27T12:43:05.6393808Z tests/test_feedback_system.py::TestFeedbackGenerationService::test_generate_feedback_with_assignment_context PASSED [ 27%]
+2026-01-27T12:43:05.6413100Z tests/test_feedback_system.py::TestAIService::test_explain_code PASSED   [ 28%]
+2026-01-27T12:43:05.6434729Z tests/test_feedback_system.py::TestAIService::test_suggest_improvements PASSED [ 28%]
+2026-01-27T12:43:05.6453870Z tests/test_feedback_system.py::TestAIService::test_answer_student_question PASSED [ 29%]
+2026-01-27T12:43:05.6465734Z tests/test_feedback_system.py::TestAIService::test_get_interaction_stats PASSED [ 29%]
+2026-01-27T12:43:05.6477602Z tests/test_feedback_system.py::TestFeedbackTemplates::test_template_category_enum PASSED [ 29%]
+2026-01-27T12:43:05.6489457Z tests/test_feedback_system.py::TestFeedbackTemplates::test_feedback_tone_enum PASSED [ 30%]
+2026-01-27T12:43:05.6501202Z tests/test_feedback_system.py::TestFeedbackTemplates::test_feedback_category_enum PASSED [ 30%]
+2026-01-27T12:43:05.6583364Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_generate_feedback_endpoint PASSED [ 31%]
+2026-01-27T12:43:05.6641284Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_explain_code_endpoint PASSED [ 31%]
+2026-01-27T12:43:05.6699888Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_suggest_improvements_endpoint PASSED [ 31%]
+2026-01-27T12:43:05.6757285Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_answer_question_endpoint PASSED [ 32%]
+2026-01-27T12:43:05.6812950Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_ai_config_endpoint PASSED [ 32%]
+2026-01-27T12:43:05.6865563Z tests/test_feedback_system.py::TestFeedbackAPIEndpoints::test_ai_health_endpoint PASSED [ 33%]
+2026-01-27T12:43:05.7024930Z tests/test_feedback_system.py::TestFeedbackTemplatesAPI::test_list_templates_endpoint PASSED [ 33%]
+2026-01-27T12:43:05.7074275Z tests/test_feedback_system.py::TestFeedbackTemplatesAPI::test_list_categories_endpoint PASSED [ 34%]
+2026-01-27T12:43:05.7224872Z tests/test_feedback_system.py::TestFeedbackTemplatesAPI::test_create_template_endpoint PASSED [ 34%]
+2026-01-27T12:43:05.7320098Z tests/test_file_api.py::TestFileUploadAPI::test_list_files_empty PASSED  [ 34%]
+2026-01-27T12:43:05.7666518Z tests/test_file_api.py::TestFileUploadAPI::test_upload_python_file PASSED [ 35%]
+2026-01-27T12:43:05.7849742Z tests/test_file_api.py::TestFileUploadAPI::test_upload_javascript_file PASSED [ 35%]
+2026-01-27T12:43:05.7905034Z tests/test_file_api.py::TestFileUploadAPI::test_upload_invalid_file_type PASSED [ 36%]
+2026-01-27T12:43:05.8137939Z tests/test_file_api.py::TestFileUploadAPI::test_get_file_metadata PASSED [ 36%]
+2026-01-27T12:43:05.8394591Z tests/test_file_api.py::TestFileUploadAPI::test_get_file_content PASSED  [ 36%]
+2026-01-27T12:43:05.8702984Z tests/test_file_api.py::TestFileUploadAPI::test_parse_file PASSED        [ 37%]
+2026-01-27T12:43:05.8723994Z tests/test_file_upload.py::TestFileParsingService::test_detect_language_python PASSED [ 37%]
+2026-01-27T12:43:05.8743723Z tests/test_file_upload.py::TestFileParsingService::test_detect_language_javascript PASSED [ 38%]
+2026-01-27T12:43:05.8762993Z tests/test_file_upload.py::TestFileParsingService::test_detect_language_java PASSED [ 38%]
+2026-01-27T12:43:05.8782447Z tests/test_file_upload.py::TestFileParsingService::test_detect_language_c_cpp PASSED [ 38%]
+2026-01-27T12:43:05.8806482Z tests/test_file_upload.py::TestFileParsingService::test_parse_python_file PASSED [ 39%]
+2026-01-27T12:43:05.8855672Z tests/test_file_upload.py::TestFileParsingService::test_parse_javascript_file PASSED [ 39%]
+2026-01-27T12:43:05.8904841Z tests/test_file_upload.py::TestFileParsingService::test_parse_java_file PASSED [ 40%]
+2026-01-27T12:43:05.8939615Z tests/test_file_upload.py::TestFileParsingService::test_parse_c_file PASSED [ 40%]
+2026-01-27T12:43:05.8965063Z tests/test_file_upload.py::TestFileParsingService::test_basic_metrics PASSED [ 40%]
+2026-01-27T12:43:06.1176822Z tests/test_health.py::test_root_endpoint PASSED                          [ 41%]
+2026-01-27T12:43:06.5310277Z tests/test_health.py::test_health_endpoint PASSED                        [ 41%]
+2026-01-27T12:43:06.7525661Z tests/test_health.py::test_docs_endpoint PASSED                          [ 42%]
+2026-01-27T12:43:08.9611842Z tests/test_health.py::test_openapi_schema PASSED                         [ 42%]
+2026-01-27T12:43:08.9625821Z tests/test_multi_dimensional_evaluation.py::TestEvaluationDimension::test_dimension_values PASSED [ 43%]
+2026-01-27T12:43:08.9637819Z tests/test_multi_dimensional_evaluation.py::TestEvaluationDimension::test_dimension_count PASSED [ 43%]
+2026-01-27T12:43:08.9649766Z tests/test_multi_dimensional_evaluation.py::TestDimensionMetadata::test_all_dimensions_have_metadata PASSED [ 43%]
+2026-01-27T12:43:08.9661824Z tests/test_multi_dimensional_evaluation.py::TestDimensionMetadata::test_metadata_has_required_fields PASSED [ 44%]
+2026-01-27T12:43:08.9673637Z tests/test_multi_dimensional_evaluation.py::TestDimensionMetadata::test_weights_sum_to_one PASSED [ 44%]
+2026-01-27T12:43:08.9685729Z tests/test_multi_dimensional_evaluation.py::TestDimensionScore::test_create_dimension_score PASSED [ 45%]
+2026-01-27T12:43:08.9699644Z tests/test_multi_dimensional_evaluation.py::TestDimensionScore::test_score_validation PASSED [ 45%]
+2026-01-27T12:43:08.9711917Z tests/test_multi_dimensional_evaluation.py::TestRadarChartData::test_create_radar_chart_data PASSED [ 45%]
+2026-01-27T12:43:08.9725787Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_score_to_grade PASSED [ 46%]
+2026-01-27T12:43:08.9757660Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_technical_ability PASSED [ 46%]
+2026-01-27T12:43:08.9785059Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_code_quality PASSED [ 47%]
+2026-01-27T12:43:08.9810733Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_innovation PASSED [ 47%]
+2026-01-27T12:43:08.9837973Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_best_practices PASSED [ 47%]
+2026-01-27T12:43:08.9863884Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_efficiency PASSED [ 48%]
+2026-01-27T12:43:08.9890509Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_documentation PASSED [ 48%]
+2026-01-27T12:43:08.9921330Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_calculate_dimension_scores PASSED [ 49%]
+2026-01-27T12:43:08.9952529Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_generate_radar_chart_data PASSED [ 49%]
+2026-01-27T12:43:08.9984650Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_generate_overall_summary PASSED [ 50%]
+2026-01-27T12:43:09.0015534Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_identify_top_strengths PASSED [ 50%]
+2026-01-27T12:43:09.0045665Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_identify_priority_improvements PASSED [ 50%]
+2026-01-27T12:43:09.0077706Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluator::test_recommend_focus_areas PASSED [ 51%]
+2026-01-27T12:43:09.0090226Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluationRequest::test_create_request_with_defaults PASSED [ 51%]
+2026-01-27T12:43:09.0102556Z tests/test_multi_dimensional_evaluation.py::TestMultiDimensionalEvaluationRequest::test_create_request_with_class_comparison PASSED [ 52%]
+2026-01-27T12:43:09.0114453Z tests/test_multi_dimensional_evaluation.py::TestClassComparison::test_create_class_comparison PASSED [ 52%]
+2026-01-27T12:43:09.0127255Z tests/test_multi_dimensional_evaluation.py::TestAbilityAnalysisReport::test_create_report PASSED [ 52%]
+2026-01-27T12:43:09.0139073Z tests/test_personalized_feedback.py::TestFeedbackEnums::test_feedback_detail_level_values PASSED [ 53%]
+2026-01-27T12:43:09.0150796Z tests/test_personalized_feedback.py::TestFeedbackEnums::test_suggestion_difficulty_values PASSED [ 53%]
+2026-01-27T12:43:09.0162741Z tests/test_personalized_feedback.py::TestFeedbackEnums::test_student_level_values PASSED [ 54%]
+2026-01-27T12:43:09.0174985Z tests/test_personalized_feedback.py::TestFeedbackEnums::test_performance_trend_values PASSED [ 54%]
+2026-01-27T12:43:09.0186593Z tests/test_personalized_feedback.py::TestDetailLevelConfig::test_brief_config PASSED [ 54%]
+2026-01-27T12:43:09.0198344Z tests/test_personalized_feedback.py::TestDetailLevelConfig::test_comprehensive_config PASSED [ 55%]
+2026-01-27T12:43:09.0209961Z tests/test_personalized_feedback.py::TestLevelMessages::test_beginner_messages PASSED [ 55%]
+2026-01-27T12:43:09.0221646Z tests/test_personalized_feedback.py::TestLevelMessages::test_advanced_messages PASSED [ 56%]
+2026-01-27T12:43:09.0233590Z tests/test_personalized_feedback.py::TestTrendMessages::test_improving_trend PASSED [ 56%]
+2026-01-27T12:43:09.0245334Z tests/test_personalized_feedback.py::TestTrendMessages::test_declining_trend PASSED [ 56%]
+2026-01-27T12:43:09.0259152Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_trend_improving PASSED [ 57%]
+2026-01-27T12:43:09.0272930Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_trend_declining PASSED [ 57%]
+2026-01-27T12:43:09.0286121Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_trend_stable PASSED [ 58%]
+2026-01-27T12:43:09.0299088Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_trend_insufficient_data PASSED [ 58%]
+2026-01-27T12:43:09.0311941Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_determine_level_beginner PASSED [ 59%]
+2026-01-27T12:43:09.0325428Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_determine_level_intermediate PASSED [ 59%]
+2026-01-27T12:43:09.0338285Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_determine_level_advanced PASSED [ 59%]
+2026-01-27T12:43:09.0351265Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_determine_level_new_student PASSED [ 60%]
+2026-01-27T12:43:09.0364641Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_improvement_rate_positive PASSED [ 60%]
+2026-01-27T12:43:09.0377556Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_calculate_improvement_rate_negative PASSED [ 61%]
+2026-01-27T12:43:09.0390347Z tests/test_personalized_feedback.py::TestFeedbackGenerationService::test_translate_to_chinese PASSED [ 61%]
+2026-01-27T12:43:09.0420401Z tests/test_personalized_feedback.py::TestProgressiveSuggestions::test_generate_progressive_suggestions PASSED [ 61%]
+2026-01-27T12:43:09.0450001Z tests/test_personalized_feedback.py::TestProgressiveSuggestions::test_suggestions_have_difficulty_levels PASSED [ 62%]
+2026-01-27T12:43:09.0478604Z tests/test_personalized_feedback.py::TestProgressiveSuggestions::test_suggestions_have_chinese_translations PASSED [ 62%]
+2026-01-27T12:43:09.0493675Z tests/test_personalized_feedback.py::TestLearningPath::test_create_learning_path PASSED [ 63%]
+2026-01-27T12:43:09.0508602Z tests/test_personalized_feedback.py::TestLearningPath::test_learning_path_sorts_by_difficulty PASSED [ 63%]
+2026-01-27T12:43:09.0523313Z tests/test_personalized_feedback.py::TestLearningPath::test_learning_path_calculates_total_time PASSED [ 63%]
+2026-01-27T12:43:09.0551578Z tests/test_personalized_feedback.py::TestPersonalizedMessage::test_first_submission_message PASSED [ 64%]
+2026-01-27T12:43:09.0571946Z tests/test_personalized_feedback.py::TestPersonalizedMessage::test_above_average_message PASSED [ 64%]
+2026-01-27T12:43:09.0592636Z tests/test_personalized_feedback.py::TestPersonalizedMessage::test_below_average_message PASSED [ 65%]
+2026-01-27T12:43:09.0614316Z tests/test_personalized_feedback.py::TestEncouragement::test_encouragement_for_new_student_high_score PASSED [ 65%]
+2026-01-27T12:43:09.0634462Z tests/test_personalized_feedback.py::TestEncouragement::test_encouragement_for_improving_student PASSED [ 65%]
+2026-01-27T12:43:09.0653858Z tests/test_personalized_feedback.py::TestEncouragement::test_encouragement_for_declining_student PASSED [ 66%]
+2026-01-27T12:43:09.0667124Z tests/test_personalized_feedback.py::TestStudentHistoryAnalysisSchema::test_create_history_analysis PASSED [ 66%]
+2026-01-27T12:43:09.0679048Z tests/test_personalized_feedback.py::TestPersonalizedFeedbackRequest::test_create_request_with_defaults PASSED [ 67%]
+2026-01-27T12:43:09.0691991Z tests/test_personalized_feedback.py::TestPersonalizedFeedbackRequest::test_create_request_with_custom_values PASSED [ 67%]
+2026-01-27T12:43:09.2927988Z tests/test_qa.py::test_ask_question PASSED                               [ 68%]
+2026-01-27T12:43:09.5133534Z tests/test_qa.py::test_ask_question_missing_fields PASSED                [ 68%]
+2026-01-27T12:43:09.7368517Z tests/test_qa.py::test_escalate_question PASSED                          [ 68%]
+2026-01-27T12:43:10.0252905Z tests/test_qa.py::test_qa_analytics PASSED                               [ 69%]
+2026-01-27T12:43:10.3931364Z tests/test_report_analysis.py::TestReportAnalysisAPI::test_analyze_endpoint_basic PASSED [ 69%]
+2026-01-27T12:43:10.6220673Z tests/test_report_analysis.py::TestReportAnalysisAPI::test_analyze_with_chinese_content PASSED [ 70%]
+2026-01-27T12:43:10.8434409Z tests/test_report_analysis.py::TestReportAnalysisAPI::test_analyze_empty_content PASSED [ 70%]
+2026-01-27T12:43:11.0697719Z tests/test_report_analysis.py::TestReportAnalysisAPI::test_analyze_file_upload_pdf_not_supported_yet PASSED [ 70%]
+2026-01-27T12:43:11.2937503Z tests/test_report_analysis.py::TestReportAnalysisAPI::test_analyze_file_upload_txt PASSED [ 71%]
+2026-01-27T12:43:11.2966459Z tests/test_report_analysis.py::TestReportAnalysisService::test_service_basic_analysis PASSED [ 71%]
+2026-01-27T12:43:11.3000922Z tests/test_report_analysis.py::TestReportAnalysisService::test_section_detection PASSED [ 72%]
+2026-01-27T12:43:11.3034901Z tests/test_report_analysis.py::TestReportAnalysisService::test_chinese_section_detection PASSED [ 72%]
+2026-01-27T12:43:11.3048967Z tests/test_report_analysis.py::TestJSONParsers::test_parse_logic_analysis_valid_json PASSED [ 72%]
+2026-01-27T12:43:11.3062745Z tests/test_report_analysis.py::TestJSONParsers::test_parse_logic_analysis_markdown_block PASSED [ 73%]
+2026-01-27T12:43:11.3076347Z tests/test_report_analysis.py::TestJSONParsers::test_parse_logic_analysis_invalid_enum PASSED [ 73%]
+2026-01-27T12:43:11.3091202Z tests/test_report_analysis.py::TestJSONParsers::test_parse_logic_analysis_invalid_json PASSED [ 74%]
+2026-01-27T12:43:11.3105148Z tests/test_report_analysis.py::TestJSONParsers::test_parse_innovation_valid PASSED [ 74%]
+2026-01-27T12:43:11.3118632Z tests/test_report_analysis.py::TestJSONParsers::test_parse_innovation_missing_required_fields PASSED [ 75%]
+2026-01-27T12:43:11.3131645Z tests/test_report_analysis.py::TestJSONParsers::test_parse_suggestions_valid PASSED [ 75%]
+2026-01-27T12:43:11.3145246Z tests/test_report_analysis.py::TestJSONParsers::test_parse_suggestions_invalid_category PASSED [ 75%]
+2026-01-27T12:43:11.3158304Z tests/test_report_analysis.py::TestJSONParsers::test_parse_language_valid PASSED [ 76%]
+2026-01-27T12:43:11.3171484Z tests/test_report_analysis.py::TestJSONParsers::test_parse_language_value_clamping PASSED [ 76%]
+2026-01-27T12:43:11.3192175Z tests/test_report_analysis.py::TestDeepSeekIntegration::test_analyze_logic_with_real_ai SKIPPED [ 77%]
+2026-01-27T12:43:11.3196784Z tests/test_report_analysis.py::TestDeepSeekIntegration::test_analyze_innovation_with_real_ai SKIPPED [ 77%]
+2026-01-27T12:43:11.3207736Z tests/test_report_analysis.py::TestDeepSeekIntegration::test_generate_suggestions_with_real_ai SKIPPED [ 77%]
+2026-01-27T12:43:11.3219234Z tests/test_report_analysis.py::TestDeepSeekIntegration::test_evaluate_language_with_real_ai SKIPPED [ 78%]
+2026-01-27T12:43:11.7443928Z tests/test_rubrics.py::TestRubricCreate::test_create_success PASSED      [ 78%]
+2026-01-27T12:43:12.0346000Z tests/test_rubrics.py::TestRubricCreate::test_create_with_criteria PASSED [ 79%]
+2026-01-27T12:43:12.4093330Z tests/test_rubrics.py::TestRubricCreate::test_create_duplicate_rubric_id FAILED [ 79%]
+2026-01-27T12:43:12.6931262Z tests/test_rubrics.py::TestRubricCreate::test_create_invalid_max_score PASSED [ 79%]
+2026-01-27T12:43:12.9779915Z tests/test_rubrics.py::TestRubricCreate::test_create_missing_required_fields PASSED [ 80%]
+2026-01-27T12:43:13.3994996Z tests/test_rubrics.py::TestRubricCreate::test_create_with_all_fields PASSED [ 80%]
+2026-01-27T12:43:13.6889535Z tests/test_rubrics.py::TestRubricList::test_list_empty PASSED            [ 81%]
+2026-01-27T12:43:14.7339316Z tests/test_rubrics.py::TestRubricList::test_list_with_data FAILED        [ 81%]
+2026-01-27T12:43:15.7707674Z tests/test_rubrics.py::TestRubricList::test_list_pagination PASSED       [ 81%]
+2026-01-27T12:43:17.0020453Z tests/test_rubrics.py::TestRubricList::test_list_pagination_last_page FAILED [ 82%]
+2026-01-27T12:43:17.2869723Z tests/test_rubrics.py::TestRubricList::test_list_invalid_page PASSED     [ 82%]
+2026-01-27T12:43:17.6562549Z tests/test_rubrics.py::TestRubricGet::test_get_success FAILED            [ 83%]
+2026-01-27T12:43:17.9634854Z tests/test_rubrics.py::TestRubricGet::test_get_not_found PASSED          [ 83%]
+2026-01-27T12:43:18.3376189Z tests/test_rubrics.py::TestRubricGet::test_get_with_criteria FAILED      [ 84%]
+2026-01-27T12:43:18.8293910Z tests/test_rubrics.py::TestRubricUpdate::test_update_success FAILED      [ 84%]
+2026-01-27T12:43:19.2025681Z tests/test_rubrics.py::TestRubricUpdate::test_update_partial_fields FAILED [ 84%]
+2026-01-27T12:43:19.5790275Z tests/test_rubrics.py::TestRubricUpdate::test_update_criteria FAILED     [ 85%]
+2026-01-27T12:43:19.8623527Z tests/test_rubrics.py::TestRubricUpdate::test_update_not_found PASSED    [ 85%]
+2026-01-27T12:43:20.3638623Z tests/test_rubrics.py::TestRubricUpdate::test_update_invalid_max_score PASSED [ 86%]
+2026-01-27T12:43:20.7303942Z tests/test_rubrics.py::TestRubricDelete::test_delete_success FAILED      [ 86%]
+2026-01-27T12:43:21.0197063Z tests/test_rubrics.py::TestRubricDelete::test_delete_not_found PASSED    [ 86%]
+2026-01-27T12:43:21.3840300Z tests/test_rubrics.py::TestRubricDelete::test_delete_with_assignments FAILED [ 87%]
+2026-01-27T12:43:21.7521314Z tests/test_rubrics.py::TestRubricAssignments::test_get_assignments_success FAILED [ 87%]
+2026-01-27T12:43:22.2555988Z tests/test_rubrics.py::TestRubricAssignments::test_get_assignments_empty FAILED [ 88%]
+2026-01-27T12:43:22.5418595Z tests/test_rubrics.py::TestRubricAssignments::test_get_assignments_not_found PASSED [ 88%]
+2026-01-27T12:43:22.8389172Z tests/test_students.py::TestStudentRegistration::test_register_success PASSED [ 88%]
+2026-01-27T12:43:23.1328152Z tests/test_students.py::TestStudentRegistration::test_register_with_all_fields PASSED [ 89%]
+2026-01-27T12:43:23.5303718Z tests/test_students.py::TestStudentRegistration::test_register_duplicate_student_id FAILED [ 89%]
+2026-01-27T12:43:24.0434954Z tests/test_students.py::TestStudentRegistration::test_register_duplicate_email FAILED [ 90%]
+2026-01-27T12:43:24.3385960Z tests/test_students.py::TestStudentRegistration::test_register_invalid_email_format PASSED [ 90%]
+2026-01-27T12:43:24.6248866Z tests/test_students.py::TestStudentRegistration::test_register_missing_required_fields PASSED [ 90%]
+2026-01-27T12:43:25.0126953Z tests/test_students.py::TestStudentLogin::test_login_success FAILED      [ 91%]
+2026-01-27T12:43:25.5205691Z tests/test_students.py::TestStudentLogin::test_login_with_email_verification FAILED [ 91%]
+2026-01-27T12:43:25.8045432Z tests/test_students.py::TestStudentLogin::test_login_student_not_found PASSED [ 92%]
+2026-01-27T12:43:26.1779742Z tests/test_students.py::TestStudentLogin::test_login_email_mismatch FAILED [ 92%]
+2026-01-27T12:43:27.5888072Z tests/test_students.py::TestStudentList::test_list_default_pagination FAILED [ 93%]
+2026-01-27T12:43:29.1721298Z tests/test_students.py::TestStudentList::test_list_custom_pagination FAILED [ 93%]
+2026-01-27T12:43:30.5677382Z tests/test_students.py::TestStudentList::test_list_second_page FAILED    [ 93%]
+2026-01-27T12:43:31.9659215Z tests/test_students.py::TestStudentList::test_list_filter_by_course FAILED [ 94%]
+2026-01-27T12:43:32.3905835Z tests/test_students.py::TestStudentList::test_list_empty_result PASSED   [ 94%]
+2026-01-27T12:43:33.8043604Z tests/test_students.py::TestStudentList::test_list_page_size_boundary FAILED [ 95%]
+2026-01-27T12:43:35.2210193Z tests/test_students.py::TestStudentList::test_list_filter_by_course_no_results PASSED [ 95%]
+2026-01-27T12:43:36.6202033Z tests/test_students.py::TestStudentList::test_list_page_out_of_range FAILED [ 95%]
+2026-01-27T12:43:37.1372420Z tests/test_students.py::TestStudentGet::test_get_success FAILED          [ 96%]
+2026-01-27T12:43:37.4186182Z tests/test_students.py::TestStudentGet::test_get_not_found PASSED        [ 96%]
+2026-01-27T12:43:37.7894192Z tests/test_students.py::TestStudentUpdate::test_update_success FAILED    [ 97%]
+2026-01-27T12:43:38.1775783Z tests/test_students.py::TestStudentUpdate::test_update_partial_fields FAILED [ 97%]
+2026-01-27T12:43:38.5459069Z tests/test_students.py::TestStudentUpdate::test_update_email FAILED      [ 97%]
+2026-01-27T12:43:39.1473761Z tests/test_students.py::TestStudentUpdate::test_update_duplicate_email FAILED [ 98%]
+2026-01-27T12:43:39.4983300Z tests/test_students.py::TestStudentUpdate::test_update_invalid_email PASSED [ 98%]
+2026-01-27T12:43:39.7855827Z tests/test_students.py::TestStudentUpdate::test_update_not_found PASSED  [ 99%]
+2026-01-27T12:43:40.1717951Z tests/test_students.py::TestStudentDelete::test_delete_success FAILED    [ 99%]
+2026-01-27T12:43:40.6556624Z tests/test_students.py::TestStudentDelete::test_delete_not_found PASSED  [100%]
+2026-01-27T12:43:40.6557238Z 
+2026-01-27T12:43:40.6557508Z =================================== FAILURES ===================================
+2026-01-27T12:43:40.6558464Z ________________ TestSummaryEndpoint.test_get_analysis_summary _________________
+2026-01-27T12:43:40.6559947Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1967: in _exec_single_context
+2026-01-27T12:43:40.6560743Z     self.dialect.do_execute(
+2026-01-27T12:43:40.6561427Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/default.py:952: in do_execute
+2026-01-27T12:43:40.6562514Z     cursor.execute(statement, parameters)
+2026-01-27T12:43:40.6563299Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:182: in execute
+2026-01-27T12:43:40.6564382Z     self._adapt_connection._handle_exception(error)
+2026-01-27T12:43:40.6565269Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:342: in _handle_exception
+2026-01-27T12:43:40.6565950Z     raise error
+2026-01-27T12:43:40.6566500Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:164: in execute
+2026-01-27T12:43:40.6567207Z     self.await_(_cursor.execute(operation, parameters))
+2026-01-27T12:43:40.6567895Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:132: in await_only
+2026-01-27T12:43:40.6568819Z     return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+2026-01-27T12:43:40.6569612Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6570675Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:196: in greenlet_spawn
+2026-01-27T12:43:40.6571522Z     value = await result
+2026-01-27T12:43:40.6571761Z             ^^^^^^^^^^^^
+2026-01-27T12:43:40.6572369Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/cursor.py:40: in execute
+2026-01-27T12:43:40.6573017Z     await self._execute(self._cursor.execute, sql, parameters)
+2026-01-27T12:43:40.6573645Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/cursor.py:32: in _execute
+2026-01-27T12:43:40.6574256Z     return await self._conn._execute(fn, *args, **kwargs)
+2026-01-27T12:43:40.6574615Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6575155Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/core.py:160: in _execute
+2026-01-27T12:43:40.6575715Z     return await future
+2026-01-27T12:43:40.6575936Z            ^^^^^^^^^^^^
+2026-01-27T12:43:40.6576404Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/core.py:63: in _connection_worker_thread
+2026-01-27T12:43:40.6576921Z     result = function()
+2026-01-27T12:43:40.6577097Z              ^^^^^^^^^^
+2026-01-27T12:43:40.6577328Z E   sqlite3.OperationalError: no such table: code_files
+2026-01-27T12:43:40.6577546Z 
+2026-01-27T12:43:40.6577727Z The above exception was the direct cause of the following exception:
+2026-01-27T12:43:40.6578143Z tests/test_analysis_api.py:141: in test_get_analysis_summary
+2026-01-27T12:43:40.6578487Z     response = client.get("/api/v1/analysis/summary")
+2026-01-27T12:43:40.6578774Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6579240Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/testclient.py:473: in get
+2026-01-27T12:43:40.6579874Z     return super().get(
+2026-01-27T12:43:40.6580251Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:1053: in get
+2026-01-27T12:43:40.6580675Z     return self.request(
+2026-01-27T12:43:40.6581093Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/testclient.py:445: in request
+2026-01-27T12:43:40.6581543Z     return super().request(
+2026-01-27T12:43:40.6581936Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:825: in request
+2026-01-27T12:43:40.6582577Z     return self.send(request, auth=auth, follow_redirects=follow_redirects)
+2026-01-27T12:43:40.6582938Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6583379Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:914: in send
+2026-01-27T12:43:40.6583812Z     response = self._send_handling_auth(
+2026-01-27T12:43:40.6584281Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:942: in _send_handling_auth
+2026-01-27T12:43:40.6584778Z     response = self._send_handling_redirects(
+2026-01-27T12:43:40.6585296Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:979: in _send_handling_redirects
+2026-01-27T12:43:40.6585972Z     response = self._send_single_request(request)
+2026-01-27T12:43:40.6586241Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6586720Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/httpx/_client.py:1014: in _send_single_request
+2026-01-27T12:43:40.6587232Z     response = transport.handle_request(request)
+2026-01-27T12:43:40.6587495Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6587967Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/testclient.py:348: in handle_request
+2026-01-27T12:43:40.6588434Z     raise exc
+2026-01-27T12:43:40.6588838Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/testclient.py:345: in handle_request
+2026-01-27T12:43:40.6589347Z     portal.call(self.app, scope, receive, send)
+2026-01-27T12:43:40.6589798Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/anyio/from_thread.py:334: in call
+2026-01-27T12:43:40.6590322Z     return cast(T_Retval, self.start_task_soon(func, *args).result())
+2026-01-27T12:43:40.6590664Z                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6591102Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/concurrent/futures/_base.py:456: in result
+2026-01-27T12:43:40.6591524Z     return self.__get_result()
+2026-01-27T12:43:40.6591732Z            ^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6592121Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+2026-01-27T12:43:40.6592690Z     raise self._exception
+2026-01-27T12:43:40.6593181Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+2026-01-27T12:43:40.6593647Z     retval = await retval_or_awaitable
+2026-01-27T12:43:40.6593881Z              ^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6594313Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/applications.py:1135: in __call__
+2026-01-27T12:43:40.6594806Z     await super().__call__(scope, receive, send)
+2026-01-27T12:43:40.6595288Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/applications.py:107: in __call__
+2026-01-27T12:43:40.6595790Z     await self.middleware_stack(scope, receive, send)
+2026-01-27T12:43:40.6596309Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/errors.py:186: in __call__
+2026-01-27T12:43:40.6596777Z     raise exc
+2026-01-27T12:43:40.6597185Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/errors.py:164: in __call__
+2026-01-27T12:43:40.6597679Z     await self.app(scope, receive, _send)
+2026-01-27T12:43:40.6598279Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/cors.py:85: in __call__
+2026-01-27T12:43:40.6598945Z     await self.app(scope, receive, send)
+2026-01-27T12:43:40.6599800Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/base.py:191: in __call__
+2026-01-27T12:43:40.6600562Z     with recv_stream, send_stream, collapse_excgroups():
+2026-01-27T12:43:40.6600976Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/contextlib.py:158: in __exit__
+2026-01-27T12:43:40.6601373Z     self.gen.throw(typ, value, traceback)
+2026-01-27T12:43:40.6601855Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/_utils.py:85: in collapse_excgroups
+2026-01-27T12:43:40.6602537Z     raise exc
+2026-01-27T12:43:40.6602961Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/base.py:193: in __call__
+2026-01-27T12:43:40.6603496Z     response = await self.dispatch_func(request, call_next)
+2026-01-27T12:43:40.6603813Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6604080Z app/main.py:101: in log_requests_middleware
+2026-01-27T12:43:40.6604344Z     response = await call_next(request)
+2026-01-27T12:43:40.6604724Z                ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6605208Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/base.py:168: in call_next
+2026-01-27T12:43:40.6605778Z     raise app_exc from app_exc.__cause__ or app_exc.__context__
+2026-01-27T12:43:40.6606302Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/base.py:144: in coro
+2026-01-27T12:43:40.6606836Z     await self.app(scope, receive_or_disconnect, send_no_error)
+2026-01-27T12:43:40.6607398Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/middleware/exceptions.py:63: in __call__
+2026-01-27T12:43:40.6608006Z     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+2026-01-27T12:43:40.6608613Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+2026-01-27T12:43:40.6609093Z     raise exc
+2026-01-27T12:43:40.6609514Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+2026-01-27T12:43:40.6610010Z     await app(scope, receive, sender)
+2026-01-27T12:43:40.6610508Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+2026-01-27T12:43:40.6611026Z     await self.app(scope, receive, send)
+2026-01-27T12:43:40.6611466Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/routing.py:716: in __call__
+2026-01-27T12:43:40.6612450Z     await self.middleware_stack(scope, receive, send)
+2026-01-27T12:43:40.6613277Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/routing.py:736: in app
+2026-01-27T12:43:40.6613783Z     await route.handle(scope, receive, send)
+2026-01-27T12:43:40.6614248Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/routing.py:290: in handle
+2026-01-27T12:43:40.6614713Z     await self.app(scope, receive, send)
+2026-01-27T12:43:40.6615148Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/routing.py:115: in app
+2026-01-27T12:43:40.6615702Z     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+2026-01-27T12:43:40.6616319Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+2026-01-27T12:43:40.6616829Z     raise exc
+2026-01-27T12:43:40.6617322Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+2026-01-27T12:43:40.6617872Z     await app(scope, receive, sender)
+2026-01-27T12:43:40.6618292Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/routing.py:101: in app
+2026-01-27T12:43:40.6618889Z     response = await f(request)
+2026-01-27T12:43:40.6619097Z                ^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6619485Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/routing.py:355: in app
+2026-01-27T12:43:40.6619946Z     raw_response = await run_endpoint_function(
+2026-01-27T12:43:40.6620450Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/fastapi/routing.py:243: in run_endpoint_function
+2026-01-27T12:43:40.6620956Z     return await dependant.call(**values)
+2026-01-27T12:43:40.6621190Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6621439Z api/analysis.py:289: in get_analysis_summary
+2026-01-27T12:43:40.6621705Z     files = await crud_code_file.get_multi(
+2026-01-27T12:43:40.6621956Z utils/crud.py:55: in get_multi
+2026-01-27T12:43:40.6622176Z     result = await db.execute(query)
+2026-01-27T12:43:40.6622631Z              ^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6623106Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py:449: in execute
+2026-01-27T12:43:40.6623612Z     result = await greenlet_spawn(
+2026-01-27T12:43:40.6624129Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:201: in greenlet_spawn
+2026-01-27T12:43:40.6624801Z     result = context.throw(*sys.exc_info())
+2026-01-27T12:43:40.6625046Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6625494Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2351: in execute
+2026-01-27T12:43:40.6625971Z     return self._execute_internal(
+2026-01-27T12:43:40.6626460Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2249: in _execute_internal
+2026-01-27T12:43:40.6627029Z     result: Result[Any] = compile_state_cls.orm_execute_statement(
+2026-01-27T12:43:40.6627618Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/orm/context.py:306: in orm_execute_statement
+2026-01-27T12:43:40.6628136Z     result = conn.execute(
+2026-01-27T12:43:40.6628568Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1419: in execute
+2026-01-27T12:43:40.6629033Z     return meth(
+2026-01-27T12:43:40.6629483Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:527: in _execute_on_connection
+2026-01-27T12:43:40.6630024Z     return connection._execute_clauseelement(
+2026-01-27T12:43:40.6630549Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1641: in _execute_clauseelement
+2026-01-27T12:43:40.6631072Z     ret = self._execute_context(
+2026-01-27T12:43:40.6631543Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1846: in _execute_context
+2026-01-27T12:43:40.6632056Z     return self._exec_single_context(
+2026-01-27T12:43:40.6632783Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1986: in _exec_single_context
+2026-01-27T12:43:40.6633309Z     self._handle_dbapi_exception(
+2026-01-27T12:43:40.6633814Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2363: in _handle_dbapi_exception
+2026-01-27T12:43:40.6634408Z     raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+2026-01-27T12:43:40.6634984Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1967: in _exec_single_context
+2026-01-27T12:43:40.6635500Z     self.dialect.do_execute(
+2026-01-27T12:43:40.6635950Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/engine/default.py:952: in do_execute
+2026-01-27T12:43:40.6636456Z     cursor.execute(statement, parameters)
+2026-01-27T12:43:40.6636965Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:182: in execute
+2026-01-27T12:43:40.6637517Z     self._adapt_connection._handle_exception(error)
+2026-01-27T12:43:40.6638230Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:342: in _handle_exception
+2026-01-27T12:43:40.6638772Z     raise error
+2026-01-27T12:43:40.6639217Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:164: in execute
+2026-01-27T12:43:40.6639778Z     self.await_(_cursor.execute(operation, parameters))
+2026-01-27T12:43:40.6640334Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:132: in await_only
+2026-01-27T12:43:40.6641042Z     return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+2026-01-27T12:43:40.6641476Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6641992Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:196: in greenlet_spawn
+2026-01-27T12:43:40.6642659Z     value = await result
+2026-01-27T12:43:40.6642848Z             ^^^^^^^^^^^^
+2026-01-27T12:43:40.6643232Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/cursor.py:40: in execute
+2026-01-27T12:43:40.6643864Z     await self._execute(self._cursor.execute, sql, parameters)
+2026-01-27T12:43:40.6644372Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/cursor.py:32: in _execute
+2026-01-27T12:43:40.6644871Z     return await self._conn._execute(fn, *args, **kwargs)
+2026-01-27T12:43:40.6645175Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-01-27T12:43:40.6645608Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/core.py:160: in _execute
+2026-01-27T12:43:40.6646042Z     return await future
+2026-01-27T12:43:40.6646220Z            ^^^^^^^^^^^^
+2026-01-27T12:43:40.6646656Z /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/aiosqlite/core.py:63: in _connection_worker_thread
+2026-01-27T12:43:40.6647155Z     result = function()
+2026-01-27T12:43:40.6647329Z              ^^^^^^^^^^
+2026-01-27T12:43:40.6647675Z E   sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: code_files
+2026-01-27T12:43:40.6649290Z E   [SQL: SELECT code_files.id, code_files.file_id, code_files.original_filename, code_files.stored_filename, code_files.file_path, code_files.file_size, code_files.file_extension, code_files.mime_type, code_files.language, code_files.status, code_files.uploader_id, code_files.assignment_id, code_files.content_hash, code_files.line_count, code_files.analysis_result, code_files.created_at, code_files.updated_at 
+2026-01-27T12:43:40.6650745Z E   FROM code_files
+2026-01-27T12:43:40.6650923Z E    LIMIT ? OFFSET ?]
+2026-01-27T12:43:40.6651109Z E   [parameters: (10, 0)]
+2026-01-27T12:43:40.6651404Z E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-01-27T12:43:40.6651826Z ----------------------------- Captured stdout call -----------------------------
+2026-01-27T12:43:40.6653158Z [31mERROR[0m | 12:43:02 | 3bf6ca15 | ai_teaching_assistant:125 | 💥 Request failed: GET http://testserver/api/v1/analysis/summary after 0.057s - (sqlite3.OperationalError) no such table: code_files
+2026-01-27T12:43:40.6655118Z [SQL: SELECT code_files.id, code_files.file_id, code_files.original_filename, code_files.stored_filename, code_files.file_path, code_files.file_size, code_files.file_extension, code_files.mime_type, code_files.language, code_files.status, code_files.uploader_id, code_files.assignment_id, code_files.content_hash, code_files.line_count, code_files.analysis_result, code_files.created_at, code_files.updated_at 
+2026-01-27T12:43:40.6656551Z FROM code_files
+2026-01-27T12:43:40.6656725Z  LIMIT ? OFFSET ?]
+2026-01-27T12:43:40.6656898Z [parameters: (10, 0)]
+2026-01-27T12:43:40.6657167Z (Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-01-27T12:43:40.6657565Z ------------------------------ Captured log call -------------------------------
+2026-01-27T12:43:40.6658585Z ERROR    ai_teaching_assistant:main.py:125 💥 Request failed: GET http://testserver/api/v1/analysis/summary after 0.057s - (sqlite3.OperationalError) no such table: code_files
+2026-01-27T12:43:40.6660489Z [SQL: SELECT code_files.id, code_files.file_id, code_files.original_filename, code_files.stored_filename, code_files.file_path, code_files.file_size, code_files.file_extension, code_files.mime_type, code_files.language, code_files.status, code_files.uploader_id, code_files.assignment_id, code_files.content_hash, code_files.line_count, code_files.analysis_result, code_files.created_at, code_files.updated_at 
+2026-01-27T12:43:40.6661925Z FROM code_files
+2026-01-27T12:43:40.6662093Z  LIMIT ? OFFSET ?]
+2026-01-27T12:43:40.6662388Z [parameters: (10, 0)]
+2026-01-27T12:43:40.6662653Z (Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-01-27T12:43:40.6663068Z _______________ TestRubricCreate.test_create_duplicate_rubric_id _______________
+2026-01-27T12:43:40.6663495Z tests/test_rubrics.py:111: in test_create_duplicate_rubric_id
+2026-01-27T12:43:40.6663827Z     assert response.status_code == 400
+2026-01-27T12:43:40.6664055Z E   assert 201 == 400
+2026-01-27T12:43:40.6664274Z E    +  where 201 = <Response [201 Created]>.status_code
+2026-01-27T12:43:40.6664757Z ______________________ TestRubricList.test_list_with_data ______________________
+2026-01-27T12:43:40.6665128Z tests/test_rubrics.py:165: in test_list_with_data
+2026-01-27T12:43:40.6665394Z     assert len(data["items"]) >= 10
+2026-01-27T12:43:40.6665610Z E   assert 0 >= 10
+2026-01-27T12:43:40.6665778Z E    +  where 0 = len([])
+2026-01-27T12:43:40.6666078Z ________________ TestRubricList.test_list_pagination_last_page _________________
+2026-01-27T12:43:40.6666487Z tests/test_rubrics.py:188: in test_list_pagination_last_page
+2026-01-27T12:43:40.6666794Z     assert response.status_code == 200
+2026-01-27T12:43:40.6667022Z E   assert 422 == 200
+2026-01-27T12:43:40.6667270Z E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+2026-01-27T12:43:40.6667677Z ________________________ TestRubricGet.test_get_success ________________________
+2026-01-27T12:43:40.6668034Z tests/test_rubrics.py:206: in test_get_success
+2026-01-27T12:43:40.6668304Z     assert response.status_code == 200
+2026-01-27T12:43:40.6668536Z E   assert 404 == 200
+2026-01-27T12:43:40.6668754Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6669121Z _____________________ TestRubricGet.test_get_with_criteria _____________________
+2026-01-27T12:43:40.6669490Z tests/test_rubrics.py:222: in test_get_with_criteria
+2026-01-27T12:43:40.6669776Z     assert response.status_code == 200
+2026-01-27T12:43:40.6669996Z E   assert 404 == 200
+2026-01-27T12:43:40.6670211Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6670579Z _____________________ TestRubricUpdate.test_update_success _____________________
+2026-01-27T12:43:40.6670943Z tests/test_rubrics.py:242: in test_update_success
+2026-01-27T12:43:40.6671216Z     assert response.status_code == 200
+2026-01-27T12:43:40.6671438Z E   assert 404 == 200
+2026-01-27T12:43:40.6671653Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6672025Z _________________ TestRubricUpdate.test_update_partial_fields __________________
+2026-01-27T12:43:40.6672540Z tests/test_rubrics.py:255: in test_update_partial_fields
+2026-01-27T12:43:40.6672838Z     assert response.status_code == 200
+2026-01-27T12:43:40.6673071Z E   assert 404 == 200
+2026-01-27T12:43:40.6673289Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6673654Z ____________________ TestRubricUpdate.test_update_criteria _____________________
+2026-01-27T12:43:40.6674031Z tests/test_rubrics.py:272: in test_update_criteria
+2026-01-27T12:43:40.6674304Z     assert response.status_code == 200
+2026-01-27T12:43:40.6674530Z E   assert 404 == 200
+2026-01-27T12:43:40.6674739Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6675103Z _____________________ TestRubricDelete.test_delete_success _____________________
+2026-01-27T12:43:40.6675603Z tests/test_rubrics.py:301: in test_delete_success
+2026-01-27T12:43:40.6675870Z     assert response.status_code == 204
+2026-01-27T12:43:40.6676099Z E   assert 404 == 204
+2026-01-27T12:43:40.6676315Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6676691Z ________________ TestRubricDelete.test_delete_with_assignments _________________
+2026-01-27T12:43:40.6677089Z tests/test_rubrics.py:319: in test_delete_with_assignments
+2026-01-27T12:43:40.6677390Z     assert response.status_code == 204
+2026-01-27T12:43:40.6677610Z E   assert 404 == 204
+2026-01-27T12:43:40.6677822Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6678205Z ______________ TestRubricAssignments.test_get_assignments_success ______________
+2026-01-27T12:43:40.6678612Z tests/test_rubrics.py:329: in test_get_assignments_success
+2026-01-27T12:43:40.6678913Z     assert response.status_code == 200
+2026-01-27T12:43:40.6679142Z E   assert 404 == 200
+2026-01-27T12:43:40.6679354Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6679728Z _______________ TestRubricAssignments.test_get_assignments_empty _______________
+2026-01-27T12:43:40.6680255Z tests/test_rubrics.py:337: in test_get_assignments_empty
+2026-01-27T12:43:40.6680553Z     assert response.status_code == 200
+2026-01-27T12:43:40.6680774Z E   assert 404 == 200
+2026-01-27T12:43:40.6680987Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6681371Z __________ TestStudentRegistration.test_register_duplicate_student_id __________
+2026-01-27T12:43:40.6681818Z tests/test_students.py:116: in test_register_duplicate_student_id
+2026-01-27T12:43:40.6682143Z     assert response.status_code == 400
+2026-01-27T12:43:40.6682487Z E   assert 201 == 400
+2026-01-27T12:43:40.6682699Z E    +  where 201 = <Response [201 Created]>.status_code
+2026-01-27T12:43:40.6683087Z ____________ TestStudentRegistration.test_register_duplicate_email _____________
+2026-01-27T12:43:40.6683519Z tests/test_students.py:129: in test_register_duplicate_email
+2026-01-27T12:43:40.6683826Z     assert response.status_code == 400
+2026-01-27T12:43:40.6684055Z E   assert 201 == 400
+2026-01-27T12:43:40.6684268Z E    +  where 201 = <Response [201 Created]>.status_code
+2026-01-27T12:43:40.6684628Z _____________________ TestStudentLogin.test_login_success ______________________
+2026-01-27T12:43:40.6684990Z tests/test_students.py:173: in test_login_success
+2026-01-27T12:43:40.6685259Z     assert data["success"] is True
+2026-01-27T12:43:40.6685482Z E   assert False is True
+2026-01-27T12:43:40.6685782Z _____________ TestStudentLogin.test_login_with_email_verification ______________
+2026-01-27T12:43:40.6686212Z tests/test_students.py:188: in test_login_with_email_verification
+2026-01-27T12:43:40.6686528Z     assert data["success"] is True
+2026-01-27T12:43:40.6686760Z E   assert False is True
+2026-01-27T12:43:40.6687055Z __________________ TestStudentLogin.test_login_email_mismatch __________________
+2026-01-27T12:43:40.6687449Z tests/test_students.py:219: in test_login_email_mismatch
+2026-01-27T12:43:40.6687778Z     assert data["message"] == "Email verification failed"
+2026-01-27T12:43:40.6688141Z E   assert "Student with..._1' not found" == 'Email verification failed'
+2026-01-27T12:43:40.6688463Z E     
+2026-01-27T12:43:40.6688626Z E     - Email verification failed
+2026-01-27T12:43:40.6688884Z E     + Student with ID 'TEST1769517809674_1' not found
+2026-01-27T12:43:40.6689250Z _________________ TestStudentList.test_list_default_pagination _________________
+2026-01-27T12:43:40.6689668Z tests/test_students.py:249: in test_list_default_pagination
+2026-01-27T12:43:40.6689978Z     assert data["total"] >= 15
+2026-01-27T12:43:40.6690178Z E   assert 0 >= 15
+2026-01-27T12:43:40.6690458Z _________________ TestStudentList.test_list_custom_pagination __________________
+2026-01-27T12:43:40.6690861Z tests/test_students.py:265: in test_list_custom_pagination
+2026-01-27T12:43:40.6691156Z     assert data["total"] >= 15
+2026-01-27T12:43:40.6691475Z E   assert 0 >= 15
+2026-01-27T12:43:40.6691746Z ____________________ TestStudentList.test_list_second_page _____________________
+2026-01-27T12:43:40.6692128Z tests/test_students.py:282: in test_list_second_page
+2026-01-27T12:43:40.6692506Z     assert data["total"] >= 15
+2026-01-27T12:43:40.6692707Z E   assert 0 >= 15
+2026-01-27T12:43:40.6692973Z __________________ TestStudentList.test_list_filter_by_course __________________
+2026-01-27T12:43:40.6693369Z tests/test_students.py:292: in test_list_filter_by_course
+2026-01-27T12:43:40.6693650Z     assert data["total"] >= 10
+2026-01-27T12:43:40.6693848Z E   assert 0 >= 10
+2026-01-27T12:43:40.6694117Z _________________ TestStudentList.test_list_page_size_boundary _________________
+2026-01-27T12:43:40.6694521Z tests/test_students.py:335: in test_list_page_size_boundary
+2026-01-27T12:43:40.6694823Z     assert len(data["items"]) == 1
+2026-01-27T12:43:40.6695033Z E   assert 0 == 1
+2026-01-27T12:43:40.6695207Z E    +  where 0 = len([])
+2026-01-27T12:43:40.6695504Z _________________ TestStudentList.test_list_page_out_of_range __________________
+2026-01-27T12:43:40.6695916Z tests/test_students.py:383: in test_list_page_out_of_range
+2026-01-27T12:43:40.6696331Z     assert data["total"] >= 15
+2026-01-27T12:43:40.6696531Z E   assert 0 >= 15
+2026-01-27T12:43:40.6696789Z _______________________ TestStudentGet.test_get_success ________________________
+2026-01-27T12:43:40.6697151Z tests/test_students.py:399: in test_get_success
+2026-01-27T12:43:40.6697423Z     assert response.status_code == 200
+2026-01-27T12:43:40.6697647Z E   assert 404 == 200
+2026-01-27T12:43:40.6697869Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6698237Z ____________________ TestStudentUpdate.test_update_success _____________________
+2026-01-27T12:43:40.6698611Z tests/test_students.py:435: in test_update_success
+2026-01-27T12:43:40.6698892Z     assert response.status_code == 200
+2026-01-27T12:43:40.6699124Z E   assert 404 == 200
+2026-01-27T12:43:40.6699360Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6699741Z _________________ TestStudentUpdate.test_update_partial_fields _________________
+2026-01-27T12:43:40.6700159Z tests/test_students.py:454: in test_update_partial_fields
+2026-01-27T12:43:40.6700468Z     assert response.status_code == 200
+2026-01-27T12:43:40.6700700Z E   assert 404 == 200
+2026-01-27T12:43:40.6700922Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6701298Z _____________________ TestStudentUpdate.test_update_email ______________________
+2026-01-27T12:43:40.6701673Z tests/test_students.py:473: in test_update_email
+2026-01-27T12:43:40.6701945Z     assert response.status_code == 200
+2026-01-27T12:43:40.6702176Z E   assert 404 == 200
+2026-01-27T12:43:40.6702508Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6702885Z ________________ TestStudentUpdate.test_update_duplicate_email _________________
+2026-01-27T12:43:40.6703296Z tests/test_students.py:493: in test_update_duplicate_email
+2026-01-27T12:43:40.6703597Z     assert response.status_code == 400
+2026-01-27T12:43:40.6703819Z E   assert 404 == 400
+2026-01-27T12:43:40.6704032Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6704400Z ____________________ TestStudentDelete.test_delete_success _____________________
+2026-01-27T12:43:40.6704769Z tests/test_students.py:537: in test_delete_success
+2026-01-27T12:43:40.6705049Z     assert response.status_code == 200
+2026-01-27T12:43:40.6705269Z E   assert 404 == 200
+2026-01-27T12:43:40.6705484Z E    +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6705791Z =============================== warnings summary ===============================
+2026-01-27T12:43:40.6706080Z core/config.py:9
+2026-01-27T12:43:40.6707229Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/core/config.py:9: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6708595Z     class Settings(BaseSettings):
+2026-01-27T12:43:40.6708757Z 
+2026-01-27T12:43:40.6708834Z schemas/grading.py:67
+2026-01-27T12:43:40.6709977Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/grading.py:67: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6711215Z     class GradingResultResponse(GradingResultBase):
+2026-01-27T12:43:40.6711429Z 
+2026-01-27T12:43:40.6711499Z schemas/auth.py:55
+2026-01-27T12:43:40.6712710Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/auth.py:55: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6713915Z     class UserResponse(UserBase):
+2026-01-27T12:43:40.6714066Z 
+2026-01-27T12:43:40.6714267Z schemas/assignment_crud.py:45
+2026-01-27T12:43:40.6715453Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/assignment_crud.py:45: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6716703Z     class AssignmentResponse(AssignmentBase):
+2026-01-27T12:43:40.6716896Z 
+2026-01-27T12:43:40.6716987Z schemas/assignment_transfer.py:34
+2026-01-27T12:43:40.6718246Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/assignment_transfer.py:34: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6719506Z     class BatchUploadRequest(BaseModel):
+2026-01-27T12:43:40.6719684Z 
+2026-01-27T12:43:40.6720007Z ../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/pydantic/_internal/_config.py:383
+2026-01-27T12:43:40.6720868Z   /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/pydantic/_internal/_config.py:383: UserWarning: Valid config keys have changed in V2:
+2026-01-27T12:43:40.6721551Z   * 'schema_extra' has been renamed to 'json_schema_extra'
+2026-01-27T12:43:40.6721852Z     warnings.warn(message, UserWarning)
+2026-01-27T12:43:40.6722025Z 
+2026-01-27T12:43:40.6722099Z schemas/qa_log.py:54
+2026-01-27T12:43:40.6723360Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/qa_log.py:54: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6724568Z     class QALogResponse(BaseModel):
+2026-01-27T12:43:40.6724735Z 
+2026-01-27T12:43:40.6724816Z schemas/knowledge_base.py:72
+2026-01-27T12:43:40.6726012Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/knowledge_base.py:72: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6727255Z     class KnowledgeBaseResponse(BaseModel):
+2026-01-27T12:43:40.6727437Z 
+2026-01-27T12:43:40.6727514Z schemas/student.py:51
+2026-01-27T12:43:40.6728648Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/student.py:51: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6729977Z     class StudentResponse(StudentBase):
+2026-01-27T12:43:40.6730150Z 
+2026-01-27T12:43:40.6730231Z schemas/submission.py:42
+2026-01-27T12:43:40.6731390Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/submission.py:42: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6732737Z     class SubmissionResponse(SubmissionBase):
+2026-01-27T12:43:40.6732927Z 
+2026-01-27T12:43:40.6733013Z schemas/file_upload.py:122
+2026-01-27T12:43:40.6734179Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/file_upload.py:122: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6735420Z     class FileMetadataResponse(BaseModel):
+2026-01-27T12:43:40.6735715Z 
+2026-01-27T12:43:40.6735993Z ../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/PyPDF2/__init__.py:21
+2026-01-27T12:43:40.6736889Z   /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/PyPDF2/__init__.py:21: DeprecationWarning: PyPDF2 is deprecated. Please move to the pypdf library instead.
+2026-01-27T12:43:40.6737578Z     warnings.warn(
+2026-01-27T12:43:40.6737687Z 
+2026-01-27T12:43:40.6737762Z schemas/feedback.py:375
+2026-01-27T12:43:40.6738926Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/feedback.py:375: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6740199Z     class FeedbackTemplateResponse(FeedbackTemplateBase):
+2026-01-27T12:43:40.6740428Z 
+2026-01-27T12:43:40.6740503Z schemas/feedback.py:430
+2026-01-27T12:43:40.6741660Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/feedback.py:430: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6743001Z     class AIInteractionResponse(BaseModel):
+2026-01-27T12:43:40.6743182Z 
+2026-01-27T12:43:40.6743254Z schemas/rubric.py:46
+2026-01-27T12:43:40.6744392Z   /home/runner/work/ai-teaching-assistant/ai-teaching-assistant/backend/schemas/rubric.py:46: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+2026-01-27T12:43:40.6745598Z     class RubricResponse(RubricBase):
+2026-01-27T12:43:40.6745768Z 
+2026-01-27T12:43:40.6745947Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2026-01-27T12:43:40.6746358Z ================================ tests coverage ================================
+2026-01-27T12:43:40.6746747Z _______________ coverage: platform linux, python 3.11.14-final-0 _______________
+2026-01-27T12:43:40.6747022Z 
+2026-01-27T12:43:40.6747109Z Coverage HTML written to dir htmlcov
+2026-01-27T12:43:40.6747354Z Coverage XML written to file coverage.xml
+2026-01-27T12:43:40.6747651Z =========================== short test summary info ============================
+2026-01-27T12:43:40.6748414Z FAILED tests/test_analysis_api.py::TestSummaryEndpoint::test_get_analysis_summary - sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: code_files
+2026-01-27T12:43:40.6750306Z [SQL: SELECT code_files.id, code_files.file_id, code_files.original_filename, code_files.stored_filename, code_files.file_path, code_files.file_size, code_files.file_extension, code_files.mime_type, code_files.language, code_files.status, code_files.uploader_id, code_files.assignment_id, code_files.content_hash, code_files.line_count, code_files.analysis_result, code_files.created_at, code_files.updated_at 
+2026-01-27T12:43:40.6751862Z FROM code_files
+2026-01-27T12:43:40.6752031Z  LIMIT ? OFFSET ?]
+2026-01-27T12:43:40.6752297Z [parameters: (10, 0)]
+2026-01-27T12:43:40.6752571Z (Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-01-27T12:43:40.6753082Z FAILED tests/test_rubrics.py::TestRubricCreate::test_create_duplicate_rubric_id - assert 201 == 400
+2026-01-27T12:43:40.6753556Z  +  where 201 = <Response [201 Created]>.status_code
+2026-01-27T12:43:40.6753952Z FAILED tests/test_rubrics.py::TestRubricList::test_list_with_data - assert 0 >= 10
+2026-01-27T12:43:40.6754323Z  +  where 0 = len([])
+2026-01-27T12:43:40.6754687Z FAILED tests/test_rubrics.py::TestRubricList::test_list_pagination_last_page - assert 422 == 200
+2026-01-27T12:43:40.6755181Z  +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+2026-01-27T12:43:40.6755615Z FAILED tests/test_rubrics.py::TestRubricGet::test_get_success - assert 404 == 200
+2026-01-27T12:43:40.6756133Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6756547Z FAILED tests/test_rubrics.py::TestRubricGet::test_get_with_criteria - assert 404 == 200
+2026-01-27T12:43:40.6756964Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6757377Z FAILED tests/test_rubrics.py::TestRubricUpdate::test_update_success - assert 404 == 200
+2026-01-27T12:43:40.6757798Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6758232Z FAILED tests/test_rubrics.py::TestRubricUpdate::test_update_partial_fields - assert 404 == 200
+2026-01-27T12:43:40.6758681Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6759090Z FAILED tests/test_rubrics.py::TestRubricUpdate::test_update_criteria - assert 404 == 200
+2026-01-27T12:43:40.6759523Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6759922Z FAILED tests/test_rubrics.py::TestRubricDelete::test_delete_success - assert 404 == 204
+2026-01-27T12:43:40.6760340Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6760781Z FAILED tests/test_rubrics.py::TestRubricDelete::test_delete_with_assignments - assert 404 == 204
+2026-01-27T12:43:40.6761230Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6761696Z FAILED tests/test_rubrics.py::TestRubricAssignments::test_get_assignments_success - assert 404 == 200
+2026-01-27T12:43:40.6762171Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6762751Z FAILED tests/test_rubrics.py::TestRubricAssignments::test_get_assignments_empty - assert 404 == 200
+2026-01-27T12:43:40.6763221Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6763721Z FAILED tests/test_students.py::TestStudentRegistration::test_register_duplicate_student_id - assert 201 == 400
+2026-01-27T12:43:40.6764232Z  +  where 201 = <Response [201 Created]>.status_code
+2026-01-27T12:43:40.6764706Z FAILED tests/test_students.py::TestStudentRegistration::test_register_duplicate_email - assert 201 == 400
+2026-01-27T12:43:40.6765198Z  +  where 201 = <Response [201 Created]>.status_code
+2026-01-27T12:43:40.6765612Z FAILED tests/test_students.py::TestStudentLogin::test_login_success - assert False is True
+2026-01-27T12:43:40.6766245Z FAILED tests/test_students.py::TestStudentLogin::test_login_with_email_verification - assert False is True
+2026-01-27T12:43:40.6767043Z FAILED tests/test_students.py::TestStudentLogin::test_login_email_mismatch - assert "Student with..._1' not found" == 'Email verification failed'
+2026-01-27T12:43:40.6767612Z   
+2026-01-27T12:43:40.6767781Z   - Email verification failed
+2026-01-27T12:43:40.6768023Z   + Student with ID 'TEST1769517809674_1' not found
+2026-01-27T12:43:40.6768588Z FAILED tests/test_students.py::TestStudentList::test_list_default_pagination - assert 0 >= 15
+2026-01-27T12:43:40.6769173Z FAILED tests/test_students.py::TestStudentList::test_list_custom_pagination - assert 0 >= 15
+2026-01-27T12:43:40.6769724Z FAILED tests/test_students.py::TestStudentList::test_list_second_page - assert 0 >= 15
+2026-01-27T12:43:40.6770274Z FAILED tests/test_students.py::TestStudentList::test_list_filter_by_course - assert 0 >= 10
+2026-01-27T12:43:40.6770839Z FAILED tests/test_students.py::TestStudentList::test_list_page_size_boundary - assert 0 == 1
+2026-01-27T12:43:40.6771241Z  +  where 0 = len([])
+2026-01-27T12:43:40.6771579Z FAILED tests/test_students.py::TestStudentList::test_list_page_out_of_range - assert 0 >= 15
+2026-01-27T12:43:40.6772118Z FAILED tests/test_students.py::TestStudentGet::test_get_success - assert 404 == 200
+2026-01-27T12:43:40.6772627Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6773046Z FAILED tests/test_students.py::TestStudentUpdate::test_update_success - assert 404 == 200
+2026-01-27T12:43:40.6773482Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6773926Z FAILED tests/test_students.py::TestStudentUpdate::test_update_partial_fields - assert 404 == 200
+2026-01-27T12:43:40.6774503Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6774911Z FAILED tests/test_students.py::TestStudentUpdate::test_update_email - assert 404 == 200
+2026-01-27T12:43:40.6775326Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6775781Z FAILED tests/test_students.py::TestStudentUpdate::test_update_duplicate_email - assert 404 == 400
+2026-01-27T12:43:40.6776235Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:40.6776649Z FAILED tests/test_students.py::TestStudentDelete::test_delete_success - assert 404 == 200
+2026-01-27T12:43:40.6777085Z  +  where 404 = <Response [404 Not Found]>.status_code
+2026-01-27T12:43:41.1015442Z =========== 30 failed, 210 passed, 4 skipped, 15 warnings in 43.42s ============
+2026-01-27T12:43:41.4815179Z ##[error]Process completed with exit code 1.

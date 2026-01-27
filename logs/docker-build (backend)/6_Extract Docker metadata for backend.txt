@@ -1,140 +1,140 @@
-﻿2026-01-27T12:28:12.8501860Z ##[group]Run docker/metadata-action@v5
-2026-01-27T12:28:12.8502179Z with:
-2026-01-27T12:28:12.8502453Z   images: ***/ai-teaching-assistant-backend
-2026-01-27T12:28:12.8502735Z   context: workflow
-2026-01-27T12:28:12.8503295Z   github-token: ***
-2026-01-27T12:28:12.8503498Z ##[endgroup]
-2026-01-27T12:28:13.6046894Z ##[group]Context info
-2026-01-27T12:28:13.6047369Z eventName: push
-2026-01-27T12:28:13.6047821Z sha: 27ec4e2e160bfcf97da2be74f1b1d16421e93d0d
-2026-01-27T12:28:13.6048308Z ref: refs/heads/main
-2026-01-27T12:28:13.6048689Z workflow: CI/CD Pipeline
-2026-01-27T12:28:13.6049120Z action: meta_backend
-2026-01-27T12:28:13.6049499Z actor: sst2020
-2026-01-27T12:28:13.6049821Z runNumber: 22
-2026-01-27T12:28:13.6050136Z runId: 21397172644
-2026-01-27T12:28:13.6050653Z commitDate: Tue Jan 27 2026 12:27:37 GMT+0000 (Coordinated Universal Time)
-2026-01-27T12:28:13.6051537Z ##[endgroup]
-2026-01-27T12:28:13.6057277Z ##[group]Processing images input
-2026-01-27T12:28:13.6058103Z name=***/ai-teaching-assistant-backend,enable=true
-2026-01-27T12:28:13.6060250Z ##[endgroup]
-2026-01-27T12:28:13.6078460Z ##[group]Processing tags input
-2026-01-27T12:28:13.6079416Z type=schedule,pattern=nightly,enable=true,priority=1000
-2026-01-27T12:28:13.6080760Z type=ref,event=branch,enable=true,priority=600
-2026-01-27T12:28:13.6081577Z type=ref,event=tag,enable=true,priority=600
-2026-01-27T12:28:13.6083818Z type=ref,event=pr,prefix=pr-,enable=true,priority=600
-2026-01-27T12:28:13.6084643Z ##[endgroup]
-2026-01-27T12:28:13.6085231Z ##[group]Processing flavor input
-2026-01-27T12:28:13.6085664Z latest=auto
-2026-01-27T12:28:13.6086424Z prefix=
-2026-01-27T12:28:13.6086833Z prefixLatest=false
-2026-01-27T12:28:13.6087516Z suffix=
-2026-01-27T12:28:13.6087962Z suffixLatest=false
-2026-01-27T12:28:13.6088752Z ##[endgroup]
-2026-01-27T12:28:13.6128919Z ##[group]Docker image version
-2026-01-27T12:28:13.6129585Z main
-2026-01-27T12:28:13.6131162Z ##[endgroup]
-2026-01-27T12:28:13.6135095Z ##[group]Docker tags
-2026-01-27T12:28:13.6149660Z ***/ai-teaching-assistant-backend:main
-2026-01-27T12:28:13.6151709Z ##[endgroup]
-2026-01-27T12:28:13.6225751Z ##[group]Docker labels
-2026-01-27T12:28:13.6226874Z org.opencontainers.image.created=2026-01-27T12:28:13.608Z
-2026-01-27T12:28:13.6229416Z org.opencontainers.image.description=A web application for AI-based question judging.
-2026-01-27T12:28:13.6230242Z org.opencontainers.image.licenses=MIT
-2026-01-27T12:28:13.6230939Z org.opencontainers.image.revision=27ec4e2e160bfcf97da2be74f1b1d16421e93d0d
-2026-01-27T12:28:13.6231891Z org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant
-2026-01-27T12:28:13.6232723Z org.opencontainers.image.title=ai-teaching-assistant
-2026-01-27T12:28:13.6233686Z org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant
-2026-01-27T12:28:13.6234430Z org.opencontainers.image.version=main
-2026-01-27T12:28:13.6235132Z ##[endgroup]
-2026-01-27T12:28:13.6235802Z ##[group]Annotations
-2026-01-27T12:28:13.6236421Z manifest:org.opencontainers.image.created=2026-01-27T12:28:13.608Z
-2026-01-27T12:28:13.6237628Z manifest:org.opencontainers.image.description=A web application for AI-based question judging.
-2026-01-27T12:28:13.6238661Z manifest:org.opencontainers.image.licenses=MIT
-2026-01-27T12:28:13.6239465Z manifest:org.opencontainers.image.revision=27ec4e2e160bfcf97da2be74f1b1d16421e93d0d
-2026-01-27T12:28:13.6240515Z manifest:org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant
-2026-01-27T12:28:13.6241438Z manifest:org.opencontainers.image.title=ai-teaching-assistant
-2026-01-27T12:28:13.6242333Z manifest:org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant
-2026-01-27T12:28:13.6243286Z manifest:org.opencontainers.image.version=main
-2026-01-27T12:28:13.6244008Z ##[endgroup]
-2026-01-27T12:28:13.6244546Z ##[group]JSON output
-2026-01-27T12:28:13.6244877Z {
-2026-01-27T12:28:13.6245137Z   "tags": [
-2026-01-27T12:28:13.6245569Z     "***/ai-teaching-assistant-backend:main"
-2026-01-27T12:28:13.6246022Z   ],
-2026-01-27T12:28:13.6246771Z   "tag-names": [
-2026-01-27T12:28:13.6247092Z     "main"
-2026-01-27T12:28:13.6247372Z   ],
-2026-01-27T12:28:13.6247635Z   "labels": {
-2026-01-27T12:28:13.6248097Z     "org.opencontainers.image.created": "2026-01-27T12:28:13.608Z",
-2026-01-27T12:28:13.6249013Z     "org.opencontainers.image.description": "A web application for AI-based question judging.",
-2026-01-27T12:28:13.6249854Z     "org.opencontainers.image.licenses": "MIT",
-2026-01-27T12:28:13.6250595Z     "org.opencontainers.image.revision": "27ec4e2e160bfcf97da2be74f1b1d16421e93d0d",
-2026-01-27T12:28:13.6251597Z     "org.opencontainers.image.source": "https://github.com/sst2020/ai-teaching-assistant",
-2026-01-27T12:28:13.6252460Z     "org.opencontainers.image.title": "ai-teaching-assistant",
-2026-01-27T12:28:13.6253487Z     "org.opencontainers.image.url": "https://github.com/sst2020/ai-teaching-assistant",
-2026-01-27T12:28:13.6254261Z     "org.opencontainers.image.version": "main"
-2026-01-27T12:28:13.6254713Z   },
-2026-01-27T12:28:13.6254995Z   "annotations": [
-2026-01-27T12:28:13.6255512Z     "manifest:org.opencontainers.image.created=2026-01-27T12:28:13.608Z",
-2026-01-27T12:28:13.6256489Z     "manifest:org.opencontainers.image.description=A web application for AI-based question judging.",
-2026-01-27T12:28:13.6257392Z     "manifest:org.opencontainers.image.licenses=MIT",
-2026-01-27T12:28:13.6258194Z     "manifest:org.opencontainers.image.revision=27ec4e2e160bfcf97da2be74f1b1d16421e93d0d",
-2026-01-27T12:28:13.6259277Z     "manifest:org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant",
-2026-01-27T12:28:13.6260428Z     "manifest:org.opencontainers.image.title=ai-teaching-assistant",
-2026-01-27T12:28:13.6261340Z     "manifest:org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant",
-2026-01-27T12:28:13.6262184Z     "manifest:org.opencontainers.image.version=main"
-2026-01-27T12:28:13.6262671Z   ]
-2026-01-27T12:28:13.6263085Z }
-2026-01-27T12:28:13.6263728Z ##[endgroup]
-2026-01-27T12:28:13.6264279Z ##[group]Bake file definition (tags)
-2026-01-27T12:28:13.6264694Z {
-2026-01-27T12:28:13.6264962Z   "target": {
-2026-01-27T12:28:13.6265282Z     "docker-metadata-action": {
-2026-01-27T12:28:13.6265656Z       "tags": [
-2026-01-27T12:28:13.6266138Z         "***/ai-teaching-assistant-backend:main"
-2026-01-27T12:28:13.6266588Z       ],
-2026-01-27T12:28:13.6266852Z       "args": {
-2026-01-27T12:28:13.6267321Z         "DOCKER_META_IMAGES": "***/ai-teaching-assistant-backend",
-2026-01-27T12:28:13.6267901Z         "DOCKER_META_VERSION": "main"
-2026-01-27T12:28:13.6268294Z       }
-2026-01-27T12:28:13.6268568Z     }
-2026-01-27T12:28:13.6268823Z   }
-2026-01-27T12:28:13.6269069Z }
-2026-01-27T12:28:13.6269557Z ##[endgroup]
-2026-01-27T12:28:13.6270088Z ##[group]Bake file definition (labels)
-2026-01-27T12:28:13.6270481Z {
-2026-01-27T12:28:13.6270744Z   "target": {
-2026-01-27T12:28:13.6271075Z     "docker-metadata-action": {
-2026-01-27T12:28:13.6271466Z       "labels": {
-2026-01-27T12:28:13.6271925Z         "org.opencontainers.image.created": "2026-01-27T12:28:13.608Z",
-2026-01-27T12:28:13.6272843Z         "org.opencontainers.image.description": "A web application for AI-based question judging.",
-2026-01-27T12:28:13.6273854Z         "org.opencontainers.image.licenses": "MIT",
-2026-01-27T12:28:13.6274594Z         "org.opencontainers.image.revision": "27ec4e2e160bfcf97da2be74f1b1d16421e93d0d",
-2026-01-27T12:28:13.6275593Z         "org.opencontainers.image.source": "https://github.com/sst2020/ai-teaching-assistant",
-2026-01-27T12:28:13.6276468Z         "org.opencontainers.image.title": "ai-teaching-assistant",
-2026-01-27T12:28:13.6277324Z         "org.opencontainers.image.url": "https://github.com/sst2020/ai-teaching-assistant",
-2026-01-27T12:28:13.6278105Z         "org.opencontainers.image.version": "main"
-2026-01-27T12:28:13.6278584Z       }
-2026-01-27T12:28:13.6278851Z     }
-2026-01-27T12:28:13.6279118Z   }
-2026-01-27T12:28:13.6279376Z }
-2026-01-27T12:28:13.6279875Z ##[endgroup]
-2026-01-27T12:28:13.6280435Z ##[group]Bake file definition (annotations)
-2026-01-27T12:28:13.6281204Z {
-2026-01-27T12:28:13.6281451Z   "target": {
-2026-01-27T12:28:13.6281752Z     "docker-metadata-action": {
-2026-01-27T12:28:13.6282122Z       "annotations": [
-2026-01-27T12:28:13.6282618Z         "manifest:org.opencontainers.image.created=2026-01-27T12:28:13.608Z",
-2026-01-27T12:28:13.6283769Z         "manifest:org.opencontainers.image.description=A web application for AI-based question judging.",
-2026-01-27T12:28:13.6284645Z         "manifest:org.opencontainers.image.licenses=MIT",
-2026-01-27T12:28:13.6285476Z         "manifest:org.opencontainers.image.revision=27ec4e2e160bfcf97da2be74f1b1d16421e93d0d",
-2026-01-27T12:28:13.6286529Z         "manifest:org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant",
-2026-01-27T12:28:13.6287488Z         "manifest:org.opencontainers.image.title=ai-teaching-assistant",
-2026-01-27T12:28:13.6288397Z         "manifest:org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant",
-2026-01-27T12:28:13.6289255Z         "manifest:org.opencontainers.image.version=main"
-2026-01-27T12:28:13.6289866Z       ]
-2026-01-27T12:28:13.6290120Z     }
-2026-01-27T12:28:13.6290380Z   }
-2026-01-27T12:28:13.6290649Z }
-2026-01-27T12:28:13.6291125Z ##[endgroup]
+﻿2026-01-27T12:42:45.2645953Z ##[group]Run docker/metadata-action@v5
+2026-01-27T12:42:45.2646277Z with:
+2026-01-27T12:42:45.2646641Z   images: ***/ai-teaching-assistant-backend
+2026-01-27T12:42:45.2646991Z   context: workflow
+2026-01-27T12:42:45.2647363Z   github-token: ***
+2026-01-27T12:42:45.2647649Z ##[endgroup]
+2026-01-27T12:42:46.0066490Z ##[group]Context info
+2026-01-27T12:42:46.0067203Z eventName: push
+2026-01-27T12:42:46.0067698Z sha: c92fed8adc260732accc9cf8fb7f577bdf6c7f27
+2026-01-27T12:42:46.0068225Z ref: refs/heads/main
+2026-01-27T12:42:46.0068722Z workflow: CI/CD Pipeline
+2026-01-27T12:42:46.0069254Z action: meta_backend
+2026-01-27T12:42:46.0069663Z actor: sst2020
+2026-01-27T12:42:46.0070149Z runNumber: 23
+2026-01-27T12:42:46.0070553Z runId: 21397608717
+2026-01-27T12:42:46.0071259Z commitDate: Tue Jan 27 2026 12:42:18 GMT+0000 (Coordinated Universal Time)
+2026-01-27T12:42:46.0072357Z ##[endgroup]
+2026-01-27T12:42:46.0077528Z ##[group]Processing images input
+2026-01-27T12:42:46.0078323Z name=***/ai-teaching-assistant-backend,enable=true
+2026-01-27T12:42:46.0079536Z ##[endgroup]
+2026-01-27T12:42:46.0090171Z ##[group]Processing tags input
+2026-01-27T12:42:46.0091034Z type=schedule,pattern=nightly,enable=true,priority=1000
+2026-01-27T12:42:46.0091842Z type=ref,event=branch,enable=true,priority=600
+2026-01-27T12:42:46.0092600Z type=ref,event=tag,enable=true,priority=600
+2026-01-27T12:42:46.0093558Z type=ref,event=pr,prefix=pr-,enable=true,priority=600
+2026-01-27T12:42:46.0094653Z ##[endgroup]
+2026-01-27T12:42:46.0095593Z ##[group]Processing flavor input
+2026-01-27T12:42:46.0096627Z latest=auto
+2026-01-27T12:42:46.0097067Z prefix=
+2026-01-27T12:42:46.0097639Z prefixLatest=false
+2026-01-27T12:42:46.0098141Z suffix=
+2026-01-27T12:42:46.0098628Z suffixLatest=false
+2026-01-27T12:42:46.0099472Z ##[endgroup]
+2026-01-27T12:42:46.0166023Z ##[group]Docker image version
+2026-01-27T12:42:46.0166531Z main
+2026-01-27T12:42:46.0167113Z ##[endgroup]
+2026-01-27T12:42:46.0167672Z ##[group]Docker tags
+2026-01-27T12:42:46.0168212Z ***/ai-teaching-assistant-backend:main
+2026-01-27T12:42:46.0168927Z ##[endgroup]
+2026-01-27T12:42:46.0220027Z ##[group]Docker labels
+2026-01-27T12:42:46.0224660Z org.opencontainers.image.created=2026-01-27T12:42:46.009Z
+2026-01-27T12:42:46.0225758Z org.opencontainers.image.description=A web application for AI-based question judging.
+2026-01-27T12:42:46.0226683Z org.opencontainers.image.licenses=MIT
+2026-01-27T12:42:46.0228074Z org.opencontainers.image.revision=c92fed8adc260732accc9cf8fb7f577bdf6c7f27
+2026-01-27T12:42:46.0229010Z org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant
+2026-01-27T12:42:46.0234299Z org.opencontainers.image.title=ai-teaching-assistant
+2026-01-27T12:42:46.0235140Z org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant
+2026-01-27T12:42:46.0235864Z org.opencontainers.image.version=main
+2026-01-27T12:42:46.0236575Z ##[endgroup]
+2026-01-27T12:42:46.0237129Z ##[group]Annotations
+2026-01-27T12:42:46.0237643Z manifest:org.opencontainers.image.created=2026-01-27T12:42:46.009Z
+2026-01-27T12:42:46.0238653Z manifest:org.opencontainers.image.description=A web application for AI-based question judging.
+2026-01-27T12:42:46.0239510Z manifest:org.opencontainers.image.licenses=MIT
+2026-01-27T12:42:46.0240276Z manifest:org.opencontainers.image.revision=c92fed8adc260732accc9cf8fb7f577bdf6c7f27
+2026-01-27T12:42:46.0241314Z manifest:org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant
+2026-01-27T12:42:46.0242220Z manifest:org.opencontainers.image.title=ai-teaching-assistant
+2026-01-27T12:42:46.0243153Z manifest:org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant
+2026-01-27T12:42:46.0244142Z manifest:org.opencontainers.image.version=main
+2026-01-27T12:42:46.0244931Z ##[endgroup]
+2026-01-27T12:42:46.0246676Z ##[group]JSON output
+2026-01-27T12:42:46.0248835Z {
+2026-01-27T12:42:46.0249129Z   "tags": [
+2026-01-27T12:42:46.0256431Z     "***/ai-teaching-assistant-backend:main"
+2026-01-27T12:42:46.0256962Z   ],
+2026-01-27T12:42:46.0257725Z   "tag-names": [
+2026-01-27T12:42:46.0258036Z     "main"
+2026-01-27T12:42:46.0258313Z   ],
+2026-01-27T12:42:46.0258592Z   "labels": {
+2026-01-27T12:42:46.0259075Z     "org.opencontainers.image.created": "2026-01-27T12:42:46.009Z",
+2026-01-27T12:42:46.0260019Z     "org.opencontainers.image.description": "A web application for AI-based question judging.",
+2026-01-27T12:42:46.0260877Z     "org.opencontainers.image.licenses": "MIT",
+2026-01-27T12:42:46.0261648Z     "org.opencontainers.image.revision": "c92fed8adc260732accc9cf8fb7f577bdf6c7f27",
+2026-01-27T12:42:46.0262694Z     "org.opencontainers.image.source": "https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:42:46.0263735Z     "org.opencontainers.image.title": "ai-teaching-assistant",
+2026-01-27T12:42:46.0264591Z     "org.opencontainers.image.url": "https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:42:46.0265388Z     "org.opencontainers.image.version": "main"
+2026-01-27T12:42:46.0265841Z   },
+2026-01-27T12:42:46.0266129Z   "annotations": [
+2026-01-27T12:42:46.0266672Z     "manifest:org.opencontainers.image.created=2026-01-27T12:42:46.009Z",
+2026-01-27T12:42:46.0267663Z     "manifest:org.opencontainers.image.description=A web application for AI-based question judging.",
+2026-01-27T12:42:46.0268592Z     "manifest:org.opencontainers.image.licenses=MIT",
+2026-01-27T12:42:46.0269424Z     "manifest:org.opencontainers.image.revision=c92fed8adc260732accc9cf8fb7f577bdf6c7f27",
+2026-01-27T12:42:46.0270502Z     "manifest:org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:42:46.0271791Z     "manifest:org.opencontainers.image.title=ai-teaching-assistant",
+2026-01-27T12:42:46.0272702Z     "manifest:org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:42:46.0273670Z     "manifest:org.opencontainers.image.version=main"
+2026-01-27T12:42:46.0274155Z   ]
+2026-01-27T12:42:46.0274428Z }
+2026-01-27T12:42:46.0274984Z ##[endgroup]
+2026-01-27T12:42:46.0275559Z ##[group]Bake file definition (tags)
+2026-01-27T12:42:46.0275986Z {
+2026-01-27T12:42:46.0276263Z   "target": {
+2026-01-27T12:42:46.0276594Z     "docker-metadata-action": {
+2026-01-27T12:42:46.0276986Z       "tags": [
+2026-01-27T12:42:46.0277495Z         "***/ai-teaching-assistant-backend:main"
+2026-01-27T12:42:46.0277968Z       ],
+2026-01-27T12:42:46.0278260Z       "args": {
+2026-01-27T12:42:46.0278754Z         "DOCKER_META_IMAGES": "***/ai-teaching-assistant-backend",
+2026-01-27T12:42:46.0279336Z         "DOCKER_META_VERSION": "main"
+2026-01-27T12:42:46.0279754Z       }
+2026-01-27T12:42:46.0280037Z     }
+2026-01-27T12:42:46.0280311Z   }
+2026-01-27T12:42:46.0280582Z }
+2026-01-27T12:42:46.0281099Z ##[endgroup]
+2026-01-27T12:42:46.0281704Z ##[group]Bake file definition (labels)
+2026-01-27T12:42:46.0282120Z {
+2026-01-27T12:42:46.0282398Z   "target": {
+2026-01-27T12:42:46.0282733Z     "docker-metadata-action": {
+2026-01-27T12:42:46.0283133Z       "labels": {
+2026-01-27T12:42:46.0283741Z         "org.opencontainers.image.created": "2026-01-27T12:42:46.009Z",
+2026-01-27T12:42:46.0284747Z         "org.opencontainers.image.description": "A web application for AI-based question judging.",
+2026-01-27T12:42:46.0285642Z         "org.opencontainers.image.licenses": "MIT",
+2026-01-27T12:42:46.0286391Z         "org.opencontainers.image.revision": "c92fed8adc260732accc9cf8fb7f577bdf6c7f27",
+2026-01-27T12:42:46.0287401Z         "org.opencontainers.image.source": "https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:42:46.0288281Z         "org.opencontainers.image.title": "ai-teaching-assistant",
+2026-01-27T12:42:46.0289110Z         "org.opencontainers.image.url": "https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:42:46.0289889Z         "org.opencontainers.image.version": "main"
+2026-01-27T12:42:46.0290361Z       }
+2026-01-27T12:42:46.0290625Z     }
+2026-01-27T12:42:46.0290892Z   }
+2026-01-27T12:42:46.0291145Z }
+2026-01-27T12:42:46.0291674Z ##[endgroup]
+2026-01-27T12:42:46.0292243Z ##[group]Bake file definition (annotations)
+2026-01-27T12:42:46.0292964Z {
+2026-01-27T12:42:46.0293353Z   "target": {
+2026-01-27T12:42:46.0293686Z     "docker-metadata-action": {
+2026-01-27T12:42:46.0294089Z       "annotations": [
+2026-01-27T12:42:46.0294623Z         "manifest:org.opencontainers.image.created=2026-01-27T12:42:46.009Z",
+2026-01-27T12:42:46.0295600Z         "manifest:org.opencontainers.image.description=A web application for AI-based question judging.",
+2026-01-27T12:42:46.0296596Z         "manifest:org.opencontainers.image.licenses=MIT",
+2026-01-27T12:42:46.0297493Z         "manifest:org.opencontainers.image.revision=c92fed8adc260732accc9cf8fb7f577bdf6c7f27",
+2026-01-27T12:42:46.0298647Z         "manifest:org.opencontainers.image.source=https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:42:46.0299669Z         "manifest:org.opencontainers.image.title=ai-teaching-assistant",
+2026-01-27T12:42:46.0300603Z         "manifest:org.opencontainers.image.url=https://github.com/sst2020/ai-teaching-assistant",
+2026-01-27T12:42:46.0301514Z         "manifest:org.opencontainers.image.version=main"
+2026-01-27T12:42:46.0302098Z       ]
+2026-01-27T12:42:46.0302376Z     }
+2026-01-27T12:42:46.0302661Z   }
+2026-01-27T12:42:46.0302933Z }
+2026-01-27T12:42:46.0303561Z ##[endgroup]

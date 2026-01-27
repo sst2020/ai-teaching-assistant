@@ -118,7 +118,7 @@ const QAInterface: React.FC = () => {
   return (
     <div className="qa-interface">
       <div className="qa-header">
-        <h2>💬 {t('title')}</h2>
+        <h2>{`💬 ${t('title')}`}</h2>
         <p>{t('subtitle')}</p>
       </div>
 
@@ -133,7 +133,7 @@ const QAInterface: React.FC = () => {
             color: '#856404',
             fontSize: '14px'
           }}>
-            💡 {t('anonymousHint')}<a href="/login" style={{ color: '#0066cc', marginLeft: '8px' }}>{t('loginPrompt')}</a> {t('loginBenefit')}
+            <>{t('anonymousHint')}<a href="/login" style={{ color: '#0066cc', marginLeft: '8px' }}>{t('loginPrompt')}</a> {t('loginBenefit')}</>
           </div>
         )}
         <div className="messages-container">

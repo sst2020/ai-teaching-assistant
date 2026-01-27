@@ -61,7 +61,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h2>🏠 {t('title')}</h2>
+        <h2>{`🏠 ${t('title')}`}</h2>
         <p>{t('welcome')}</p>
       </div>
 

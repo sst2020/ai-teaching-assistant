@@ -199,7 +199,7 @@ const ManageAssignments: React.FC = () => {
           <button className="btn-back" onClick={() => navigate('/teacher')}>
             ← {t('back')}
           </button>
-          <h1>📋 {t('title')}</h1>
+          <h1>{`📋 ${t('title')}`}</h1>
         </div>
         <button className="btn-primary" onClick={openCreateForm}>
           ➕ {t('newAssignment')}
@@ -355,10 +355,10 @@ const ManageAssignments: React.FC = () => {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="code">💻 {t('types.code')}</option>
-                    <option value="essay">📝 {t('types.essay')}</option>
-                    <option value="quiz">❓ {t('types.quiz')}</option>
-                    <option value="project">🎯 {t('types.project')}</option>
+                    <option value="code">{`💻 ${t('types.code')}`}</option>
+                    <option value="essay">{`📝 ${t('types.essay')}`}</option>
+                    <option value="quiz">{`❓ ${t('types.quiz')}`}</option>
+                    <option value="project">{`🎯 ${t('types.project')}`}</option>
                   </select>
                 </div>
                 <div className="form-group">

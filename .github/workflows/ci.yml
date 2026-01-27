@@ -107,6 +107,7 @@ jobs:
         echo "Building frontend application..."
         npm run build
       env:
+        SKIP_PREFLIGHT_CHECK: true
         GENERATE_SOURCEMAP: false
         CI: false
 

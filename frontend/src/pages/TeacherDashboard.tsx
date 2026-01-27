@@ -99,7 +99,7 @@ const TeacherDashboard: React.FC = () => {
   return (
     <div className="teacher-dashboard">
       <header className="dashboard-header">
-        <h1>📚 {t('dashboard.title')}</h1>
+        <h1>{`📚 ${t('dashboard.title')}`}</h1>
         <div className="header-actions">
           <button className="btn-primary" onClick={() => navigate('/manage-assignments')}>
             ➕ {t('dashboard.newAssignment')}

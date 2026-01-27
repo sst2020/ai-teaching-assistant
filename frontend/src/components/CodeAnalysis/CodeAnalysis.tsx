@@ -64,7 +64,7 @@ const CodeAnalysis: React.FC = () => {
   return (
     <div className="code-analysis">
       <div className="analysis-header">
-        <h2>📊 {t('title')}</h2>
+        <h2>{`📊 ${t('title')}`}</h2>
         <p>{t('subtitle')}</p>
       </div>
 

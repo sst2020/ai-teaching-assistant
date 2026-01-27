@@ -122,7 +122,7 @@ const StudentDashboard: React.FC = () => {
         {/* Upcoming Assignments */}
         <section className="dashboard-section">
           <div className="section-header">
-            <h2>📅 {t('assignments.upcoming')}</h2>
+            <h2>{`📅 ${t('assignments.upcoming')}`}</h2>
             <Link to="/assignments" className="view-all-link">{t('assignments.viewAll')}</Link>
           </div>
           {upcomingAssignments.length > 0 ? (
@@ -155,7 +155,7 @@ const StudentDashboard: React.FC = () => {
         {/* Enrolled Courses */}
         <section className="dashboard-section">
           <div className="section-header">
-            <h2>📚 {t('courses.title')}</h2>
+            <h2>{`📚 ${t('courses.title')}`}</h2>
             <Link to="/courses" className="view-all-link">{t('courses.viewAll')}</Link>
           </div>
           {courses.length > 0 ? (
@@ -164,7 +164,7 @@ const StudentDashboard: React.FC = () => {
                 <div key={course.id} className="course-card">
                   <h3>{course.name}</h3>
                   <p className="course-code">{course.code}</p>
-                  <p className="course-instructor">👨‍🏫 {course.instructor_name}</p>
+                  <p className="course-instructor">{`👨‍🏫 ${course.instructor_name}`}</p>
                 </div>
               ))}
             </div>

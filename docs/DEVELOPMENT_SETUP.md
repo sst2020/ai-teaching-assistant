@@ -2,6 +2,69 @@
 
 本指南提供了完整的前后端协同调试环境配置方案，包含增强调试功能和一键启动脚本。
 
+## 🏗️ 系统架构
+
+### 双系统架构
+
+本项目采用**双系统分离架构**，由两个独立系统组成：
+
+#### 1. 学生学习支持系统（本系统）
+- **位置**：`E:\Code\repo\ai-teaching-assistant-frontend`
+- **技术栈**：FastAPI (后端) + React (前端)
+- **职责**：
+  - 学生作业提交和查看
+  - AI 自动评分和反馈
+  - 代码分析和查重检测
+  - Q&A 问答助手
+  - 教师评分审核
+
+#### 2. 作业管理系统（外部系统）
+- **位置**：`E:\Code\repo\管理系统`
+- **技术栈**：Flask + JSON 文件存储
+- **职责**：
+  - 创建和编辑作业
+  - 管理课程和班级
+  - 任务分配和调度
+
+### 系统交互
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      作业管理系统                            │
+│                  (E:\Code\repo\管理系统)                     │
+│                                                              │
+│  - 创建作业                                                  │
+│  - 管理课程                                                  │
+│  - 任务调度                                                  │
+│                                                              │
+│  数据存储: data/db.json                                      │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+                       │ 单向同步（只读）
+                       ↓
+┌─────────────────────────────────────────────────────────────┐
+│                  学生学习支持系统（本系统）                   │
+│              (E:\Code\repo\ai-teaching-assistant-frontend)   │
+│                                                              │
+│  后端 (FastAPI)                前端 (React)                  │
+│  ├─ 作业同步服务               ├─ 学生仪表板                 │
+│  ├─ 评分服务                   ├─ 教师仪表板                 │
+│  ├─ 查重服务                   ├─ 作业提交界面               │
+│  ├─ 代码分析服务               ├─ 评分界面                   │
+│  └─ Q&A 服务                   └─ 问答界面                   │
+│                                                              │
+│  数据存储: PostgreSQL/SQLite                                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 数据同步流程
+
+1. 教师在**作业管理系统**中创建作业
+2. 作业数据保存到 `data/db.json`
+3. **学习支持系统**通过同步服务读取 `db.json`
+4. 将任务数据映射为作业并存入数据库
+5. 学生可以在学习支持系统中看到新作业
+
 ## 🚀 快速开始
 
 ### 一键启动（推荐）
@@ -102,7 +165,52 @@ CORS_ALLOW_CREDENTIALS=true
 CORS_ALLOW_METHODS=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
 CORS_ALLOW_HEADERS=["*"]
 CORS_EXPOSE_HEADERS=["X-Request-ID", "X-Response-Time"]
+
+# Assignment Sync Configuration
+MANAGEMENT_SYSTEM_PATH=E:/Code/repo/管理系统/data/db.json
+SYNC_LOG_PATH=data/sync_log.json
 ```
+
+## 🔄 作业同步配置
+
+### 配置同步服务
+
+1. **设置管理系统路径**
+
+在 `backend/.env` 中配置：
+```env
+MANAGEMENT_SYSTEM_PATH=E:/Code/repo/管理系统/data/db.json
+```
+
+2. **手动触发同步**
+
+通过 API 端点触发同步：
+```bash
+curl -X POST http://localhost:8000/api/v1/sync/assignments
+```
+
+3. **查看同步日志**
+
+```bash
+curl http://localhost:8000/api/v1/sync/logs
+```
+
+或查看本地日志文件：
+```bash
+cat backend/data/sync_log.json
+```
+
+### 同步服务工作原理
+
+1. 读取管理系统的 `db.json` 文件
+2. 提取所有班级和任务数据
+3. 根据任务类型映射为作业类型：
+   - `知识点学习` → `essay`
+   - `OJ题目` → `code`
+   - `ACDC系统任务` → `code`
+4. 检查作业是否已存在（根据 `assignment_id`）
+5. 仅创建新作业，跳过重复项
+6. 记录同步结果到日志
 
 ## 🐛 调试功能
 

@@ -90,6 +90,12 @@ jobs:
         npm install --legacy-peer-deps
       shell: bash
 
+    - name: Verify react-router-dom installation
+      run: |
+        ls -la node_modules/react-router-dom
+        npm list react-router-dom
+      working-directory: ./frontend
+
     - name: Run frontend tests
       run: npm test -- --passWithNoTests --coverage --watchAll=false
 

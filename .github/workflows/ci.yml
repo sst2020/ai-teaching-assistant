@@ -80,7 +80,7 @@ jobs:
         cache-dependency-path: './frontend/package-lock.json'
 
     - name: Install frontend dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
 
     - name: Run frontend tests
       run: npm test

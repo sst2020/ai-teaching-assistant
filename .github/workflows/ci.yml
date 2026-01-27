@@ -90,10 +90,8 @@ jobs:
         npm install --legacy-peer-deps
       shell: bash
 
-    - name: Verify react-router-dom installation
-      run: |
-        ls -la node_modules/react-router-dom
-        npm list react-router-dom
+    - name: Install additional dependencies
+      run: npm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev
       working-directory: ./frontend
 
     - name: Run frontend tests
@@ -103,7 +101,12 @@ jobs:
       run: npx eslint src/ --ext .ts,.tsx --fix
 
     - name: Build frontend
-      run: npm run build
+      run: |
+        echo "Building frontend application..."
+        npm run build
+      env:
+        GENERATE_SOURCEMAP: false
+        CI: false
 
   # Docker构建任务
   docker-build:

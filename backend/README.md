@@ -2,10 +2,30 @@
 
 A FastAPI-based backend service for an AI-powered teaching assistant that provides automated assignment grading, code analysis, plagiarism detection, and intelligent Q&A support. Built with SQLAlchemy ORM for robust database management.
 
+## 🎯 System Overview
+
+This backend is **dedicated to student learning support** and works in conjunction with a separate **Assignment Management System** for teachers to create and manage assignments.
+
+### System Responsibilities
+
+**This System (Student Learning Support)**:
+- ✅ Assignment synchronization from external management system
+- ✅ Student submission tracking and management
+- ✅ AI-powered automated grading
+- ✅ Plagiarism detection and similarity analysis
+- ✅ Code quality analysis and feedback
+- ✅ Q&A assistance with intelligent triage
+- ✅ Grading results and feedback delivery
+
+**External Management System** (`E:\Code\repo\管理系统`):
+- 📋 Creating and editing assignments
+- 📋 Managing courses and classes
+- 📋 Task distribution and scheduling
+
 ## Features
 
 - **Student Management**: Complete CRUD operations for student registration and management
-- **Assignment Management**: Create, update, and manage course assignments
+- **Assignment Synchronization**: Read-only sync from external management system
 - **Submission Tracking**: Track and manage student submissions with status updates
 - **Automated Assignment Grading**: AI-powered evaluation of code and report submissions
 - **Code Static Analysis**: PEP 8 compliance, complexity metrics, and code smell detection
@@ -90,21 +110,26 @@ A FastAPI-based backend service for an AI-powered teaching assistant that provid
 | `/{student_id}` | PUT | Update student information |
 | `/{student_id}` | DELETE | Delete a student |
 
-### Assignment Management (`/api/v1/assignments`)
+### Assignment Management (`/api/v1/assignments`) - Read-Only
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/` | POST | Create a new assignment |
 | `/` | GET | List all assignments (paginated) |
 | `/course/{course_id}` | GET | Get assignments by course |
 | `/{assignment_id}` | GET | Get assignment by ID |
-| `/{assignment_id}` | PUT | Update assignment |
-| `/{assignment_id}` | DELETE | Delete assignment |
+| `/stats` | GET | Get assignment statistics |
 | `/grade` | POST | Grade a single assignment |
 | `/grade/batch` | POST | Batch grade multiple assignments |
 | `/analyze-code` | POST | Run static code analysis |
 | `/plagiarism/check` | POST | Check submission for plagiarism |
 | `/plagiarism/batch` | POST | Batch plagiarism check |
+| `/plagiarism/report/{assignment_id}` | GET | Get plagiarism report |
 | `/upload` | POST | Upload and grade a file |
+
+### Assignment Synchronization (`/api/v1/sync`)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/assignments` | POST | Sync assignments from management system |
+| `/logs` | GET | Get synchronization logs |
 
 ### Submission Management (`/api/v1/submissions`)
 | Endpoint | Method | Description |

@@ -1036,87 +1036,9 @@ export const deleteGradingResult = async (gradingId: number): Promise<void> => {
   await apiClient.delete(`${API_V1_PREFIX}/grading/${gradingId}`);
 };
 
-// 教师提交作业
-export const teacherSubmitAssignment = async (
-  assignmentData: FormData
-): Promise<APIResponse> => {
-  const response = await apiClient.post<APIResponse>(
-    `${API_V1_PREFIX}/assignments/teacher/submit`,
-    assignmentData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  );
-  return response.data;
-};
-
-// 批量上传学生作业
-export const batchUploadStudentSubmissions = async (
-  uploadData: FormData
-): Promise<BatchUploadResponse> => {
-  const response = await apiClient.post<BatchUploadResponse>(
-    `${API_V1_PREFIX}/assignments/teacher/batch-upload`,
-    uploadData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      timeout: 300000, // 5分钟超时，因为可能上传大量文件
-    }
-  );
-  return response.data;
-};
-
-// 获取作业提交列表
-export const getAssignmentSubmissions = async (
-  assignmentId: string,
-  courseId: string,
-  page: number = 1,
-  pageSize: number = 20
-): Promise<AssignmentSubmissionRecord[]> => {
-  const params = new URLSearchParams();
-  params.append('course_id', courseId);
-  params.append('page', page.toString());
-  params.append('page_size', pageSize.toString());
-
-  const response = await apiClient.get<AssignmentSubmissionRecord[]>(
-    `${API_V1_PREFIX}/assignments/teacher/${assignmentId}/submissions?${params.toString()}`
-  );
-  return response.data;
-};
-
 // 与文件管理系统同步
-export const syncWithFileManager = async (
-  syncData: FormData
-): Promise<FileManagerSyncResponse> => {
-  const response = await apiClient.post<FileManagerSyncResponse>(
-    `${API_V1_PREFIX}/assignments/file-manager/sync`,
-    syncData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  );
-  return response.data;
-};
-
-// 查询同步状态
-export const getSyncStatus = async (
-  assignmentId: string,
-  syncId?: string
-): Promise<FileManagerSyncResponse> => {
-  const params = new URLSearchParams();
-  params.append('assignment_id', assignmentId);
-  if (syncId) params.append('sync_id', syncId);
-
-  const response = await apiClient.get<FileManagerSyncResponse>(
-    `${API_V1_PREFIX}/assignments/file-manager/status?${params.toString()}`
-  );
-  return response.data;
-};
+// Note: File manager sync functions removed as part of refactoring
+// These endpoints are no longer available in the backend
 
 // Export the axios instance for custom requests
 export default apiClient;

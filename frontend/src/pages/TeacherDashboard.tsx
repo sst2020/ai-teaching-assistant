@@ -17,6 +17,7 @@ import {
 } from '../services/api';
 import { Assignment, AssignmentStats } from '../types/assignment';
 import { TriageStats } from '../types/triage';
+import ManagementSystemNotice from '../components/ManagementSystemNotice';
 import './TeacherDashboard.css';
 
 interface DashboardStats {
@@ -101,9 +102,6 @@ const TeacherDashboard: React.FC = () => {
       <header className="dashboard-header">
         <h1>{`📚 ${t('dashboard.title')}`}</h1>
         <div className="header-actions">
-          <button className="btn-primary" onClick={() => navigate('/manage-assignments')}>
-            ➕ {t('dashboard.newAssignment')}
-          </button>
           <button className="btn-secondary" onClick={loadDashboardData}>
             🔄 {t('dashboard.refresh')}
           </button>
@@ -111,6 +109,9 @@ const TeacherDashboard: React.FC = () => {
       </header>
 
       {error && <div className="error-banner">{error}</div>}
+
+      {/* 管理系统引导提示 */}
+      <ManagementSystemNotice variant="banner" dismissible={true} />
 
       {/* 统计卡片 */}
       <section className="stats-grid">
@@ -148,10 +149,6 @@ const TeacherDashboard: React.FC = () => {
       <section className="quick-actions">
         <h2>{t('quickActions.title')}</h2>
         <div className="action-grid">
-          <Link to="/manage-assignments" className="action-card">
-            <span className="action-icon">📋</span>
-            <span className="action-label">{t('quickActions.manageAssignments')}</span>
-          </Link>
           <Link to="/grading" className="action-card">
             <span className="action-icon">✏️</span>
             <span className="action-label">{t('quickActions.grading')}</span>
@@ -171,7 +168,6 @@ const TeacherDashboard: React.FC = () => {
       <section className="recent-assignments">
         <div className="section-header">
           <h2>{t('recentAssignments.title')}</h2>
-          <Link to="/manage-assignments" className="view-all">{t('recentAssignments.viewAll')} →</Link>
         </div>
         <div className="assignments-table">
           {recentAssignments.length > 0 ? (
@@ -207,13 +203,6 @@ const TeacherDashboard: React.FC = () => {
                       >
                         ✏️
                       </button>
-                      <button
-                        className="btn-icon"
-                        onClick={() => navigate(`/manage-assignments?edit=${assignment.id}`)}
-                        title={t('assignments.edit')}
-                      >
-                        ⚙️
-                      </button>
                     </td>
                   </tr>
                 ))}
@@ -222,9 +211,7 @@ const TeacherDashboard: React.FC = () => {
           ) : (
             <div className="empty-state">
               <p>{t('recentAssignments.empty')}</p>
-              <button className="btn-primary" onClick={() => navigate('/manage-assignments')}>
-                {t('recentAssignments.createFirst')}
-              </button>
+              <p className="empty-hint">{t('recentAssignments.syncHint')}</p>
             </div>
           )}
         </div>

@@ -1,0 +1,151 @@
+[
+  {
+    "sync_id": "sync_20260127_172758",
+    "sync_time": "2026-01-27T17:27:58.936326",
+    "total_tasks": 0,
+    "new_assignments": 0,
+    "skipped_duplicates": 0,
+    "errors": [],
+    "details": []
+  },
+  {
+    "sync_id": "sync_20260127_174937",
+    "sync_time": "2026-01-27T17:49:37.385549",
+    "total_tasks": 1,
+    "new_assignments": 1,
+    "skipped_duplicates": 0,
+    "errors": [],
+    "details": [
+      {
+        "task_id": "TEST-1769507367",
+        "assignment_id": "mgmt_TEST-1769507367",
+        "status": "created",
+        "title": "实现一个快速排序算法"
+      }
+    ]
+  },
+  {
+    "sync_id": "sync_20260127_175052",
+    "sync_time": "2026-01-27T17:50:52.246222",
+    "total_tasks": 2,
+    "new_assignments": 1,
+    "skipped_duplicates": 1,
+    "errors": [],
+    "details": [
+      {
+        "task_id": "TEST-1769507367",
+        "assignment_id": "mgmt_TEST-1769507367",
+        "status": "skipped",
+        "reason": "already_exists"
+      },
+      {
+        "task_id": "TEST-1769507442",
+        "assignment_id": "mgmt_TEST-1769507442",
+        "status": "created",
+        "title": "实现一个快速排序算法"
+      }
+    ]
+  },
+  {
+    "sync_id": "sync_20260127_175252",
+    "sync_time": "2026-01-27T17:52:52.291758",
+    "total_tasks": 3,
+    "new_assignments": 1,
+    "skipped_duplicates": 2,
+    "errors": [],
+    "details": [
+      {
+        "task_id": "TEST-1769507367",
+        "assignment_id": "mgmt_TEST-1769507367",
+        "status": "skipped",
+        "reason": "already_exists"
+      },
+      {
+        "task_id": "TEST-1769507442",
+        "assignment_id": "mgmt_TEST-1769507442",
+        "status": "skipped",
+        "reason": "already_exists"
+      },
+      {
+        "task_id": "TEST-1769507562",
+        "assignment_id": "mgmt_TEST-1769507562",
+        "status": "created",
+        "title": "实现一个快速排序算法"
+      }
+    ]
+  },
+  {
+    "sync_id": "sync_20260127_175422",
+    "sync_time": "2026-01-27T17:54:22.781271",
+    "total_tasks": 4,
+    "new_assignments": 1,
+    "skipped_duplicates": 3,
+    "errors": [],
+    "details": [
+      {
+        "task_id": "TEST-1769507367",
+        "assignment_id": "mgmt_TEST-1769507367",
+        "status": "skipped",
+        "reason": "already_exists"
+      },
+      {
+        "task_id": "TEST-1769507442",
+        "assignment_id": "mgmt_TEST-1769507442",
+        "status": "skipped",
+        "reason": "already_exists"
+      },
+      {
+        "task_id": "TEST-1769507562",
+        "assignment_id": "mgmt_TEST-1769507562",
+        "status": "skipped",
+        "reason": "already_exists"
+      },
+      {
+        "task_id": "TEST-1769507652",
+        "assignment_id": "mgmt_TEST-1769507652",
+        "status": "created",
+        "title": "实现一个快速排序算法"
+      }
+    ]
+  },
+  {
+    "sync_id": "sync_20260127_175557",
+    "sync_time": "2026-01-27T17:55:57.982016",
+    "total_tasks": 5,
+    "new_assignments": 1,
+    "skipped_duplicates": 4,
+    "errors": [],
+    "details": [
+      {
+        "task_id": "TEST-1769507367",
+        "assignment_id": "mgmt_TEST-1769507367",
+        "status": "skipped",
+        "reason": "already_exists"
+      },
+      {
+        "task_id": "TEST-1769507442",
+        "assignment_id": "mgmt_TEST-1769507442",
+        "status": "skipped",
+        "reason": "already_exists"
+      },
+      {
+        "task_id": "TEST-1769507562",
+        "assignment_id": "mgmt_TEST-1769507562",
+        "status": "skipped",
+        "reason": "already_exists"
+      },
+      {
+        "task_id": "TEST-1769507652",
+        "assignment_id": "mgmt_TEST-1769507652",
+        "status": "skipped",
+        "reason": "already_exists"
+      },
+      {
+        "task_id": "TEST-1769507747",
+        "assignment_id": "mgmt_TEST-1769507747",
+        "status": "created",
+        "title": "实现一个快速排序算法"
+      }
+    ]
+  }
+]

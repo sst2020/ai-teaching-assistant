@@ -1,0 +1,162 @@
+/* 管理系统引导组件样式 */
+
+.management-notice {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  margin-bottom: 24px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.management-notice--banner {
+  border-left: 4px solid #ffd700;
+}
+
+.management-notice--card {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.management-notice__icon {
+  font-size: 32px;
+  flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.management-notice__content {
+  flex: 1;
+}
+
+.management-notice__title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.management-notice__message {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.management-notice__message strong {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.management-notice__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.management-notice__path {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
+
+.management-notice__path-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.management-notice__path-value {
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #ffd700;
+  word-break: break-all;
+}
+
+.management-notice__features {
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+}
+
+.management-notice__features-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.management-notice__features-list {
+  margin: 0;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.management-notice__features-list li {
+  margin-bottom: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.management-notice__features-list li:last-child {
+  margin-bottom: 0;
+}
+
+.management-notice__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.management-notice__close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.management-notice__close:active {
+  transform: scale(0.95);
+}
+

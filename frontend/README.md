@@ -1,13 +1,40 @@
 # AI Teaching Assistant - Frontend
 
-A React-based frontend application for the AI Teaching Assistant platform, providing an intuitive interface for code analysis, Q&A assistance, and assignment grading.
+A React-based frontend application for the AI Teaching Assistant platform, providing an intuitive interface for student learning support, including assignment submission, AI grading, plagiarism detection, and Q&A assistance.
+
+## 🎯 System Overview
+
+This system is **dedicated to student learning support** and works in conjunction with a separate **Assignment Management System** for teachers to create and manage assignments.
+
+### System Responsibilities
+
+**This System (Student Learning Support)**:
+- ✅ Student assignment submission
+- ✅ AI-powered automated grading
+- ✅ Plagiarism detection and originality reports
+- ✅ Code analysis and feedback
+- ✅ Q&A assistance for programming topics
+- ✅ Viewing grades and submission history
+
+**External Management System** (`E:\Code\repo\管理系统`):
+- 📋 Creating and editing assignments
+- 📋 Managing courses and classes
+- 📋 Task distribution and scheduling
 
 ## Features
 
-- 🏠 **Dashboard**: Overview of system status and available features
-- 📊 **Code Analysis**: Analyze Python code for style issues, complexity, and code smells
+### For Students
+- 🏠 **Student Dashboard**: View courses, assignments, and submission history
+- 📝 **Assignment Submission**: Submit code with Monaco editor or file upload
+- 📊 **Grades View**: Check graded submissions with detailed feedback
 - 💬 **Q&A Assistant**: AI-powered question answering for programming topics
-- 📝 **Assignment Grading**: Automated grading with detailed feedback (coming soon)
+
+### For Teachers
+- 📈 **Teacher Dashboard**: Overview of assignments and grading statistics
+- ✏️ **Grading Interface**: Review AI grading results and provide manual overrides
+- 🔍 **Plagiarism Detection**: Batch upload and similarity analysis
+- 📊 **Code Analysis**: Detailed code quality reports
+- 🎯 **Question Queue**: Manage and respond to student questions
 
 ## Tech Stack
 
@@ -87,15 +114,45 @@ frontend/
 
 The frontend communicates with the FastAPI backend through the API service layer.
 
-### API Endpoints Used
+### Key API Endpoints
 
+#### Assignment Management (Read-Only)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/assignments` | GET | List assignments with pagination |
+| `/api/v1/assignments/{id}` | GET | Get assignment details |
+| `/api/v1/assignments/stats` | GET | Get assignment statistics |
+| `/api/v1/sync/assignments` | POST | Sync assignments from management system |
+
+#### Grading & Evaluation
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/assignments/grade` | POST | Grade a single assignment |
+| `/api/v1/assignments/batch-grade` | POST | Batch grade multiple assignments |
+| `/api/v1/grading` | GET | List grading results |
+
+#### Plagiarism Detection
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/assignments/plagiarism/check` | POST | Check plagiarism |
+| `/api/v1/assignments/plagiarism/report` | GET | Get plagiarism report |
+
+#### Code Analysis
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/assignments/analyze-code` | POST | Analyze code quality |
+
+#### Q&A System
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/qa/ask` | POST | Ask a question |
+| `/api/v1/qa/logs` | GET | Get Q&A history |
+
+#### Health & Info
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/` | GET | API information |
 | `/health` | GET | Health check |
-| `/api/v1/assignments/analyze-code` | POST | Analyze code |
-| `/api/v1/qa/ask` | POST | Ask a question |
-| `/api/v1/assignments/grade` | POST | Grade assignment |
 
 ### Example API Call
 

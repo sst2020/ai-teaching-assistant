@@ -20,7 +20,6 @@ import {
   SubmitAssignment,
   Grades,
   TeacherDashboard,
-  ManageAssignments,
   GradingInterface,
   Account,
   Forbidden,
@@ -40,7 +39,6 @@ const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({ children
     if (path.startsWith('/report-analysis')) return 'report-analysis';
     if (path.startsWith('/teacher')) return 'teacher';
     if (path.startsWith('/grading')) return 'grading';
-    if (path.startsWith('/manage-assignments')) return 'manage-assignments';
     if (path.startsWith('/question-queue')) return 'question-queue';
     return 'dashboard';
   };
@@ -151,16 +149,6 @@ const App: React.FC = () => {
               <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
                 <AuthenticatedLayout>
                   <TeacherDashboard />
-                </AuthenticatedLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/manage-assignments"
-            element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
-                <AuthenticatedLayout>
-                  <ManageAssignments />
                 </AuthenticatedLayout>
               </ProtectedRoute>
             }

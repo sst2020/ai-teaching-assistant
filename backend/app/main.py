@@ -36,6 +36,7 @@ from api.knowledge_base import router as knowledge_base_router
 from api.triage import router as triage_router
 from api.rubrics import router as rubrics_router
 from api.grading import router as grading_router
+from api.sync import router as sync_router
 
 # Setup enhanced logger
 logger = setup_logger(
@@ -197,6 +198,7 @@ def create_app(testing: bool = False) -> FastAPI:
     app.include_router(triage_router, prefix=settings.API_V1_PREFIX)
     app.include_router(rubrics_router, prefix=settings.API_V1_PREFIX)
     app.include_router(grading_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(sync_router, prefix=settings.API_V1_PREFIX)
 
     return app
 

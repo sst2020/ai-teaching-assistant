@@ -197,12 +197,12 @@ const ManageAssignments: React.FC = () => {
       <header className="page-header">
         <div className="header-left">
           <button className="btn-back" onClick={() => navigate('/teacher')}>
-            ← {t('back')}
+            {`← ${t('back')}`}
           </button>
           <h1>{`📋 ${t('title')}`}</h1>
         </div>
         <button className="btn-primary" onClick={openCreateForm}>
-          ➕ {t('newAssignment')}
+          {`➕ ${t('newAssignment')}`}
         </button>
       </header>
 

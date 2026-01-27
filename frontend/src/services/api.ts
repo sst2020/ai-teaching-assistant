@@ -56,6 +56,9 @@ import {
   BatchAnalysisResponse,
   OriginalityReport,
   PlagiarismSettings,
+  BatchUploadResponse,
+  AssignmentSubmissionRecord,
+  FileManagerSyncResponse,
 } from '../types/plagiarism';
 import {
   ReportAnalysisRequest,
@@ -1039,8 +1042,8 @@ export const deleteGradingResult = async (gradingId: number): Promise<void> => {
 // 教师提交作业
 export const teacherSubmitAssignment = async (
   assignmentData: FormData
-): Promise<APIResponse> => {
-  const response = await apiClient.post<APIResponse>(
+): Promise<BatchUploadResponse> => {
+  const response = await apiClient.post<BatchUploadResponse>(
     `${API_V1_PREFIX}/assignments/teacher/submit`,
     assignmentData,
     {

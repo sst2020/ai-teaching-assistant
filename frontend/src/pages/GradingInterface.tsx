@@ -158,7 +158,7 @@ const GradingInterface: React.FC = () => {
       <header className="page-header">
         <div className="header-left">
           <button className="btn-back" onClick={() => navigate('/teacher')}>
-            ← {t('back')}
+            {'← ' + t('back')}
           </button>
           <h1>{`✏️ ${t('title')}`}</h1>
         </div>

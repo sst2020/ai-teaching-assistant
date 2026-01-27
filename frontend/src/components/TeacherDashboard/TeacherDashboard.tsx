@@ -108,7 +108,7 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2>📋 {role === 'teacher' ? '教师' : '助教'}问题队列</h2>
+        <h2>{`📋 ${role === 'teacher' ? '教师' : '助教'}问题队列`}</h2>
         {stats && (
           <div className={styles.stats}>
             <span className={styles.statItem}>待处理: {stats.pending}</span>

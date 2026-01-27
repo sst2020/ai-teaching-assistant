@@ -113,7 +113,7 @@ const Account: React.FC = () => {
 
         {/* 个人资料卡片 */}
         <div className="account-card">
-          <h2 className="card-title">👤 {t('account.profile')}</h2>
+          <h2 className="card-title">{`👤 ${t('account.profile')}`}</h2>
           
           <div className="profile-section">
             <div className="avatar-section">
@@ -190,7 +190,7 @@ const Account: React.FC = () => {
 
         {/* 安全设置卡片 */}
         <div className="account-card">
-          <h2 className="card-title">🔒 {t('account.security')}</h2>
+          <h2 className="card-title">{`🔒 ${t('account.security')}`}</h2>
 
           {!isChangingPassword ? (
             <button onClick={() => setIsChangingPassword(true)} className="btn-secondary">
@@ -239,7 +239,7 @@ const Account: React.FC = () => {
 
         {/* 账户操作卡片 */}
         <div className="account-card">
-          <h2 className="card-title">⚙️ {t('account.actions')}</h2>
+          <h2 className="card-title">{`⚙️ ${t('account.actions')}`}</h2>
 
           <button onClick={handleLogout} className="btn-secondary logout-btn">
             🚪 {t('logout')}

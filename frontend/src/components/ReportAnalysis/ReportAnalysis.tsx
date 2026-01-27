@@ -113,7 +113,7 @@ const ReportAnalysis: React.FC = () => {
 
     return (
       <div className="result-section">
-        <h3>📋 {t('structure.title')}</h3>
+        <h3>{`📋 ${t('structure.title')}`}</h3>
 
         <div className="score-display">
           <div className="score-value" style={{ color: result.overall_score >= 70 ? '#28a745' : result.overall_score >= 50 ? '#ffc107' : '#dc3545' }}>
@@ -165,7 +165,7 @@ const ReportAnalysis: React.FC = () => {
 
     return (
       <div className="result-section">
-        <h3>📊 {t('quality.title')}</h3>
+        <h3>{`📊 ${t('quality.title')}`}</h3>
 
         <div className="metrics-grid">
           <div className="metric-card">
@@ -224,7 +224,7 @@ const ReportAnalysis: React.FC = () => {
 
     return (
       <div className="result-section">
-        <h3>💡 {t('logic.title')}</h3>
+        <h3>{`💡 ${t('logic.title')}`}</h3>
 
         <div className="metrics-grid">
           <div className="metric-card">
@@ -306,7 +306,7 @@ const ReportAnalysis: React.FC = () => {
 
     return (
       <div className="result-section">
-        <h3>✏️ {t('suggestions.title')}</h3>
+        <h3>{`✏️ ${t('suggestions.title')}`}</h3>
 
         {result.suggestions.length > 0 ? (
           <div className="suggestions-list">
@@ -330,7 +330,7 @@ const ReportAnalysis: React.FC = () => {
   return (
     <div className="report-analysis">
       <div className="page-header">
-        <h1>📑 {t('title')}</h1>
+        <h1>{`📑 ${t('title')}`}</h1>
         <p>{t('subtitle')}</p>
       </div>
 

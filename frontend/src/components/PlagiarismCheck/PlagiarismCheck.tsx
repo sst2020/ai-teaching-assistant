@@ -78,7 +78,7 @@ const PlagiarismCheck: React.FC = () => {
   return (
     <div className="plagiarism-check">
       <div className="page-header">
-        <h1>🔍 {t('title')}</h1>
+        <h1>{`🔍 ${t('title')}`}</h1>
         <p>{t('subtitle')}</p>
       </div>
 
@@ -121,7 +121,7 @@ const PlagiarismCheck: React.FC = () => {
       {/* 错误提示 */}
       {error && (
         <div className="error-message">
-          <span>❌ {error}</span>
+          <span>{`❌ ${error}`}</span>
           <button onClick={() => setError(null)}>{t('common.close')}</button>
         </div>
       )}

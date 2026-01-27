@@ -135,7 +135,7 @@ const CodeAnalysis: React.FC = () => {
                   <div className="metric-label">{t('results.functions.count')}</div>
                 </div>
                 <div className="metric-card">
-                  <h4>⚠️ {t('results.styleIssues.title')}</h4>
+                  <h4>{`⚠️ ${t('results.styleIssues.title')}`}</h4>
                   <div className="metric-value">
                     {result.style_analysis.total_issues}
                   </div>
@@ -145,7 +145,7 @@ const CodeAnalysis: React.FC = () => {
 
               {result.recommendations.length > 0 && (
                 <div className="recommendations">
-                  <h4>💡 {t('results.recommendations.title')}</h4>
+                  <h4>{`💡 ${t('results.recommendations.title')}`}</h4>
                   <ul>
                     {result.recommendations.map((rec, index) => (
                       <li key={index}>{rec}</li>

@@ -191,7 +191,7 @@ const GradingInterface: React.FC = () => {
           {/* 统计概览 */}
           {statistics && (
             <section className="statistics-panel">
-              <h3>📊 {t('statistics.title')}</h3>
+              <h3>{`📊 ${t('statistics.title')}`}</h3>
               <div className="stats-grid">
                 <div className="stat-item">
                   <span className="stat-value">{statistics.total_graded}</span>
@@ -307,7 +307,7 @@ const GradingInterface: React.FC = () => {
 
                     {selectedGrading.feedback && (
                       <div className="feedback-section">
-                        <h4>📋 {t('feedback.title')}</h4>
+                        <h4>{`📋 ${t('feedback.title')}`}</h4>
                         {selectedGrading.feedback.summary && (
                           <p className="feedback-summary">{selectedGrading.feedback.summary}</p>
                         )}
@@ -323,7 +323,7 @@ const GradingInterface: React.FC = () => {
                         )}
                         {selectedGrading.feedback.improvements && selectedGrading.feedback.improvements.length > 0 && (
                           <div className="feedback-list improvements">
-                            <h5>💡 {t('feedback.improvements')}</h5>
+                            <h5>{`💡 ${t('feedback.improvements')}`}</h5>
                             <ul>
                               {selectedGrading.feedback.improvements.map((s, i) => (
                                 <li key={i}>{s}</li>

@@ -238,11 +238,11 @@ const Header: React.FC<HeaderProps> = () => {
               {showUserMenu && (
                 <div className="user-dropdown">
                   <button onClick={handleProfileClick} className="dropdown-item">
-                    👤 {tAuth('profile')}
+                    {`👤 ${tAuth('profile')}`}
                   </button>
                   <div className="dropdown-divider" />
                   <button onClick={handleLogout} className="dropdown-item logout">
-                    🚪 {tAuth('logout')}
+                    {`🚪 ${tAuth('logout')}`}
                   </button>
                 </div>
               )}

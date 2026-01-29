@@ -142,15 +142,18 @@ class ReportAnalysisService:
                 suggestions = ai_suggestions
 
         # Step 5: aggregate overall score and summary
+        # Calculate weighted overall score with balanced factors
+        # Weights adjusted to better reflect academic report quality
         overall_score = float(
             min(
                 100.0,
                 max(
                     0.0,
-                    0.3 * quality.overall_completeness_score
-                    + 0.25 * logic.argumentation_score
-                    + 0.2 * innovation.novelty_score
-                    + 0.25 * language_quality.academic_tone_score,
+                    0.25 * quality.overall_completeness_score      # Completeness and structure
+                    + 0.30 * logic.argumentation_score             # Logical reasoning and argumentation
+                    + 0.20 * innovation.novelty_score              # Innovation and originality
+                    + 0.15 * language_quality.academic_tone_score  # Language quality and academic tone
+                    + 0.10 * language_quality.readability_score    # Readability and clarity
                 ),
             )
         )
@@ -458,24 +461,40 @@ class ReportAnalysisService:
                 report_text = report_text[:4000] + "\n\n...[中间内容省略]...\n\n" + report_text[-4000:]
 
             # 构建分析提示词
-            prompt = f"""你是一位专业的学术报告评审专家。请分析以下项目报告的逻辑结构和论证质量。
+            prompt = f"""你是中国高校计算机科学或相关专业的资深教授，专门负责评审学术报告和毕业论文。
+请严格按照以下评分标准，对提供的学术报告进行全面的逻辑结构分析。
 
 ## 报告内容：
 {report_text}
 
-## 分析要求：
-请从以下维度评估报告的逻辑质量，并以 JSON 格式返回结果：
+## 评分标准（每项满分100分，根据实际情况打分）：
+1. **章节顺序评分 (section_order_score)**：
+   - 优秀(90-100)：章节安排完全符合学术规范，逻辑递进清晰
+   - 良好(75-89)：章节安排基本合理，逻辑较为清晰
+   - 中等(60-74)：章节安排有部分不合理之处
+   - 较差(0-59)：章节安排混乱，缺乏逻辑性
 
-1. **章节顺序评分 (section_order_score)**：评估章节的组织是否合理、逻辑是否清晰（0-100分）
-2. **连贯性评分 (coherence_score)**：评估段落之间的衔接是否流畅、过渡是否自然（0-100分）
-3. **论证完整性评分 (argumentation_score)**：评估论点是否有充分的证据支撑、论证是否完整（0-100分）
-4. **逻辑问题列表 (issues)**：识别报告中存在的逻辑问题，每个问题包含：
-   - issue_type: 问题类型，可选值为 "missing_evidence"（缺乏证据）、"logical_gap"（逻辑跳跃）、"weak_conclusion"（结论薄弱）、"redundant_content"（冗余内容）
-   - description: 问题描述
-   - suggested_fix: 修改建议
-5. **总结 (summary)**：用一段话总结报告的逻辑质量
+2. **连贯性评分 (coherence_score)**：
+   - 优秀(90-100)：段落间衔接自然，过渡句使用恰当
+   - 良好(75-89)：段落间衔接较好，偶有过渡不足
+   - 中等(60-74)：段落间衔接一般，部分地方缺乏过渡
+   - 较差(0-59)：段落间衔接差，缺乏有效过渡
 
-## 输出格式（严格按照 JSON 格式）：
+3. **论证完整性评分 (argumentation_score)**：
+   - 优秀(90-100)：论点明确，论据充分，论证过程严密
+   - 良好(75-89)：论点较明确，论据较充分，论证较严密
+   - 中等(60-74)：论点基本明确，论据基本充分
+   - 较差(0-59)：论点模糊，论据不足，论证不严密
+
+## 详细分析要求：
+请识别报告中的具体逻辑问题，包括但不限于：
+- 缺乏证据支撑的观点
+- 概念之间的逻辑跳跃
+- 结论与前文论证不符
+- 内容重复或冗余
+- 因果关系错误
+
+## 输出格式（必须严格遵守，仅输出JSON，不得包含其他文字）：
 ```json
 {{
     "section_order_score": 85,
@@ -484,22 +503,24 @@ class ReportAnalysisService:
     "issues": [
         {{
             "issue_type": "missing_evidence",
+            "section_id": null,
+            "paragraph_index": null,
             "description": "第二章中关于系统架构优势的论述缺乏具体数据支撑",
             "suggested_fix": "建议添加性能测试数据或对比实验结果"
         }}
     ],
-    "summary": "报告整体逻辑结构清晰，但部分论证需要加强证据支撑..."
+    "summary": "报告整体逻辑结构清晰，章节安排合理，但部分论证需要加强证据支撑..."
 }}
 ```
 
-请直接输出 JSON，不要包含其他解释文字。"""
+请严格按照上述JSON格式输出，不得添加任何其他内容。"""
 
             # 调用 AI 服务
             response = await self.ai_service.generate_response(
                 prompt=prompt,
-                system_prompt="你是一位严谨的学术报告评审专家，擅长分析学术文章的逻辑结构和论证质量。请以 JSON 格式输出分析结果。",
+                system_prompt="你是中国高校计算机科学或相关专业的资深教授，专门负责评审学术报告和毕业论文。请严格按照评分标准和JSON格式输出分析结果，不得添加任何其他内容。",
                 max_tokens=2000,
-                temperature=0.3  # 低温度以获得更稳定的输出
+                temperature=0.2  # 更低温度以获得更稳定的输出
             )
 
             if not response:
@@ -529,28 +550,59 @@ class ReportAnalysisService:
             # 尝试提取 JSON 内容
             json_str = response.strip()
 
-            # 处理可能包含 markdown 代码块的情况
+            # 多种方式尝试提取 JSON 内容
+            # 1. 尝试提取 ```json 代码块
             if "```json" in json_str:
                 start = json_str.find("```json") + 7
                 end = json_str.find("```", start)
                 if end > start:
                     json_str = json_str[start:end].strip()
+            # 2. 尝试提取 ``` 代码块
             elif "```" in json_str:
-                start = json_str.find("```") + 3
-                end = json_str.find("```", start)
+                start = json_str.find("```")
+                end = json_str.find("```", start + 3)
                 if end > start:
-                    json_str = json_str[start:end].strip()
+                    # Extract content after the first ``` and before the closing ```
+                    content_after_first_backticks = json_str[start + 3:end].strip()
+                    # Check if it starts with a JSON object/array
+                    if content_after_first_backticks.lstrip().startswith(('{', '[')):
+                        json_str = content_after_first_backticks
+                    else:
+                        # If it doesn't look like JSON, use the original response
+                        json_str = response.strip()
+            # 3. If no code blocks, use the original response
 
-            # 解析 JSON
+            # Clean up the JSON string
+            json_str = json_str.strip()
+
+            # Sometimes AI adds prefixes like "Here is the JSON:" before the actual JSON
+            # Find the first occurrence of { or [ to get the actual JSON
+            first_brace = json_str.find('{')
+            first_bracket = json_str.find('[')
+
+            if first_brace != -1 and (first_bracket == -1 or first_brace < first_bracket):
+                json_str = json_str[first_brace:]
+            elif first_bracket != -1 and (first_brace == -1 or first_bracket < first_brace):
+                json_str = json_str[first_bracket:]
+
+            # Parse JSON with error recovery
             data = json.loads(json_str)
 
             # 构建 LogicIssue 列表
             issues = []
-            for issue_data in data.get("issues", []):
+            issues_data = data.get("issues", [])
+            if not isinstance(issues_data, list):
+                issues_data = []
+
+            for issue_data in issues_data:
+                if not isinstance(issue_data, dict):
+                    continue
+
                 issue_type_str = issue_data.get("issue_type", "logical_gap")
                 try:
                     issue_type = schemas.LogicIssueType(issue_type_str)
                 except ValueError:
+                    # If the issue type is invalid, default to logical gap
                     issue_type = schemas.LogicIssueType.LOGICAL_GAP
 
                 issues.append(schemas.LogicIssue(
@@ -561,17 +613,37 @@ class ReportAnalysisService:
                     suggested_fix=issue_data.get("suggested_fix")
                 ))
 
+            # Extract and validate scores
+            section_order_score = data.get("section_order_score", 70.0)
+            coherence_score = data.get("coherence_score", 70.0)
+            argumentation_score = data.get("argumentation_score", 70.0)
+
+            # Ensure scores are valid floats in the 0-100 range
+            try:
+                section_order_score = float(section_order_score)
+                coherence_score = float(coherence_score)
+                argumentation_score = float(argumentation_score)
+            except (TypeError, ValueError):
+                section_order_score = 70.0
+                coherence_score = 70.0
+                argumentation_score = 70.0
+
+            # Clamp scores to valid range
+            section_order_score = max(0.0, min(100.0, section_order_score))
+            coherence_score = max(0.0, min(100.0, coherence_score))
+            argumentation_score = max(0.0, min(100.0, argumentation_score))
+
             # 构建结果
             return schemas.LogicAnalysisResult(
-                section_order_score=float(data.get("section_order_score", 70.0)),
-                coherence_score=float(data.get("coherence_score", 70.0)),
-                argumentation_score=float(data.get("argumentation_score", 70.0)),
+                section_order_score=section_order_score,
+                coherence_score=coherence_score,
+                argumentation_score=argumentation_score,
                 issues=issues,
                 summary=data.get("summary", "逻辑分析完成")
             )
 
         except json.JSONDecodeError as e:
-            logger.warning(f"JSON 解析失败: {e}")
+            logger.warning(f"JSON 解析失败: {e}. 响应内容: {response[:200]}...")
             return None
         except Exception as e:
             logger.error(f"逻辑分析结果解析失败: {e}")
@@ -604,7 +676,8 @@ class ReportAnalysisService:
             sections_info.append(f"- {section.title}: {section_text[:200]}...")
         sections_summary = "\n".join(sections_info[:10])  # 最多10个章节
 
-        prompt = f"""请分析以下学术/项目报告的创新性和独特之处。
+        prompt = f"""你是中国高校计算机科学或相关专业的资深教授，专门负责评估学术报告的创新性。
+请严格按照以下评分标准，对提供的学术报告进行创新性分析。
 
 ## 报告章节结构：
 {sections_summary}
@@ -612,46 +685,49 @@ class ReportAnalysisService:
 ## 报告全文摘要：
 {report_content}
 
+## 创新性评分标准（满分100分）：
+- 突破性创新(90-100分)：提出全新理论、方法或技术，具有重大学术价值
+- 显著创新(70-89分)：在现有基础上有重要改进或拓展，有较高学术价值
+- 一般创新(50-69分)：在现有方法上有一定改进或应用，有一定学术价值
+- 创新较弱(30-49分)：主要是现有方法的应用，创新性有限
+- 缺乏创新(0-29分)：完全照搬现有方法，无明显创新点
+
 ## 分析要求：
-1. 评估报告的整体创新程度（0-100分）
-2. 总结报告与同类报告的差异点
-3. 识别报告中具体的创新点（技术创新、方法创新、思路创新等）
+1. 识别报告中的具体创新点，包括：
+   - 理论创新：新概念、新模型、新框架
+   - 方法创新：新算法、新技术、新流程
+   - 应用创新：新应用场景、新解决方案
+   - 实验创新：新实验方法、新验证手段
 
-## 评分标准：
-- 90-100分：具有突破性创新，提出了全新的概念或方法
-- 70-89分：有明显创新，在现有基础上有显著改进
-- 50-69分：有一定创新，但主要是常规改进
-- 30-49分：创新性较弱，主要是已有方法的应用
-- 0-29分：缺乏创新，完全是常规内容
+2. 评估创新的独特性和价值
+3. 与同类研究进行对比分析
 
-请以 JSON 格式输出分析结果：
+## 输出格式（必须严格遵守，仅输出JSON，不得包含其他文字）：
 ```json
 {{
-    "novelty_score": <0-100的创新性评分>,
-    "difference_summary": "<与同类报告的差异总结，200字以内>",
+    "novelty_score": 78,
+    "difference_summary": "报告在XXX方面与同类研究有所不同，主要体现在...",
     "innovation_points": [
         {{
-            "section_id": "<所在章节ID，如无法确定则为null>",
-            "highlight_text": "<创新点的原文引用或描述，50字以内>",
-            "reason": "<为什么这是创新点，100字以内>"
+            "section_id": null,
+            "highlight_text": "关于XXX的新方法描述",
+            "reason": "这是创新点，因为它解决了XXX问题，采用了不同于传统方法的YYY策略"
         }}
     ]
 }}
 ```
 
-请确保输出的 JSON 格式正确，innovation_points 数组包含 0-5 个最重要的创新点。"""
+请严格按照上述JSON格式输出，不得添加任何其他内容。"""
 
-        system_prompt = """你是一位资深的学术评审专家，擅长评估学术报告和项目文档的创新性。
-你需要客观、专业地分析报告的创新程度，识别真正有价值的创新点。
-评分时要严格但公正，既不过于苛刻也不过于宽松。
-请务必以有效的 JSON 格式输出分析结果。"""
+        system_prompt = """你是中国高校计算机科学或相关专业的资深教授，专门负责评估学术报告的创新性。
+请严格按照评分标准和JSON格式输出分析结果，不得添加任何其他内容。"""
 
         try:
             response = await self.ai_service.generate_response(
                 prompt=prompt,
                 system_prompt=system_prompt,
                 max_tokens=2000,
-                temperature=0.3
+                temperature=0.2  # 更低温度以获得更稳定的输出
             )
 
             if not response:
@@ -677,23 +753,52 @@ class ReportAnalysisService:
         """
         try:
             # 尝试从 markdown 代码块中提取 JSON
-            json_text = response
-            if "```json" in response:
-                start = response.find("```json") + 7
-                end = response.find("```", start)
+            json_text = response.strip()
+
+            # 多种方式尝试提取 JSON 内容
+            # 1. 尝试提取 ```json 代码块
+            if "```json" in json_text:
+                start = json_text.find("```json") + 7
+                end = json_text.find("```", start)
                 if end > start:
-                    json_text = response[start:end].strip()
-            elif "```" in response:
-                start = response.find("```") + 3
-                end = response.find("```", start)
+                    json_text = json_text[start:end].strip()
+            # 2. 尝试提取 ``` 代码块
+            elif "```" in json_text:
+                start = json_text.find("```")
+                end = json_text.find("```", start + 3)
                 if end > start:
-                    json_text = response[start:end].strip()
+                    # Extract content after the first ``` and before the closing ```
+                    content_after_first_backticks = json_text[start + 3:end].strip()
+                    # Check if it starts with a JSON object/array
+                    if content_after_first_backticks.lstrip().startswith(('{', '[')):
+                        json_text = content_after_first_backticks
+                    else:
+                        # If it doesn't look like JSON, use the original response
+                        json_text = response.strip()
+            # 3. If no code blocks, use the original response
+
+            # Clean up the JSON string
+            json_text = json_text.strip()
+
+            # Sometimes AI adds prefixes like "Here is the JSON:" before the actual JSON
+            # Find the first occurrence of { or [ to get the actual JSON
+            first_brace = json_text.find('{')
+            first_bracket = json_text.find('[')
+
+            if first_brace != -1 and (first_bracket == -1 or first_brace < first_bracket):
+                json_text = json_text[first_brace:]
+            elif first_bracket != -1 and (first_brace == -1 or first_bracket < first_brace):
+                json_text = json_text[first_bracket:]
 
             data = json.loads(json_text)
 
             # 解析创新点列表
             innovation_points = []
-            for point_data in data.get("innovation_points", []):
+            points_data = data.get("innovation_points", [])
+            if not isinstance(points_data, list):
+                points_data = []
+
+            for point_data in points_data:
                 if not isinstance(point_data, dict):
                     continue
                 # highlight_text 和 reason 是必填字段
@@ -708,15 +813,25 @@ class ReportAnalysisService:
                     reason=reason
                 ))
 
+            # Extract and validate novelty score
+            novelty_score = data.get("novelty_score", 50.0)
+            try:
+                novelty_score = float(novelty_score)
+            except (TypeError, ValueError):
+                novelty_score = 50.0
+
+            # Clamp score to valid range
+            novelty_score = max(0.0, min(100.0, novelty_score))
+
             # 构建结果
             return schemas.InnovationAnalysisResult(
-                novelty_score=float(data.get("novelty_score", 50.0)),
+                novelty_score=novelty_score,
                 difference_summary=data.get("difference_summary", ""),
                 innovation_points=innovation_points
             )
 
         except json.JSONDecodeError as e:
-            logger.warning(f"创新性分析 JSON 解析失败: {e}")
+            logger.warning(f"创新性分析 JSON 解析失败: {e}. 响应内容: {response[:200]}...")
             return None
         except Exception as e:
             logger.error(f"创新性分析结果解析失败: {e}")
@@ -749,7 +864,8 @@ class ReportAnalysisService:
             sections_info.append(f"- [{section.id}] {section.title}: {section_text}...")
         sections_summary = "\n".join(sections_info[:15])  # 最多15个章节
 
-        prompt = f"""请分析以下学术/项目报告，并提供具体的改进建议。
+        prompt = f"""你是中国高校计算机科学或相关专业的资深教授，专门负责指导学生改进学术报告。
+请针对以下学术报告提供具体、可操作的改进建议。
 
 ## 报告章节结构：
 {sections_summary}
@@ -757,49 +873,45 @@ class ReportAnalysisService:
 ## 报告全文摘要：
 {report_content}
 
-## 分析要求：
+## 改进建议要求：
 请从以下四个维度提供改进建议：
 1. **content（内容）**：内容完整性、深度、准确性方面的改进
 2. **logic（逻辑）**：论证结构、逻辑连贯性、推理过程的改进
 3. **language（语言）**：学术写作规范、表达清晰度、专业术语使用的改进
 4. **formatting（格式）**：排版、图表、引用格式等方面的改进
 
-## 建议要求：
-- 每个建议要具体、可操作
-- 尽量关联到具体的章节（提供 section_id）
-- 提供简洁的建议摘要和详细的改进说明
-- 总共提供 4-8 条最重要的建议
+## 建议标准：
+- 每个建议必须具体、可操作，不能空泛
+- 建议应针对报告的具体内容，而非通用性意见
+- 每条建议需包含明确的改进方向和具体实施方法
+- 优先关注影响报告质量的关键问题
+- 建议总数控制在4-8条，聚焦最重要问题
 
-请以 JSON 格式输出：
+## 输出格式（必须严格遵守，仅输出JSON，不得包含其他文字）：
 ```json
 {{
     "suggestions": [
         {{
-            "category": "<content|logic|language|formatting>",
-            "section_id": "<相关章节ID，如 'section_1'，如无特定章节则为 null>",
-            "summary": "<建议摘要，20字以内>",
-            "details": "<详细说明，包含具体的改进方法和示例，100-200字>"
+            "category": "content",
+            "section_id": null,
+            "summary": "建议摘要，不超过20字",
+            "details": "详细说明，包含具体的改进方法和示例，100-200字"
         }}
     ]
 }}
 ```
 
-请确保每个维度至少提供1条建议，优先关注最需要改进的方面。"""
+请严格按照上述JSON格式输出，不得添加任何其他内容。"""
 
-        system_prompt = """你是一位经验丰富的学术写作导师，擅长提供建设性的改进建议。
-你的建议应该：
-1. 具体且可操作，避免空泛的评价
-2. 平衡指出问题与提供解决方案
-3. 考虑不同水平作者的接受能力
-4. 以鼓励为主，同时不回避关键问题
-请务必以有效的 JSON 格式输出建议。"""
+        system_prompt = """你是中国高校计算机科学或相关专业的资深教授，专门负责指导学生改进学术报告。
+请严格按照要求和JSON格式输出改进建议，不得添加任何其他内容。"""
 
         try:
             response = await self.ai_service.generate_response(
                 prompt=prompt,
                 system_prompt=system_prompt,
                 max_tokens=2500,
-                temperature=0.4
+                temperature=0.3  # 降低温度以获得更一致的建议
             )
 
             if not response:
@@ -825,17 +937,42 @@ class ReportAnalysisService:
         """
         try:
             # 尝试从 markdown 代码块中提取 JSON
-            json_text = response
-            if "```json" in response:
-                start = response.find("```json") + 7
-                end = response.find("```", start)
+            json_text = response.strip()
+
+            # 多种方式尝试提取 JSON 内容
+            # 1. 尝试提取 ```json 代码块
+            if "```json" in json_text:
+                start = json_text.find("```json") + 7
+                end = json_text.find("```", start)
                 if end > start:
-                    json_text = response[start:end].strip()
-            elif "```" in response:
-                start = response.find("```") + 3
-                end = response.find("```", start)
+                    json_text = json_text[start:end].strip()
+            # 2. 尝试提取 ``` 代码块
+            elif "```" in json_text:
+                start = json_text.find("```")
+                end = json_text.find("```", start + 3)
                 if end > start:
-                    json_text = response[start:end].strip()
+                    # Extract content after the first ``` and before the closing ```
+                    content_after_first_backticks = json_text[start + 3:end].strip()
+                    # Check if it starts with a JSON object/array
+                    if content_after_first_backticks.lstrip().startswith(('{', '[')):
+                        json_text = content_after_first_backticks
+                    else:
+                        # If it doesn't look like JSON, use the original response
+                        json_text = response.strip()
+            # 3. If no code blocks, use the original response
+
+            # Clean up the JSON string
+            json_text = json_text.strip()
+
+            # Sometimes AI adds prefixes like "Here is the JSON:" before the actual JSON
+            # Find the first occurrence of { or [ to get the actual JSON
+            first_brace = json_text.find('{')
+            first_bracket = json_text.find('[')
+
+            if first_brace != -1 and (first_bracket == -1 or first_brace < first_bracket):
+                json_text = json_text[first_brace:]
+            elif first_bracket != -1 and (first_brace == -1 or first_bracket < first_brace):
+                json_text = json_text[first_bracket:]
 
             data = json.loads(json_text)
 
@@ -843,7 +980,11 @@ class ReportAnalysisService:
             suggestions = []
             valid_categories = {"content", "logic", "language", "formatting"}
 
-            for sugg_data in data.get("suggestions", []):
+            suggestions_data = data.get("suggestions", [])
+            if not isinstance(suggestions_data, list):
+                suggestions_data = []
+
+            for sugg_data in suggestions_data:
                 if not isinstance(sugg_data, dict):
                     continue
 
@@ -869,7 +1010,7 @@ class ReportAnalysisService:
             return suggestions if suggestions else None
 
         except json.JSONDecodeError as e:
-            logger.warning(f"改进建议 JSON 解析失败: {e}")
+            logger.warning(f"改进建议 JSON 解析失败: {e}. 响应内容: {response[:200]}...")
             return None
         except Exception as e:
             logger.error(f"改进建议结果解析失败: {e}")
@@ -902,67 +1043,67 @@ class ReportAnalysisService:
                 + report_content[-4000:]
             )
 
-        system_prompt = """你是一位专业的学术写作评估专家，精通语言质量分析和可读性评估。
-你的任务是评估学术报告的语言质量，包括句子结构、词汇使用、语法规范性、学术风格和可读性。
+        system_prompt = """你是中国高校的资深学术写作指导教授，专门负责评估学术报告的语言质量。
+请严格按照评分标准和JSON格式输出评估结果，不得添加任何其他内容。"""
 
-请严格按照 JSON 格式输出评估结果，不要包含任何其他文字说明。"""
-
-        user_prompt = f"""请分析以下学术报告的语言质量，并提供详细的评估指标。
+        user_prompt = f"""你是中国高校的资深学术写作指导教授，专门负责评估学术报告的语言质量。
+请严格按照以下评分标准，对提供的学术报告进行语言质量评估。
 
 ## 报告内容
 {report_content}
 
-## 评估要求
-请从以下维度评估语言质量：
-
+## 评估标准及评分方法
 1. **句子平均长度** (average_sentence_length)
-   - 统计报告中句子的平均字数
-   - 一般学术报告句子长度在 15-30 字为宜
+   - 计算报告中句子的平均字数
+   - 理想范围：15-25字，过长影响可读性，过短显得零碎
 
 2. **长句比例** (long_sentence_ratio)
-   - 计算超过 40 字的长句占总句子数的比例
-   - 值范围：0.0-1.0
-   - 过多长句会影响可读性
+   - 计算超过30字的长句占总句子数的比例
+   - 理想值：<0.2（即20%以下），过多长句影响可读性
 
 3. **词汇丰富度** (vocabulary_richness)
-   - 评估词汇的多样性和专业性
-   - 值范围：0.0-1.0
-   - 1.0 表示词汇非常丰富多样
+   - 采用类型-标记比(TTR)评估词汇多样性
+   - 计算公式：不重复词汇数/总词汇数
+   - 理想值：0.4-0.7，反映词汇使用的丰富程度
 
 4. **语法问题数量** (grammar_issue_count)
    - 统计明显的语法错误、标点错误、用词不当等问题
-   - 整数，0 表示没有发现问题
+   - 整数，0表示没有发现问题，数值越高问题越多
 
 5. **学术语调分数** (academic_tone_score)
-   - 评估写作风格的学术性和正式性
-   - 值范围：0-100
-   - 考虑：客观性、专业术语使用、被动语态使用、引用规范等
+   - 评估写作风格的学术性和正式性（0-100分）
+   - 优秀(90-100)：客观、严谨、专业术语使用恰当
+   - 良好(75-89)：较为客观，学术风格明显
+   - 中等(60-74)：基本符合学术要求
+   - 较差(0-59)：口语化严重，缺乏学术性
 
 6. **可读性分数** (readability_score)
-   - 综合评估报告的可读性
-   - 值范围：0-100
-   - 考虑：段落结构、逻辑清晰度、过渡词使用、信息密度等
+   - 综合评估报告的可读性（0-100分）
+   - 优秀(90-100)：结构清晰，逻辑顺畅，易于理解
+   - 良好(75-89)：结构较清晰，基本易懂
+   - 中等(60-74)：结构一般，需要仔细阅读才能理解
+   - 较差(0-59)：结构混乱，难以理解
 
-## 输出格式
-请严格按以下 JSON 格式输出，不要包含任何额外说明：
-
+## 输出格式（必须严格遵守，仅输出JSON，不得包含其他文字）：
 ```json
 {{
-    "average_sentence_length": <浮点数>,
-    "long_sentence_ratio": <0.0-1.0 的浮点数>,
-    "vocabulary_richness": <0.0-1.0 的浮点数>,
-    "grammar_issue_count": <非负整数>,
-    "academic_tone_score": <0-100 的浮点数>,
-    "readability_score": <0-100 的浮点数>
+    "average_sentence_length": 22.5,
+    "long_sentence_ratio": 0.15,
+    "vocabulary_richness": 0.52,
+    "grammar_issue_count": 3,
+    "academic_tone_score": 85.0,
+    "readability_score": 78.0
 }}
-```"""
+```
+
+请严格按照上述JSON格式输出，不得添加任何其他内容。"""
 
         try:
             response = await self._ai_service.generate_response(
                 prompt=user_prompt,
                 system_prompt=system_prompt,
                 max_tokens=500,
-                temperature=0.3  # 低温度以获得更稳定的评分
+                temperature=0.1  # 极低温度以获得最稳定的数值评分
             )
 
             if not response:
@@ -982,39 +1123,88 @@ class ReportAnalysisService:
         try:
             # 尝试提取 JSON 内容（处理 markdown 代码块情况）
             json_content = response.strip()
+
+            # 多种方式尝试提取 JSON 内容
+            # 1. 尝试提取 ```json 代码块
             if "```json" in json_content:
                 start = json_content.find("```json") + 7
                 end = json_content.find("```", start)
                 if end > start:
                     json_content = json_content[start:end].strip()
+            # 2. 尝试提取 ``` 代码块
             elif "```" in json_content:
-                start = json_content.find("```") + 3
-                end = json_content.find("```", start)
+                start = json_content.find("```")
+                end = json_content.find("```", start + 3)
                 if end > start:
-                    json_content = json_content[start:end].strip()
+                    # Extract content after the first ``` and before the closing ```
+                    content_after_first_backticks = json_content[start + 3:end].strip()
+                    # Check if it starts with a JSON object/array
+                    if content_after_first_backticks.lstrip().startswith(('{', '[')):
+                        json_content = content_after_first_backticks
+                    else:
+                        # If it doesn't look like JSON, use the original response
+                        json_content = response.strip()
+            # 3. If no code blocks, use the original response
+
+            # Clean up the JSON string
+            json_content = json_content.strip()
+
+            # Sometimes AI adds prefixes like "Here is the JSON:" before the actual JSON
+            # Find the first occurrence of { or [ to get the actual JSON
+            first_brace = json_content.find('{')
+            first_bracket = json_content.find('[')
+
+            if first_brace != -1 and (first_bracket == -1 or first_brace < first_bracket):
+                json_content = json_content[first_brace:]
+            elif first_bracket != -1 and (first_brace == -1 or first_bracket < first_bracket):
+                json_content = json_content[first_bracket:]
 
             data = json.loads(json_content)
 
             # 提取并验证各字段值
-            avg_sentence_length = float(data.get("average_sentence_length", 0.0))
-            if avg_sentence_length < 0:
+            avg_sentence_length_raw = data.get("average_sentence_length", 0.0)
+            try:
+                avg_sentence_length = float(avg_sentence_length_raw)
+                if avg_sentence_length < 0:
+                    avg_sentence_length = 0.0
+            except (ValueError, TypeError):
                 avg_sentence_length = 0.0
 
-            long_sentence_ratio = float(data.get("long_sentence_ratio", 0.0))
-            long_sentence_ratio = max(0.0, min(1.0, long_sentence_ratio))
+            long_sentence_ratio_raw = data.get("long_sentence_ratio", 0.0)
+            try:
+                long_sentence_ratio = float(long_sentence_ratio_raw)
+                long_sentence_ratio = max(0.0, min(1.0, long_sentence_ratio))
+            except (ValueError, TypeError):
+                long_sentence_ratio = 0.0
 
-            vocabulary_richness = float(data.get("vocabulary_richness", 0.0))
-            vocabulary_richness = max(0.0, min(1.0, vocabulary_richness))
+            vocabulary_richness_raw = data.get("vocabulary_richness", 0.0)
+            try:
+                vocabulary_richness = float(vocabulary_richness_raw)
+                vocabulary_richness = max(0.0, min(1.0, vocabulary_richness))
+            except (ValueError, TypeError):
+                vocabulary_richness = 0.0
 
-            grammar_issue_count = int(data.get("grammar_issue_count", 0))
-            if grammar_issue_count < 0:
+            grammar_issue_count_raw = data.get("grammar_issue_count", 0)
+            try:
+                grammar_issue_count = int(grammar_issue_count_raw)
+                if grammar_issue_count < 0:
+                    grammar_issue_count = 0
+            except (ValueError, TypeError):
                 grammar_issue_count = 0
 
-            academic_tone_score = float(data.get("academic_tone_score", 0.0))
-            academic_tone_score = max(0.0, min(100.0, academic_tone_score))
+            academic_tone_score_raw = data.get("academic_tone_score", 0.0)
+            try:
+                academic_tone_score = float(academic_tone_score_raw)
+                academic_tone_score = max(0.0, min(100.0, academic_tone_score))
+            except (ValueError, TypeError):
+                academic_tone_score = 0.0
 
-            readability_score = float(data.get("readability_score", 0.0))
-            readability_score = max(0.0, min(100.0, readability_score))
+            readability_score_raw = data.get("readability_score", 0.0)
+            try:
+                readability_score = float(readability_score_raw)
+                readability_score = max(0.0, min(100.0, readability_score))
+            except (ValueError, TypeError):
+                readability_score = 0.0
 
             return schemas.LanguageQualityMetrics(
                 average_sentence_length=avg_sentence_length,
@@ -1026,7 +1216,7 @@ class ReportAnalysisService:
             )
 
         except json.JSONDecodeError as e:
-            logger.warning(f"语言质量评估 JSON 解析失败: {e}")
+            logger.warning(f"语言质量评估 JSON 解析失败: {e}. 响应内容: {response[:200]}...")
             return None
         except Exception as e:
             logger.error(f"语言质量评估结果解析失败: {e}")

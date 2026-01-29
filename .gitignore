@@ -224,3 +224,6 @@ docker-compose.override.yml
 # Uploads directory content
 backend/uploads/*
 !backend/uploads/.gitkeep
+
+.qwen/
+gha-creds-*.json

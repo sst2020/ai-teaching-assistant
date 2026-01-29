@@ -22,7 +22,7 @@ def check_project_structure() -> Tuple[bool, List[str]]:
     print("=" * 60)
     print("📁 检查项目文件结构")
     print("=" * 60)
-    
+
     required_files = [
         # 后端核心文件
         ("backend/app/main.py", "后端主应用文件"),

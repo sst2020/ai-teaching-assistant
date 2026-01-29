@@ -13,10 +13,14 @@ import math
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
+import logging
+
 from models.qa_log import QALog, TriageResult, QALogStatus
 from models.knowledge_base import KnowledgeBaseEntry, DifficultyLevel
 from schemas.qa_log import QALogCreate, QALogResponse, QALogStats
 from services.knowledge_base_service import knowledge_base_service
+
+logger = logging.getLogger(__name__)
 
 
 # 中文停用词列表
@@ -242,11 +246,32 @@ class QAEngineService:
         status = QALogStatus.PENDING
 
         if matched_entry and match_score >= self.HIGH_MATCH_THRESHOLD:
+            # 知识库高匹配度，使用知识库答案
             answer = matched_entry.answer
             answer_source = "knowledge_base"
             status = QALogStatus.ANSWERED
+            triage_result = TriageResult.AUTO_REPLY
             # 增加查看次数
             await knowledge_base_service.increment_view(db, matched_entry.entry_id)
+        else:
+            # 知识库无匹配或低匹配度，使用 AI 生成回答
+            try:
+                from services.ai_service import ai_service
+                ai_result = await ai_service.answer_question(
+                    request.question,
+                    context=""
+                )
+                answer = ai_result.get("answer", "")
+                if answer and len(answer) > 10:
+                    answer_source = "ai"
+                    status = QALogStatus.ANSWERED
+                    triage_result = TriageResult.AUTO_REPLY
+                    logger.info(f"AI 回答生成成功，问题: {request.question[:50]}...")
+                else:
+                    logger.warning(f"AI 回答为空或过短，转人工处理")
+            except Exception as e:
+                logger.error(f"AI 服务调用失败: {e}，转人工处理")
+                # AI 服务失败时保持原有分诊逻辑
 
         # 计算响应时间
         response_time = (datetime.now() - start_time).total_seconds()

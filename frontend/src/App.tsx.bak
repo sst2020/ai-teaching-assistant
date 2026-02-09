@@ -10,10 +10,9 @@ import { QAInterface } from './components/QAInterface';
 import { PlagiarismCheck } from './components/PlagiarismCheck';
 import { ReportAnalysis } from './components/ReportAnalysis';
 import { DebugPanel } from './components/common/DebugPanel';
-import ErrorBoundary from './components/common/ErrorBoundary';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { KnowledgeBase, QATriage, TeacherDashboard as TeacherQuestionQueue } from './components';
-import { ApiTester, PerformanceMonitor } from './components/DevTools';
+import { ApiTester } from './components/DevTools';
 import {
   Login,
   Register,
@@ -68,11 +67,10 @@ const App: React.FC = () => {
                      process.env.REACT_APP_ENABLE_DEBUG_PANEL === 'true';
 
   return (
-    <ErrorBoundary>
-      <AuthProvider>
-        <ToastProvider>
-          <ThemeProvider>
-            <div className="app">
+    <AuthProvider>
+      <ToastProvider>
+        <ThemeProvider>
+          <div className="app">
         <Routes>
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
@@ -243,16 +241,6 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/dev/performance-monitor"
-            element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
-                <AuthenticatedLayout>
-                  <PerformanceMonitor />
-                </AuthenticatedLayout>
-              </ProtectedRoute>
-            }
-          />
 
           {/* Account settings - accessible to all authenticated users */}
           <Route
@@ -294,12 +282,12 @@ const App: React.FC = () => {
             onToggle={() => setDebugPanelVisible(!debugPanelVisible)}
           />
         )}
-            </div>
-          </ThemeProvider>
-        </ToastProvider>
-      </AuthProvider>
-    </ErrorBoundary>
+          </div>
+        </ThemeProvider>
+      </ToastProvider>
+    </AuthProvider>
   );
 };
 
 export default App;
+

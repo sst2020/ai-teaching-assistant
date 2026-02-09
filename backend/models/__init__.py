@@ -1,4 +1,4 @@
-"""
+﻿"""
 Database Models Package
 
 This package contains all SQLAlchemy ORM models for the AI Teaching Assistant.
@@ -9,6 +9,7 @@ from models.refresh_token import RefreshToken
 from models.token_blacklist import TokenBlacklist
 from models.auth_log import AuthLog
 from models.student import Student
+from models.teacher import Teacher
 from models.rubric import Rubric
 from models.assignment import Assignment, AssignmentType
 from models.submission import Submission, SubmissionStatus
@@ -37,6 +38,7 @@ __all__ = [
     "AuthLog",
     # Business Models
     "Student",
+    "Teacher",
     "Rubric",
     "Assignment",
     "Submission",
@@ -66,4 +68,3 @@ __all__ = [
     "TriageResult",
     "QALogStatus",
 ]
-

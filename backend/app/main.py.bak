@@ -17,7 +17,6 @@ import time
 import os
 
 from core.config import settings
-from core.rate_limit import SimpleRateLimitMiddleware
 from utils.logger import setup_logger, log_request_start, log_request_end, generate_request_id, set_request_id
 from core.database import async_engine, Base
 from api.health import router as health_router
@@ -25,7 +24,6 @@ from api.auth import router as auth_router
 from api.assignments import router as assignments_router
 from api.qa import router as qa_router
 from api.students import router as students_router
-from api.teachers import router as teachers_router
 from api.submissions import router as submissions_router
 from api.files import router as files_router
 from api.analysis import router as analysis_router
@@ -63,7 +61,7 @@ async def lifespan(app: FastAPI):
     async with async_engine.begin() as conn:
         # Import all models to ensure they are registered with Base
         from models import (
-            Student, Teacher, Assignment, Submission, GradingResult,
+            Student, Assignment, Submission, GradingResult,
             Question, Answer, PlagiarismCheck, Rubric, CodeFile,
             FeedbackTemplate, AIInteraction, KnowledgeBaseEntry, QALog
         )
@@ -148,7 +146,7 @@ def create_app(testing: bool = False) -> FastAPI:
             async with async_engine.begin() as conn:
                 # 导入所有模型以确保它们被注册到 Base.metadata
                 from models import (
-                    Student, Teacher, Assignment, Submission, GradingResult,
+                    Student, Assignment, Submission, GradingResult,
                     Question, Answer, PlagiarismCheck, Rubric, CodeFile,
                     AnalysisResult, FeedbackTemplate, AIInteraction,
                     KnowledgeBaseEntry, QALog
@@ -183,16 +181,12 @@ def create_app(testing: bool = False) -> FastAPI:
         allow_headers=["*"],
     )
 
-    # Rate limiting middleware (toggle via settings.RATE_LIMIT_ENABLED)
-    app.add_middleware(SimpleRateLimitMiddleware)
-
     # Include routers
     app.include_router(health_router)
     app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
     app.include_router(assignments_router, prefix=settings.API_V1_PREFIX)
     app.include_router(qa_router, prefix=settings.API_V1_PREFIX)
     app.include_router(students_router, prefix=settings.API_V1_PREFIX)
-    app.include_router(teachers_router, prefix=settings.API_V1_PREFIX)
     app.include_router(submissions_router, prefix=settings.API_V1_PREFIX)
     app.include_router(files_router, prefix=settings.API_V1_PREFIX)
     app.include_router(analysis_router, prefix=settings.API_V1_PREFIX)

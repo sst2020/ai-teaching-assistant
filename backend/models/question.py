@@ -95,6 +95,7 @@ class Question(Base, TimestampMixin):
     __table_args__ = (
         Index("ix_questions_course_status", "course_id", "status"),
         Index("ix_questions_student_created", "student_id", "created_at"),
+        {'mysql_engine': 'InnoDB'}  # 明确指定MySQL存储引擎
     )
     
     def __repr__(self) -> str:

@@ -18,10 +18,12 @@ from schemas.qa import (
     EscalationRequest
 )
 from schemas.qa_log import QALogCreate, QALogResponse, QALogStats
+from schemas.triage import TeacherAnswerRequest, TeacherAnswerResponse
 from schemas.common import APIResponse
 from services.qa_service import qa_service
 from services.qa_engine_service import qa_engine_service
 from services.ai_service import ai_service
+from api.deps import get_current_teacher
 
 logger = logging.getLogger(__name__)
 
@@ -217,6 +219,108 @@ async def get_question(question_id: str):
         raise HTTPException(status_code=404, detail="Question not found")
     
     return qa_service._questions[question_id]
+
+
+@router.get("/pending-questions", response_model=List[QALogResponse])
+async def get_pending_questions(
+    current_user = Depends(get_current_teacher),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    获取待回答的问题列表
+    
+    - 只有教师角色可以访问此端点
+    - 返回所有待处理的问题
+    """
+    try:
+        from sqlalchemy import select
+        from models.qa_log import QALog, QALogStatus, TriageResult
+        
+        # 查询所有需要教师处理的问题
+        query = select(QALog).where(
+            (QALog.triage_result == TriageResult.TO_TEACHER) |
+            (QALog.status == QALogStatus.PENDING) |
+            ((QALog.triage_result == TriageResult.TO_ASSISTANT) & (QALog.status == QALogStatus.PENDING))
+        ).order_by(QALog.priority.desc(), QALog.created_at.asc())
+        
+        result = await db.execute(query)
+        pending_questions = result.scalars().all()
+        
+        return [qa_service._log_to_response(q) for q in pending_questions]
+    except Exception as e:
+        logger.error(f"获取待回答问题失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get pending questions")
+
+
+@router.post("/answer-question", response_model=TeacherAnswerResponse)
+async def answer_question(
+    request: TeacherAnswerRequest,
+    current_user = Depends(get_current_teacher),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    教师回答问题的端点
+    
+    - 只有教师角色可以访问此端点
+    - 更新问答日志的状态为已回答
+    - 可选择性地更新知识库
+    """
+    try:
+        # 获取问答日志
+        from sqlalchemy import select
+        from models.qa_log import QALog, QALogStatus
+        from models.knowledge_base import KnowledgeBaseEntry
+        
+        query = select(QALog).where(QALog.log_id == request.log_id)
+        result = await db.execute(query)
+        qa_log = result.scalar_one_or_none()
+        
+        if not qa_log:
+            raise HTTPException(status_code=404, detail="Question log not found")
+        
+        # 更新问答日志
+        qa_log.answer = request.answer
+        qa_log.answer_source = "teacher"
+        qa_log.handled_by = current_user.name or current_user.student_id
+        qa_log.handled_at = datetime.utcnow()
+        qa_log.status = QALogStatus.ANSWERED
+        
+        # 如果需要更新知识库
+        knowledge_base_updated = False
+        new_entry_id = None
+        if request.update_knowledge_base:
+            # 创建知识库条目
+            entry = KnowledgeBaseEntry(
+                title=f"来自问题: {qa_log.question[:50]}...",
+                content=request.answer,
+                category=qa_log.detected_category or "General",
+                difficulty=qa_log.detected_difficulty or 3,
+                keywords=request.new_keywords or qa_log.question_keywords or [],
+                author_id=current_user.student_id,
+                is_approved=True
+            )
+            db.add(entry)
+            await db.flush()  # 获取新条目的ID
+            
+            knowledge_base_updated = True
+            new_entry_id = entry.entry_id
+        
+        await db.commit()
+        await db.refresh(qa_log)
+        
+        return TeacherAnswerResponse(
+            log_id=qa_log.log_id,
+            answer=qa_log.answer,
+            answered_by=qa_log.handled_by,
+            answered_at=qa_log.handled_at,
+            knowledge_base_updated=knowledge_base_updated,
+            new_entry_id=new_entry_id
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"教师回答问题失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to answer question")
 
 
 @router.get("/health")

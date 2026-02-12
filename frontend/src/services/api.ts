@@ -885,6 +885,27 @@ export const markKnowledgeBaseEntryHelpful = async (entryId: string): Promise<vo
   await apiClient.post(`${API_V1_PREFIX}/knowledge-base/${entryId}/helpful`);
 };
 
+// ============ Q&A Endpoints ============
+
+// 获取待回答问题列表（教师/管理员）
+export const getPendingQuestions = async (): Promise<QALogResponse[]> => {
+  const response = await apiClient.get<QALogResponse[]>(
+    `${API_V1_PREFIX}/qa/pending-questions`
+  );
+  return response.data;
+};
+
+// 教师回答问题
+export const answerQuestion = async (
+  request: TeacherAnswerRequest
+): Promise<TeacherAnswerResponse> => {
+  const response = await apiClient.post<TeacherAnswerResponse>(
+    `${API_V1_PREFIX}/qa/answer-question`,
+    request
+  );
+  return response.data;
+};
+
 // ============ Triage Endpoints ============
 
 export const askTriageQuestion = async (request: TriageRequest): Promise<TriageResponse> => {

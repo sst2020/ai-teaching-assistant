@@ -54,7 +54,12 @@ class Answer(Base, TimestampMixin):
         "Question",
         back_populates="answer",
     )
-    
+
+    # Indexes
+    __table_args__ = (
+        {'mysql_engine': 'InnoDB'}  # 明确指定MySQL存储引擎
+    )
+
     def __repr__(self) -> str:
         return f"<Answer(id={self.id}, question_id={self.question_id}, confidence={self.confidence})>"
     

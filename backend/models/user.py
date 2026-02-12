@@ -16,7 +16,7 @@ from core.database import Base
 class User(Base, TimestampMixin):
     """
     用户模型 - 用于认证和授权。
-    
+
     一个 User 可以关联一个 Student (学生业务数据)。
     未来可以扩展 Teacher、Admin 等角色。
     """
@@ -24,7 +24,7 @@ class User(Base, TimestampMixin):
 
     # 主键
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    
+
     # 认证信息
     student_id: Mapped[str] = mapped_column(
         String(10),
@@ -38,7 +38,7 @@ class User(Base, TimestampMixin):
         nullable=False,
         comment="bcrypt 哈希后的密码"
     )
-    
+
     # 用户信息
     role: Mapped[str] = mapped_column(
         String(50),
@@ -52,7 +52,7 @@ class User(Base, TimestampMixin):
         nullable=False,
         comment="账户是否激活"
     )
-    
+
     # 用户资料
     name: Mapped[Optional[str]] = mapped_column(
         String(100),
@@ -67,7 +67,7 @@ class User(Base, TimestampMixin):
 
     # 登录追踪
     last_login: Mapped[Optional[datetime]] = mapped_column(
-        DateTime,
+        DateTime(timezone=True),
         nullable=True,
         comment="最后登录时间"
     )

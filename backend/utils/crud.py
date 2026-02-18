@@ -14,7 +14,7 @@ from sqlalchemy.orm import selectinload
 from core.database import Base
 from models import (
     User, RefreshToken, TokenBlacklist, AuthLog,
-    Student, Assignment, Submission, GradingResult,
+    Student, Teacher, Assignment, Submission, GradingResult,
     Question, Answer, PlagiarismCheck, Rubric, AnalysisResult,
     FeedbackTemplate, AIInteraction
 )
@@ -722,7 +722,38 @@ crud_refresh_token = CRUDRefreshToken(RefreshToken)
 crud_token_blacklist = CRUDTokenBlacklist(TokenBlacklist)
 crud_auth_log = CRUDBase(AuthLog)  # AuthLog 使用基础 CRUD 操作即可
 
+# Teacher CRUD
+class CRUDTeacher(CRUDBase[Teacher]):
+    """CRUD operations for Teacher model."""
+
+    async def get_by_teacher_id(self, db: AsyncSession, teacher_id: str) -> Optional[Teacher]:
+        """Get teacher by unique teacher_id."""
+        result = await db.execute(
+            select(Teacher).where(Teacher.teacher_id == teacher_id)
+        )
+        return result.scalar_one_or_none()
+
+    async def get_by_email(self, db: AsyncSession, email: str) -> Optional[Teacher]:
+        """Get teacher by email."""
+        result = await db.execute(
+            select(Teacher).where(Teacher.email == email)
+        )
+        return result.scalar_one_or_none()
+
+    async def get_by_department(
+        self, db: AsyncSession, department: str, skip: int = 0, limit: int = 100
+    ) -> List[Teacher]:
+        """Get teachers by department."""
+        result = await db.execute(
+            select(Teacher)
+            .where(Teacher.department == department)
+            .offset(skip).limit(limit)
+        )
+        return list(result.scalars().all())
+
+
 crud_student = CRUDStudent(Student)
+crud_teacher = CRUDTeacher(Teacher)
 crud_assignment = CRUDAssignment(Assignment)
 crud_submission = CRUDSubmission(Submission)
 crud_code_file = CRUDCodeFile(CodeFile)

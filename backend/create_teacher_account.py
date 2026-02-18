@@ -1,15 +1,45 @@
 """
-创建测试账号
+创建标准测试账号
 
 使用方法：
     cd backend
-    python create_teacher_account.py           # 创建教师账号
-    python create_teacher_account.py student   # 创建学生账号
+    python create_teacher_account.py           # 创建全部3个测试账号
+    python create_teacher_account.py admin     # 仅创建管理员账号
+    python create_teacher_account.py teacher   # 仅创建教师账号
+    python create_teacher_account.py student   # 仅创建学生账号
+
+标准测试账号：
+    管理员: 0000000001 / Admin123456
+    教师:   0000000002 / Teacher123456
+    学生:   0000000003 / Student123456
 """
 import sqlite3
 import bcrypt
 import sys
 from datetime import datetime
+
+
+# 标准测试账号配置
+TEST_ACCOUNTS = {
+    'admin': {
+        'student_id': '0000000001',
+        'name': '管理员',
+        'password': 'Admin123456',
+        'role': 'admin',
+    },
+    'teacher': {
+        'student_id': '0000000002',
+        'name': '测试教师',
+        'password': 'Teacher123456',
+        'role': 'teacher',
+    },
+    'student': {
+        'student_id': '0000000003',
+        'name': '测试学生',
+        'password': 'Student123456',
+        'role': 'student',
+    },
+}
 
 
 def hash_password(password: str) -> str:
@@ -45,8 +75,8 @@ def create_account(student_id: str, name: str, password: str, role: str):
     user_id = cursor.lastrowid
     print(f"创建 User 记录成功，ID: {user_id}")
 
-    # 创建 Student 记录
-    email = f"{student_id}@student.local"
+    # 创建 Student 记录（所有角色都需要关联 student 表）
+    email = f"{student_id}@test.local"
     cursor.execute('''
         INSERT INTO students (student_id, name, email, user_id, created_at, updated_at)
         VALUES (?, ?, ?, ?, ?, ?)
@@ -59,17 +89,25 @@ def create_account(student_id: str, name: str, password: str, role: str):
     conn.close()
 
     print(f"\n=== {role} 测试账号创建成功 ===")
-    print(f"学号: {student_id}")
+    print(f"账号: {student_id}")
     print(f"姓名: {name}")
     print(f"密码: {password}")
     print(f"角色: {role}")
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argv[1] == 'student':
-        # 创建学生测试账号
-        create_account('2000000001', '测试学生', 'student123', 'student')
+    if len(sys.argv) > 1:
+        # 创建指定角色的账号
+        target = sys.argv[1].lower()
+        if target in TEST_ACCOUNTS:
+            acc = TEST_ACCOUNTS[target]
+            create_account(acc['student_id'], acc['name'], acc['password'], acc['role'])
+        else:
+            print(f"未知角色: {target}，可选: admin, teacher, student")
     else:
-        # 创建教师测试账号
-        create_account('1000000001', '测试教师', 'teacher123', 'teacher')
+        # 创建全部3个标准测试账号
+        print("=== 创建全部标准测试账号 ===\n")
+        for role_key, acc in TEST_ACCOUNTS.items():
+            create_account(acc['student_id'], acc['name'], acc['password'], acc['role'])
+            print()
 

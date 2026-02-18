@@ -73,103 +73,76 @@ const Header: React.FC<HeaderProps> = () => {
     return null;
   };
 
+  // 学生导航项
+  const studentNavItems = () => (
+    <>
+      <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        🏠 {t('menu.dashboard')}
+      </NavLink>
+      <NavLink to="/submit/assignment" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        📝 {t('menu.submitAssignment')}
+      </NavLink>
+      <NavLink to="/grades" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        📊 {t('menu.grades')}
+      </NavLink>
+    </>
+  );
+
+  // 教师导航项
+  const teacherNavItems = () => (
+    <>
+      <NavLink to="/teacher" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        👨‍🏫 {t('menu.teacherDashboard')}
+      </NavLink>
+      <NavLink to="/grading" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        ✍️ {t('menu.grading')}
+      </NavLink>
+      <NavLink to="/manage-assignments" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        📋 {t('menu.manageAssignments')}
+      </NavLink>
+      <NavLink to="/question-queue" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        ❓ {t('menu.questionQueue')}
+      </NavLink>
+      <NavLink to="/code-analysis" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        📊 {t('menu.codeAnalysis')}
+      </NavLink>
+      <NavLink to="/plagiarism" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        🔍 {t('menu.plagiarism')}
+      </NavLink>
+      <NavLink to="/report-analysis" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        📑 {t('menu.reportAnalysis')}
+      </NavLink>
+    </>
+  );
+
+  // 公共导航项（所有角色可见）
+  const commonNavItems = () => (
+    <>
+      <NavLink to="/smart-qa" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        💬 {t('menu.smartQA')}
+      </NavLink>
+    </>
+  );
+
   // 根据用户角色渲染导航项
   const renderNavigationItems = () => {
     if (!isAuthenticated || !user) return null;
 
     const role = user.role;
 
-    // 学生导航项
+    // 学生：仅学生区 + 公共
     if (role === 'student') {
-      return (
-        <>
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            🏠 {t('menu.dashboard')}
-          </NavLink>
-          <NavLink
-            to="/submit/assignment" // 使用通用路径，实际应用中应根据实际情况调整
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            📝 {t('menu.submitAssignment')}
-          </NavLink>
-          <NavLink
-            to="/grades"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            📊 {t('menu.grades')}
-          </NavLink>
-          <NavLink
-            to="/smart-qa"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            💬 {t('menu.smartQA')}
-          </NavLink>
-        </>
-      );
+      return <>{studentNavItems()}{commonNavItems()}</>;
     }
 
-    // 教师和管理员导航项
-    if (role === 'teacher' || role === 'admin') {
+    // 教师：仅教师区 + 公共
+    if (role === 'teacher') {
       return (
         <>
-          <NavLink
-            to="/teacher"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            👨‍🏫 {t('menu.teacherDashboard')}
-          </NavLink>
-          <NavLink
-            to="/grading"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            ✍️ {t('menu.grading')}
-          </NavLink>
-          <NavLink
-            to="/manage-assignments"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            📋 {t('menu.manageAssignments')}
-          </NavLink>
-          <NavLink
-            to="/question-queue"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            ❓ {t('menu.questionQueue')}
-          </NavLink>
-          <NavLink
-            to="/code-analysis"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            📊 {t('menu.codeAnalysis')}
-          </NavLink>
-          <NavLink
-            to="/plagiarism"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            🔍 {t('menu.plagiarism')}
-          </NavLink>
-          <NavLink
-            to="/report-analysis"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            📑 {t('menu.reportAnalysis')}
-          </NavLink>
-          {/* 教师也可以访问学生功能进行演示 */}
-          <NavLink
-            to="/smart-qa"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            💬 {t('menu.smartQA')}
-          </NavLink>
-          {/* 开发工具 - 仅开发环境显示 */}
+          {teacherNavItems()}
+          {commonNavItems()}
           {process.env.NODE_ENV === 'development' && (
-            <NavLink
-              to="/dev/api-tester"
-              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-            >
+            <NavLink to="/dev/api-tester" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               🔧 API 测试
             </NavLink>
           )}
@@ -177,7 +150,22 @@ const Header: React.FC<HeaderProps> = () => {
       );
     }
 
-    // 默认返回空导航
+    // 管理员：学生区 + 教师区 + 公共（全部可见）
+    if (role === 'admin') {
+      return (
+        <>
+          {studentNavItems()}
+          {teacherNavItems()}
+          {commonNavItems()}
+          {process.env.NODE_ENV === 'development' && (
+            <NavLink to="/dev/api-tester" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              🔧 API 测试
+            </NavLink>
+          )}
+        </>
+      );
+    }
+
     return null;
   };
 
@@ -185,7 +173,7 @@ const Header: React.FC<HeaderProps> = () => {
     <header className="app-header">
       <div className="header-content">
         <div className="header-brand">
-          <NavLink to={user?.role === 'teacher' || user?.role === 'admin' ? '/teacher' : '/dashboard'} className="brand-link">
+          <NavLink to={user?.role === 'teacher' ? '/manage-assignments' : '/dashboard'} className="brand-link">
             <span className="header-logo">🎓</span>
             <h1 className="header-title">{t('appTitle')}</h1>
           </NavLink>

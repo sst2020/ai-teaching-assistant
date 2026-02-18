@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Header } from './components/layout';
@@ -12,6 +12,7 @@ import { ReportAnalysis } from './components/ReportAnalysis';
 import { DebugPanel } from './components/common/DebugPanel';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import { getRoleHomePath } from './components/common/ProtectedRoute';
 import { KnowledgeBase, QATriage, TeacherDashboard as TeacherQuestionQueue } from './components';
 import { ApiTester, PerformanceMonitor } from './components/DevTools';
 import {
@@ -27,6 +28,16 @@ import {
   Forbidden,
 } from './pages';
 import './App.css';
+
+/**
+ * 根据用户角色重定向到对应首页的组件
+ */
+const RoleBasedRedirect: React.FC = () => {
+  const { user, isAuthenticated, isLoading } = useAuth();
+  if (isLoading) return null;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  return <Navigate to={getRoleHomePath(user?.role)} replace />;
+};
 
 // Layout component for authenticated pages
 const AuthenticatedLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -78,21 +89,17 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Default redirect based on user role */}
+          {/* 根路径：按角色智能跳转 */}
           <Route
             path="/"
-            element={
-              <ProtectedRoute>
-                <Navigate to="/dashboard" replace />
-              </ProtectedRoute>
-            }
+            element={<RoleBasedRedirect />}
           />
 
-          {/* Student routes */}
+          {/* Student routes - student + admin 可访问 */}
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute allowedRoles={['student', 'teacher', 'admin']}>
+              <ProtectedRoute allowedRoles={['student', 'admin']}>
                 <AuthenticatedLayout>
                   <StudentDashboard />
                 </AuthenticatedLayout>
@@ -102,7 +109,7 @@ const App: React.FC = () => {
           <Route
             path="/submit/:assignmentId"
             element={
-              <ProtectedRoute allowedRoles={['student']}>
+              <ProtectedRoute allowedRoles={['student', 'admin']}>
                 <AuthenticatedLayout>
                   <SubmitAssignment />
                 </AuthenticatedLayout>
@@ -112,7 +119,7 @@ const App: React.FC = () => {
           <Route
             path="/grades"
             element={
-              <ProtectedRoute allowedRoles={['student']}>
+              <ProtectedRoute allowedRoles={['student', 'admin']}>
                 <AuthenticatedLayout>
                   <Grades />
                 </AuthenticatedLayout>
@@ -146,11 +153,11 @@ const App: React.FC = () => {
             }
           />
 
-          {/* Teacher/Admin routes */}
+          {/* Teacher/Admin routes - teacher + admin 可访问 */}
           <Route
             path="/teacher"
             element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+              <ProtectedRoute allowedRoles={['teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <TeacherDashboard />
                 </AuthenticatedLayout>
@@ -160,7 +167,7 @@ const App: React.FC = () => {
           <Route
             path="/manage-assignments"
             element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+              <ProtectedRoute allowedRoles={['teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <ManageAssignments />
                 </AuthenticatedLayout>
@@ -170,7 +177,7 @@ const App: React.FC = () => {
           <Route
             path="/grading"
             element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+              <ProtectedRoute allowedRoles={['teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <GradingInterface />
                 </AuthenticatedLayout>
@@ -180,7 +187,7 @@ const App: React.FC = () => {
           <Route
             path="/question-queue"
             element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+              <ProtectedRoute allowedRoles={['teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <React.Suspense fallback={<div>加载中...</div>}>
                     <TeacherQuestionQueue teacherId="teacher_001" teacherName="教师" />
@@ -194,7 +201,7 @@ const App: React.FC = () => {
           <Route
             path="/code-analysis"
             element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+              <ProtectedRoute allowedRoles={['teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <CodeAnalysis />
                 </AuthenticatedLayout>
@@ -204,7 +211,7 @@ const App: React.FC = () => {
           <Route
             path="/qa"
             element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+              <ProtectedRoute allowedRoles={['teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <QAInterface />
                 </AuthenticatedLayout>
@@ -214,7 +221,7 @@ const App: React.FC = () => {
           <Route
             path="/plagiarism"
             element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+              <ProtectedRoute allowedRoles={['teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <PlagiarismCheck />
                 </AuthenticatedLayout>
@@ -224,7 +231,7 @@ const App: React.FC = () => {
           <Route
             path="/report-analysis"
             element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+              <ProtectedRoute allowedRoles={['teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <ReportAnalysis />
                 </AuthenticatedLayout>
@@ -236,7 +243,7 @@ const App: React.FC = () => {
           <Route
             path="/dev/api-tester"
             element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+              <ProtectedRoute allowedRoles={['teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <ApiTester />
                 </AuthenticatedLayout>
@@ -246,7 +253,7 @@ const App: React.FC = () => {
           <Route
             path="/dev/performance-monitor"
             element={
-              <ProtectedRoute allowedRoles={['teacher', 'admin']} fallbackPath="/dashboard">
+              <ProtectedRoute allowedRoles={['teacher', 'admin']}>
                 <AuthenticatedLayout>
                   <PerformanceMonitor />
                 </AuthenticatedLayout>
@@ -276,14 +283,10 @@ const App: React.FC = () => {
             }
           />
 
-          {/* Fallback route for unknown paths */}
+          {/* Fallback route for unknown paths - 按角色跳转到对应首页 */}
           <Route
             path="*"
-            element={
-              <ProtectedRoute>
-                <Navigate to="/dashboard" replace />
-              </ProtectedRoute>
-            }
+            element={<RoleBasedRedirect />}
           />
         </Routes>
 

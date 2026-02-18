@@ -5,6 +5,22 @@ import LoadingSpinner from './LoadingSpinner';
 import Forbidden from '../../pages/Forbidden';
 import './ProtectedRoute.css';
 
+/**
+ * 根据用户角色获取默认首页路径
+ */
+export const getRoleHomePath = (role?: string): string => {
+  switch (role) {
+    case 'admin':
+      return '/dashboard';
+    case 'teacher':
+      return '/manage-assignments';
+    case 'student':
+      return '/dashboard';
+    default:
+      return '/login';
+  }
+};
+
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredRole?: 'student' | 'teacher' | 'admin';
@@ -17,16 +33,20 @@ interface ProtectedRouteProps {
  * ProtectedRoute component that wraps routes requiring authentication.
  * Redirects to login page if user is not authenticated.
  * Optionally checks for specific user roles.
+ * When access is denied, redirects to the user's role-based home page.
  */
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requiredRole,
   allowedRoles,
-  fallbackPath = '/dashboard',
+  fallbackPath,
   showForbiddenPage = false
 }) => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
+
+  // 根据角色计算实际的 fallback 路径
+  const resolvedFallbackPath = fallbackPath || getRoleHomePath(user?.role);
 
   // Show loading spinner while checking authentication
   if (isLoading) {
@@ -45,20 +65,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // Check for required role if specified
   if (requiredRole && user?.role !== requiredRole) {
-    // User doesn't have the required role
     if (showForbiddenPage) {
       return <Forbidden />;
     }
-    return <Navigate to={fallbackPath} replace />;
+    return <Navigate to={resolvedFallbackPath} replace />;
   }
 
   // Check for allowed roles if specified
   if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    // User doesn't have any of the allowed roles
     if (showForbiddenPage) {
       return <Forbidden />;
     }
-    return <Navigate to={fallbackPath} replace />;
+    return <Navigate to={resolvedFallbackPath} replace />;
   }
 
   // User is authenticated (and has required role if specified)

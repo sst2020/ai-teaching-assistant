@@ -80,6 +80,13 @@ class User(Base, TimestampMixin):
         uselist=False,
         cascade="all, delete-orphan"
     )
+
+    # 一对一: User -> Teacher
+    teacher: Mapped[Optional["Teacher"]] = relationship(
+        "Teacher",
+        back_populates="user",
+        uselist=False
+    )
     
     # 一对多: User -> RefreshToken
     refresh_tokens: Mapped[list["RefreshToken"]] = relationship(

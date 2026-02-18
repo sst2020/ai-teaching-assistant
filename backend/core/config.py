@@ -96,6 +96,7 @@ class Settings(BaseSettings):
     TOKEN_URL: str = "/api/v1/auth/login"
 
     # Rate Limiting
+    RATE_LIMIT_ENABLED: bool = True
     RATE_LIMIT_REQUESTS: int = 100
     RATE_LIMIT_PERIOD: int = 60
 

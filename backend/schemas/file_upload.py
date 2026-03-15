@@ -2,7 +2,7 @@
 Schemas for File Upload and Parsing API
 """
 from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any
+from typing import Optional, List
 from datetime import datetime
 from enum import Enum
 
@@ -21,6 +21,7 @@ class ProgrammingLanguage(str, Enum):
     JAVA = "java"
     JAVASCRIPT = "javascript"
     TYPESCRIPT = "typescript"
+    PHP = "php"
     C = "c"
     CPP = "cpp"
     JSX = "jsx"
@@ -155,4 +156,13 @@ class FileContentResponse(BaseModel):
     content: str = Field(..., description="File content")
     language: ProgrammingLanguage = Field(..., description="Programming language")
     line_count: int = Field(..., description="Number of lines")
+
+
+class DocumentParseResponse(BaseModel):
+    """Response for parsed document files."""
+    file_id: str = Field(..., description="Unique file identifier")
+    file_extension: str = Field(..., description="Document file extension")
+    content: str = Field(..., description="Extracted document text content")
+    line_count: int = Field(..., description="Number of text lines extracted")
+    parsed_at: datetime = Field(..., description="Timestamp of parsing")
 

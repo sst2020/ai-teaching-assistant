@@ -262,6 +262,82 @@
   text-decoration: none;
 }
 
+@keyframes studentDashboardFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes studentDashboardRise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.student-dashboard {
+  animation: studentDashboardFadeIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.student-dashboard .dashboard-header,
+.student-dashboard .stats-grid,
+.student-dashboard .dashboard-section {
+  animation: studentDashboardRise var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) both;
+}
+
+.student-dashboard .stats-grid {
+  animation-delay: 50ms;
+}
+
+.student-dashboard .dashboard-section:first-child {
+  animation-delay: 100ms;
+}
+
+.student-dashboard .dashboard-section:last-child {
+  animation-delay: 150ms;
+}
+
+.student-dashboard .stat-card,
+.student-dashboard .assignment-card,
+.student-dashboard .course-card {
+  will-change: transform, box-shadow;
+}
+
+.student-dashboard .assignment-card,
+.student-dashboard .course-card {
+  transition:
+    background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-emphasized),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.student-dashboard .assignment-card:hover,
+.student-dashboard .course-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.student-dashboard .submit-btn,
+.student-dashboard .view-all-link {
+  transition:
+    transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-emphasized),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.student-dashboard .submit-btn:hover,
+.student-dashboard .view-all-link:hover {
+  transform: translateY(-1px);
+}
+
+.student-dashboard .submit-btn:active {
+  transform: translateY(0);
+}
+
+.student-dashboard .empty-message {
+  border: 1px dashed var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-low);
+  animation: studentDashboardRise var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) both;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .student-dashboard {

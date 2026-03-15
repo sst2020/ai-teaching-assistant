@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { LoadingSpinner, ErrorMessage } from '../components/common';
+import { getRoleHomePath } from '../components/common/ProtectedRoute';
 import './Login.css';
 
 interface LocationState {
@@ -15,19 +16,19 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [formErrors, setFormErrors] = useState<{ studentId?: string; password?: string }>({});
 
-  const { login, isLoading, error, isAuthenticated, clearError } = useAuth();
+  const { login, isLoading, error, isAuthenticated, user, clearError } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const state = location.state as LocationState;
-  const from = state?.from?.pathname || '/dashboard';
+  const redirectPath = state?.from?.pathname || getRoleHomePath(user?.role);
 
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(from, { replace: true });
+      navigate(redirectPath, { replace: true });
     }
-  }, [isAuthenticated, navigate, from]);
+  }, [isAuthenticated, navigate, redirectPath]);
 
   // Clear errors when component unmounts
   useEffect(() => {

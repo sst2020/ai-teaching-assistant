@@ -95,11 +95,11 @@ const App: React.FC = () => {
             element={<RoleBasedRedirect />}
           />
 
-          {/* Student routes - student + admin 可访问 */}
+          {/* Student routes - 仅 student 可访问 */}
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute allowedRoles={['student', 'admin']}>
+              <ProtectedRoute allowedRoles={['student']}>
                 <AuthenticatedLayout>
                   <StudentDashboard />
                 </AuthenticatedLayout>
@@ -109,7 +109,7 @@ const App: React.FC = () => {
           <Route
             path="/submit/:assignmentId"
             element={
-              <ProtectedRoute allowedRoles={['student', 'admin']}>
+              <ProtectedRoute allowedRoles={['student']}>
                 <AuthenticatedLayout>
                   <SubmitAssignment />
                 </AuthenticatedLayout>
@@ -119,7 +119,7 @@ const App: React.FC = () => {
           <Route
             path="/grades"
             element={
-              <ProtectedRoute allowedRoles={['student', 'admin']}>
+              <ProtectedRoute allowedRoles={['student']}>
                 <AuthenticatedLayout>
                   <Grades />
                 </AuthenticatedLayout>

@@ -34,6 +34,8 @@ interface AssignmentFormData {
   late_penalty_percent: number;
 }
 
+const MODAL_EXIT_DURATION_MS = 180;
+
 const initialFormData: AssignmentFormData = {
   title: '',
   description: '',
@@ -64,6 +66,8 @@ const ManageAssignments: React.FC = () => {
 
   // 表单状态
   const [showForm, setShowForm] = useState(false);
+  const [isFormRendered, setIsFormRendered] = useState(false);
+  const [isFormClosing, setIsFormClosing] = useState(false);
   const [formData, setFormData] = useState<AssignmentFormData>(initialFormData);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -117,6 +121,27 @@ const ManageAssignments: React.FC = () => {
     }
   }, [editId, loadAssignment]);
 
+  useEffect(() => {
+    if (showForm) {
+      setIsFormRendered(true);
+      setIsFormClosing(false);
+      return;
+    }
+
+    if (isFormRendered) {
+      setIsFormClosing(true);
+      const timer = window.setTimeout(() => {
+        setIsFormRendered(false);
+        setIsFormClosing(false);
+        setFormData(initialFormData);
+        setEditingId(null);
+        navigate('/manage-assignments', { replace: true });
+      }, MODAL_EXIT_DURATION_MS);
+
+      return () => window.clearTimeout(timer);
+    }
+  }, [showForm, isFormRendered, navigate]);
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -138,8 +163,6 @@ const ManageAssignments: React.FC = () => {
 
       // 模拟成功
       setShowForm(false);
-      setFormData(initialFormData);
-      setEditingId(null);
       loadAssignments();
     } catch (err) {
       setError(t('saveError'));
@@ -166,14 +189,13 @@ const ManageAssignments: React.FC = () => {
   const openCreateForm = () => {
     setFormData(initialFormData);
     setEditingId(null);
+    setIsFormClosing(false);
     setShowForm(true);
   };
 
   const closeForm = () => {
+    if (!showForm) return;
     setShowForm(false);
-    setFormData(initialFormData);
-    setEditingId(null);
-    navigate('/manage-assignments', { replace: true });
   };
 
   const formatDate = (dateStr: string) => {
@@ -324,9 +346,9 @@ const ManageAssignments: React.FC = () => {
       </div>
 
       {/* 创建/编辑表单模态框 */}
-      {showForm && (
-        <div className="modal-overlay" onClick={closeForm}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      {isFormRendered && (
+        <div className={`modal-overlay ${isFormClosing ? 'modal-overlay-closing' : 'modal-overlay-open'}`} onClick={closeForm}>
+          <div className={`modal-content ${isFormClosing ? 'modal-content-closing' : 'modal-content-open'}`} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>{editingId ? t('form.editTitle') : t('form.createTitle')}</h2>
               <button className="btn-close" onClick={closeForm}>×</button>

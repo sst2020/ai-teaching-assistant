@@ -72,9 +72,16 @@ class Settings(BaseSettings):
     # File Upload Settings
     MAX_UPLOAD_SIZE: int = 10 * 1024 * 1024  # 10MB
     UPLOAD_DIR: str = "./uploads"
+    UPLOAD_STORAGE_BACKEND: str = "local"
+    UPLOAD_S3_BUCKET: Optional[str] = None
+    UPLOAD_S3_REGION: Optional[str] = None
+    UPLOAD_S3_ENDPOINT_URL: Optional[str] = None
+    UPLOAD_S3_KEY_PREFIX: str = "uploads"
+    UPLOAD_S3_ACCESS_KEY_ID: Optional[str] = None
+    UPLOAD_S3_SECRET_ACCESS_KEY: Optional[str] = None
     ALLOWED_EXTENSIONS: List[str] = [
         ".py", ".java", ".cpp", ".c", ".cc", ".cxx",
-        ".js", ".jsx", ".ts", ".tsx",
+        ".js", ".jsx", ".ts", ".tsx", ".php",
         ".h", ".hpp",
         ".pdf", ".docx", ".txt"
     ]

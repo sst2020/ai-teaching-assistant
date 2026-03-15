@@ -1,5 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './ConfirmDialog.css';
+
+const DIALOG_EXIT_DURATION_MS = 180;
 
 export interface ConfirmDialogProps {
   isOpen: boolean;
@@ -24,12 +26,34 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
+  const [isRendered, setIsRendered] = useState(isOpen);
+  const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsRendered(true);
+      setIsClosing(false);
+      return;
+    }
+
+    if (isRendered) {
+      setIsClosing(true);
+      const timer = window.setTimeout(() => {
+        setIsRendered(false);
+        setIsClosing(false);
+      }, DIALOG_EXIT_DURATION_MS);
+
+      return () => window.clearTimeout(timer);
+    }
+  }, [isOpen, isRendered]);
 
   // Focus trap and keyboard handling
   useEffect(() => {
-    if (isOpen) {
+    if (isRendered) {
       // Focus the confirm button when dialog opens
-      confirmButtonRef.current?.focus();
+      if (isOpen && !isClosing) {
+        confirmButtonRef.current?.focus();
+      }
 
       // Handle escape key
       const handleKeyDown = (e: KeyboardEvent) => {
@@ -63,13 +87,13 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         document.body.style.overflow = '';
       };
     }
-  }, [isOpen, onCancel]);
+  }, [isRendered, isOpen, isClosing, onCancel]);
 
-  if (!isOpen) return null;
+  if (!isRendered) return null;
 
   return (
     <div 
-      className="confirm-dialog-overlay" 
+      className={`confirm-dialog-overlay ${isClosing ? 'confirm-dialog-overlay-closing' : 'confirm-dialog-overlay-open'}`}
       onClick={onCancel}
       role="dialog"
       aria-modal="true"
@@ -78,7 +102,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     >
       <div 
         ref={dialogRef}
-        className={`confirm-dialog confirm-dialog-${variant}`}
+        className={`confirm-dialog confirm-dialog-${variant} ${isClosing ? 'confirm-dialog-closing' : 'confirm-dialog-open'}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="confirm-dialog-header">

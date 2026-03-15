@@ -141,6 +141,70 @@
   outline-color: #fff;
 }
 
+@keyframes confirmDialogOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes confirmDialogOverlayOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes confirmDialogPanelIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes confirmDialogPanelOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(8px) scale(0.97); }
+}
+
+.confirm-dialog-overlay {
+  opacity: 0;
+  backdrop-filter: blur(4px);
+}
+
+.confirm-dialog-overlay-open {
+  animation: confirmDialogOverlayIn var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard) forwards;
+}
+
+.confirm-dialog-overlay-closing {
+  animation: confirmDialogOverlayOut var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard) forwards;
+}
+
+.confirm-dialog {
+  opacity: 0;
+  transform-origin: center;
+}
+
+.confirm-dialog-open {
+  animation: confirmDialogPanelIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) forwards;
+}
+
+.confirm-dialog-closing {
+  animation: confirmDialogPanelOut var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard) forwards;
+}
+
+.confirm-dialog-cancel,
+.confirm-dialog-confirm {
+  transition:
+    transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-emphasized),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.confirm-dialog-cancel:hover,
+.confirm-dialog-confirm:hover {
+  transform: translateY(-1px);
+}
+
+.confirm-dialog-cancel:active,
+.confirm-dialog-confirm:active {
+  transform: translateY(0);
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .confirm-dialog {

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { getHealthStatus } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
+import { getRoleHomePath } from '../common/ProtectedRoute';
 import './Header.css';
 
 interface HeaderProps {
@@ -150,11 +151,10 @@ const Header: React.FC<HeaderProps> = () => {
       );
     }
 
-    // 管理员：学生区 + 教师区 + 公共（全部可见）
+    // 管理员：教师区 + 公共
     if (role === 'admin') {
       return (
         <>
-          {studentNavItems()}
           {teacherNavItems()}
           {commonNavItems()}
           {process.env.NODE_ENV === 'development' && (
@@ -173,7 +173,7 @@ const Header: React.FC<HeaderProps> = () => {
     <header className="app-header">
       <div className="header-content">
         <div className="header-brand">
-          <NavLink to={user?.role === 'teacher' ? '/manage-assignments' : '/dashboard'} className="brand-link">
+          <NavLink to={getRoleHomePath(user?.role)} className="brand-link">
             <span className="header-logo">🎓</span>
             <h1 className="header-title">{t('appTitle')}</h1>
           </NavLink>

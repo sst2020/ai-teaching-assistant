@@ -23,7 +23,7 @@ from schemas.common import APIResponse
 from services.qa_service import qa_service
 from services.qa_engine_service import qa_engine_service
 from services.ai_service import ai_service
-from api.deps import get_current_teacher
+from api.deps import get_current_teacher_or_admin
 
 logger = logging.getLogger(__name__)
 
@@ -223,13 +223,13 @@ async def get_question(question_id: str):
 
 @router.get("/pending-questions", response_model=List[QALogResponse])
 async def get_pending_questions(
-    current_user = Depends(get_current_teacher),
+    current_user = Depends(get_current_teacher_or_admin),
     db: AsyncSession = Depends(get_db)
 ):
     """
     获取待回答的问题列表
     
-    - 只有教师角色可以访问此端点
+    - 教师和管理员角色可以访问此端点
     - 返回所有待处理的问题
     """
     try:
@@ -255,13 +255,13 @@ async def get_pending_questions(
 @router.post("/answer-question", response_model=TeacherAnswerResponse)
 async def answer_question(
     request: TeacherAnswerRequest,
-    current_user = Depends(get_current_teacher),
+    current_user = Depends(get_current_teacher_or_admin),
     db: AsyncSession = Depends(get_db)
 ):
     """
     教师回答问题的端点
     
-    - 只有教师角色可以访问此端点
+    - 教师和管理员角色可以访问此端点
     - 更新问答日志的状态为已回答
     - 可选择性地更新知识库
     """

@@ -192,4 +192,33 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
+  .teacher-dashboard,
+  .student-dashboard,
+  .submit-assignment,
+  .manage-assignments,
+  .grading-interface,
+  .confirm-dialog,
+  .confirm-dialog-overlay,
+  .modal-content,
+  .modal-overlay,
+  .stat-card,
+  .action-card,
+  .assignment-card,
+  .course-card,
+  .grading-item,
+  .criterion-card,
+  .warning-banner,
+  .info-banner,
+  .empty-state,
+  .no-selection,
+  .loading {
+    transform: none !important;
+  }
+
+  .teacher-dashboard .loading-container p,
+  .submit-assignment-loading p,
+  .submit-assignment-error p {
+    animation: none !important;
+  }
 }

@@ -377,6 +377,122 @@
   background: #d32f2f;
 }
 
+@keyframes teacherDashboardFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes teacherSectionRise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes teacherStatusPulse {
+  0%, 100% { opacity: 0.65; }
+  50% { opacity: 1; }
+}
+
+.teacher-dashboard {
+  animation: teacherDashboardFadeIn var(--md-sys-motion-duration-medium2, 320ms) var(--md-sys-motion-easing-emphasized-decelerate, ease-out);
+}
+
+.teacher-dashboard .dashboard-header,
+.teacher-dashboard .quick-actions,
+.teacher-dashboard .recent-assignments,
+.teacher-dashboard .urgent-alerts,
+.teacher-dashboard .error-banner,
+.teacher-dashboard .loading-container {
+  animation: teacherSectionRise var(--md-sys-motion-duration-medium2, 320ms) var(--md-sys-motion-easing-emphasized-decelerate, ease-out) both;
+}
+
+.teacher-dashboard .stats-grid {
+  animation: teacherSectionRise var(--md-sys-motion-duration-medium2, 320ms) var(--md-sys-motion-easing-emphasized-decelerate, ease-out) 60ms both;
+}
+
+.teacher-dashboard .stat-card,
+.teacher-dashboard .action-card {
+  transform-origin: center;
+  will-change: transform, box-shadow, opacity;
+}
+
+.teacher-dashboard .stat-card {
+  opacity: 0;
+  animation: teacherSectionRise var(--md-sys-motion-duration-medium2, 320ms) var(--md-sys-motion-easing-emphasized-decelerate, ease-out) forwards;
+}
+
+.teacher-dashboard .stat-card:nth-child(1) { animation-delay: 40ms; }
+.teacher-dashboard .stat-card:nth-child(2) { animation-delay: 90ms; }
+.teacher-dashboard .stat-card:nth-child(3) { animation-delay: 140ms; }
+.teacher-dashboard .stat-card:nth-child(4) { animation-delay: 190ms; }
+
+.teacher-dashboard .action-card {
+  opacity: 0;
+  animation: teacherSectionRise var(--md-sys-motion-duration-medium2, 320ms) var(--md-sys-motion-easing-emphasized-decelerate, ease-out) forwards;
+}
+
+.teacher-dashboard .action-card:nth-child(1) { animation-delay: 70ms; }
+.teacher-dashboard .action-card:nth-child(2) { animation-delay: 110ms; }
+.teacher-dashboard .action-card:nth-child(3) { animation-delay: 150ms; }
+.teacher-dashboard .action-card:nth-child(4) { animation-delay: 190ms; }
+
+.teacher-dashboard .btn-primary,
+.teacher-dashboard .btn-secondary,
+.teacher-dashboard .btn-icon,
+.teacher-dashboard .alert-action {
+  transition: transform 0.18s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.teacher-dashboard .btn-primary:hover,
+.teacher-dashboard .btn-secondary:hover,
+.teacher-dashboard .btn-icon:hover,
+.teacher-dashboard .alert-action:hover {
+  transform: translateY(-1px);
+}
+
+.teacher-dashboard .btn-primary:active,
+.teacher-dashboard .btn-secondary:active,
+.teacher-dashboard .btn-icon:active,
+.teacher-dashboard .alert-action:active {
+  transform: translateY(0);
+}
+
+.teacher-dashboard .btn-primary:focus-visible,
+.teacher-dashboard .btn-secondary:focus-visible,
+.teacher-dashboard .btn-icon:focus-visible,
+.teacher-dashboard .alert-action:focus-visible {
+  outline: 2px solid rgba(74, 144, 217, 0.5);
+  outline-offset: 2px;
+}
+
+.teacher-dashboard .assignments-table tbody tr {
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.teacher-dashboard .assignments-table tbody tr:hover {
+  transform: translateY(-1px);
+}
+
+.teacher-dashboard .error-banner {
+  border-left: 4px solid #c00;
+  box-shadow: 0 8px 20px rgba(204, 0, 0, 0.08);
+}
+
+.teacher-dashboard .empty-state {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 255, 0.92));
+  border: 1px dashed rgba(74, 144, 217, 0.18);
+  border-radius: 12px;
+  animation: teacherSectionRise var(--md-sys-motion-duration-medium2, 320ms) var(--md-sys-motion-easing-emphasized-decelerate, ease-out) both;
+}
+
+.teacher-dashboard .loading-container p {
+  margin: 12px 0 0;
+  animation: teacherStatusPulse 1.8s ease-in-out infinite;
+}
+
+.teacher-dashboard .alert-card {
+  animation: teacherSectionRise var(--md-sys-motion-duration-medium2, 320ms) var(--md-sys-motion-easing-emphasized-decelerate, ease-out) both;
+}
+
 /* 响应式设计 */
 @media (max-width: 1200px) {
   .stats-grid {

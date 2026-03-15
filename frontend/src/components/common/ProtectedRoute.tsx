@@ -11,7 +11,7 @@ import './ProtectedRoute.css';
 export const getRoleHomePath = (role?: string): string => {
   switch (role) {
     case 'admin':
-      return '/dashboard';
+      return '/manage-assignments';
     case 'teacher':
       return '/manage-assignments';
     case 'student':

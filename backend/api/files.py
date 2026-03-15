@@ -1,16 +1,9 @@
-"""
-File Upload Router - Handles code file upload, parsing, and metadata management
-"""
-import os
-import re
-import uuid
+"""File Upload Router - Handles file upload, parsing, and metadata management."""
 import hashlib
 import logging
 import math
-import aiofiles
-from pathlib import Path
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Union
 
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Query, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -19,10 +12,16 @@ from core.config import settings
 from core.database import get_db
 from schemas.file_upload import (
     FileUploadResponse, FileMetadataResponse, FileListResponse,
-    FileContentResponse, FileParseResult, ProgrammingLanguage, FileStatus
+    FileContentResponse, FileParseResult, ProgrammingLanguage, FileStatus,
+    DocumentParseResponse,
 )
 from schemas.common import APIResponse
 from services.file_parsing_service import file_parsing_service
+from services.storage_service import (
+    storage_service,
+    StorageValidationError,
+    StorageOperationError,
+)
 from utils.crud import crud_code_file, generate_unique_id
 from models.code_file import FileStatus as DBFileStatus
 
@@ -30,141 +29,78 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/files", tags=["File Management"])
 
-# Allowed code file extensions
-ALLOWED_CODE_EXTENSIONS = {
-    ".py", ".java", ".js", ".jsx", ".ts", ".tsx",
-    ".c", ".cpp", ".cc", ".cxx", ".h", ".hpp"
-}
-
-
-def sanitize_filename(filename: str) -> str:
-    """
-    Sanitize filename to prevent path traversal and other security issues.
-    
-    - Removes path separators
-    - Removes special characters
-    - Limits length
-    """
-    # Remove any path components
-    filename = os.path.basename(filename)
-    
-    # Remove or replace dangerous characters
-    filename = re.sub(r'[<>:"/\\|?*\x00-\x1f]', '_', filename)
-    
-    # Limit length (keep extension)
-    name, ext = os.path.splitext(filename)
-    if len(name) > 200:
-        name = name[:200]
-    
-    return f"{name}{ext}"
-
-
-def get_file_extension(filename: str) -> str:
-    """Get lowercase file extension."""
-    _, ext = os.path.splitext(filename)
-    return ext.lower()
-
-
-def validate_file_extension(extension: str) -> bool:
-    """Check if file extension is allowed."""
-    return extension.lower() in ALLOWED_CODE_EXTENSIONS
-
-
 def calculate_file_hash(content: bytes) -> str:
     """Calculate SHA-256 hash of file content."""
     return hashlib.sha256(content).hexdigest()
 
 
-async def ensure_upload_directory() -> Path:
-    """Ensure upload directory exists and return path."""
-    upload_dir = Path(settings.UPLOAD_DIR)
-    upload_dir.mkdir(parents=True, exist_ok=True)
-    return upload_dir
+DOCUMENT_EXTENSIONS = {".pdf", ".docx", ".txt"}
+TEXT_BASED_EXTENSIONS = {ext.lower() for ext in settings.ALLOWED_EXTENSIONS if ext.lower() not in {".pdf", ".docx"}}
+
+
+def is_document_extension(extension: str) -> bool:
+    return extension.lower() in DOCUMENT_EXTENSIONS
+
+
+def estimate_line_count(content: str) -> int:
+    return len(content.splitlines()) if content else 0
 
 
 @router.post("/upload", response_model=FileUploadResponse, status_code=201)
 async def upload_code_file(
-    file: UploadFile = File(..., description="Code file to upload"),
+    file: UploadFile = File(..., description="File to upload"),
     uploader_id: Optional[str] = Form(None, description="ID of the uploader"),
     assignment_id: Optional[str] = Form(None, description="Associated assignment ID"),
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Upload a code file for parsing and analysis.
+    Upload a file for parsing and analysis.
     
-    - Validates file type (only code files allowed)
+    - Validates file type and size
     - Validates file size (max 10MB)
     - Sanitizes filename to prevent security issues
-    - Stores file with unique name
+    - Stores file with unique name in local or S3 storage
     - Creates metadata record in database
-    - Triggers file parsing
     """
     # Validate filename exists
     if not file.filename:
         raise HTTPException(status_code=400, detail="Filename is required")
-    
-    # Sanitize and validate filename
-    original_filename = sanitize_filename(file.filename)
-    extension = get_file_extension(original_filename)
-    
-    if not validate_file_extension(extension):
-        raise HTTPException(
-            status_code=400,
-            detail=f"File type '{extension}' not allowed. Allowed types: {sorted(ALLOWED_CODE_EXTENSIONS)}"
-        )
-    
+
     # Read file content
     content = await file.read()
-    file_size = len(content)
-    
-    # Validate file size
-    if file_size > settings.MAX_UPLOAD_SIZE:
-        max_size_mb = settings.MAX_UPLOAD_SIZE / (1024 * 1024)
-        raise HTTPException(
-            status_code=400,
-            detail=f"File size exceeds maximum allowed size of {max_size_mb}MB"
-        )
-    
-    if file_size == 0:
-        raise HTTPException(status_code=400, detail="Empty files are not allowed")
-    
-    # Generate unique file ID and stored filename
     file_id = generate_unique_id("file")
-    stored_filename = f"{file_id}{extension}"
-    
-    # Ensure upload directory exists
-    upload_dir = await ensure_upload_directory()
-    file_path = upload_dir / stored_filename
-    
-    # Calculate content hash
+    try:
+        storage_result = await storage_service.save_upload(
+            content=content,
+            original_filename=file.filename,
+            file_id=file_id,
+            content_type=file.content_type,
+        )
+    except StorageValidationError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except StorageOperationError as exc:
+        logger.error(f"Failed to persist file: {exc}")
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    original_filename = storage_result.original_filename
+    extension = storage_result.file_extension
+    file_size = len(content)
+    file_path = storage_result.file_path
+
     content_hash = calculate_file_hash(content)
-    
-    # Detect language
     language = file_parsing_service.detect_language(extension)
-    
-    # Count lines
-    try:
-        text_content = content.decode('utf-8', errors='replace')
-        line_count = len(text_content.split('\n'))
-    except Exception:
-        text_content = ""
-        line_count = 0
-    
-    # Save file to disk
-    try:
-        async with aiofiles.open(file_path, 'wb') as f:
-            await f.write(content)
-    except Exception as e:
-        logger.error(f"Failed to save file: {e}")
-        raise HTTPException(status_code=500, detail="Failed to save file")
+    line_count = 0
+    if extension in TEXT_BASED_EXTENSIONS:
+        text_content = content.decode("utf-8", errors="replace")
+        line_count = estimate_line_count(text_content)
     
     # Create database record
     try:
         file_data = {
             "file_id": file_id,
             "original_filename": original_filename,
-            "stored_filename": stored_filename,
-            "file_path": str(file_path),
+            "stored_filename": storage_result.stored_filename,
+            "file_path": file_path,
             "file_size": file_size,
             "file_extension": extension,
             "mime_type": file.content_type,
@@ -179,8 +115,10 @@ async def upload_code_file(
         db_file = await crud_code_file.create(db, file_data)
     except Exception as e:
         # Clean up file if database insert fails
-        if file_path.exists():
-            file_path.unlink()
+        try:
+            await storage_service.delete_file(file_path)
+        except StorageOperationError as cleanup_error:
+            logger.warning(f"Failed to clean up stored file after DB error: {cleanup_error}")
         logger.error(f"Failed to create file record: {e}")
         raise HTTPException(status_code=500, detail="Failed to create file record")
 
@@ -265,13 +203,25 @@ async def get_file_content(
     if not file:
         raise HTTPException(status_code=404, detail=f"File with ID '{file_id}' not found")
 
-    file_path = Path(file.file_path)
-    if not file_path.exists():
-        raise HTTPException(status_code=404, detail="File content not found on disk")
-
     try:
-        async with aiofiles.open(file_path, 'r', encoding='utf-8', errors='replace') as f:
-            content = await f.read()
+        if is_document_extension(file.file_extension):
+            processing_path, should_cleanup = await storage_service.materialize_to_local_path(
+                file.file_path, file.file_extension
+            )
+            try:
+                content = await file_parsing_service.parse_document_file(
+                    str(processing_path), file.file_extension
+                )
+            finally:
+                if should_cleanup and processing_path.exists():
+                    processing_path.unlink(missing_ok=True)
+        else:
+            content = (await storage_service.read_bytes(file.file_path)).decode(
+                "utf-8", errors="replace"
+            )
+    except StorageOperationError as exc:
+        logger.error(f"Failed to read file: {exc}")
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
     except Exception as e:
         logger.error(f"Failed to read file: {e}")
         raise HTTPException(status_code=500, detail="Failed to read file content")
@@ -281,11 +231,11 @@ async def get_file_content(
         filename=file.original_filename,
         content=content,
         language=ProgrammingLanguage(file.language),
-        line_count=file.line_count or len(content.split('\n'))
+        line_count=file.line_count or estimate_line_count(content)
     )
 
 
-@router.get("/{file_id}/parse", response_model=FileParseResult)
+@router.get("/{file_id}/parse", response_model=Union[FileParseResult, DocumentParseResponse])
 async def parse_file(
     file_id: str,
     db: AsyncSession = Depends(get_db)
@@ -301,29 +251,40 @@ async def parse_file(
     if not file:
         raise HTTPException(status_code=404, detail=f"File with ID '{file_id}' not found")
 
-    file_path = Path(file.file_path)
-    if not file_path.exists():
-        raise HTTPException(status_code=404, detail="File content not found on disk")
-
     try:
-        async with aiofiles.open(file_path, 'r', encoding='utf-8', errors='replace') as f:
-            content = await f.read()
-    except Exception as e:
-        logger.error(f"Failed to read file: {e}")
-        raise HTTPException(status_code=500, detail="Failed to read file content")
+        if is_document_extension(file.file_extension):
+            processing_path, should_cleanup = await storage_service.materialize_to_local_path(
+                file.file_path, file.file_extension
+            )
+            try:
+                content = await file_parsing_service.parse_document_file(
+                    str(processing_path), file.file_extension
+                )
+            finally:
+                if should_cleanup and processing_path.exists():
+                    processing_path.unlink(missing_ok=True)
 
-    # Parse the file
-    try:
+            await crud_code_file.update_status(db, file_id, DBFileStatus.PROCESSED.value)
+            return DocumentParseResponse(
+                file_id=file_id,
+                file_extension=file.file_extension,
+                content=content,
+                line_count=estimate_line_count(content),
+                parsed_at=datetime.utcnow(),
+            )
+
+        content = (await storage_service.read_bytes(file.file_path)).decode("utf-8", errors="replace")
         result = await file_parsing_service.parse_file(
             content=content,
             extension=file.file_extension,
-            file_id=file_id
+            file_id=file_id,
         )
-
-        # Update file status to processed
         await crud_code_file.update_status(db, file_id, DBFileStatus.PROCESSED.value)
-
         return result
+    except StorageOperationError as exc:
+        logger.error(f"Failed to read file for parsing: {exc}")
+        await crud_code_file.update_status(db, file_id, DBFileStatus.FAILED.value)
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
     except Exception as e:
         logger.error(f"Failed to parse file: {e}")
         await crud_code_file.update_status(db, file_id, DBFileStatus.FAILED.value)
@@ -345,13 +306,10 @@ async def delete_file(
     if not file:
         raise HTTPException(status_code=404, detail=f"File with ID '{file_id}' not found")
 
-    # Delete file from disk
-    file_path = Path(file.file_path)
-    if file_path.exists():
-        try:
-            file_path.unlink()
-        except Exception as e:
-            logger.warning(f"Failed to delete file from disk: {e}")
+    try:
+        await storage_service.delete_file(file.file_path)
+    except StorageOperationError as exc:
+        logger.warning(f"Failed to delete file from storage: {exc}")
 
     # Delete from database
     await crud_code_file.delete(db, file.id)

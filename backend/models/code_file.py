@@ -26,6 +26,7 @@ class ProgrammingLanguage(str, PyEnum):
     JAVA = "java"
     JAVASCRIPT = "javascript"
     TYPESCRIPT = "typescript"
+    PHP = "php"
     C = "c"
     CPP = "cpp"
     JSX = "jsx"

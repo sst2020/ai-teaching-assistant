@@ -769,6 +769,15 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - ✅ Persist preference to localStorage
   - ✅ CSS variables for light/dark themes
 
+- [ ] 🟡 **Add Web Animation Effects (添加网页动画效果)** (P2)
+  - Add smooth page transitions and interaction animations for the frontend
+  - Implement route transition animations between pages
+  - Add component loading animations (skeleton screens or loading indicators)
+  - Enhance hover and click animations for buttons, cards, and other interactive elements
+  - Use CSS transitions/animations or a React animation library such as Framer Motion
+  - **Files:** `frontend/src/` components and style files
+  - **Acceptance Criteria:** Smooth 60fps animations, no noticeable performance impact, aligned with Material Design 3 motion guidelines
+
 ### Development Tools Enhancement
 
 - [x] 🟡 **Create API Testing Tool Page** (P2) ✅ 2026-01-25
@@ -838,15 +847,16 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
 
 ### Rubric Management
 
-- [ ] 🟡 **Create Rubric API endpoints** (P1)
-  - Create `backend/api/rubrics.py`
-  - CRUD operations for rubrics
-  - Link rubrics to assignments
+- [x] 🟡 **Create Rubric API endpoints** (P1) ✅
+  - ✅ Created `backend/api/rubrics.py`
+  - ✅ CRUD operations for rubrics
+  - ✅ Link rubrics to assignments
+  - ✅ Route registered in `backend/app/main.py`
   - **Deliverables:** Router, schemas, tests
 
-- [ ] 🟢 **Create rubric schemas** (P1)
-  - Create `backend/schemas/rubric.py`
-  - RubricCreate, RubricUpdate, RubricResponse
+- [x] 🟢 **Create rubric schemas** (P1) ✅
+  - ✅ Created `backend/schemas/rubric.py`
+  - ✅ `RubricCreate`, `RubricUpdate`, `RubricResponse`, `RubricListResponse`
 
 ### Grading Results API ✅
 
@@ -888,19 +898,18 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
 
 ### File Upload System
 
-- [ ] 🔴 **Implement file upload endpoint** (P1)
-  - Create `backend/api/uploads.py`
-  - Support multiple file types (.py, .pdf, .docx)
-  - Virus scanning (optional)
-  - **Acceptance Criteria:**
-    - Max file size enforced (10MB default)
-    - Allowed extensions validated
-    - Files stored securely
+- [x] 🔴 **Implement file upload endpoint** (P1) ✅
+  - ✅ Implemented by extending `backend/api/files.py`
+  - ✅ Supports multiple file types (.py, .php, .pdf, .docx, .txt)
+  - ✅ Max file size enforced (10MB default)
+  - ✅ Allowed extensions validated
+  - ✅ Files stored securely via storage service
+  - ℹ️ Virus scanning remains optional / not enabled by default
 
-- [ ] 🟡 **Create file storage service** (P1)
-  - Create `backend/services/storage_service.py`
-  - Local storage for development
-  - S3/cloud storage for production
+- [x] 🟡 **Create file storage service** (P1) ✅
+  - ✅ Created `backend/services/storage_service.py`
+  - ✅ Local storage for development
+  - ✅ S3/cloud storage for production
   - **File:** `backend/services/storage_service.py`
 
 ### Caching & Performance ✅
@@ -1010,9 +1019,10 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - Add fixtures for common data
   - **File:** `backend/tests/conftest.py`
 
-- [ ] 🟢 **Add GitHub Actions CI** (P1)
-  - Run tests on PR
-  - Run linting
+- [x] 🟢 **Add GitHub Actions CI** (P1) ✅
+  - ✅ Created `.github/workflows/ci.yml`
+  - ✅ Run backend/frontend tests on push and pull requests
+  - ✅ Run linting, type checks, coverage, and build validation
   - **File:** `.github/workflows/ci.yml`
 
 - [ ] 🟢 **Add code coverage reporting** (P2)
@@ -1100,11 +1110,11 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
 
 ### CI/CD Pipeline
 
-- [ ] 🟡 **Set up GitHub Actions** (P1)
-  - Create `.github/workflows/ci.yml`
-  - Run tests on push/PR
-  - Lint and type check
-  - Build Docker images
+- [x] 🟡 **Set up GitHub Actions** (P1) ✅
+  - ✅ Created `.github/workflows/ci.yml`
+  - ✅ Run tests on push/PR
+  - ✅ Lint and type check
+  - ✅ Build Docker images
 
 - [ ] 🟡 **Add deployment workflow** (P2)
   - Create `.github/workflows/deploy.yml`

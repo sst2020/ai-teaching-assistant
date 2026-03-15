@@ -6,6 +6,7 @@ Supports multiple programming languages:
 - Java (.java)
 - JavaScript (.js, .jsx)
 - TypeScript (.ts, .tsx)
+- PHP (.php)
 - C (.c)
 - C++ (.cpp)
 
@@ -48,6 +49,7 @@ EXTENSION_LANGUAGE_MAP: Dict[str, ProgrammingLanguage] = {
     ".jsx": ProgrammingLanguage.JSX,
     ".ts": ProgrammingLanguage.TYPESCRIPT,
     ".tsx": ProgrammingLanguage.TSX,
+    ".php": ProgrammingLanguage.PHP,
     ".c": ProgrammingLanguage.C,
     ".cpp": ProgrammingLanguage.CPP,
     ".cc": ProgrammingLanguage.CPP,
@@ -178,6 +180,8 @@ class FileParsingService:
             return self._validate_js_syntax(content)
         elif language in (ProgrammingLanguage.TYPESCRIPT, ProgrammingLanguage.TSX):
             return self._validate_ts_syntax(content)
+        elif language == ProgrammingLanguage.PHP:
+            return self._validate_php_syntax(content)
         elif language == ProgrammingLanguage.JAVA:
             return self._validate_java_syntax(content)
         elif language in (ProgrammingLanguage.C, ProgrammingLanguage.CPP):
@@ -290,6 +294,39 @@ class FileParsingService:
             error_line=None
         )
 
+    def _validate_php_syntax(self, content: str) -> SyntaxValidation:
+        """Basic PHP syntax validation using delimiter balancing."""
+        errors = []
+        error_line = None
+        brace_count = 0
+        paren_count = 0
+        bracket_count = 0
+
+        for i, line in enumerate(content.split('\n'), 1):
+            stripped = line.strip()
+            if stripped.startswith(('//', '#', '/*', '*', '*/')):
+                continue
+
+            brace_count += line.count('{') - line.count('}')
+            paren_count += line.count('(') - line.count(')')
+            bracket_count += line.count('[') - line.count(']')
+
+            if error_line is None and min(brace_count, paren_count, bracket_count) < 0:
+                error_line = i
+
+        if brace_count != 0:
+            errors.append(f"Unbalanced braces: {'+' if brace_count > 0 else ''}{brace_count}")
+        if paren_count != 0:
+            errors.append(f"Unbalanced parentheses: {'+' if paren_count > 0 else ''}{paren_count}")
+        if bracket_count != 0:
+            errors.append(f"Unbalanced brackets: {'+' if bracket_count > 0 else ''}{bracket_count}")
+
+        return SyntaxValidation(
+            is_valid=len(errors) == 0,
+            errors=errors,
+            error_line=error_line
+        )
+
     def _extract_structure(self, content: str, language: ProgrammingLanguage) -> CodeStructure:
         """Extract code structure based on language."""
         if language == ProgrammingLanguage.PYTHON:
@@ -298,6 +335,8 @@ class FileParsingService:
             return self._extract_js_structure(content)
         elif language in (ProgrammingLanguage.TYPESCRIPT, ProgrammingLanguage.TSX):
             return self._extract_ts_structure(content)
+        elif language == ProgrammingLanguage.PHP:
+            return self._extract_php_structure(content)
         elif language == ProgrammingLanguage.JAVA:
             return self._extract_java_structure(content)
         elif language in (ProgrammingLanguage.C, ProgrammingLanguage.CPP):
@@ -708,6 +747,92 @@ class FileParsingService:
             functions=functions,
             classes=classes,
             global_variables=global_variables
+        )
+
+    def _extract_php_structure(self, content: str) -> CodeStructure:
+        """Extract structure from PHP code using regex patterns."""
+        imports = []
+        functions = []
+        classes = []
+        global_variables = []
+
+        lines = content.split('\n')
+
+        use_pattern = r"use\s+([A-Za-z0-9_\\\\]+)(?:\s+as\s+(\w+))?\s*;"
+        include_pattern = r"(?:require|require_once|include|include_once)\s*\(?\s*['\"]([^'\"]+)['\"]\s*\)?\s*;"
+        function_pattern = r"(?:public|protected|private)?\s*(?:static\s+)?function\s+(\w+)\s*\(([^)]*)\)"
+        class_pattern = r"(?:abstract\s+|final\s+)?class\s+(\w+)(?:\s+extends\s+(\w+))?(?:\s+implements\s+([^\{]+))?"
+        variable_pattern = r"^\s*\$(\w+)\s*="
+
+        for i, line in enumerate(lines, 1):
+            use_match = re.search(use_pattern, line)
+            if use_match:
+                module = use_match.group(1)
+                alias = use_match.group(2) or module.split('\\')[-1]
+                imports.append(ImportInfo(
+                    module=module,
+                    names=[alias],
+                    line=i,
+                    is_from_import=False
+                ))
+
+            include_match = re.search(include_pattern, line)
+            if include_match:
+                module = include_match.group(1)
+                imports.append(ImportInfo(
+                    module=module,
+                    names=[module.split('/')[-1]],
+                    line=i,
+                    is_from_import=False
+                ))
+
+            function_match = re.search(function_pattern, line)
+            if function_match:
+                params = []
+                for param in function_match.group(2).split(','):
+                    cleaned = param.strip()
+                    if not cleaned:
+                        continue
+                    cleaned = cleaned.split('=')[0].strip().replace('&', '').replace('...', '')
+                    cleaned = cleaned.split()[-1].lstrip('$')
+                    params.append(cleaned)
+                functions.append(FunctionInfo(
+                    name=function_match.group(1),
+                    line_start=i,
+                    line_end=None,
+                    parameters=params,
+                    return_type=None,
+                    docstring=None,
+                    is_async=False,
+                    decorators=[]
+                ))
+
+            class_match = re.search(class_pattern, line)
+            if class_match:
+                base_classes = []
+                if class_match.group(2):
+                    base_classes.append(class_match.group(2))
+                if class_match.group(3):
+                    base_classes.extend([item.strip() for item in class_match.group(3).split(',') if item.strip()])
+                classes.append(ClassInfo(
+                    name=class_match.group(1),
+                    line_start=i,
+                    line_end=None,
+                    base_classes=base_classes,
+                    methods=[],
+                    docstring=None,
+                    decorators=[]
+                ))
+
+            variable_match = re.search(variable_pattern, line)
+            if variable_match:
+                global_variables.append(variable_match.group(1))
+
+        return CodeStructure(
+            imports=imports,
+            functions=functions,
+            classes=classes,
+            global_variables=global_variables[:50]
         )
 
     async def parse_document_file(self, file_path: str, extension: str) -> str:

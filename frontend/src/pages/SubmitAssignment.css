@@ -51,6 +51,33 @@
   100% { opacity: 0; }
 }
 
+@keyframes submitAssignmentFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes submitAssignmentRise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes submitAssignmentSoftPulse {
+  0%, 100% { opacity: 0.72; }
+  50% { opacity: 1; }
+}
+
+.submit-assignment {
+  animation: submitAssignmentFadeIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.submit-header,
+.assignment-details,
+.submission-form,
+.submit-assignment-loading,
+.submit-assignment-error {
+  animation: submitAssignmentRise var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) both;
+}
+
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -69,6 +96,43 @@
 .back-link:hover {
   background-color: rgba(124, 77, 255, var(--md-sys-state-hover-opacity));
   text-decoration: none;
+}
+
+.back-link,
+.view-rubric-btn,
+.preview-btn,
+.clear-btn,
+.cancel-btn,
+.save-draft-btn,
+.submit-btn,
+.remove-file-btn {
+  transition:
+    transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-emphasized),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.back-link:hover,
+.view-rubric-btn:hover,
+.preview-btn:hover,
+.clear-btn:hover,
+.cancel-btn:hover,
+.save-draft-btn:hover:not(:disabled),
+.submit-btn:hover:not(:disabled),
+.remove-file-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.back-link:active,
+.view-rubric-btn:active,
+.preview-btn:active,
+.clear-btn:active,
+.cancel-btn:active,
+.save-draft-btn:active:not(:disabled),
+.submit-btn:active:not(:disabled),
+.remove-file-btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .submit-header h1 {
@@ -131,6 +195,7 @@
   padding: var(--md-sys-spacing-5);
   background-color: var(--md-sys-color-surface-container);
   border-radius: var(--md-sys-shape-corner-medium);
+  animation: submitAssignmentRise var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
 .rubric-section h3 {
@@ -157,7 +222,15 @@
   padding: var(--md-sys-spacing-4);
   border-radius: var(--md-sys-shape-corner-small);
   border-left: 4px solid var(--md-sys-color-primary);
+  opacity: 0;
+  animation: submitAssignmentRise var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) forwards;
 }
+
+.criterion-card:nth-child(1) { animation-delay: 40ms; }
+.criterion-card:nth-child(2) { animation-delay: 80ms; }
+.criterion-card:nth-child(3) { animation-delay: 120ms; }
+.criterion-card:nth-child(4) { animation-delay: 160ms; }
+.criterion-card:nth-child(5) { animation-delay: 200ms; }
 
 .criterion-header {
   display: flex;
@@ -292,6 +365,7 @@
   margin-bottom: var(--md-sys-spacing-5);
   font-family: var(--md-sys-typescale-body-medium-font);
   font-size: var(--md-sys-typescale-body-medium-size);
+  animation: submitAssignmentRise var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
 .info-banner {
@@ -305,6 +379,7 @@
   margin-bottom: var(--md-sys-spacing-5);
   font-family: var(--md-sys-typescale-body-medium-font);
   font-size: var(--md-sys-typescale-body-medium-size);
+  animation: submitAssignmentRise var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
 .form-section {
@@ -382,6 +457,7 @@
   border: 1px solid var(--md-sys-color-outline);
   border-radius: var(--md-sys-shape-corner-medium);
   overflow: hidden;
+  animation: submitAssignmentRise var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
 /* Code Preview */
@@ -392,6 +468,7 @@
   min-height: 400px;
   max-height: 600px;
   overflow: auto;
+  animation: submitAssignmentRise var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
 .code-preview pre {
@@ -482,6 +559,12 @@
 .upload-label:hover {
   border-color: var(--md-sys-color-primary);
   background-color: rgba(124, 77, 255, var(--md-sys-state-hover-opacity));
+  transform: translateY(-1px);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.file-upload-area {
+  animation: submitAssignmentRise var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) 70ms both;
 }
 
 .upload-icon {
@@ -504,6 +587,7 @@
   padding: var(--md-sys-spacing-4);
   background-color: var(--md-sys-color-surface-container);
   border-radius: var(--md-sys-shape-corner-medium);
+  animation: submitAssignmentRise var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
 .file-icon {
@@ -661,6 +745,11 @@
   color: var(--md-sys-color-surface);
   opacity: var(--md-sys-state-disabled-opacity);
   cursor: not-allowed;
+}
+
+.submit-assignment-loading p,
+.submit-assignment-error p {
+  animation: submitAssignmentSoftPulse 1.8s ease-in-out infinite;
 }
 
 /* Responsive */

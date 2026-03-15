@@ -26,6 +26,8 @@ import {
 } from '../types/grading';
 import './GradingInterface.css';
 
+const MODAL_EXIT_DURATION_MS = 180;
+
 const GradingInterface: React.FC = () => {
   const { t, i18n } = useTranslation('grading');
   const navigate = useNavigate();
@@ -47,6 +49,8 @@ const GradingInterface: React.FC = () => {
 
   // 覆盖评分表单
   const [showOverrideForm, setShowOverrideForm] = useState(false);
+  const [isOverrideModalRendered, setIsOverrideModalRendered] = useState(false);
+  const [isOverrideModalClosing, setIsOverrideModalClosing] = useState(false);
   const [overrideScore, setOverrideScore] = useState<number>(0);
   const [overrideReason, setOverrideReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -134,6 +138,35 @@ const GradingInterface: React.FC = () => {
       loadGradingResults();
     }
   }, [selectedAssignment, loadGradingResults]);
+
+  useEffect(() => {
+    if (showOverrideForm) {
+      setIsOverrideModalRendered(true);
+      setIsOverrideModalClosing(false);
+      return;
+    }
+
+    if (isOverrideModalRendered) {
+      setIsOverrideModalClosing(true);
+      const timer = window.setTimeout(() => {
+        setIsOverrideModalRendered(false);
+        setIsOverrideModalClosing(false);
+        setOverrideReason('');
+      }, MODAL_EXIT_DURATION_MS);
+
+      return () => window.clearTimeout(timer);
+    }
+  }, [showOverrideForm, isOverrideModalRendered]);
+
+  const openOverrideModal = () => {
+    setIsOverrideModalClosing(false);
+    setShowOverrideForm(true);
+  };
+
+  const closeOverrideModal = () => {
+    if (!showOverrideForm) return;
+    setShowOverrideForm(false);
+  };
 
   const getScoreColor = (percentage: number) => {
     if (percentage >= 90) return 'excellent';
@@ -282,7 +315,7 @@ const GradingInterface: React.FC = () => {
                     <h3>{t('detail.title')}</h3>
                     <button
                       className="btn-override"
-                      onClick={() => setShowOverrideForm(true)}
+                      onClick={openOverrideModal}
                     >
                       ✏️ {t('detail.override')}
                     </button>
@@ -352,12 +385,12 @@ const GradingInterface: React.FC = () => {
       )}
 
       {/* 覆盖评分模态框 */}
-      {showOverrideForm && selectedGrading && (
-        <div className="modal-overlay" onClick={() => setShowOverrideForm(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      {isOverrideModalRendered && selectedGrading && (
+        <div className={`modal-overlay ${isOverrideModalClosing ? 'modal-overlay-closing' : 'modal-overlay-open'}`} onClick={closeOverrideModal}>
+          <div className={`modal-content ${isOverrideModalClosing ? 'modal-content-closing' : 'modal-content-open'}`} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>{t('overrideModal.title')}</h2>
-              <button className="btn-close" onClick={() => setShowOverrideForm(false)}>×</button>
+              <button className="btn-close" onClick={closeOverrideModal}>×</button>
             </div>
             <div className="modal-body">
               <p>{t('overrideModal.currentScore')}: <strong>{selectedGrading.overall_score}/{selectedGrading.max_score}</strong></p>
@@ -384,7 +417,7 @@ const GradingInterface: React.FC = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn-secondary" onClick={() => setShowOverrideForm(false)}>
+              <button className="btn-secondary" onClick={closeOverrideModal}>
                 {t('overrideModal.cancel')}
               </button>
               <button

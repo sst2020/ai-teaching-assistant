@@ -704,25 +704,33 @@
 
 ### 教师/管理员界面
 
-- [ ] 🔴 **创建教师仪表板** (P1)
-  - 查看所有学生
-  - 查看所有提交
-  - 批改队列
-  - 分析概览
-  - **文件：** `frontend/src/pages/TeacherDashboard.tsx`
+- [x] 🔴 **创建教师仪表板** (P1) ✅
+  - ✅ 创建 `frontend/src/pages/TeacherDashboard.tsx`
+  - ✅ 查看作业统计与概览
+  - ✅ 快捷操作卡片导航
+  - ✅ 最近作业表格
+  - ✅ 待处理问题提醒
+  - ✅ CSS Grid 响应式布局
+  - **路由：** `/teacher`
 
-- [ ] 🟡 **创建作业管理页面** (P1)
-  - 创建/编辑/删除作业
-  - 设置截止日期和评分标准
-  - 批量操作
-  - **文件：** `frontend/src/pages/ManageAssignments.tsx`
+- [x] 🟡 **创建作业管理页面** (P1) ✅
+  - ✅ 创建 `frontend/src/pages/ManageAssignments.tsx`
+  - ✅ 作业列表分页展示
+  - ✅ 按类型和状态筛选
+  - ✅ 创建/编辑作业表单
+  - ✅ 删除确认
+  - ✅ 截止日期与迟交设置
+  - **路由：** `/manage-assignments`
 
-- [ ] 🟡 **创建批改界面** (P1)
-  - 查看提交内容
-  - AI 建议评分（可覆盖）
-  - 反馈编辑器
-  - 批量批改支持
-  - **文件：** `frontend/src/pages/GradingInterface.tsx`
+- [x] 🟡 **创建批改界面** (P1) ✅
+  - ✅ 创建 `frontend/src/pages/GradingInterface.tsx`
+  - ✅ 作业选择下拉
+  - ✅ 评分统计面板（平均分、分布）
+  - ✅ 提交列表与分数徽章
+  - ✅ 详细评分视图与反馈
+  - ✅ 教师覆盖评分弹窗与原因
+  - ✅ AI 与教师评分指示
+  - **路由：** `/grading`
 
 - [ ] 🔴 **创建管理员面板** (P2)
   - 用户管理（CRUD）
@@ -758,6 +766,15 @@
   - ✅ 头部主题切换按钮
   - ✅ 持久化偏好设置 (localStorage)
   - ✅ CSS 变量主题切换支持
+
+- [ ] 🟡 **添加网页动画效果** (P2)
+  - 为前端页面添加流畅的过渡动画和交互效果
+  - 实现页面切换动画（路由转场）
+  - 添加组件加载动画（骨架屏或加载指示器）
+  - 优化按钮、卡片等交互元素的悬停和点击动画
+  - 使用 CSS transitions/animations 或 React 动画库（如 Framer Motion）
+  - **相关文件：** `frontend/src/` 下的组件和样式文件
+  - **验收标准：** 动画流畅（60fps），不影响性能，符合 Material Design 3 动效规范
 
 ### 开发工具增强
 
@@ -827,26 +844,31 @@
 
 ### 评分标准管理
 
-- [ ] 🟡 **创建 Rubric API 端点** (P1)
-  - 创建 `backend/api/rubrics.py`
-  - 评分标准的 CRUD 操作
-  - 将评分标准链接到作业
+- [x] 🟡 **创建 Rubric API 端点** (P1) ✅
+  - ✅ 创建 `backend/api/rubrics.py`
+  - ✅ 评分标准的 CRUD 操作
+  - ✅ 将评分标准链接到作业
+  - ✅ 已在 `backend/app/main.py` 注册路由
   - **交付物：** 路由、schemas、测试
 
-- [ ] 🟢 **创建评分标准 schemas** (P1)
-  - 创建 `backend/schemas/rubric.py`
-  - RubricCreate, RubricUpdate, RubricResponse
+- [x] 🟢 **创建评分标准 schemas** (P1) ✅
+  - ✅ 创建 `backend/schemas/rubric.py`
+  - ✅ `RubricCreate`、`RubricUpdate`、`RubricResponse`、`RubricListResponse`
 
-### 评分结果 API
+### 评分结果 API ✅
 
-- [ ] 🟡 **创建 GradingResult API 端点** (P1)
-  - 创建 `backend/api/grading.py`
-  - 按学生/作业获取成绩
-  - 手动成绩覆盖
+> **完成时间：** 2024年12月27日
+
+- [x] 🟡 **创建 GradingResult API 端点** (P1) ✅
+  - ✅ 创建 `backend/api/grading.py`
+  - ✅ 按学生/作业/提交获取成绩
+  - ✅ 手动成绩覆盖与教师反馈
+  - ✅ 评分统计端点
+  - ✅ Redis 缓存集成
   - **交付物：** 路由、schemas、测试
 
-- [ ] 🟢 **创建评分结果 schemas** (P1)
-  - 创建 `backend/schemas/grading.py`
+- [x] 🟢 **创建评分结果 schemas** (P1) ✅
+  - ✅ 创建 `backend/schemas/grading.py`
 
 ### Q&A 系统增强
 
@@ -861,27 +883,28 @@
 
 ### 文件上传系统
 
-- [ ] 🔴 **实现文件上传端点** (P1)
-  - 创建 `backend/api/uploads.py`
-  - 支持多种文件类型（.py, .pdf, .docx）
-  - 病毒扫描（可选）
-  - **验收标准：**
-    - 强制执行最大文件大小（默认 10MB）
-    - 验证允许的扩展名
-    - 安全存储文件
+- [x] 🔴 **实现文件上传端点** (P1) ✅
+  - ✅ 通过扩展 `backend/api/files.py` 实现
+  - ✅ 支持多种文件类型（.py、.php、.pdf、.docx、.txt）
+  - ✅ 强制执行最大文件大小（默认 10MB）
+  - ✅ 验证允许的扩展名
+  - ✅ 通过存储服务安全存储文件
+  - ℹ️ 病毒扫描仍为可选项，默认未启用
 
-- [ ] 🟡 **创建文件存储服务** (P1)
-  - 创建 `backend/services/storage_service.py`
-  - 开发环境使用本地存储
-  - 生产环境使用 S3/云存储
+- [x] 🟡 **创建文件存储服务** (P1) ✅
+  - ✅ 创建 `backend/services/storage_service.py`
+  - ✅ 开发环境使用本地存储
+  - ✅ 生产环境使用 S3/云存储
   - **文件：** `backend/services/storage_service.py`
 
 ### 缓存与性能
 
-- [ ] 🟡 **实现 Redis 缓存** (P2)
-  - 缓存频繁访问的数据
-  - 会话存储
-  - 限流存储
+- [x] 🟡 **实现 Redis 缓存** (P2) ✅
+  - ✅ 创建 `backend/core/cache.py`
+  - ✅ 缓存频繁访问的数据并支持 TTL
+  - ✅ 会话存储功能
+  - ✅ 限流存储支持
+  - ✅ Redis 不可用时优雅降级到内存缓存
   - **文件：** `backend/core/cache.py`
 
 - [ ] 🟢 **添加数据库查询优化** (P2)
@@ -967,9 +990,10 @@
   - 添加常用数据的 fixtures
   - **文件：** `backend/tests/conftest.py`
 
-- [ ] 🟢 **添加 GitHub Actions CI** (P1)
-  - 在 PR 时运行测试
-  - 运行代码检查
+- [x] 🟢 **添加 GitHub Actions CI** (P1) ✅
+  - ✅ 创建 `.github/workflows/ci.yml`
+  - ✅ 在 push / PR 时运行前后端测试
+  - ✅ 运行代码检查、类型检查、覆盖率与构建验证
   - **文件：** `.github/workflows/ci.yml`
 
 - [ ] 🟢 **添加代码覆盖率报告** (P2)
@@ -1038,8 +1062,8 @@
 
 ### Docker 与容器化
 
-- [ ] 🟢 **创建 docker-compose.yml** (P1)
-  - Backend + Frontend + PostgreSQL
+- [x] 🟢 **创建 docker-compose.yml** (P1) ✅ 2025-12-15
+  - Backend + Frontend + PostgreSQL + Redis
   - 开发配置
   - **文件：** `docker-compose.yml`
 
@@ -1055,11 +1079,11 @@
 
 ### CI/CD 流水线
 
-- [ ] 🟡 **设置 GitHub Actions** (P1)
-  - 创建 `.github/workflows/ci.yml`
-  - 在 push/PR 时运行测试
-  - 代码检查和类型检查
-  - 构建 Docker 镜像
+- [x] 🟡 **设置 GitHub Actions** (P1) ✅
+  - ✅ 创建 `.github/workflows/ci.yml`
+  - ✅ 在 push/PR 时运行测试
+  - ✅ 代码检查和类型检查
+  - ✅ 构建 Docker 镜像
 
 - [ ] 🟡 **添加部署工作流** (P2)
   - 创建 `.github/workflows/deploy.yml`
@@ -1085,7 +1109,7 @@
 
 ### 环境管理
 
-- [ ] 🟢 **创建环境模板** (P1)
+- [x] 🟢 **创建环境模板** (P1) ✅ 2025-12-15
   - `.env.development`
   - `.env.staging`
   - `.env.production`

@@ -45,7 +45,7 @@ class Answer(Base, TimestampMixin):
     )
     teacher_answer: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     answered_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
+        DateTime(timezone=False),
         nullable=False,
     )
     
@@ -74,4 +74,5 @@ class Answer(Base, TimestampMixin):
         if self.has_teacher_response:
             return self.teacher_answer
         return self.ai_answer
+
 

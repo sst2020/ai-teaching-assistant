@@ -26,6 +26,59 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     # 获取数据库连接
     conn = op.get_bind()
+    dialect_name = conn.dialect.name
+
+    def get_columns(table_name: str) -> set[str]:
+        return {column["name"] for column in sa.inspect(conn).get_columns(table_name)}
+
+    def get_indexes(table_name: str) -> set[str]:
+        return {index["name"] for index in sa.inspect(conn).get_indexes(table_name)}
+
+    if dialect_name == "mysql":
+        users_columns = get_columns("users")
+        if "student_id" not in users_columns:
+            op.add_column("users", sa.Column("student_id", sa.String(length=10), nullable=True))
+
+        conn.execute(sa.text("""
+            UPDATE users
+            SET student_id = LPAD(CAST(2026000000 + id AS CHAR), 10, '0')
+            WHERE student_id IS NULL OR student_id = ''
+        """))
+
+        users_indexes = get_indexes("users")
+        if "email" in get_columns("users"):
+            if "ix_users_email" in users_indexes:
+                op.drop_index("ix_users_email", table_name="users")
+            op.alter_column("users", "student_id", existing_type=sa.String(length=10), nullable=False)
+            op.create_index("ix_users_student_id", "users", ["student_id"], unique=True)
+            op.drop_column("users", "email")
+
+        auth_logs_columns = get_columns("auth_logs")
+        if "student_id" not in auth_logs_columns:
+            op.add_column("auth_logs", sa.Column("student_id", sa.String(length=10), nullable=True))
+
+        conn.execute(sa.text("""
+            UPDATE auth_logs
+            SET student_id = '0000000000'
+            WHERE student_id IS NULL OR student_id = ''
+        """))
+
+        auth_logs_indexes = get_indexes("auth_logs")
+        if "email" in get_columns("auth_logs"):
+            if "ix_auth_logs_email" in auth_logs_indexes:
+                op.drop_index("ix_auth_logs_email", table_name="auth_logs")
+            if "idx_failed_login" in auth_logs_indexes:
+                op.drop_index("idx_failed_login", table_name="auth_logs")
+            op.alter_column("auth_logs", "student_id", existing_type=sa.String(length=10), nullable=False)
+            op.create_index("ix_auth_logs_student_id", "auth_logs", ["student_id"], unique=False)
+            op.create_index(
+                "idx_failed_login",
+                "auth_logs",
+                ["student_id", "event_type", "status", "created_at"],
+                unique=False,
+            )
+            op.drop_column("auth_logs", "email")
+        return
 
     # 检查 student_id 列是否已存在（处理部分迁移的情况）
     result = conn.execute(sa.text("PRAGMA table_info(users)"))

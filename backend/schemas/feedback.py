@@ -2,9 +2,10 @@
 Pydantic schemas for feedback generation, AI interactions, and templates.
 """
 from datetime import datetime
+from core.time import utc_now
 from typing import Optional, List, Dict, Any
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 
 
 # ============================================
@@ -136,7 +137,7 @@ class GeneratedFeedback(BaseModel):
     strengths: List[str] = Field(default_factory=list, description="Code strengths")
     improvements: List[str] = Field(default_factory=list, description="Areas for improvement")
     next_steps: List[str] = Field(default_factory=list, description="Recommended next steps")
-    generated_at: datetime = Field(default_factory=datetime.utcnow)
+    generated_at: datetime = Field(default_factory=utc_now)
     tone: FeedbackTone = Field(FeedbackTone.PROFESSIONAL)
     language: str = Field("python")
 
@@ -293,7 +294,7 @@ class PersonalizedFeedback(BaseModel):
     feedback_id: str = Field(..., description="Unique feedback ID")
     student_id: str = Field(..., description="Student ID")
     submission_id: Optional[str] = Field(None)
-    generated_at: datetime = Field(default_factory=datetime.utcnow)
+    generated_at: datetime = Field(default_factory=utc_now)
 
     # Core feedback
     overall_score: float = Field(..., ge=0, le=100)
@@ -379,8 +380,7 @@ class FeedbackTemplateResponse(FeedbackTemplateBase):
     updated_at: Optional[datetime] = None
     usage_count: int = Field(0, description="Number of times template was used")
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class FeedbackTemplateListResponse(BaseModel):
@@ -439,8 +439,7 @@ class AIInteractionResponse(BaseModel):
     student_id: Optional[str] = None
     submission_id: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AIConfigResponse(BaseModel):
@@ -450,5 +449,7 @@ class AIConfigResponse(BaseModel):
     temperature: float
     max_tokens: int
     available_models: List[str]
+
+
 
 

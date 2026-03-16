@@ -11,6 +11,7 @@ Defines data models for:
 from __future__ import annotations
 
 from datetime import datetime
+from core.time import utc_now
 from enum import Enum
 from typing import Dict, List, Optional
 
@@ -283,7 +284,7 @@ class ReportAnalysisResponse(BaseModel):
 
     report_id: str = Field(..., description="Unique report analysis ID")
     file_name: str = Field(..., description="Original report file name")
-    analyzed_at: datetime = Field(default_factory=datetime.utcnow, description="Analysis timestamp")
+    analyzed_at: datetime = Field(default_factory=utc_now, description="Analysis timestamp")
 
     parsed: ReportParseResult = Field(..., description="Parsed report structure and text")
     quality: ReportQualityMetrics = Field(..., description="Completeness and quality metrics")
@@ -326,3 +327,4 @@ __all__ = [
     "ReportAnalysisRequest",
     "ReportAnalysisResponse",
 ]
+

@@ -11,6 +11,7 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional
 from datetime import datetime
+from core.time import utc_now
 import math
 import logging
 
@@ -69,7 +70,7 @@ async def create_grading_result(
         "max_score": grading_in.max_score,
         "feedback": grading_in.feedback,
         "graded_by": grading_in.graded_by,
-        "graded_at": grading_in.graded_at or datetime.utcnow(),
+        "graded_at": grading_in.graded_at or utc_now(),
     }
     
     grading_result = await crud_grading_result.create(db, grading_data)
@@ -340,7 +341,7 @@ async def override_grading_result(
     update_data = {
         "overall_score": override_in.overall_score,
         "graded_by": GradedBy.TEACHER,
-        "graded_at": datetime.utcnow(),
+        "graded_at": utc_now(),
     }
 
     # 更新反馈（保留原有反馈，添加覆盖信息）
@@ -391,4 +392,5 @@ async def delete_grading_result(
     await cache_service.delete(CacheKeys.grading_by_submission(submission_id))
 
     logger.info(f"删除评分结果: ID={grading_id}")
+
 

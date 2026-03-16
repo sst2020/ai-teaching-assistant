@@ -59,6 +59,85 @@ jobs:
         # Mypy类型检查
         mypy --package app || true
 
+  backend-mysql-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    services:
+      mysql:
+        image: mysql:9
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: ai_teaching_assistant
+          MYSQL_USER: ai_teaching
+          MYSQL_PASSWORD: ai_teaching_dev
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot_password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+    env:
+      DATABASE_URL: mysql+aiomysql://ai_teaching:ai_teaching_dev@127.0.0.1:3306/ai_teaching_assistant
+      TEST_DATABASE_URL: mysql+aiomysql://ai_teaching:ai_teaching_dev@127.0.0.1:3306/ai_teaching_assistant
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-mysql-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-mysql-pip-
+
+    - name: Install backend dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov ruff mypy
+
+    - name: Wait for MySQL
+      run: |
+        python - <<'PY'
+        import time
+        import pymysql
+
+        for attempt in range(30):
+            try:
+                conn = pymysql.connect(
+                    host="127.0.0.1",
+                    user="ai_teaching",
+                    password="ai_teaching_dev",
+                    database="ai_teaching_assistant",
+                    port=3306,
+                )
+                conn.close()
+                print("MySQL is ready")
+                break
+            except Exception as exc:
+                if attempt == 29:
+                    raise
+                print(f"MySQL not ready yet: {exc}")
+                time.sleep(2)
+        PY
+
+    - name: Run MySQL migrations
+      run: |
+        python -m alembic upgrade head
+
+    - name: Run backend MySQL regression tests
+      run: |
+        pytest tests/test_students.py tests/test_submissions.py tests/test_crud.py tests/test_qa.py tests/test_file_upload.py -q
+
   # 前端测试任务
   frontend-test:
     runs-on: ubuntu-latest
@@ -198,7 +277,7 @@ jobs:
 
   # 部署任务 (仅在推送到main分支时运行)
   deploy:
-    needs: [backend-test, frontend-test, docker-build]
+    needs: [backend-test, backend-mysql-test, frontend-test, docker-build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     steps:

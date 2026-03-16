@@ -26,7 +26,7 @@ def upgrade() -> None:
         sa.Column('email', sa.String(255), nullable=False),
         sa.Column('password_hash', sa.String(255), nullable=False),
         sa.Column('role', sa.String(50), nullable=False, server_default='student'),
-        sa.Column('is_active', sa.Boolean(), nullable=False, server_default='1'),
+        sa.Column('is_active', sa.Boolean(), nullable=False, server_default=sa.text('1')),
         sa.Column('last_login', sa.DateTime(), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=False, server_default=sa.text('CURRENT_TIMESTAMP')),
         sa.Column('updated_at', sa.DateTime(), nullable=False, server_default=sa.text('CURRENT_TIMESTAMP')),
@@ -43,7 +43,7 @@ def upgrade() -> None:
         sa.Column('token', sa.String(500), nullable=False),
         sa.Column('expires_at', sa.DateTime(), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False, server_default=sa.text('CURRENT_TIMESTAMP')),
-        sa.Column('revoked', sa.Boolean(), nullable=False, server_default='0'),
+        sa.Column('revoked', sa.Boolean(), nullable=False, server_default=sa.text('0')),
         sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
         sa.PrimaryKeyConstraint('id')
     )

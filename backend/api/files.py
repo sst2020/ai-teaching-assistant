@@ -3,6 +3,7 @@ import hashlib
 import logging
 import math
 from datetime import datetime
+from core.time import utc_now
 from typing import Optional, Union
 
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Query, Depends
@@ -129,7 +130,7 @@ async def upload_code_file(
         file_extension=extension,
         language=language,
         status=FileStatus.PENDING,
-        uploaded_at=datetime.utcnow(),
+        uploaded_at=utc_now(),
         message="File uploaded successfully"
     )
 
@@ -270,7 +271,7 @@ async def parse_file(
                 file_extension=file.file_extension,
                 content=content,
                 line_count=estimate_line_count(content),
-                parsed_at=datetime.utcnow(),
+                parsed_at=utc_now(),
             )
 
         content = (await storage_service.read_bytes(file.file_path)).decode("utf-8", errors="replace")
@@ -318,4 +319,5 @@ async def delete_file(
         success=True,
         message=f"File '{file_id}' deleted successfully"
     )
+
 

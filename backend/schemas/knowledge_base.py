@@ -1,7 +1,7 @@
 """
 Schemas for Knowledge Base Feature
 """
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 from enum import Enum
@@ -84,8 +84,7 @@ class KnowledgeBaseResponse(BaseModel):
     created_at: datetime
     updated_at: Optional[datetime]
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class KnowledgeBaseSearchResult(BaseModel):
@@ -133,4 +132,5 @@ class CategoryInfo(BaseModel):
 class CategoriesResponse(BaseModel):
     """Response for getting all categories."""
     categories: List[CategoryInfo]
+
 

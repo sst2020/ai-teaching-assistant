@@ -21,6 +21,7 @@ import uuid
 import logging
 from typing import Optional, List, Tuple, Dict, Any
 from datetime import datetime
+from core.time import utc_now
 from dataclasses import dataclass
 import os
 
@@ -115,7 +116,7 @@ class FileParsingService:
             structure=structure,
             metrics=metrics,
             syntax_validation=syntax_validation,
-            parsed_at=datetime.utcnow()
+            parsed_at=utc_now()
         )
 
     def _calculate_metrics(self, content: str, language: ProgrammingLanguage) -> BasicMetrics:
@@ -924,4 +925,5 @@ class FileParsingService:
 
 # Create singleton instance
 file_parsing_service = FileParsingService()
+
 

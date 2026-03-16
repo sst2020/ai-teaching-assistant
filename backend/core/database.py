@@ -5,7 +5,6 @@ This module provides SQLAlchemy engine configuration, session management,
 and base model class for the AI Teaching Assistant backend.
 """
 from typing import AsyncGenerator, Optional
-from contextlib import asynccontextmanager
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
@@ -51,20 +50,27 @@ def get_database_url(async_mode: bool = True) -> str:
         # postgresql+asyncpg:// to postgresql://
         elif "+asyncpg" in url:
             url = url.replace("postgresql+asyncpg://", "postgresql://")
-        # mysql+aiomysql:// to mysql://
+        # mysql+aiomysql:// to mysql+pymysql://
         elif "+aiomysql" in url:
-            url = url.replace("mysql+aiomysql://", "mysql://")
+            url = url.replace("mysql+aiomysql://", "mysql+pymysql://")
 
     return url
 
 
+_is_sqlite = settings.DATABASE_URL.startswith("sqlite")
+
+_async_engine_kwargs = {
+    "echo": settings.DATABASE_ECHO,
+}
+if _is_sqlite:
+    # Use StaticPool for SQLite to avoid threading issues
+    _async_engine_kwargs["poolclass"] = StaticPool
+    _async_engine_kwargs["connect_args"] = {"check_same_thread": False}
+
 # Async engine for production use
 async_engine = create_async_engine(
     get_database_url(async_mode=True),
-    echo=settings.DATABASE_ECHO,
-    # Use StaticPool for SQLite to avoid threading issues
-    poolclass=StaticPool if settings.DATABASE_URL.startswith("sqlite") else None,
-    connect_args={"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {},
+    **_async_engine_kwargs,
 )
 
 # Async session factory
@@ -80,7 +86,7 @@ AsyncSessionLocal = async_sessionmaker(
 sync_engine = create_engine(
     get_database_url(async_mode=False),
     echo=settings.DATABASE_ECHO,
-    connect_args={"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {},
+    connect_args={"check_same_thread": False} if _is_sqlite else {},
 )
 
 # Sync session factory
@@ -151,4 +157,3 @@ async def check_db_connection() -> tuple[bool, Optional[str]]:
         return True, None
     except Exception as e:
         return False, str(e)
-

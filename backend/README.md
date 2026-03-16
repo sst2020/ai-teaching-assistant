@@ -12,7 +12,7 @@ A FastAPI-based backend service for an AI-powered teaching assistant that provid
 - **Plagiarism Detection**: AST-based code similarity detection that catches renamed variables
 - **AI Q&A Triage**: Intelligent question answering with automatic categorization
 - **OpenAI Integration**: GPT-4/GPT-3.5 support with local LLM fallback option
-- **Database-Backed**: SQLAlchemy ORM with SQLite (development) or PostgreSQL (production)
+- **Database-Backed**: SQLAlchemy ORM with MySQL 9 (default) and optional SQLite in-memory unit tests
 - **Database Migrations**: Alembic for schema versioning and migrations
 
 ## Quick Start
@@ -132,7 +132,7 @@ All configuration is done through environment variables. See `.env.example` for 
 |----------|-------------|---------|
 | `OPENAI_API_KEY` | OpenAI API key for AI features | (empty) |
 | `AI_MODEL` | OpenAI model to use | `gpt-4` |
-| `DATABASE_URL` | Database connection string | `sqlite:///./teaching_assistant.db` |
+| `DATABASE_URL` | Database connection string | `mysql+aiomysql://ai_teaching:ai_teaching_dev@localhost:3306/ai_teaching_assistant` |
 | `DATABASE_ECHO` | Log SQL queries | `false` |
 | `DEBUG` | Enable debug mode | `true` |
 | `HOST` | Server host | `0.0.0.0` |
@@ -140,21 +140,21 @@ All configuration is done through environment variables. See `.env.example` for 
 
 ### Database Configuration
 
-The application supports multiple database backends:
+The application supports MySQL 9 as the default backend:
 
-**SQLite (Development)**:
+**MySQL 9 (Default, Async Runtime)**:
+```
+DATABASE_URL=mysql+aiomysql://ai_teaching:ai_teaching_dev@localhost:3306/ai_teaching_assistant
+```
+
+**MySQL 9 (Alembic/Sync Scripts)**:
+```
+DATABASE_URL=mysql+pymysql://ai_teaching:ai_teaching_dev@localhost:3306/ai_teaching_assistant
+```
+
+**SQLite (Optional Unit Tests Only)**:
 ```
 DATABASE_URL=sqlite:///./teaching_assistant.db
-```
-
-**PostgreSQL (Production)**:
-```
-DATABASE_URL=postgresql://user:password@localhost:5432/teaching_assistant
-```
-
-**MySQL**:
-```
-DATABASE_URL=mysql://user:password@localhost:3306/teaching_assistant
 ```
 
 ## Database Schema
@@ -313,9 +313,10 @@ This creates:
 - 3 sample assignments (code, essay, quiz)
 - 3 sample submissions
 
-To reseed, delete the database file first:
+To reseed on MySQL, reset the schema with migrations and then run the seed script:
 ```bash
-rm teaching_assistant.db
+alembic downgrade base
+alembic upgrade head
 python -m scripts.seed_database
 ```
 
@@ -415,6 +416,23 @@ curl "http://localhost:8000/health"
 pytest
 ```
 
+### Running MySQL Integration Tests
+```bash
+# PowerShell
+$env:TEST_DATABASE_URL="mysql+aiomysql://ai_teaching:ai_teaching_dev@localhost:3306/ai_teaching_assistant"
+pytest tests/test_students.py tests/test_submissions.py tests/test_crud.py tests/test_qa.py tests/test_file_upload.py -q
+
+# Linux/macOS
+export TEST_DATABASE_URL="mysql+aiomysql://ai_teaching:ai_teaching_dev@localhost:3306/ai_teaching_assistant"
+pytest tests/test_students.py tests/test_submissions.py tests/test_crud.py tests/test_qa.py tests/test_file_upload.py -q
+```
+
+Before running the MySQL suite, apply migrations:
+
+```bash
+alembic upgrade head
+```
+
 ### Running Tests with Coverage
 ```bash
 pytest --cov=. --cov-report=html
@@ -440,12 +458,11 @@ ruff check .
 
 ### Database Connection Issues
 
-1. **SQLite "database is locked"**: This usually happens with concurrent access. For production, use PostgreSQL.
+1. **MySQL connection refused**: Ensure MySQL is running and the connection string is correct.
 
-2. **PostgreSQL connection refused**: Ensure PostgreSQL is running and the connection string is correct:
+2. **Migration issues**: Reset and re-run migrations if schemas drift:
    ```bash
-   # Check PostgreSQL status
-   sudo systemctl status postgresql
+   mysqladmin ping -h localhost -u <user> -p
    ```
 
 3. **Migration errors**: If migrations fail, try:
@@ -469,7 +486,7 @@ docker build -t ai-teaching-assistant-backend .
 docker run -p 8000:8000 --env-file .env ai-teaching-assistant-backend
 ```
 
-### Docker Compose (with PostgreSQL)
+### Docker Compose (with MySQL 9)
 ```yaml
 version: '3.8'
 services:
@@ -478,20 +495,22 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/teaching_assistant
+      - DATABASE_URL=mysql+aiomysql://ai_teaching:ai_teaching_dev@mysql:3306/ai_teaching_assistant
     depends_on:
-      - db
+      - mysql
 
-  db:
-    image: postgres:15
+  mysql:
+    image: mysql:9
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=teaching_assistant
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=teaching_assistant
+      - MYSQL_USER=ai_teaching
+      - MYSQL_PASSWORD=ai_teaching_dev
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
 
 volumes:
-  postgres_data:
+  mysql_data:
 ```
 
 TODO:
@@ -532,4 +551,5 @@ TODO:
 ## License
 
 MIT License
+
 

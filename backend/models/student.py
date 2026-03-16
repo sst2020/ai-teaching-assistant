@@ -50,7 +50,7 @@ class Student(Base, TimestampMixin):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     enrollment_date: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone=True),
+        DateTime(timezone=False),
         nullable=True,
     )
     course_id: Mapped[Optional[str]] = mapped_column(
@@ -84,4 +84,5 @@ class Student(Base, TimestampMixin):
     
     def __repr__(self) -> str:
         return f"<Student(id={self.id}, student_id='{self.student_id}', name='{self.name}')>"
+
 

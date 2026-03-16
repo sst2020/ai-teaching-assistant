@@ -4,6 +4,7 @@ Feedback Generation Service - Generates personalized, constructive feedback for 
 import logging
 import uuid
 from datetime import datetime, timezone
+from core.time import utc_now
 from typing import Optional, List, Dict, Any, Tuple
 from dataclasses import dataclass, field
 
@@ -263,7 +264,7 @@ class FeedbackGenerationService:
             strengths=strengths,
             improvements=improvements,
             next_steps=next_steps,
-            generated_at=datetime.utcnow(),
+            generated_at=utc_now(),
             tone=request.tone,
             language=request.language
         )
@@ -1181,3 +1182,4 @@ class FeedbackGenerationService:
 
 # Singleton instance
 feedback_service = FeedbackGenerationService()
+

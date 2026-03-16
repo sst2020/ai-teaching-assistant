@@ -2,6 +2,7 @@
 认证监控服务 - 检测可疑登录活动
 """
 from datetime import datetime, timedelta
+from core.time import utc_now
 from typing import Optional, Dict, Any
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
@@ -78,7 +79,7 @@ class AuthMonitorService:
         Returns:
             Dict: 包含失败次数和是否被锁定的信息
         """
-        cutoff_time = datetime.utcnow() - timedelta(minutes=time_window_minutes)
+        cutoff_time = utc_now() - timedelta(minutes=time_window_minutes)
 
         # 查询时间窗口内的失败登录次数
         stmt = select(func.count(AuthLog.id)).where(
@@ -107,8 +108,8 @@ class AuthMonitorService:
 
             if last_failed:
                 lockout_end = last_failed + timedelta(minutes=AuthMonitorService.LOCKOUT_DURATION)
-                if datetime.utcnow() < lockout_end:
-                    remaining_lockout = int((lockout_end - datetime.utcnow()).total_seconds() / 60)
+                if utc_now() < lockout_end:
+                    remaining_lockout = int((lockout_end - utc_now()).total_seconds() / 60)
                 else:
                     # 锁定时间已过,不再锁定
                     is_locked = False
@@ -137,7 +138,7 @@ class AuthMonitorService:
         Returns:
             Dict: 可疑活动检测结果
         """
-        cutoff_time = datetime.utcnow() - timedelta(minutes=AuthMonitorService.SUSPICIOUS_WINDOW)
+        cutoff_time = utc_now() - timedelta(minutes=AuthMonitorService.SUSPICIOUS_WINDOW)
 
         # 检查短时间内的登录尝试次数
         stmt = select(func.count(AuthLog.id)).where(
@@ -170,4 +171,5 @@ class AuthMonitorService:
             'unique_ips': unique_ips,
             'time_window_minutes': AuthMonitorService.SUSPICIOUS_WINDOW
         }
+
 

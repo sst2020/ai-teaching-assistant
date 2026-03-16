@@ -3,6 +3,7 @@ Q&A Service - Handles AI-powered question answering and triage
 """
 from typing import List, Optional, Dict
 from datetime import datetime, timedelta
+from core.time import utc_now
 from collections import Counter
 import uuid
 import logging
@@ -79,7 +80,7 @@ class QAService:
             question_id=question_id, student_id=request.student_id,
             course_id=request.course_id, question=request.question,
             category=category, status=status, ai_answer=ai_answer,
-            created_at=datetime.utcnow(), answered_at=datetime.utcnow()
+            created_at=utc_now(), answered_at=utc_now()
         )
 
         self._questions[question_id] = response
@@ -382,4 +383,5 @@ class QAService:
 
 # Singleton instance
 qa_service = QAService()
+
 

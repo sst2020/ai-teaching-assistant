@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional
 from datetime import datetime
+from core.time import utc_now
 import math
 
 from core.database import get_db
@@ -75,7 +76,7 @@ async def create_submission(
         "assignment_id": assignment.id,  # Use database ID
         "content": submission_in.content,
         "file_path": submission_in.file_path,
-        "submitted_at": submission_in.submitted_at or datetime.utcnow(),
+        "submitted_at": submission_in.submitted_at or utc_now(),
         "status": SubmissionStatus.PENDING,
     }
     
@@ -269,4 +270,5 @@ async def update_submission_status(
         )
 
     return submission
+
 

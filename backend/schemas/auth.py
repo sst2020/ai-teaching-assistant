@@ -6,7 +6,7 @@
 import re
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, Field, field_validator
+from pydantic import ConfigDict, BaseModel, Field, field_validator
 
 
 def validate_student_id_format(v: str) -> str:
@@ -62,8 +62,7 @@ class UserResponse(UserBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserInDB(UserResponse):
@@ -194,4 +193,5 @@ class DeleteAccountRequest(BaseModel):
 class DeleteAccountResponse(BaseModel):
     """删除账户响应"""
     message: str = "账户已注销"
+
 

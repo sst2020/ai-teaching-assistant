@@ -4,7 +4,7 @@ Schemas for Grading Result API
 
 与 models/grading_result.py 中的 GradingResult 模型兼容
 """
-from pydantic import BaseModel, Field, field_validator
+from pydantic import ConfigDict, BaseModel, Field, field_validator
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from enum import Enum
@@ -74,8 +74,7 @@ class GradingResultResponse(GradingResultBase):
     created_at: datetime = Field(..., description="创建时间")
     updated_at: Optional[datetime] = Field(None, description="更新时间")
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
     
     @field_validator('percentage_score', mode='before')
     @classmethod
@@ -148,4 +147,5 @@ class BatchGradingResponse(BaseModel):
     failed_count: int = Field(..., description="失败数量")
     results: List[GradingResultResponse] = Field(default_factory=list, description="评分结果列表")
     errors: List[Dict[str, Any]] = Field(default_factory=list, description="错误信息列表")
+
 

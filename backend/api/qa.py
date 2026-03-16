@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Query, Depends
 from fastapi.responses import StreamingResponse
 from typing import Optional, List, AsyncGenerator
 from datetime import datetime, timedelta
+from core.time import utc_now
 import logging
 import json
 
@@ -121,7 +122,7 @@ async def get_qa_analytics(
     - Generates teaching recommendations
     """
     try:
-        end_date = datetime.utcnow()
+        end_date = utc_now()
         start_date = end_date - timedelta(days=days)
 
         report = await qa_service.generate_analytics_report(
@@ -282,7 +283,7 @@ async def answer_question(
         qa_log.answer = request.answer
         qa_log.answer_source = "teacher"
         qa_log.handled_by = current_user.name or current_user.student_id
-        qa_log.handled_at = datetime.utcnow()
+        qa_log.handled_at = utc_now()
         qa_log.status = QALogStatus.ANSWERED
         
         # 如果需要更新知识库
@@ -331,4 +332,5 @@ async def qa_health():
         "status": "healthy",
         "questions_in_memory": len(qa_service._questions)
     }
+
 

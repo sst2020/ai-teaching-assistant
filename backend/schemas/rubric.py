@@ -2,7 +2,7 @@
 Schemas for Rubric Management API
 评分标准管理 API 的数据模型
 """
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
@@ -50,8 +50,7 @@ class RubricResponse(RubricBase):
     created_at: datetime = Field(..., description="创建时间")
     updated_at: Optional[datetime] = Field(None, description="更新时间")
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class RubricListResponse(BaseModel):
@@ -61,4 +60,5 @@ class RubricListResponse(BaseModel):
     page: int = Field(..., description="当前页码")
     page_size: int = Field(..., description="每页数量")
     total_pages: int = Field(..., description="总页数")
+
 

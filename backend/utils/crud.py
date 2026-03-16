@@ -5,6 +5,7 @@ This module provides reusable CRUD operations for all database models.
 """
 from typing import Optional, List, Type, TypeVar, Generic, Any, Dict
 from datetime import datetime
+from core.time import utc_now
 import uuid
 
 from sqlalchemy import select, func, and_
@@ -145,7 +146,7 @@ class CRUDAssignment(CRUDBase[Assignment]):
         result = await db.execute(
             select(Assignment)
             .where(Assignment.course_id == course_id)
-            .order_by(Assignment.due_date.desc().nullslast())
+            .order_by(Assignment.due_date.is_(None), Assignment.due_date.desc())
             .offset(skip).limit(limit)
         )
         return list(result.scalars().all())
@@ -222,7 +223,7 @@ class CRUDSubmission(CRUDBase[Submission]):
 def generate_unique_id(prefix: str = "") -> str:
     """Generate a unique ID with optional prefix."""
     unique_part = str(uuid.uuid4())[:8]
-    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    timestamp = utc_now().strftime("%Y%m%d%H%M%S")
     if prefix:
         return f"{prefix}_{timestamp}_{unique_part}"
     return f"{timestamp}_{unique_part}"
@@ -589,7 +590,7 @@ class CRUDUser(CRUDBase[User]):
         """更新最后登录时间"""
         user = await self.get(db, user_id)
         if user:
-            user.last_login = datetime.utcnow()
+            user.last_login = utc_now()
             await db.flush()
 
     async def deactivate(self, db: AsyncSession, user_id: int) -> bool:
@@ -660,7 +661,7 @@ class CRUDRefreshToken(CRUDBase[RefreshToken]):
 
     async def delete_expired(self, db: AsyncSession) -> int:
         """删除过期令牌"""
-        now = datetime.utcnow()
+        now = utc_now()
         result = await db.execute(
             select(RefreshToken).where(RefreshToken.expires_at < now)
         )
@@ -704,7 +705,7 @@ class CRUDTokenBlacklist(CRUDBase[TokenBlacklist]):
 
     async def cleanup_expired(self, db: AsyncSession) -> int:
         """清理过期黑名单记录"""
-        now = datetime.utcnow()
+        now = utc_now()
         result = await db.execute(
             select(TokenBlacklist).where(TokenBlacklist.expires_at < now)
         )
@@ -938,3 +939,4 @@ class CRUDGradingResult(CRUDBase[GradingResult]):
 
 # Create CRUD instance
 crud_grading_result = CRUDGradingResult(GradingResult)
+

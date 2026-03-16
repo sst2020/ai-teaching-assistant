@@ -6,7 +6,7 @@ QA Log Schemas
 from datetime import datetime
 from typing import Optional, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 
 
 class TriageResultEnum(str, Enum):
@@ -79,8 +79,7 @@ class QALogResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class QALogListResponse(BaseModel):
@@ -116,4 +115,5 @@ class QALogQuery(BaseModel):
     end_date: Optional[datetime] = None
     page: int = Field(1, ge=1)
     page_size: int = Field(20, ge=1, le=100)
+
 

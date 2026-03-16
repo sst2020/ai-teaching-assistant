@@ -47,7 +47,7 @@ class GradingResult(Base, TimestampMixin):
     max_score: Mapped[float] = mapped_column(Float, default=100.0, nullable=False)
     feedback: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     graded_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
+        DateTime(timezone=False),
         nullable=False,
     )
     graded_by: Mapped[GradedBy] = mapped_column(
@@ -71,4 +71,5 @@ class GradingResult(Base, TimestampMixin):
         if self.max_score == 0:
             return 0.0
         return (self.overall_score / self.max_score) * 100
+
 

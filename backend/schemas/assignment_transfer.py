@@ -1,10 +1,11 @@
 """
 数据模型定义 - 作业传输和文件管理
 """
-from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Literal
 from datetime import datetime
 from enum import Enum
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class AssignmentTransferStatus(str, Enum):
@@ -37,9 +38,9 @@ class BatchUploadRequest(BaseModel):
     course_id: str = Field(..., description="课程ID")
     student_submissions: List[Dict] = Field(..., description="学生提交列表")
     sync_to_file_manager: bool = Field(True, description="是否同步到文件管理系统")
-    
-    class Config:
-        schema_extra = {
+
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "assignment_id": "hw001",
                 "course_id": "CS101",
@@ -51,7 +52,7 @@ class BatchUploadRequest(BaseModel):
                         "file_name": "hello.py"
                     },
                     {
-                        "student_id": "s002", 
+                        "student_id": "s002",
                         "student_name": "李四",
                         "file_content": "def greet(name):\n    return f'Hello, {name}!'",
                         "file_name": "greet.py"
@@ -60,6 +61,7 @@ class BatchUploadRequest(BaseModel):
                 "sync_to_file_manager": True
             }
         }
+    )
 
 
 class FileManagerSyncRequest(BaseModel):

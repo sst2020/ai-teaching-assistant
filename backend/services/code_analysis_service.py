@@ -5,6 +5,7 @@ import ast
 import uuid
 from typing import List, Optional, Tuple
 from datetime import datetime
+from core.time import utc_now
 from dataclasses import dataclass
 
 import pycodestyle
@@ -48,7 +49,7 @@ class CodeAnalysisService:
         summary, recommendations = self._generate_summary(style_analysis, complexity_metrics, functions, code_smells)
 
         return CodeAnalysisResult(
-            analysis_id=analysis_id, language=request.language, analyzed_at=datetime.utcnow(),
+            analysis_id=analysis_id, language=request.language, analyzed_at=utc_now(),
             style_analysis=style_analysis, complexity_metrics=complexity_metrics,
             functions=functions, code_smells=code_smells,
             overall_quality_score=overall_score, summary=summary, recommendations=recommendations
@@ -226,4 +227,5 @@ class CodeAnalysisService:
 
 
 code_analysis_service = CodeAnalysisService()
+
 

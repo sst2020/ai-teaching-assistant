@@ -1,7 +1,7 @@
 """
 Schemas for File Upload and Parsing API
 """
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 from enum import Enum
@@ -136,8 +136,7 @@ class FileMetadataResponse(BaseModel):
     created_at: datetime = Field(..., description="Creation timestamp")
     updated_at: Optional[datetime] = Field(None, description="Last update timestamp")
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class FileListResponse(BaseModel):
@@ -165,4 +164,5 @@ class DocumentParseResponse(BaseModel):
     content: str = Field(..., description="Extracted document text content")
     line_count: int = Field(..., description="Number of text lines extracted")
     parsed_at: datetime = Field(..., description="Timestamp of parsing")
+
 

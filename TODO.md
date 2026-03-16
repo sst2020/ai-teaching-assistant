@@ -1,6 +1,6 @@
 # AI Teaching Assistant - Project TODO List
 
-> **Last Updated:** January 25, 2026
+> **Last Updated:** March 15, 2026
 > **Project Status:** MVP Complete ✅ + Enhanced Debugging Environment ✅ + Production JWT Auth ✅ + Auth Monitoring ✅ + Redis Cache ✅ + Grading API ✅ + Report Analysis with DeepSeek ✅
 > **Complexity Indicators:** 🟢 Easy | 🟡 Medium | 🔴 Hard | ⏱️ Time-consuming
 
@@ -624,26 +624,32 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - ✅ Verified database schema and indexes
   - **Test Results:** All monitoring features working correctly
 
-### Role-Based Access Control (RBAC)
+### Role-Based Access Control (RBAC) ✅
 
-- [ ] 🔴 **Design and implement user roles** (P1)
-  - Create `User` model with roles (student, teacher, admin)
-  - Create `Role` and `Permission` models
+> **Completed:** 2025 (implemented via string-based roles instead of separate Role/Permission models)
+
+- [x] 🔴 **Design and implement user roles** (P1) ✅
+  - ✅ `User` model with role field (student, teacher, admin) - `backend/models/user.py`
+  - ✅ Role-based access control via `require_role()` and `require_roles()` decorators
+  - ✅ Permission checking via `check_permissions()` in `backend/api/deps.py`
+  - **Note:** Uses string-based roles instead of separate Role/Permission models (simpler approach)
   - **Acceptance Criteria:**
-    - Students: Submit assignments, view own grades, ask questions
-    - Teachers: Grade assignments, view all submissions, answer questions
-    - Admins: Full access, user management
+    - ✅ Students: Submit assignments, view own grades, ask questions
+    - ✅ Teachers: Grade assignments, view all submissions, answer questions
+    - ✅ Admins: Full access, user management
 
-- [ ] 🟡 **Create Teacher model and endpoints** (P1)
-  - Create `backend/models/teacher.py`
-  - Create `backend/api/teachers.py` router
-  - Implement teacher CRUD operations
-  - **Deliverables:** Model, schemas, router, tests
+- [x] 🟡 **Create Teacher model and endpoints** (P1) ✅
+  - ✅ Created `backend/models/teacher.py` - Teacher model with user_id FK
+  - ✅ Created `backend/api/teachers.py` - Full CRUD router (register, list, get, update, delete)
+  - ✅ Created `backend/schemas/teacher.py` - TeacherCreate, TeacherUpdate, TeacherResponse, TeacherListResponse
+  - ✅ Added `crud_teacher` to `backend/utils/crud.py`
+  - **Deliverables:** Model ✅, schemas ✅, router ✅
 
-- [ ] 🟡 **Implement permission decorators** (P2)
-  - Create `@require_role("teacher")` decorator
-  - Create `@require_permission("grade_assignments")` decorator
-  - **File:** `backend/core/permissions.py`
+- [x] 🟡 **Implement permission decorators** (P2) ✅
+  - ✅ `require_role("teacher")` decorator in `backend/core/dependencies.py`
+  - ✅ `require_roles(["teacher", "admin"])` decorator in `backend/core/dependencies.py`
+  - ✅ `check_permissions()` in `backend/api/deps.py`
+  - **Note:** Implemented in `dependencies.py` and `deps.py` instead of separate `permissions.py`
 
 ---
 
@@ -769,14 +775,15 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - ✅ Persist preference to localStorage
   - ✅ CSS variables for light/dark themes
 
-- [ ] 🟡 **Add Web Animation Effects (添加网页动画效果)** (P2)
-  - Add smooth page transitions and interaction animations for the frontend
-  - Implement route transition animations between pages
-  - Add component loading animations (skeleton screens or loading indicators)
-  - Enhance hover and click animations for buttons, cards, and other interactive elements
-  - Use CSS transitions/animations or a React animation library such as Framer Motion
-  - **Files:** `frontend/src/` components and style files
-  - **Acceptance Criteria:** Smooth 60fps animations, no noticeable performance impact, aligned with Material Design 3 motion guidelines
+- [x] 🟡 **Add Web Animation Effects (添加网页动画效果)** (P2) ✅
+  - ✅ Added smooth page transitions and interaction animations for the frontend
+  - ✅ Page-level entrance animations (fadeIn, slideIn) for TeacherDashboard, StudentDashboard, ManageAssignments, GradingInterface, SubmitAssignment
+  - ✅ Card/button feedback animations with staggered delays
+  - ✅ List and empty state animations
+  - ✅ Dialog open/close transitions (ConfirmDialog)
+  - ✅ Uses CSS transitions/animations aligned with MD3 motion tokens
+  - **Files:** `frontend/src/pages/*.css`, `frontend/src/index.css`
+  - **Verified:** `npm run build` passed successfully
 
 ### Development Tools Enhancement
 
@@ -885,16 +892,20 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - ✅ GradingResultListResponse, GradingStatistics
   - ✅ BatchGradingRequest, BatchGradingResponse
 
-### Q&A System Enhancements
+### Q&A System Enhancements ✅
 
-- [ ] 🟡 **Persist Q&A to database** (P1)
-  - Update `backend/api/qa.py` to use database
-  - Store questions and answers
-  - Link to students
-  - **Files:** `backend/api/qa.py`, `backend/utils/crud.py`
+> **Completed:** December 2024 (see Future Enhancements section for details)
 
-- [ ] 🟢 **Add Q&A CRUD utilities** (P1)
-  - Add `CRUDQuestion` and `CRUDAnswer` to `backend/utils/crud.py`
+- [x] 🟡 **Persist Q&A to database** (P1) ✅
+  - ✅ `backend/models/qa_log.py` - QALog model for persistence
+  - ✅ `backend/api/qa.py` - Full Q&A API with database storage
+  - ✅ `backend/services/qa_service.py` - Q&A service layer
+  - ✅ Student question history, weakness analysis, smart Q&A with triage
+  - **Files:** `backend/api/qa.py`, `backend/models/qa_log.py`, `backend/services/qa_service.py`
+
+- [x] 🟢 **Add Q&A CRUD utilities** (P1) ✅
+  - ✅ Q&A operations integrated via qa_service.py
+  - ✅ Tests in `backend/tests/test_qa.py`
 
 ### File Upload System
 
@@ -936,13 +947,13 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
   - Implement eager loading for relationships
   - **Files:** Model files, Alembic migrations
 
-### Rate Limiting
+### Rate Limiting ✅
 
-- [ ] 🟡 **Implement rate limiting middleware** (P2)
-  - Use slowapi or custom implementation
-  - Configure limits per endpoint
-  - **File:** `backend/core/rate_limit.py`
-  - **Note:** Rate limiting storage already implemented in `backend/core/cache.py`
+- [x] 🟡 **Implement rate limiting middleware** (P2) ✅
+  - ✅ Created `backend/core/rate_limit.py` with `SimpleRateLimitMiddleware`
+  - ✅ In-memory sliding window per client IP
+  - ✅ Configurable via `RATE_LIMIT_ENABLED`, `RATE_LIMIT_REQUESTS`, `RATE_LIMIT_PERIOD` settings
+  - **Note:** For production, consider upgrading to Redis-backed distributed limiter
 
 ---
 
@@ -954,21 +965,22 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
 
 ### Backend Unit Tests
 
-- [ ] 🟢 **Add student endpoint tests** (P1)
-  - Create `backend/tests/test_students.py`
-  - Test all CRUD operations
-  - Test validation errors
-  - **Target Coverage:** 90%
+- [x] 🟢 **Add student endpoint tests** (P1) ✅
+  - ✅ Created `backend/tests/test_students.py` (559 lines)
+  - ✅ Tests all CRUD operations with factory fixtures
+  - ✅ Tests validation errors and edge cases
+  - **File:** `backend/tests/test_students.py`
 
-- [ ] 🟢 **Add submission endpoint tests** (P1)
-  - Create `backend/tests/test_submissions.py`
-  - Test create, list, status update
-  - **Target Coverage:** 90%
+- [x] 🟢 **Add submission endpoint tests** (P1) ✅
+  - ✅ Created `backend/tests/test_submissions.py` (333 lines)
+  - ✅ Tests: create, get, student/assignment submissions, status updates
+  - ✅ Tests: auto-id, duplicate, not-found, missing fields, pagination, invalid status
 
-- [ ] 🟢 **Add CRUD utility tests** (P1)
-  - Create `backend/tests/test_crud.py`
-  - Test all CRUD operations
-  - **Target Coverage:** 95%
+- [x] 🟢 **Add CRUD utility tests** (P1) ✅
+  - ✅ Created `backend/tests/test_crud.py` (420+ lines, async)
+  - ✅ Tests: CRUDBase (get, get_multi, count, create, update, delete)
+  - ✅ Tests: CRUDStudent, CRUDAssignment, CRUDSubmission, CRUDTeacher
+  - ✅ Tests: generate_unique_id uniqueness
 
 - [ ] 🟡 **Add service layer tests** (P2)
   - Test AI service (with mocks)
@@ -1014,10 +1026,12 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
 
 ### Test Infrastructure
 
-- [ ] 🟢 **Set up test database** (P1)
-  - Use SQLite in-memory for tests
-  - Add fixtures for common data
-  - **File:** `backend/tests/conftest.py`
+- [x] 🟢 **Set up test database** (P1) ✅
+  - ✅ SQLite in-memory database by default for unit tests (`backend/tests/conftest.py`)
+  - ✅ Supports MySQL test database via `TEST_DATABASE_URL` for integration validation
+  - ✅ Test utilities in `backend/tests/test_utils.py` (override_get_db, init_test_db, dispose_test_db)
+  - ✅ Sync and async test client fixtures
+  - **File:** `backend/tests/conftest.py`, `backend/tests/test_utils.py`
 
 - [x] 🟢 **Add GitHub Actions CI** (P1) ✅
   - ✅ Created `.github/workflows/ci.yml`
@@ -1094,7 +1108,7 @@ The MVP (Minimum Viable Product) is now complete with the following core feature
 ### Docker & Containerization
 
 - [x] 🟢 **Create docker-compose.yml** (P1) ✅ 2025-12-15
-  - Backend + Frontend + PostgreSQL + Redis
+  - Backend + Frontend + MySQL 9 + Redis
   - Development configuration
   - **File:** `docker-compose.yml`
 

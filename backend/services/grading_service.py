@@ -3,6 +3,7 @@ Grading Service - Handles automated assignment grading with AI and code analysis
 """
 from typing import List, Optional
 from datetime import datetime
+from core.time import utc_now
 import uuid
 
 from schemas.assignment import (
@@ -51,7 +52,7 @@ class GradingService:
             assignment_id=submission.assignment_id, assignment_type=submission.assignment_type,
             overall_score=round(overall_score, 2), status=GradingStatus.COMPLETED,
             code_feedback=code_feedback, report_feedback=report_feedback,
-            graded_at=datetime.utcnow(),
+            graded_at=utc_now(),
             feedback_summary="Assignment reviewed with AI-powered analysis and detailed feedback."
         )
 
@@ -147,4 +148,5 @@ Provide brief comments and revision suggestions."""
 
 
 grading_service = GradingService()
+
 

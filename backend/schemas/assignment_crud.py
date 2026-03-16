@@ -1,7 +1,7 @@
 """
 Schemas for Assignment CRUD API
 """
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 from enum import Enum
@@ -50,8 +50,7 @@ class AssignmentResponse(AssignmentBase):
     created_at: datetime = Field(..., description="Record creation timestamp")
     updated_at: Optional[datetime] = Field(None, description="Record update timestamp")
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AssignmentListResponse(BaseModel):
@@ -61,4 +60,5 @@ class AssignmentListResponse(BaseModel):
     page: int = Field(..., description="Current page number")
     page_size: int = Field(..., description="Number of items per page")
     total_pages: int = Field(..., description="Total number of pages")
+
 

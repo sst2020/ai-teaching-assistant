@@ -1,6 +1,6 @@
-# 数据库迁移指南：从 SQLite 到 MySQL
+# 数据库迁移指南：从 SQLite 到 MySQL 9
 
-本文档介绍了如何将 AI Teaching Assistant 应用从 SQLite 数据库迁移到 MySQL 数据库。
+本文档介绍了如何将 AI Teaching Assistant 应用从 SQLite 数据库迁移到 MySQL 9 数据库。
 
 ## 1. 准备工作
 
@@ -17,7 +17,7 @@ pip install aiomysql PyMySQL
 DATABASE_URL=sqlite:///./teaching_assistant.db
 
 # 改为
-DATABASE_URL=mysql+pymysql://username:password@host:port/database_name
+DATABASE_URL=mysql+aiomysql://username:password@host:3306/database_name
 ```
 
 ## 2. 模型兼容性调整
@@ -31,9 +31,9 @@ MySQL 需要为 VARCHAR 字段指定最大长度，已在模型中更新：
 - `String(500)` for avatar_url
 
 ### 时区处理
-确保 DateTime 字段正确处理时区信息：
+MySQL 中建议统一使用无时区 DATETIME，并由应用层处理时区：
 ```python
-DateTime(timezone=True)
+DateTime(timezone=False)
 ```
 
 ### 存储引擎
@@ -81,10 +81,18 @@ if __name__ == "__main__":
 更新 `.env` 文件中的 `DATABASE_URL` 设置。
 
 ### 3.4 创建 MySQL 表结构
-运行 Alembic 迁移创建表结构：
+方式 A：运行 Alembic 迁移创建表结构（推荐）：
 ```bash
 cd backend
 python -m alembic upgrade head
+```
+
+方式 B：开发环境下通过 SQLAlchemy `create_all` 初始化：
+```python
+from core.database import async_engine, Base
+
+async with async_engine.begin() as conn:
+    await conn.run_sync(Base.metadata.create_all)
 ```
 
 ### 3.5 导入数据

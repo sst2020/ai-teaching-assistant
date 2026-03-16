@@ -6,6 +6,7 @@ import os
 import shutil
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime
+from core.time import utc_now
 import tempfile
 import zipfile
 from pathlib import Path
@@ -59,7 +60,7 @@ class AssignmentTransferService:
                 "max_score": assignment_data.max_score,
                 "assignment_type": assignment_data.assignment_type,
                 "instructions": assignment_data.instructions,
-                "created_at": datetime.utcnow()
+                "created_at": utc_now()
             }
             
             # 如果有附件，保存附件

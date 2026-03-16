@@ -61,7 +61,7 @@ class Assignment(Base, TimestampMixin):
         index=True,
     )
     due_date: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone=True),
+        DateTime(timezone=False),
         nullable=True,
     )
     max_score: Mapped[float] = mapped_column(Float, default=100.0, nullable=False)
@@ -88,4 +88,5 @@ class Assignment(Base, TimestampMixin):
     
     def __repr__(self) -> str:
         return f"<Assignment(id={self.id}, assignment_id='{self.assignment_id}', title='{self.title}')>"
+
 

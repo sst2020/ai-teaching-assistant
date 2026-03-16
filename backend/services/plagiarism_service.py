@@ -7,6 +7,7 @@ import hashlib
 import uuid
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime
+from core.time import utc_now
 from dataclasses import dataclass, field
 from difflib import SequenceMatcher
 from collections import defaultdict
@@ -85,7 +86,7 @@ class PlagiarismDetectionService:
         return PlagiarismReport(
             report_id=report_id,
             submission_id=request.submission_id,
-            checked_at=datetime.utcnow(),
+            checked_at=utc_now(),
             overall_similarity=highest_similarity,
             similarity_level=self._get_similarity_level(highest_similarity),
             is_flagged=highest_similarity >= self.similarity_threshold,
@@ -117,7 +118,7 @@ class PlagiarismDetectionService:
                     flagged_pairs.append((fp1.student_id, fp2.student_id))
 
         return BatchPlagiarismReport(
-            report_id=str(uuid.uuid4()), course_id=course_id, checked_at=datetime.utcnow(),
+            report_id=str(uuid.uuid4()), course_id=course_id, checked_at=utc_now(),
             total_submissions=len(submissions), flagged_pairs=len(flagged_pairs),
             comparisons=all_comparisons,
             summary=f"Checked {len(submissions)} submissions. Found {len(flagged_pairs)} suspicious pairs."
@@ -360,7 +361,7 @@ class EnhancedPlagiarismService:
         similarity_matrix = SimilarityMatrix(
             report_id=report_id,
             assignment_id=request.assignment_id,
-            created_at=datetime.utcnow(),
+            created_at=utc_now(),
             student_ids=student_ids,
             student_names=student_names,
             matrix=matrix,
@@ -392,7 +393,7 @@ class EnhancedPlagiarismService:
         return BatchAnalysisResponse(
             report_id=report_id,
             assignment_id=request.assignment_id,
-            created_at=datetime.utcnow(),
+            created_at=utc_now(),
             total_submissions=n,
             total_comparisons=total_comparisons,
             flagged_count=flagged_count,
@@ -499,7 +500,7 @@ class EnhancedPlagiarismService:
             student_id=submission.student_id,
             student_name=submission.student_name or submission.student_id,
             assignment_id=request.assignment_id,
-            created_at=datetime.utcnow(),
+            created_at=utc_now(),
             originality_score=originality_score,
             similarity_breakdown=similarity_breakdown,
             detailed_matches=detailed_matches,
@@ -625,4 +626,5 @@ class EnhancedPlagiarismService:
 
 # 增强服务单例
 enhanced_plagiarism_service = EnhancedPlagiarismService()
+
 

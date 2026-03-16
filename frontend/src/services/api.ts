@@ -477,7 +477,7 @@ export const analyzeUploadedReport = async (
   }
 
   const response = await apiClient.post<ReportAnalysisResponse>(
-    `${API_V1_PREFIX}/analysis/report/analyze-file`,
+    `${API_V1_PREFIX}/report-analysis/analyze-file`,
     formData,
     {
       headers: {

@@ -144,16 +144,17 @@ def create_app(testing: bool = False) -> FastAPI:
         @asynccontextmanager
         async def test_lifespan(app: FastAPI):
             """测试模式的简化 lifespan"""
-            # 测试模式下仍然需要初始化数据库表
-            async with async_engine.begin() as conn:
-                # 导入所有模型以确保它们被注册到 Base.metadata
-                from models import (
-                    Student, Teacher, Assignment, Submission, GradingResult,
-                    Question, Answer, PlagiarismCheck, Rubric, CodeFile,
-                    AnalysisResult, FeedbackTemplate, AIInteraction,
-                    KnowledgeBaseEntry, QALog
-                )
-                await conn.run_sync(Base.metadata.create_all)
+            if os.getenv("TEST_DATABASE_URL", os.getenv("DATABASE_URL", "")).startswith("sqlite"):
+                # SQLite in-memory needs schema creation per test app lifecycle.
+                async with async_engine.begin() as conn:
+                    # 导入所有模型以确保它们被注册到 Base.metadata
+                    from models import (
+                        Student, Teacher, Assignment, Submission, GradingResult,
+                        Question, Answer, PlagiarismCheck, Rubric, CodeFile,
+                        AnalysisResult, FeedbackTemplate, AIInteraction,
+                        KnowledgeBaseEntry, QALog
+                    )
+                    await conn.run_sync(Base.metadata.create_all)
             yield
             await async_engine.dispose()
 

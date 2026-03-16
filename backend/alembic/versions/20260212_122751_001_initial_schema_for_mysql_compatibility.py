@@ -1,6 +1,6 @@
 """Initial schema for MySQL compatibility
 
-Revision ID: 001
+Revision ID: 20260212_mysql_compat
 Revises: 2a2e1c6077a3
 Create Date: 2026-02-12 12:27:51.307460
 
@@ -13,7 +13,7 @@ from sqlalchemy.dialects import mysql
 
 
 # revision identifiers, used by Alembic.
-revision: str = '001'
+revision: str = '20260212_mysql_compat'
 down_revision: Union[str, None] = '2a2e1c6077a3'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -31,4 +31,3 @@ def upgrade() -> None:
 def downgrade() -> None:
     # Revert MySQL-specific changes if needed
     pass
-

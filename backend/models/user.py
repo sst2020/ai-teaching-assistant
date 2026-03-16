@@ -67,7 +67,7 @@ class User(Base, TimestampMixin):
 
     # 登录追踪
     last_login: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone=True),
+        DateTime(timezone=False),
         nullable=True,
         comment="最后登录时间"
     )
@@ -104,4 +104,5 @@ class User(Base, TimestampMixin):
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, student_id='{self.student_id}', role='{self.role}')>"
+
 

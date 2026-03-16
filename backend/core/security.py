@@ -4,6 +4,7 @@
 提供密码哈希、JWT Token 生成和验证等安全相关功能。
 """
 from datetime import datetime, timedelta
+from core.time import utc_now
 from typing import Optional, Dict, Any
 import secrets
 
@@ -79,16 +80,16 @@ def create_access_token(
     to_encode = data.copy()
     
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = utc_now() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(
+        expire = utc_now() + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
     
     # 添加标准 JWT claims
     to_encode.update({
         "exp": expire,  # Expiration time
-        "iat": datetime.utcnow(),  # Issued at
+        "iat": utc_now(),  # Issued at
         "jti": secrets.token_urlsafe(16)  # JWT ID (用于黑名单)
     })
     
@@ -164,4 +165,5 @@ def get_token_expiration(token: str) -> Optional[datetime]:
     if payload and "exp" in payload:
         return datetime.fromtimestamp(payload["exp"])
     return None
+
 

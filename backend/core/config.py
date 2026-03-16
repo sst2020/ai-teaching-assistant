@@ -1,13 +1,21 @@
 """
 Application Configuration Settings
 """
-from pydantic_settings import BaseSettings
-from typing import List, Optional
+import os
 from functools import lru_cache
+from typing import List, Optional
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
+
+    model_config = SettingsConfigDict(
+        env_file=os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"),
+        case_sensitive=True,
+        extra="ignore",
+    )
 
     # Application Settings
     APP_NAME: str = "AI Teaching Assistant API"
@@ -62,7 +70,7 @@ class Settings(BaseSettings):
     DEEPSEEK_RETRY_DELAY: float = 1.0
 
     # Database Settings
-    DATABASE_URL: str = "sqlite:///./teaching_assistant.db"
+    DATABASE_URL: str = "mysql+aiomysql://ai_teaching:ai_teaching_dev@localhost:3306/ai_teaching_assistant"
     DATABASE_ECHO: bool = False
 
     # Redis/Cache Settings (optional)
@@ -106,14 +114,6 @@ class Settings(BaseSettings):
     RATE_LIMIT_ENABLED: bool = True
     RATE_LIMIT_REQUESTS: int = 100
     RATE_LIMIT_PERIOD: int = 60
-
-    class Config:
-        import os
-        # Support both backend/.env and .env paths
-        env_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
-        case_sensitive = True
-        extra = "ignore"
-
 
 @lru_cache()
 def get_settings() -> Settings:

@@ -137,7 +137,7 @@ ai-teaching-assistant/
 
 ## Database Schema
 
-The backend uses SQLAlchemy ORM with support for SQLite (development) and PostgreSQL (production).
+The backend uses SQLAlchemy ORM with MySQL 9 as the default database backend.
 
 ### Core Models
 
@@ -154,7 +154,7 @@ The backend uses SQLAlchemy ORM with support for SQLite (development) and Postgr
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `DATABASE_URL` | Database connection string | `sqlite:///./teaching_assistant.db` |
+| `DATABASE_URL` | Database connection string | `mysql+aiomysql://ai_teaching:ai_teaching_dev@localhost:3306/ai_teaching_assistant` |
 | `OPENAI_API_KEY` | OpenAI API key | (empty) |
 | `AI_MODEL` | OpenAI model to use | `gpt-4` |
 | `DEBUG` | Enable debug mode | `true` |
@@ -168,6 +168,11 @@ The backend uses SQLAlchemy ORM with support for SQLite (development) and Postgr
 # Backend tests
 cd backend
 pytest
+
+# Backend MySQL integration tests
+$env:TEST_DATABASE_URL="mysql+aiomysql://ai_teaching:ai_teaching_dev@localhost:3306/ai_teaching_assistant"  # Windows PowerShell
+# export TEST_DATABASE_URL="mysql+aiomysql://ai_teaching:ai_teaching_dev@localhost:3306/ai_teaching_assistant"  # Linux/macOS
+pytest tests/test_students.py tests/test_submissions.py tests/test_crud.py tests/test_qa.py tests/test_file_upload.py
 
 # Frontend tests
 cd frontend

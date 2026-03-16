@@ -1,7 +1,7 @@
 """
 Schemas for Student Management API
 """
-from pydantic import BaseModel, Field, field_validator
+from pydantic import ConfigDict, BaseModel, Field, field_validator
 from typing import Optional, List
 from datetime import datetime
 import re
@@ -56,8 +56,7 @@ class StudentResponse(StudentBase):
     created_at: datetime = Field(..., description="Record creation timestamp")
     updated_at: Optional[datetime] = Field(None, description="Record update timestamp")
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class StudentLogin(BaseModel):
@@ -80,4 +79,5 @@ class StudentListResponse(BaseModel):
     page: int = Field(..., description="Current page number")
     page_size: int = Field(..., description="Number of items per page")
     total_pages: int = Field(..., description="Total number of pages")
+
 

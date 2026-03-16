@@ -2,6 +2,7 @@
 Pydantic schemas for multi-dimensional evaluation system.
 """
 from datetime import datetime
+from core.time import utc_now
 from typing import Optional, List, Dict, Any
 from enum import Enum
 from pydantic import BaseModel, Field
@@ -109,7 +110,7 @@ class AbilityAnalysisReport(BaseModel):
     """Comprehensive ability analysis report."""
     report_id: str = Field(..., description="Unique report ID")
     student_id: str = Field(..., description="Student ID")
-    generated_at: datetime = Field(default_factory=datetime.utcnow)
+    generated_at: datetime = Field(default_factory=utc_now)
     
     # Overall assessment
     overall_score: float = Field(..., ge=0, le=100)
@@ -153,4 +154,5 @@ class MultiDimensionalEvaluationResponse(BaseModel):
     report: AbilityAnalysisReport
     message: str = Field("多维度评估完成")
     processing_time_ms: Optional[float] = Field(None)
+
 

@@ -5,6 +5,7 @@
 使用数据库存储、bcrypt 密码哈希、Token 黑名单机制。
 """
 from datetime import datetime, timedelta
+from core.time import utc_now
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Depends, status, Request, UploadFile
@@ -99,7 +100,7 @@ async def _create_tokens_for_user(db: AsyncSession, user: User) -> Token:
 
     # 创建 Refresh Token (随机字符串)
     refresh_token_str = create_refresh_token(user.id)
-    refresh_token_expires = datetime.utcnow() + timedelta(
+    refresh_token_expires = utc_now() + timedelta(
         days=settings.REFRESH_TOKEN_EXPIRE_DAYS
     )
 
@@ -355,7 +356,7 @@ async def refresh_access_token(
         )
 
     # 检查是否过期
-    if refresh_token.expires_at < datetime.utcnow():
+    if refresh_token.expires_at < utc_now():
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Refresh Token 已过期"
@@ -751,3 +752,4 @@ async def delete_account(
     )
 
     return DeleteAccountResponse(message="账户已注销")
+

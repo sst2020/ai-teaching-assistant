@@ -216,10 +216,10 @@ docker-compose.override.yml
 !.env.staging
 !.env.production
 
-# Database files
-*.db
-*.sqlite
-*.sqlite3
+# MySQL data and dumps
+mysql_data/
+*.sql
+*.sql.gz
 
 # Uploads directory content
 backend/uploads/*

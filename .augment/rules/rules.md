@@ -82,14 +82,22 @@ type: "always_apply"
 ## MCP服务优先级
 
 1. `mcp-feedback-enhanced` - 用户交互和确认
-2. `sequential-thinking` - 复杂问题分析和深度思考
-3. `context7-mcp` - 查询最新库文档和示例
-4. `deepwiki-mcp` - 获取背景知识和领域概念
-5. `mcp-shrimp-task-manager` - 拆分与管理任务依赖
-6. `codebase-retrieval` - 分析现有代码结构
-7. `desktop-commander` - 系统文件操作和命令执行
+2. `chrome-devtools` - 浏览器调试、DOM检查、网络请求分析、性能审计
+3. `sequential-thinking` - 复杂问题分析和深度思考
+4. `context7-mcp` - 查询最新库文档和示例
+5. `deepwiki-mcp` - 获取背景知识和领域概念
+6. `mcp-shrimp-task-manager` - 拆分与管理任务依赖
+7. `codebase-retrieval` - 分析现有代码结构
+8. `desktop-commander` - 系统文件操作和命令执行
 
 ## 工具使用指南
+
+### Chrome DevTools
+
+- **用途**：浏览器调试、DOM检查、网络请求分析、性能审计、控制台错误排查
+- **适用场景**：前端页面调试、API请求验证、UI交互问题排查、Lighthouse审计
+- **使用时机**：需要在用户实际浏览器中检查页面状态、网络请求、DOM结构或执行JavaScript时
+- **优先于Playwright**：当需要在用户实际浏览器环境中调试时，优先使用Chrome DevTools而非Playwright
 
 ### Sequential Thinking
 

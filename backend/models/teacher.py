@@ -58,7 +58,7 @@ class Teacher(Base, TimestampMixin):
         nullable=True,
     )
     hire_date: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone=True),
+        DateTime(timezone=False),
         nullable=True,
     )
 
@@ -74,3 +74,4 @@ class Teacher(Base, TimestampMixin):
 
     def __repr__(self) -> str:
         return f"<Teacher(id={self.id}, teacher_id='{self.teacher_id}', name='{self.name}')>"
+

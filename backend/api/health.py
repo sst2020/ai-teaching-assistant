@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
 from datetime import datetime
+from core.time import utc_now
 from typing import Optional
 
 from schemas.common import HealthResponse
@@ -49,7 +50,7 @@ async def health_check(db: AsyncSession = Depends(get_db)):
     return HealthResponse(
         status=status,
         version=settings.APP_VERSION,
-        timestamp=datetime.utcnow(),
+        timestamp=utc_now(),
         database_status="connected" if db_healthy else f"error: {db_error}"
     )
 
@@ -74,4 +75,5 @@ async def root():
         "docs_url": "/docs",
         "health_check": "/health"
     }
+
 

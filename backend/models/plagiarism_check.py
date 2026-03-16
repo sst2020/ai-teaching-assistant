@@ -39,7 +39,7 @@ class PlagiarismCheck(Base, TimestampMixin):
     is_flagged: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     matches: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     checked_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
+        DateTime(timezone=False),
         nullable=False,
     )
     
@@ -56,4 +56,5 @@ class PlagiarismCheck(Base, TimestampMixin):
     def similarity_percentage(self) -> float:
         """Get similarity as percentage."""
         return self.similarity_score * 100
+
 

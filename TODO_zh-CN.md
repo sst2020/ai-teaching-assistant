@@ -1,6 +1,6 @@
 # AI 智能教学助手 - 项目待办事项清单
 
-> **最后更新：** 2026年1月25日
+> **最后更新：** 2026年3月15日
 > **项目状态：** MVP 已完成 ✅ + 增强调试环境 ✅ + 生产级 JWT 认证 ✅ + 认证监控 ✅ + Redis Cache ✅ + Grading API ✅ + 报告分析 DeepSeek 集成 ✅
 > **复杂度指标：** 🟢 简单 | 🟡 中等 | 🔴 困难 | ⏱️ 耗时较长
 
@@ -624,26 +624,32 @@
   - ✅ 验证数据库架构和索引
   - **测试结果：** 所有监控功能正常工作
 
-### 基于角色的访问控制 (RBAC)
+### 基于角色的访问控制 (RBAC) ✅
 
-- [ ] 🔴 **设计和实现用户角色** (P1)
-  - 创建带有角色的 `User` 模型（学生、教师、管理员）
-  - 创建 `Role` 和 `Permission` 模型
+> **完成时间：** 2025年（采用字符串角色方案，而非独立的 Role/Permission 模型）
+
+- [x] 🔴 **设计和实现用户角色** (P1) ✅
+  - ✅ `User` 模型包含 role 字段（student、teacher、admin）- `backend/models/user.py`
+  - ✅ 通过 `require_role()` 和 `require_roles()` 装饰器实现角色访问控制
+  - ✅ 通过 `check_permissions()` 实现权限检查 - `backend/api/deps.py`
+  - **说明：** 采用字符串角色方案，比独立 Role/Permission 模型更简洁
   - **验收标准：**
-    - 学生：提交作业、查看自己的成绩、提问
-    - 教师：批改作业、查看所有提交、回答问题
-    - 管理员：完全访问权限、用户管理
+    - ✅ 学生：提交作业、查看自己的成绩、提问
+    - ✅ 教师：批改作业、查看所有提交、回答问题
+    - ✅ 管理员：完全访问权限、用户管理
 
-- [ ] 🟡 **创建 Teacher 模型和端点** (P1)
-  - 创建 `backend/models/teacher.py`
-  - 创建 `backend/api/teachers.py` 路由
-  - 实现教师 CRUD 操作
-  - **交付物：** 模型、schemas、路由、测试
+- [x] 🟡 **创建 Teacher 模型和端点** (P1) ✅
+  - ✅ 创建 `backend/models/teacher.py` - Teacher 模型（含 user_id 外键）
+  - ✅ 创建 `backend/api/teachers.py` - 完整 CRUD 路由（注册、列表、获取、更新、删除）
+  - ✅ 创建 `backend/schemas/teacher.py` - TeacherCreate、TeacherUpdate、TeacherResponse、TeacherListResponse
+  - ✅ 在 `backend/utils/crud.py` 中添加 `crud_teacher`
+  - **交付物：** 模型 ✅、schemas ✅、路由 ✅
 
-- [ ] 🟡 **实现权限装饰器** (P2)
-  - 创建 `@require_role("teacher")` 装饰器
-  - 创建 `@require_permission("grade_assignments")` 装饰器
-  - **文件：** `backend/core/permissions.py`
+- [x] 🟡 **实现权限装饰器** (P2) ✅
+  - ✅ `require_role("teacher")` 装饰器 - `backend/core/dependencies.py`
+  - ✅ `require_roles(["teacher", "admin"])` 装饰器 - `backend/core/dependencies.py`
+  - ✅ `check_permissions()` - `backend/api/deps.py`
+  - **说明：** 实现在 `dependencies.py` 和 `deps.py` 中，而非独立的 `permissions.py`
 
 ---
 
@@ -767,14 +773,15 @@
   - ✅ 持久化偏好设置 (localStorage)
   - ✅ CSS 变量主题切换支持
 
-- [ ] 🟡 **添加网页动画效果** (P2)
-  - 为前端页面添加流畅的过渡动画和交互效果
-  - 实现页面切换动画（路由转场）
-  - 添加组件加载动画（骨架屏或加载指示器）
-  - 优化按钮、卡片等交互元素的悬停和点击动画
-  - 使用 CSS transitions/animations 或 React 动画库（如 Framer Motion）
-  - **相关文件：** `frontend/src/` 下的组件和样式文件
-  - **验收标准：** 动画流畅（60fps），不影响性能，符合 Material Design 3 动效规范
+- [x] 🟡 **添加网页动画效果** (P2) ✅
+  - ✅ 为前端页面添加流畅的过渡动画和交互效果
+  - ✅ 页面级入场动画（fadeIn、slideIn）：TeacherDashboard、StudentDashboard、ManageAssignments、GradingInterface、SubmitAssignment
+  - ✅ 卡片/按钮反馈动画（交错延迟）
+  - ✅ 列表与空状态动画
+  - ✅ 弹窗开关过渡（ConfirmDialog）
+  - ✅ 使用 CSS transitions/animations，符合 MD3 动效令牌
+  - **相关文件：** `frontend/src/pages/*.css`、`frontend/src/index.css`
+  - **验证：** `npm run build` 通过
 
 ### 开发工具增强
 
@@ -870,16 +877,20 @@
 - [x] 🟢 **创建评分结果 schemas** (P1) ✅
   - ✅ 创建 `backend/schemas/grading.py`
 
-### Q&A 系统增强
+### Q&A 系统增强 ✅
 
-- [ ] 🟡 **将 Q&A 持久化到数据库** (P1)
-  - 更新 `backend/api/qa.py` 以使用数据库
-  - 存储问题和答案
-  - 链接到学生
-  - **文件：** `backend/api/qa.py`, `backend/utils/crud.py`
+> **完成时间：** 2024年12月（详见"未来增强功能"章节）
 
-- [ ] 🟢 **添加 Q&A CRUD 工具** (P1)
-  - 在 `backend/utils/crud.py` 中添加 `CRUDQuestion` 和 `CRUDAnswer`
+- [x] 🟡 **将 Q&A 持久化到数据库** (P1) ✅
+  - ✅ `backend/models/qa_log.py` - QALog 模型用于持久化
+  - ✅ `backend/api/qa.py` - 完整 Q&A API（数据库存储）
+  - ✅ `backend/services/qa_service.py` - Q&A 服务层
+  - ✅ 学生提问历史、薄弱点分析、智能问答与分诊
+  - **文件：** `backend/api/qa.py`、`backend/models/qa_log.py`、`backend/services/qa_service.py`
+
+- [x] 🟢 **添加 Q&A CRUD 工具** (P1) ✅
+  - ✅ Q&A 操作通过 qa_service.py 集成
+  - ✅ 测试在 `backend/tests/test_qa.py`
 
 ### 文件上传系统
 
@@ -912,12 +923,13 @@
   - 实现关系的预加载
   - **文件：** 模型文件、Alembic 迁移
 
-### 限流
+### 限流 ✅
 
-- [ ] 🟡 **实现限流中间件** (P2)
-  - 使用 slowapi 或自定义实现
-  - 按端点配置限制
-  - **文件：** `backend/core/rate_limit.py`
+- [x] 🟡 **实现限流中间件** (P2) ✅
+  - ✅ 创建 `backend/core/rate_limit.py`，包含 `SimpleRateLimitMiddleware`
+  - ✅ 基于客户端 IP 的内存滑动窗口
+  - ✅ 可通过 `RATE_LIMIT_ENABLED`、`RATE_LIMIT_REQUESTS`、`RATE_LIMIT_PERIOD` 配置
+  - **说明：** 生产环境建议升级为 Redis 分布式限流
 
 ---
 
@@ -929,21 +941,22 @@
 
 ### 后端单元测试
 
-- [ ] 🟢 **添加学生端点测试** (P1)
-  - 创建 `backend/tests/test_students.py`
-  - 测试所有 CRUD 操作
-  - 测试验证错误
-  - **目标覆盖率：** 90%
+- [x] 🟢 **添加学生端点测试** (P1) ✅
+  - ✅ 创建 `backend/tests/test_students.py`（559 行）
+  - ✅ 使用工厂 fixtures 测试所有 CRUD 操作
+  - ✅ 测试验证错误和边界情况
+  - **文件：** `backend/tests/test_students.py`
 
-- [ ] 🟢 **添加提交端点测试** (P1)
-  - 创建 `backend/tests/test_submissions.py`
-  - 测试创建、列表、状态更新
-  - **目标覆盖率：** 90%
+- [x] 🟢 **添加提交端点测试** (P1) ✅
+  - ✅ 创建 `backend/tests/test_submissions.py`（333 行）
+  - ✅ 测试：创建、获取、学生提交列表、作业提交列表、状态更新
+  - ✅ 测试：自动ID、重复、不存在、缺少字段、分页、无效状态
 
-- [ ] 🟢 **添加 CRUD 工具测试** (P1)
-  - 创建 `backend/tests/test_crud.py`
-  - 测试所有 CRUD 操作
-  - **目标覆盖率：** 95%
+- [x] 🟢 **添加 CRUD 工具测试** (P1) ✅
+  - ✅ 创建 `backend/tests/test_crud.py`（420+ 行，异步）
+  - ✅ 测试：CRUDBase（get、get_multi、count、create、update、delete）
+  - ✅ 测试：CRUDStudent、CRUDAssignment、CRUDSubmission、CRUDTeacher
+  - ✅ 测试：generate_unique_id 唯一性
 
 - [ ] 🟡 **添加服务层测试** (P2)
   - 测试 AI 服务（使用 mock）
@@ -985,10 +998,12 @@
 
 ### 测试基础设施
 
-- [ ] 🟢 **设置测试数据库** (P1)
-  - 使用 SQLite 内存数据库进行测试
-  - 添加常用数据的 fixtures
-  - **文件：** `backend/tests/conftest.py`
+- [x] 🟢 **设置测试数据库** (P1) ✅
+  - ✅ 默认使用 SQLite 内存数据库进行单元测试 - `backend/tests/conftest.py`
+  - ✅ 支持通过 `TEST_DATABASE_URL` 切换到 MySQL 测试库做集成验证
+  - ✅ 测试工具 - `backend/tests/test_utils.py`（override_get_db、init_test_db、dispose_test_db）
+  - ✅ 同步和异步测试客户端 fixtures
+  - **文件：** `backend/tests/conftest.py`、`backend/tests/test_utils.py`
 
 - [x] 🟢 **添加 GitHub Actions CI** (P1) ✅
   - ✅ 创建 `.github/workflows/ci.yml`
@@ -1063,7 +1078,7 @@
 ### Docker 与容器化
 
 - [x] 🟢 **创建 docker-compose.yml** (P1) ✅ 2025-12-15
-  - Backend + Frontend + PostgreSQL + Redis
+  - Backend + Frontend + MySQL 9 + Redis
   - 开发配置
   - **文件：** `docker-compose.yml`
 

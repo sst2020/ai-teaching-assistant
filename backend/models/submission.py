@@ -60,7 +60,7 @@ class Submission(Base, TimestampMixin):
     )
     content: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     submitted_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
+        DateTime(timezone=False),
         nullable=False,
     )
     status: Mapped[SubmissionStatus] = mapped_column(
@@ -100,4 +100,5 @@ class Submission(Base, TimestampMixin):
     
     def __repr__(self) -> str:
         return f"<Submission(id={self.id}, submission_id='{self.submission_id}', status='{self.status}')>"
+
 

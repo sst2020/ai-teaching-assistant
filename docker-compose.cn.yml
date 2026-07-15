@@ -44,6 +44,28 @@ services:
     networks:
       - ai-ta-network
 
+  # RabbitMQ Message Queue (使用 DaoCloud 镜像加速)
+  rabbitmq:
+    image: docker.m.daocloud.io/library/rabbitmq:3.13-management-alpine
+    container_name: ai-ta-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-ai_ta}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-ai_ta_dev}
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - ai-ta-network
+
   # Backend API Service
   backend:
     build:
@@ -54,8 +76,13 @@ services:
     environment:
       DATABASE_URL: mysql+aiomysql://${MYSQL_USER:-ai_teaching}:${MYSQL_PASSWORD:-ai_teaching_dev}@mysql:3306/${MYSQL_DATABASE:-ai_teaching_assistant}
       DATABASE_ECHO: ${DATABASE_ECHO:-false}
+      # Redis
       REDIS_URL: redis://redis:6379/0
-      DEBUG: ${DEBUG:-true}
+
+      # RabbitMQ
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-ai_ta}:${RABBITMQ_PASSWORD:-ai_ta_dev}@rabbitmq:5672/
+
+      # Application
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       SECRET_KEY: ${SECRET_KEY:-change-this-in-production-use-a-secure-random-key}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
@@ -71,6 +98,8 @@ services:
       mysql:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health')"]
@@ -113,6 +142,8 @@ volumes:
   mysql_data:
     driver: local
   redis_data:
+    driver: local
+  rabbitmq_data:
     driver: local
   backend_uploads:
     driver: local

@@ -33,6 +33,7 @@ from models import (
     Question,
     Answer,
     PlagiarismCheck,
+    StudentRecord,
 )
 
 # this is the Alembic Config object, which provides

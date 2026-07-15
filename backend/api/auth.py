@@ -162,14 +162,15 @@ async def register(
         db=db,
         student_id=data.student_id,
         password_hash=password_hashed,
-        role=data.role
+        role=data.role,
+        name=data.name
     )
 
     # 创建 Student 记录（与 User 使用相同的 student_id）
     student_data = {
         "student_id": data.student_id,
         "name": data.name,
-        "email": f"{data.student_id}@student.local"  # 使用学号生成占位邮箱
+        "email": data.email
     }
     student = await crud_student.create(db, student_data)
 

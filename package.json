@@ -1,5 +1,12 @@
 {
-  "devDependencies": {
-    "tailwindcss": "^4.1.18"
+  "name": "ai-teaching-assistant-workspace",
+  "private": true,
+  "description": "Workspace entrypoint for the AI Teaching Assistant monorepo-style repository.",
+  "scripts": {
+    "dev": "node scripts/dev-start.js",
+    "check:env": "node scripts/check-environment.js",
+    "frontend:start": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build",
+    "frontend:test": "npm --prefix frontend run test"
   }
 }

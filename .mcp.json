@@ -1,0 +1,36 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "./backend",
+        "./frontend/src",
+        "./docs"
+      ],
+      "description": "沙箱式文件访问：后端源码、前端源码、项目文档。目录相对于仓库根运行。"
+    },
+    "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "env": {
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "description": "抓取外部文档并转换为 Markdown，用于查阅 FastAPI/OpenAI/React 官方文档。需要 uv 工具链（pip install uv）。"
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "GitHub 集成：PR 审查、Issue 管理、代码搜索。需在环境变量中设置 GITHUB_TOKEN。"
+    }
+  }
+}

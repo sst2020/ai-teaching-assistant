@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-dotnet",
+      "program": "${workspaceFolder}/bin/Debug/net6.0/YourApp.dll", // ← 编辑此路径
+      "cwd": "${workspaceFolder}",
+      "args": [] // Add command line arguments if needed
+    },
+    {
+      "name": "Mono Launch",
+      "type": "mono",
+      "request": "launch",
+      "preLaunchTask": "build-mono",
+      "program": "${workspaceFolder}/YourProgram.exe", // ← Edit this path
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

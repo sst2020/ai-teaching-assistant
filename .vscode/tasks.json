@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-cpp",
+      "type": "shell",
+      "command": "clang++",
+      "args": ["-g", "main.cpp", "-o", "main"], // ← 请根据您的文件修改
+      "group": "build",
+      "problemMatcher": "$gcc"
+    }
+  ]
+}

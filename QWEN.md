@@ -5,7 +5,7 @@
 The AI Teaching Assistant is a comprehensive educational technology platform that provides automated assignment grading, code analysis, plagiarism detection, and intelligent Q&A support for educational institutions. The project consists of two main components:
 
 - **Backend**: FastAPI-based REST API with SQLAlchemy ORM for database management
-- **Frontend**: React 19 web application with Material Design 3 theme
+- **Frontend**: Vue 3 web application with Element Plus UI framework
 
 The project is currently in a complete MVP state with full frontend-backend integration, featuring user authentication, assignment management, code editor integration, file uploads, grades viewing, and an intelligent Q&A system.
 
@@ -22,13 +22,13 @@ The project is currently in a complete MVP state with full frontend-backend inte
 - **Development Tools**: black, isort, mypy, ruff
 
 ### Frontend Stack
-- **Framework**: React 19 with TypeScript
-- **Routing**: React Router DOM
-- **Styling**: Material Design 3 with CSS variables
+- **Framework**: Vue 3 with TypeScript
+- **Routing**: Vue Router
+- **Styling**: Element Plus with CSS variables
 - **Code Editor**: Monaco Editor with syntax highlighting for 10+ languages
 - **HTTP Client**: Axios
-- **Internationalization**: i18next
-- **Testing**: React Testing Library, Jest DOM
+- **State Management**: Pinia
+- **Testing**: Vitest (待配置)
 
 ## Building and Running
 
@@ -68,7 +68,7 @@ cd frontend
 npm install
 
 # Start development server
-npm start
+npm run dev
 ```
 
 ### Quick Start with Scripts
@@ -108,8 +108,8 @@ docker-compose up --build
 - **Personalized Feedback**: Student history analysis with progressive suggestions
 
 ### User Interface
-- **Modern UI**: Material Design 3 with accessibility features
-- **Responsive Design**: Mobile-friendly layouts with MD3 responsive breakpoints
+- **Modern UI**: Element Plus with accessibility features
+- **Responsive Design**: Mobile-friendly layouts
 - **Accessibility**: Screen reader support, keyboard navigation, focus indicators
 - **Dark Mode**: Theme context with persistent preferences
 - **Code Editor**: Monaco Editor with syntax highlighting for 10+ languages
@@ -162,8 +162,8 @@ The application uses SQLAlchemy ORM with the following core models:
 ### Frontend Environment Variables
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `REACT_APP_API_URL` | Backend API URL | `http://localhost:8000` |
-| `REACT_APP_DEBUG_MODE` | Enable debug features | `false` |
+| `VITE_API_URL` | Backend API URL | `http://localhost:8000` |
+| `VITE_DEBUG_MODE` | Enable debug features | `false` |
 
 ## Development Practices
 
@@ -179,6 +179,7 @@ mypy .           # Type check
 # Frontend
 cd frontend
 npm run lint     # Lint code
+npm run format   # Format code
 ```
 
 ### Running Tests
@@ -194,15 +195,13 @@ npm test
 
 ### Testing Structure
 - Backend tests use pytest with conftest.py for fixtures
-- Frontend tests use React Testing Library and Jest
-- API integration tests cover complete request/response cycles
-- Component tests validate UI behavior
+- Frontend tests use Vitest (待配置)
 
 ## Current Development Status
 
 The project has completed its MVP with the following features:
 - ✅ User Authentication (Login, Register, Logout)
-- ✅ Frontend UI (React Router, Toast, Accessibility)
+- ✅ Frontend UI (Vue Router, Toast, Accessibility)
 - ✅ Assignment Submission with Monaco Editor
 - ✅ Grades Display with Charts and Filtering
 - ✅ API Integration
@@ -232,9 +231,9 @@ ai-teaching-assistant/
 │   ├── schemas/             # Pydantic schemas
 │   ├── services/            # Business logic
 │   └── utils/               # Utility functions
-├── frontend/                # React frontend
+├── frontend/                # Vue 3 frontend
 │   ├── public/              # Static assets
-│   └── src/                 # React components
+│   └── src/                 # Vue components
 ├── scripts/                 # Development and deployment scripts
 ├── docs/                    # Documentation
 └── docker-compose.yml       # Container orchestration

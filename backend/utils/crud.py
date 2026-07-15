@@ -17,7 +17,7 @@ from models import (
     User, RefreshToken, TokenBlacklist, AuthLog,
     Student, Teacher, Assignment, Submission, GradingResult,
     Question, Answer, PlagiarismCheck, Rubric, AnalysisResult,
-    FeedbackTemplate, AIInteraction
+    FeedbackTemplate, AIInteraction, StudentRecord
 )
 from models.submission import SubmissionStatus
 from models.code_file import CodeFile
@@ -762,6 +762,40 @@ crud_analysis_result = CRUDAnalysisResult(AnalysisResult)
 crud_feedback_template = CRUDFeedbackTemplate(FeedbackTemplate)
 crud_ai_interaction = CRUDAIInteraction(AIInteraction)
 
+
+# StudentRecord CRUD
+class CRUDStudentRecord(CRUDBase[StudentRecord]):
+    """CRUD operations for StudentRecord model."""
+
+    async def get_by_student_id(self, db: AsyncSession, student_id: str) -> Optional[StudentRecord]:
+        """通过学号查找记录"""
+        result = await db.execute(
+            select(StudentRecord).where(StudentRecord.student_id == student_id)
+        )
+        return result.scalar_one_or_none()
+
+    async def get_by_assignment_number(
+        self, db: AsyncSession, assignment_number: str, skip: int = 0, limit: int = 100
+    ) -> List[StudentRecord]:
+        """通过作业编号查找记录"""
+        result = await db.execute(
+            select(StudentRecord)
+            .where(StudentRecord.assignment_number == assignment_number)
+            .offset(skip).limit(limit)
+        )
+        return list(result.scalars().all())
+
+    async def count_by_assignment_number(self, db: AsyncSession, assignment_number: str) -> int:
+        """统计指定作业编号的记录数"""
+        result = await db.execute(
+            select(func.count())
+            .select_from(StudentRecord)
+            .where(StudentRecord.assignment_number == assignment_number)
+        )
+        return result.scalar() or 0
+
+
+crud_student_record = CRUDStudentRecord(StudentRecord)
 
 
 # Rubric CRUD

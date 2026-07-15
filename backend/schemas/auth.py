@@ -111,7 +111,7 @@ class LoginResponse(BaseModel):
 
 class RegisterRequest(UserCreate):
     """注册请求 (继承 UserCreate，student_id 已在 UserBase 中定义为必填)"""
-    pass
+    email: str = Field(..., description="邮箱地址")
 
 
 class RegisterResponse(BaseModel):

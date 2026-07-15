@@ -27,6 +27,7 @@ from models.knowledge_base import (
     DifficultyLevel,
 )
 from models.qa_log import QALog, TriageResult, QALogStatus
+from models.student_record import StudentRecord
 
 __all__ = [
     # Base
@@ -52,6 +53,7 @@ __all__ = [
     "AIInteraction",
     "KnowledgeBaseEntry",
     "QALog",
+    "StudentRecord",
     # Enums
     "AssignmentType",
     "SubmissionStatus",

@@ -1,1146 +1,330 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
-import {
-  HealthResponse,
-  ApiInfo,
-  CodeAnalysisRequest,
-  CodeAnalysisResponse,
-  AssignmentSubmission,
-  GradingResult,
-  QuestionRequest,
-  QuestionResponse,
-  PlagiarismRequest,
-  PlagiarismResponse,
-  ApiError,
-  QALogCreate,
-  QALogResponse,
-  QALogStats,
-  QAAnalyticsReport,
-  StudentWeaknessReport,
-} from '../types/api';
-import {
-  LoginCredentials,
-  RegisterData,
-  LoginResponse,
-  RegisterResponse,
-  User,
-  RefreshTokenResponse,
-  ChangePasswordResponse,
-  RevokeAllTokensResponse,
-  UpdateProfileResponse,
-  AvatarUploadResponse,
-  DeleteAccountResponse,
-} from '../types/auth';
-import {
-  StudentProfile,
-  Course,
-  StudentStats,
-  UpdateProfileData,
-} from '../types/student';
-import {
-  Submission,
-  CreateSubmissionRequest,
-  SubmissionListResponse,
-  SubmissionFilters,
-  SubmissionStats,
-} from '../types/submission';
-import {
-  Assignment,
-  AssignmentListResponse,
-  AssignmentFilters,
-  AssignmentWithSubmission,
-  AssignmentStats,
-  Rubric,
-} from '../types/assignment';
-import {
-  BatchAnalysisRequest,
-  BatchAnalysisResponse,
-  OriginalityReport,
-  PlagiarismSettings,
-  BatchUploadResponse,
-  AssignmentSubmissionRecord,
-  FileManagerSyncResponse,
-} from '../types/plagiarism';
-import {
-  ReportAnalysisRequest,
-  ReportAnalysisResponse,
-} from '../types/reportAnalysis';
-import {
-  KnowledgeBaseEntry,
-  KnowledgeBaseCreateRequest,
-  KnowledgeBaseUpdateRequest,
-  KnowledgeBaseSearchRequest,
-  KnowledgeBaseSearchResponse,
-  KnowledgeBaseListResponse,
-  KnowledgeBaseStats,
-  CategoriesResponse,
-} from '../types/knowledgeBase';
-import {
-  TriageRequest,
-  TriageResponse,
-  PendingQueueResponse,
-  TeacherTakeoverRequest,
-  TeacherAnswerRequest,
-  TeacherAnswerResponse,
-  TriageStats,
-  DifficultyLevelsResponse,
-} from '../types/triage';
-import {
-  GradingResultCreate,
-  GradingResultResponse,
-  GradingResultWithSubmission,
-  GradingResultListResponse,
-  GradingResultOverride,
-  GradingStatistics,
-} from '../types/grading';
+import axios, { AxiosError, type AxiosInstance, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios'
+import type { User, LoginCredentials, RegisterData, Assignment, Submission, QAQuestion, StudentRecord, StudentRecordCreate, StudentRecordUpdate } from '@/types'
 
-// 扩展 Axios 配置类型以支持 metadata
-declare module 'axios' {
-  interface InternalAxiosRequestConfig {
-    metadata?: {
-      startTime: number;
-    };
-  }
-}
-
-// API Configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-const API_V1_PREFIX = '/api/v1';
-
-// Create axios instance with default config
-// 超时设置为 90 秒，以适应 DeepSeek API 的响应时间（通常需要 15-50 秒）
+// Create axios instance
 const apiClient: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 90000,
+  baseURL: import.meta.env.VITE_API_URL || '/api/v1',
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   },
-});
+  timeout: 30000
+})
 
-// Enhanced request interceptor with detailed logging and performance tracking
+// Request interceptor - add auth token
 apiClient.interceptors.request.use(
-  (config) => {
-    // Add request timestamp for performance tracking
-    config.metadata = { startTime: Date.now() };
-
-    // Add unique request ID for tracking
-    const requestId = Math.random().toString(36).substr(2, 9);
-    config.headers['X-Request-ID'] = requestId;
-
-    // Enhanced logging
-    const isDebugMode = process.env.REACT_APP_DEBUG_MODE === 'true';
-    const enableApiLogging = process.env.REACT_APP_ENABLE_API_LOGGING === 'true';
-
-    if (isDebugMode && enableApiLogging) {
-      console.group(`🚀 [API Request] ${config.method?.toUpperCase()} ${config.url}`);
-      console.log('📋 Request ID:', requestId);
-      console.log('🔗 URL:', (config.baseURL || '') + (config.url || ''));
-      console.log('📤 Method:', config.method?.toUpperCase());
-      console.log('📋 Headers:', config.headers);
-      if (config.data) {
-        console.log('📦 Data:', config.data);
-      }
-      if (config.params) {
-        console.log('🔍 Params:', config.params);
-      }
-      console.log('⏰ Timestamp:', new Date().toISOString());
-      console.groupEnd();
+  (config: InternalAxiosRequestConfig) => {
+    const token = localStorage.getItem('token')
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`
     }
-
-    return config;
+    return config
   },
-  (error) => {
-    console.error('❌ [API] Request error:', error);
-    return Promise.reject(error);
+  (error: AxiosError) => {
+    return Promise.reject(error)
   }
-);
+)
 
-// Enhanced response interceptor with performance tracking and detailed error handling
+// Response interceptor - handle errors
 apiClient.interceptors.response.use(
-  (response) => {
-    // Calculate response time
-    const startTime = response.config.metadata?.startTime;
-    const responseTime = startTime ? Date.now() - startTime : 0;
+  (response: AxiosResponse) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
 
-    // Add response time to headers for debugging
-    response.headers['X-Response-Time'] = `${responseTime}ms`;
+    // Handle 401 - try to refresh token
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+      const refreshTokenValue = localStorage.getItem('refreshToken')
 
-    const isDebugMode = process.env.REACT_APP_DEBUG_MODE === 'true';
-    const enableApiLogging = process.env.REACT_APP_ENABLE_API_LOGGING === 'true';
-    const enablePerformanceMonitoring = process.env.REACT_APP_ENABLE_PERFORMANCE_MONITORING === 'true';
+      if (refreshTokenValue) {
+        try {
+          const response = await authApi.refreshToken(refreshTokenValue)
+          localStorage.setItem('token', response.access_token)
 
-    if (isDebugMode && enableApiLogging) {
-      const requestId = response.config.headers['X-Request-ID'];
-      const statusColor = response.status >= 200 && response.status < 300 ? '✅' : '⚠️';
-
-      console.group(`${statusColor} [API Response] ${response.status} ${response.config.method?.toUpperCase()} ${response.config.url}`);
-      console.log('📋 Request ID:', requestId);
-      console.log('📊 Status:', response.status, response.statusText);
-      console.log('⏱️ Response Time:', `${responseTime}ms`);
-      console.log('📥 Headers:', response.headers);
-      console.log('📦 Data:', response.data);
-      console.log('⏰ Timestamp:', new Date().toISOString());
-      console.groupEnd();
-    }
-
-    // Performance monitoring
-    if (enablePerformanceMonitoring && responseTime > 0) {
-      // Store performance data for monitoring dashboard
-      const performanceData = {
-        url: response.config.url,
-        method: response.config.method?.toUpperCase(),
-        responseTime,
-        status: response.status,
-        timestamp: Date.now()
-      };
-
-      // Store in sessionStorage for debug panel
-      try {
-        const rawData = sessionStorage.getItem('api_performance');
-        const existingData = rawData ? JSON.parse(rawData) : [];
-        existingData.push(performanceData);
-        // Keep only last 100 entries
-        if (existingData.length > 100) {
-          existingData.shift();
+          if (originalRequest.headers) {
+            originalRequest.headers.Authorization = `Bearer ${response.access_token}`
+          }
+          return apiClient(originalRequest)
+        } catch (refreshError) {
+          localStorage.removeItem('token')
+          localStorage.removeItem('refreshToken')
+          window.location.href = '/login'
+          return Promise.reject(refreshError)
         }
-        sessionStorage.setItem('api_performance', JSON.stringify(existingData));
-      } catch (parseError) {
-        console.warn('[API] Failed to parse performance data, resetting:', parseError);
-        sessionStorage.setItem('api_performance', JSON.stringify([performanceData]));
       }
     }
 
-    return response;
+    return Promise.reject(error)
+  }
+)
+
+// Auth API
+export const authApi = {
+  async login(credentials: LoginCredentials) {
+    const response = await apiClient.post('/auth/login', {
+      student_id: credentials.username,
+      password: credentials.password
+    })
+    return response.data
   },
-  (error: AxiosError<ApiError>) => {
-    // Calculate response time for failed requests
-    const startTime = error.config?.metadata?.startTime;
-    const responseTime = startTime ? Date.now() - startTime : 0;
 
-    const isDebugMode = process.env.REACT_APP_DEBUG_MODE === 'true';
-    const enableApiLogging = process.env.REACT_APP_ENABLE_API_LOGGING === 'true';
+  async register(data: RegisterData) {
+    const response = await apiClient.post('/auth/register', data)
+    return response.data
+  },
 
-    // Enhanced error logging
-    if (isDebugMode && enableApiLogging) {
-      const requestId = error.config?.headers?.['X-Request-ID'];
+  async getCurrentUser(): Promise<User> {
+    const response = await apiClient.get('/auth/me')
+    return response.data
+  },
 
-      console.group(`❌ [API Error] ${error.response?.status || 'Network'} ${error.config?.method?.toUpperCase()} ${error.config?.url}`);
-      console.log('📋 Request ID:', requestId);
-      console.log('⏱️ Response Time:', `${responseTime}ms`);
-      console.log('🔥 Error Type:', error.name);
-      console.log('💬 Error Message:', error.message);
-      if (error.response) {
-        console.log('📊 Status:', error.response.status, error.response.statusText);
-        console.log('📥 Response Headers:', error.response.headers);
-        console.log('📦 Response Data:', error.response.data);
-      }
-      console.log('⏰ Timestamp:', new Date().toISOString());
-      console.groupEnd();
-    }
+  async refreshToken(refreshToken: string) {
+    const response = await apiClient.post('/auth/refresh', { refresh_token: refreshToken })
+    return response.data
+  },
 
-    // Store error data for debugging
-    const errorData = {
-      url: error.config?.url,
-      method: error.config?.method?.toUpperCase(),
-      status: error.response?.status,
-      message: error.message,
-      responseTime,
-      timestamp: Date.now(),
-      requestId: error.config?.headers?.['X-Request-ID']
-    };
-
-    try {
-      const rawErrors = sessionStorage.getItem('api_errors');
-      const existingErrors = rawErrors ? JSON.parse(rawErrors) : [];
-      existingErrors.push(errorData);
-      // Keep only last 50 errors
-      if (existingErrors.length > 50) {
-        existingErrors.shift();
-      }
-      sessionStorage.setItem('api_errors', JSON.stringify(existingErrors));
-    } catch (parseError) {
-      console.warn('[API] Failed to parse error data, resetting:', parseError);
-      sessionStorage.setItem('api_errors', JSON.stringify([errorData]));
-    }
-
-    return Promise.reject(error);
+  async logout() {
+    const response = await apiClient.post('/auth/logout')
+    return response.data
   }
-);
-
-// Helper function to handle API errors
-export const handleApiError = (error: unknown): string => {
-  if (axios.isAxiosError(error)) {
-    const axiosError = error as AxiosError<ApiError>;
-    if (axiosError.response?.data?.detail) {
-      return axiosError.response.data.detail;
-    }
-    if (axiosError.message) {
-      return axiosError.message;
-    }
-  }
-  return 'An unexpected error occurred';
-};
-
-// ============ Health & Info Endpoints ============
-
-export const getApiInfo = async (): Promise<ApiInfo> => {
-  const response = await apiClient.get<ApiInfo>('/');
-  return response.data;
-};
-
-export const getHealthStatus = async (): Promise<HealthResponse> => {
-  const response = await apiClient.get<HealthResponse>('/health');
-  return response.data;
-};
-
-// ============ Code Analysis Endpoints ============
-
-export const analyzeCode = async (request: CodeAnalysisRequest): Promise<CodeAnalysisResponse> => {
-  const response = await apiClient.post<CodeAnalysisResponse>(
-    `${API_V1_PREFIX}/assignments/analyze-code`,
-    request
-  );
-  return response.data;
-};
-
-// ============ Assignment Grading Endpoints ============
-
-export const gradeAssignment = async (submission: AssignmentSubmission): Promise<GradingResult> => {
-  const response = await apiClient.post<GradingResult>(
-    `${API_V1_PREFIX}/assignments/grade`,
-    submission
-  );
-  return response.data;
-};
-
-// ============ Q&A Endpoints ============
-
-export const askQuestion = async (request: QuestionRequest): Promise<QuestionResponse> => {
-  const response = await apiClient.post<QuestionResponse>(
-    `${API_V1_PREFIX}/qa/ask`,
-    request
-  );
-  return response.data;
-};
-
-// 流式问答接口
-export interface StreamCallbacks {
-  onStart?: (questionId: string) => void;
-  onChunk?: (chunk: string) => void;
-  onDone?: (confidence: number, needsReview: boolean) => void;
-  onError?: (error: string) => void;
 }
 
-export const askQuestionStream = async (
-  request: QuestionRequest,
-  callbacks: StreamCallbacks
-): Promise<void> => {
-  const response = await fetch(`${API_BASE_URL}${API_V1_PREFIX}/qa/ask-stream`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(request),
-  });
+// Assignments API
+export const assignmentsApi = {
+  async getAll(signal?: AbortSignal) {
+    const response = await apiClient.get('/assignments/', { signal })
+    return response.data
+  },
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+  async getById(id: string) {
+    const response = await apiClient.get(`/assignments/${id}`)
+    return response.data
+  },
+
+  async create(data: Partial<Assignment>) {
+    const response = await apiClient.post('/assignments/', data)
+    return response.data
+  },
+
+  async update(id: string, data: Partial<Assignment>) {
+    const response = await apiClient.put(`/assignments/${id}`, data)
+    return response.data
+  },
+
+  async delete(id: string) {
+    const response = await apiClient.delete(`/assignments/${id}`)
+    return response.data
   }
+}
 
-  const reader = response.body?.getReader();
-  if (!reader) {
-    throw new Error('No response body');
+// Submissions API
+export const submissionsApi = {
+  async getStudentSubmissions(studentId: string) {
+    const response = await apiClient.get(`/submissions/student/${studentId}`)
+    return response.data
+  },
+
+  async getByAssignment(assignmentId: string) {
+    const response = await apiClient.get(`/submissions/assignment/${assignmentId}`)
+    return response.data
+  },
+
+  async create(data: { student_id: string; assignment_id: string; content?: string }) {
+    const response = await apiClient.post('/submissions', data)
+    return response.data
   }
+}
 
-  const decoder = new TextDecoder();
-  let buffer = '';
+// QA API
+export const qaApi = {
+  async askQuestion(question: string, studentId: string = 'anonymous', courseId: string = 'general') {
+    const response = await apiClient.post('/qa/ask', {
+      student_id: studentId,
+      course_id: courseId,
+      question
+    })
+    return response.data
+  },
 
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
+  /**
+   * 流式问答 — 返回 EventSource 式的 ReadableStream
+   * 调用方通过 onChunk 回调逐步接收文本片段
+   */
+  askStream(
+    question: string,
+    options: {
+      studentId?: string
+      courseId?: string
+      onChunk: (text: string) => void
+      onDone?: (meta: { confidence: number; needs_review: boolean }) => void
+      onError?: (msg: string) => void
+    }
+  ): AbortController {
+    const controller = new AbortController()
+    const baseURL = apiClient.defaults.baseURL || '/api/v1'
+    const token = localStorage.getItem('token')
 
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n\n');
-      buffer = lines.pop() || '';
+    fetch(`${baseURL}/qa/ask-stream`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify({
+        student_id: options.studentId || 'anonymous',
+        course_id: options.courseId || 'general',
+        question
+      }),
+      signal: controller.signal
+    })
+      .then(async (res) => {
+        if (!res.ok || !res.body) {
+          options.onError?.(`HTTP ${res.status}`)
+          return
+        }
+        const reader = res.body.getReader()
+        const decoder = new TextDecoder()
+        let buffer = ''
 
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          try {
-            const data = JSON.parse(line.slice(6));
-            switch (data.type) {
-              case 'start':
-                callbacks.onStart?.(data.question_id);
-                break;
-              case 'chunk':
-                callbacks.onChunk?.(data.content);
-                break;
-              case 'done':
-                callbacks.onDone?.(data.confidence, data.needs_review);
-                break;
-              case 'error':
-                callbacks.onError?.(data.message);
-                break;
-            }
-          } catch (e) {
-            console.error('Failed to parse SSE data:', e);
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          buffer += decoder.decode(value, { stream: true })
+
+          const lines = buffer.split('\n')
+          buffer = lines.pop() || ''
+
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue
+            try {
+              const data = JSON.parse(line.slice(6))
+              if (data.type === 'chunk') {
+                options.onChunk(data.content)
+              } else if (data.type === 'done') {
+                options.onDone?.({ confidence: data.confidence, needs_review: data.needs_review })
+              } else if (data.type === 'error') {
+                options.onError?.(data.message)
+              }
+            } catch { /* skip malformed */ }
           }
         }
-      }
-    }
-  } finally {
-    reader.releaseLock();
+      })
+      .catch((err) => {
+        if (err.name !== 'AbortError') {
+          options.onError?.(err.message)
+        }
+      })
+
+    return controller
+  },
+
+  async getQuestions(): Promise<QAQuestion[]> {
+    const response = await apiClient.get('/qa/pending-questions')
+    return response.data
+  },
+
+  async getKnowledgeBase(category?: string) {
+    const response = await apiClient.get('/knowledge-base', {
+      params: { category }
+    })
+    return (response.data as { entries: unknown[] }).entries ?? response.data
   }
-};
+}
 
-// 智能问答（持久化版本）
-export const smartAskQuestion = async (request: QALogCreate): Promise<QALogResponse> => {
-  const response = await apiClient.post<QALogResponse>(
-    `${API_V1_PREFIX}/qa/smart-ask`,
-    request
-  );
-  return response.data;
-};
+// Analysis API
+export const analysisApi = {
+  async analyzeCode(code: string, language: string) {
+    const response = await apiClient.post('/analysis/analyze', {
+      code,
+      language,
+      include_suggestions: true,
+    })
+    return response.data
+  },
 
-// 获取 Q&A 统计信息
-export const getQAStats = async (): Promise<QALogStats> => {
-  const response = await apiClient.get<QALogStats>(
-    `${API_V1_PREFIX}/qa/stats`
-  );
-  return response.data;
-};
+  async checkPlagiarism(submissionId: string) {
+    const response = await apiClient.post('/assignments/plagiarism/check', {
+      submission_id: submissionId,
+    })
+    return response.data
+  },
 
-// 获取学生问答历史
-export const getStudentQAHistory = async (
-  studentId: string,
-  limit: number = 50
-): Promise<QALogResponse[]> => {
-  const response = await apiClient.get<QALogResponse[]>(
-    `${API_V1_PREFIX}/qa/history/${studentId}`,
-    { params: { limit } }
-  );
-  return response.data;
-};
+  async analyzeReport(file: File) {
+    const formData = new FormData()
+    formData.append('file', file)
 
-// 获取学生知识薄弱点报告
-export const getStudentWeaknessReport = async (
-  studentId: string
-): Promise<StudentWeaknessReport> => {
-  const response = await apiClient.get<StudentWeaknessReport>(
-    `${API_V1_PREFIX}/qa/weakness/${studentId}`
-  );
-  return response.data;
-};
-
-// 获取课程 Q&A 分析报告
-export const getCourseQAAnalytics = async (
-  courseId: string,
-  days: number = 30
-): Promise<QAAnalyticsReport> => {
-  const response = await apiClient.get<QAAnalyticsReport>(
-    `${API_V1_PREFIX}/qa/analytics/${courseId}`,
-    { params: { days } }
-  );
-  return response.data;
-};
-
-// ============ Plagiarism Detection Endpoints ============
-
-export const checkPlagiarism = async (request: PlagiarismRequest): Promise<PlagiarismResponse> => {
-  const response = await apiClient.post<PlagiarismResponse>(
-    `${API_V1_PREFIX}/assignments/plagiarism/check`,
-    request
-  );
-  return response.data;
-};
-
-// ============ Project Report Analysis Endpoints ============
-
-export const analyzeProjectReport = async (
-  request: ReportAnalysisRequest
-): Promise<ReportAnalysisResponse> => {
-  const response = await apiClient.post<ReportAnalysisResponse>(
-    `${API_V1_PREFIX}/analysis/report/analyze`,
-    request
-  );
-  return response.data;
-};
-
-export const analyzeUploadedReport = async (
-  file: File,
-  referenceStylePreference?: string
-): Promise<ReportAnalysisResponse> => {
-  const formData = new FormData();
-  formData.append('file', file);
-
-  if (referenceStylePreference) {
-    formData.append('reference_style_preference', referenceStylePreference);
+    const response = await apiClient.post('/report-analysis/analyze-file', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+    return response.data
   }
+}
 
-  const response = await apiClient.post<ReportAnalysisResponse>(
-    `${API_V1_PREFIX}/report-analysis/analyze-file`,
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  );
-  return response.data;
-};
+// Grading API
+export const gradingApi = {
+  async getByAssignment(assignmentId: string) {
+    const response = await apiClient.get(`/grading/assignment/${assignmentId}`)
+    return response.data
+  },
 
-// 获取支持的报告文件类型
-export const getReportFileTypes = async (): Promise<{
-  file_types: string[];
-  languages: string[];
-  reference_formats: string[];
-}> => {
-  const response = await apiClient.get(
-    `${API_V1_PREFIX}/analysis/report/file-types`
-  );
-  return response.data;
-};
+  async gradeSubmission(submissionId: number, feedback: Record<string, any>, overallScore: number) {
+    const response = await apiClient.post('/grading', {
+      submission_id: submissionId,
+      overall_score: overallScore,
+      feedback,
+      graded_by: 'teacher',
+    })
+    return response.data
+  },
 
-// 批量分析项目报告
-export const batchAnalyzeReports = async (
-  requests: ReportAnalysisRequest[]
-): Promise<{
-  total: number;
-  successful_count: number;
-  failed_count: number;
-  results: ReportAnalysisResponse[];
-  errors: Array<{ file_name: string; error: string }>;
-}> => {
-  const response = await apiClient.post(
-    `${API_V1_PREFIX}/analysis/report/batch-analyze`,
-    requests
-  );
-  return response.data;
-};
-
-// 批量分析查重（增强版）
-export const batchAnalyzePlagiarism = async (
-  request: BatchAnalysisRequest
-): Promise<BatchAnalysisResponse> => {
-  const response = await apiClient.post<BatchAnalysisResponse>(
-    `${API_V1_PREFIX}/assignments/plagiarism/batch-analyze`,
-    request
-  );
-  return response.data;
-};
-
-// 获取原创性报告
-export const getOriginalityReport = async (
-  submissionId: string,
-  assignmentId: string
-): Promise<OriginalityReport> => {
-  const response = await apiClient.get<OriginalityReport>(
-    `${API_V1_PREFIX}/assignments/plagiarism/originality-report/${submissionId}`,
-    { params: { assignment_id: assignmentId } }
-  );
-  return response.data;
-};
-
-// 获取查重设置
-export const getPlagiarismSettings = async (): Promise<PlagiarismSettings> => {
-  const response = await apiClient.get<PlagiarismSettings>(
-    `${API_V1_PREFIX}/assignments/plagiarism/settings`
-  );
-  return response.data;
-};
-
-// 更新查重设置
-export const updatePlagiarismSettings = async (
-  settings: PlagiarismSettings
-): Promise<PlagiarismSettings> => {
-  const response = await apiClient.put<PlagiarismSettings>(
-    `${API_V1_PREFIX}/assignments/plagiarism/settings`,
-    settings
-  );
-  return response.data;
-};
-
-// ============ Authentication Endpoints ============
-
-export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
-  const response = await apiClient.post<LoginResponse>(
-    `${API_V1_PREFIX}/auth/login`,
-    credentials
-  );
-  return response.data;
-};
-
-export const register = async (data: RegisterData): Promise<RegisterResponse> => {
-  const response = await apiClient.post<RegisterResponse>(
-    `${API_V1_PREFIX}/auth/register`,
-    data
-  );
-  return response.data;
-};
-
-export const refreshToken = async (refresh_token: string): Promise<RefreshTokenResponse> => {
-  const response = await apiClient.post<RefreshTokenResponse>(
-    `${API_V1_PREFIX}/auth/refresh`,
-    { refresh_token }
-  );
-  return response.data;
-};
-
-export const logout = async (): Promise<void> => {
-  await apiClient.post(`${API_V1_PREFIX}/auth/logout`);
-};
-
-export const getCurrentUser = async (): Promise<User> => {
-  const response = await apiClient.get<User>(`${API_V1_PREFIX}/auth/me`);
-  return response.data;
-};
-
-export const changePassword = async (
-  oldPassword: string,
-  newPassword: string
-): Promise<ChangePasswordResponse> => {
-  const response = await apiClient.post<ChangePasswordResponse>(
-    `${API_V1_PREFIX}/auth/change-password`,
-    {
-      old_password: oldPassword,
-      new_password: newPassword,
-    }
-  );
-  return response.data;
-};
-
-export const revokeAllTokens = async (): Promise<RevokeAllTokensResponse> => {
-  const response = await apiClient.post<RevokeAllTokensResponse>(
-    `${API_V1_PREFIX}/auth/revoke-all`
-  );
-  return response.data;
-};
-
-export const updateProfile = async (name: string): Promise<UpdateProfileResponse> => {
-  const response = await apiClient.patch<UpdateProfileResponse>(
-    `${API_V1_PREFIX}/auth/profile`,
-    { name }
-  );
-  return response.data;
-};
-
-export const uploadAvatar = async (file: File): Promise<AvatarUploadResponse> => {
-  const formData = new FormData();
-  formData.append('file', file);
-  const response = await apiClient.post<AvatarUploadResponse>(
-    `${API_V1_PREFIX}/auth/avatar`,
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  );
-  return response.data;
-};
-
-export const deleteAccount = async (password: string): Promise<DeleteAccountResponse> => {
-  const response = await apiClient.delete<DeleteAccountResponse>(
-    `${API_V1_PREFIX}/auth/account`,
-    { data: { password } }
-  );
-  return response.data;
-};
-
-// ============ Auth Token Management ============
-
-// Function to set auth token in request headers
-export const setAuthToken = (token: string | null) => {
-  if (token) {
-    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete apiClient.defaults.headers.common['Authorization'];
+  async autoGrade(submissionId: number) {
+    const response = await apiClient.post('/grading', {
+      submission_id: submissionId,
+      overall_score: 0,
+      graded_by: 'AI',
+    })
+    return response.data
   }
-};
+}
 
-// ============ Student Endpoints ============
+// Task Queue API (for RabbitMQ integration)
+export const tasksApi = {
+  async getTaskStatus(taskId: string) {
+    const response = await apiClient.get(`/tasks/status/${taskId}`)
+    return response.data
+  },
 
-export const getStudentProfile = async (): Promise<StudentProfile> => {
-  const response = await apiClient.get<StudentProfile>(`${API_V1_PREFIX}/students/profile`);
-  return response.data;
-};
-
-export const updateStudentProfile = async (data: UpdateProfileData): Promise<StudentProfile> => {
-  const response = await apiClient.put<StudentProfile>(
-    `${API_V1_PREFIX}/students/profile`,
-    data
-  );
-  return response.data;
-};
-
-export const getStudentStats = async (): Promise<StudentStats> => {
-  const response = await apiClient.get<StudentStats>(`${API_V1_PREFIX}/students/stats`);
-  return response.data;
-};
-
-export const getEnrolledCourses = async (): Promise<Course[]> => {
-  const response = await apiClient.get<Course[]>(`${API_V1_PREFIX}/students/courses`);
-  return response.data;
-};
-
-export const enrollInCourse = async (courseId: string): Promise<void> => {
-  await apiClient.post(`${API_V1_PREFIX}/students/courses/${courseId}/enroll`);
-};
-
-export const dropCourse = async (courseId: string): Promise<void> => {
-  await apiClient.delete(`${API_V1_PREFIX}/students/courses/${courseId}/drop`);
-};
-
-// ============ Submission Endpoints ============
-
-export const createSubmission = async (data: CreateSubmissionRequest): Promise<Submission> => {
-  const formData = new FormData();
-  formData.append('assignment_id', data.assignment_id);
-  formData.append('content', data.content);
-  if (data.file) {
-    formData.append('file', data.file);
+  async submitBatchTask(type: string, data: any) {
+    const response = await apiClient.post('/tasks/batch', { type, data })
+    return response.data
   }
+}
 
-  const response = await apiClient.post<Submission>(
-    `${API_V1_PREFIX}/submissions`,
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  );
-  return response.data;
-};
+// Student Records API
+export const studentRecordsApi = {
+  async getAll(params?: { page?: number; page_size?: number; assignment_number?: string }) {
+    const response = await apiClient.get('/student-records', { params })
+    return response.data
+  },
 
-export const getSubmission = async (submissionId: string): Promise<Submission> => {
-  const response = await apiClient.get<Submission>(
-    `${API_V1_PREFIX}/submissions/${submissionId}`
-  );
-  return response.data;
-};
+  async getByStudentId(studentId: string): Promise<StudentRecord> {
+    const response = await apiClient.get(`/student-records/${studentId}`)
+    return response.data
+  },
 
-export const getSubmissions = async (filters?: SubmissionFilters): Promise<SubmissionListResponse> => {
-  const params = new URLSearchParams();
-  if (filters?.assignment_id) params.append('assignment_id', filters.assignment_id);
-  if (filters?.course_id) params.append('course_id', filters.course_id);
-  if (filters?.status) params.append('status', filters.status);
-  if (filters?.page) params.append('page', filters.page.toString());
-  if (filters?.page_size) params.append('page_size', filters.page_size.toString());
+  async create(data: StudentRecordCreate): Promise<StudentRecord> {
+    const response = await apiClient.post('/student-records', data)
+    return response.data
+  },
 
-  const response = await apiClient.get<SubmissionListResponse>(
-    `${API_V1_PREFIX}/submissions?${params.toString()}`
-  );
-  return response.data;
-};
+  async update(studentId: string, data: StudentRecordUpdate): Promise<StudentRecord> {
+    const response = await apiClient.put(`/student-records/${studentId}`, data)
+    return response.data
+  },
 
-export const updateSubmission = async (
-  submissionId: string,
-  content: string
-): Promise<Submission> => {
-  const response = await apiClient.put<Submission>(
-    `${API_V1_PREFIX}/submissions/${submissionId}`,
-    { content }
-  );
-  return response.data;
-};
+  async delete(studentId: string) {
+    const response = await apiClient.delete(`/student-records/${studentId}`)
+    return response.data
+  }
+}
 
-export const deleteSubmission = async (submissionId: string): Promise<void> => {
-  await apiClient.delete(`${API_V1_PREFIX}/submissions/${submissionId}`);
-};
-
-export const getSubmissionStats = async (): Promise<SubmissionStats> => {
-  const response = await apiClient.get<SubmissionStats>(
-    `${API_V1_PREFIX}/submissions/stats`
-  );
-  return response.data;
-};
-
-// ============ Assignment Endpoints ============
-
-export const getAssignment = async (assignmentId: string): Promise<Assignment> => {
-  const response = await apiClient.get<Assignment>(
-    `${API_V1_PREFIX}/assignments/${assignmentId}`
-  );
-  return response.data;
-};
-
-export const getAssignments = async (filters?: AssignmentFilters): Promise<AssignmentListResponse> => {
-  const params = new URLSearchParams();
-  if (filters?.course_id) params.append('course_id', filters.course_id);
-  if (filters?.assignment_type) params.append('assignment_type', filters.assignment_type);
-  if (filters?.is_published !== undefined) params.append('is_published', filters.is_published.toString());
-  if (filters?.due_before) params.append('due_before', filters.due_before);
-  if (filters?.due_after) params.append('due_after', filters.due_after);
-  if (filters?.page) params.append('page', filters.page.toString());
-  if (filters?.page_size) params.append('page_size', filters.page_size.toString());
-
-  const response = await apiClient.get<AssignmentListResponse>(
-    `${API_V1_PREFIX}/assignments?${params.toString()}`
-  );
-  return response.data;
-};
-
-export const getAssignmentsWithSubmissions = async (
-  courseId?: string
-): Promise<AssignmentWithSubmission[]> => {
-  const params = courseId ? `?course_id=${courseId}` : '';
-  const response = await apiClient.get<AssignmentWithSubmission[]>(
-    `${API_V1_PREFIX}/assignments/with-submissions${params}`
-  );
-  return response.data;
-};
-
-export const getAssignmentStats = async (courseId?: string): Promise<AssignmentStats> => {
-  const params = courseId ? `?course_id=${courseId}` : '';
-  const response = await apiClient.get<AssignmentStats>(
-    `${API_V1_PREFIX}/assignments/stats${params}`
-  );
-  return response.data;
-};
-
-export const getAssignmentRubric = async (assignmentId: string): Promise<Rubric> => {
-  const response = await apiClient.get<Rubric>(
-    `${API_V1_PREFIX}/assignments/${assignmentId}/rubric`
-  );
-  return response.data;
-};
-
-// ============ Knowledge Base Endpoints ============
-
-export const getKnowledgeBaseEntries = async (
-  page: number = 1,
-  pageSize: number = 20,
-  category?: string,
-  difficultyLevel?: number
-): Promise<KnowledgeBaseListResponse> => {
-  const params = new URLSearchParams();
-  params.append('page', page.toString());
-  params.append('page_size', pageSize.toString());
-  if (category) params.append('category', category);
-  if (difficultyLevel) params.append('difficulty_level', difficultyLevel.toString());
-
-  const response = await apiClient.get<KnowledgeBaseListResponse>(
-    `${API_V1_PREFIX}/knowledge-base?${params.toString()}`
-  );
-  return response.data;
-};
-
-export const getKnowledgeBaseEntry = async (entryId: string): Promise<KnowledgeBaseEntry> => {
-  const response = await apiClient.get<KnowledgeBaseEntry>(
-    `${API_V1_PREFIX}/knowledge-base/${entryId}`
-  );
-  return response.data;
-};
-
-export const createKnowledgeBaseEntry = async (
-  data: KnowledgeBaseCreateRequest
-): Promise<KnowledgeBaseEntry> => {
-  const response = await apiClient.post<KnowledgeBaseEntry>(
-    `${API_V1_PREFIX}/knowledge-base`,
-    data
-  );
-  return response.data;
-};
-
-export const updateKnowledgeBaseEntry = async (
-  entryId: string,
-  data: KnowledgeBaseUpdateRequest
-): Promise<KnowledgeBaseEntry> => {
-  const response = await apiClient.put<KnowledgeBaseEntry>(
-    `${API_V1_PREFIX}/knowledge-base/${entryId}`,
-    data
-  );
-  return response.data;
-};
-
-export const deleteKnowledgeBaseEntry = async (entryId: string): Promise<void> => {
-  await apiClient.delete(`${API_V1_PREFIX}/knowledge-base/${entryId}`);
-};
-
-export const searchKnowledgeBase = async (
-  request: KnowledgeBaseSearchRequest
-): Promise<KnowledgeBaseSearchResponse> => {
-  const response = await apiClient.post<KnowledgeBaseSearchResponse>(
-    `${API_V1_PREFIX}/knowledge-base/search`,
-    request
-  );
-  return response.data;
-};
-
-export const getKnowledgeBaseCategories = async (): Promise<CategoriesResponse> => {
-  const response = await apiClient.get<CategoriesResponse>(
-    `${API_V1_PREFIX}/knowledge-base/categories/list`
-  );
-  return response.data;
-};
-
-export const getKnowledgeBaseStats = async (): Promise<KnowledgeBaseStats> => {
-  const response = await apiClient.get<KnowledgeBaseStats>(
-    `${API_V1_PREFIX}/knowledge-base/stats/overview`
-  );
-  return response.data;
-};
-
-export const markKnowledgeBaseEntryHelpful = async (entryId: string): Promise<void> => {
-  await apiClient.post(`${API_V1_PREFIX}/knowledge-base/${entryId}/helpful`);
-};
-
-// ============ Q&A Endpoints ============
-
-// 获取待回答问题列表（教师/管理员）
-export const getPendingQuestions = async (): Promise<QALogResponse[]> => {
-  const response = await apiClient.get<QALogResponse[]>(
-    `${API_V1_PREFIX}/qa/pending-questions`
-  );
-  return response.data;
-};
-
-// 教师回答问题
-export const answerQuestion = async (
-  request: TeacherAnswerRequest
-): Promise<TeacherAnswerResponse> => {
-  const response = await apiClient.post<TeacherAnswerResponse>(
-    `${API_V1_PREFIX}/qa/answer-question`,
-    request
-  );
-  return response.data;
-};
-
-// ============ Triage Endpoints ============
-
-export const askTriageQuestion = async (request: TriageRequest): Promise<TriageResponse> => {
-  const response = await apiClient.post<TriageResponse>(
-    `${API_V1_PREFIX}/triage/ask`,
-    request
-  );
-  return response.data;
-};
-
-export const getPendingQueue = async (
-  role?: string,
-  handlerId?: string,
-  page: number = 1,
-  pageSize: number = 20
-): Promise<PendingQueueResponse> => {
-  const params = new URLSearchParams();
-  if (role) params.append('role', role);
-  if (handlerId) params.append('handler_id', handlerId);
-  params.append('page', page.toString());
-  params.append('page_size', pageSize.toString());
-
-  const response = await apiClient.get<PendingQueueResponse>(
-    `${API_V1_PREFIX}/triage/queue?${params.toString()}`
-  );
-  return response.data;
-};
-
-export const teacherTakeover = async (
-  request: TeacherTakeoverRequest
-): Promise<{ message: string; log_id: string }> => {
-  const response = await apiClient.post<{ message: string; log_id: string }>(
-    `${API_V1_PREFIX}/triage/takeover`,
-    request
-  );
-  return response.data;
-};
-
-export const teacherAnswer = async (
-  request: TeacherAnswerRequest
-): Promise<TeacherAnswerResponse> => {
-  const response = await apiClient.post<TeacherAnswerResponse>(
-    `${API_V1_PREFIX}/triage/answer`,
-    request
-  );
-  return response.data;
-};
-
-export const getTriageStats = async (): Promise<TriageStats> => {
-  const response = await apiClient.get<TriageStats>(
-    `${API_V1_PREFIX}/triage/stats`
-  );
-  return response.data;
-};
-
-export const getDifficultyLevels = async (): Promise<DifficultyLevelsResponse> => {
-  const response = await apiClient.get<DifficultyLevelsResponse>(
-    `${API_V1_PREFIX}/triage/difficulty-levels`
-  );
-  return response.data;
-};
-
-// ============ Grading Result Endpoints ============
-
-// 创建评分结果
-export const createGradingResult = async (
-  data: GradingResultCreate
-): Promise<GradingResultResponse> => {
-  const response = await apiClient.post<GradingResultResponse>(
-    `${API_V1_PREFIX}/grading`,
-    data
-  );
-  return response.data;
-};
-
-// 获取单个评分结果（包含提交详情）
-export const getGradingResult = async (
-  gradingId: number
-): Promise<GradingResultWithSubmission> => {
-  const response = await apiClient.get<GradingResultWithSubmission>(
-    `${API_V1_PREFIX}/grading/${gradingId}`
-  );
-  return response.data;
-};
-
-// 按提交 ID 获取评分结果
-export const getGradingBySubmission = async (
-  submissionId: number
-): Promise<GradingResultResponse> => {
-  const response = await apiClient.get<GradingResultResponse>(
-    `${API_V1_PREFIX}/grading/submission/${submissionId}`
-  );
-  return response.data;
-};
-
-// 按学生 ID 获取评分结果列表
-export const getGradingByStudent = async (
-  studentId: string,
-  page: number = 1,
-  pageSize: number = 20
-): Promise<GradingResultListResponse> => {
-  const params = new URLSearchParams();
-  params.append('page', page.toString());
-  params.append('page_size', pageSize.toString());
-
-  const response = await apiClient.get<GradingResultListResponse>(
-    `${API_V1_PREFIX}/grading/student/${studentId}?${params.toString()}`
-  );
-  return response.data;
-};
-
-// 按作业 ID 获取评分结果列表
-export const getGradingByAssignment = async (
-  assignmentId: string,
-  page: number = 1,
-  pageSize: number = 20
-): Promise<GradingResultListResponse> => {
-  const params = new URLSearchParams();
-  params.append('page', page.toString());
-  params.append('page_size', pageSize.toString());
-
-  const response = await apiClient.get<GradingResultListResponse>(
-    `${API_V1_PREFIX}/grading/assignment/${assignmentId}?${params.toString()}`
-  );
-  return response.data;
-};
-
-// 获取作业评分统计
-export const getGradingStatistics = async (
-  assignmentId: string
-): Promise<GradingStatistics> => {
-  const response = await apiClient.get<GradingStatistics>(
-    `${API_V1_PREFIX}/grading/assignment/${assignmentId}/statistics`
-  );
-  return response.data;
-};
-
-// 教师覆盖评分
-export const overrideGradingResult = async (
-  gradingId: number,
-  data: GradingResultOverride
-): Promise<GradingResultResponse> => {
-  const response = await apiClient.put<GradingResultResponse>(
-    `${API_V1_PREFIX}/grading/${gradingId}/override`,
-    data
-  );
-  return response.data;
-};
-
-// 删除评分结果
-export const deleteGradingResult = async (gradingId: number): Promise<void> => {
-  await apiClient.delete(`${API_V1_PREFIX}/grading/${gradingId}`);
-};
-
-// 教师提交作业
-export const teacherSubmitAssignment = async (
-  assignmentData: FormData
-): Promise<BatchUploadResponse> => {
-  const response = await apiClient.post<BatchUploadResponse>(
-    `${API_V1_PREFIX}/assignments/teacher/submit`,
-    assignmentData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  );
-  return response.data;
-};
-
-// 批量上传学生作业
-export const batchUploadStudentSubmissions = async (
-  uploadData: FormData
-): Promise<BatchUploadResponse> => {
-  const response = await apiClient.post<BatchUploadResponse>(
-    `${API_V1_PREFIX}/assignments/teacher/batch-upload`,
-    uploadData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      timeout: 300000, // 5分钟超时，因为可能上传大量文件
-    }
-  );
-  return response.data;
-};
-
-// 获取作业提交列表
-export const getAssignmentSubmissions = async (
-  assignmentId: string,
-  courseId: string,
-  page: number = 1,
-  pageSize: number = 20
-): Promise<AssignmentSubmissionRecord[]> => {
-  const params = new URLSearchParams();
-  params.append('course_id', courseId);
-  params.append('page', page.toString());
-  params.append('page_size', pageSize.toString());
-
-  const response = await apiClient.get<AssignmentSubmissionRecord[]>(
-    `${API_V1_PREFIX}/assignments/teacher/${assignmentId}/submissions?${params.toString()}`
-  );
-  return response.data;
-};
-
-// 与文件管理系统同步
-export const syncWithFileManager = async (
-  syncData: FormData
-): Promise<FileManagerSyncResponse> => {
-  const response = await apiClient.post<FileManagerSyncResponse>(
-    `${API_V1_PREFIX}/assignments/file-manager/sync`,
-    syncData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  );
-  return response.data;
-};
-
-// 查询同步状态
-export const getSyncStatus = async (
-  assignmentId: string,
-  syncId?: string
-): Promise<FileManagerSyncResponse> => {
-  const params = new URLSearchParams();
-  params.append('assignment_id', assignmentId);
-  if (syncId) params.append('sync_id', syncId);
-
-  const response = await apiClient.get<FileManagerSyncResponse>(
-    `${API_V1_PREFIX}/assignments/file-manager/status?${params.toString()}`
-  );
-  return response.data;
-};
-
-// Export the axios instance for custom requests
-export default apiClient;
+export default apiClient

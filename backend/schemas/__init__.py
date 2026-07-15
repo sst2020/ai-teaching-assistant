@@ -16,6 +16,14 @@ from schemas.grading import (
     BatchGradingResponse,
 )
 
+from schemas.student_record import (
+    StudentRecordBase,
+    StudentRecordCreate,
+    StudentRecordUpdate,
+    StudentRecordResponse,
+    StudentRecordListResponse,
+)
+
 __all__ = [
     # Grading schemas
     "GradedByEnum",
@@ -31,4 +39,10 @@ __all__ = [
     "GradingStatistics",
     "BatchGradingRequest",
     "BatchGradingResponse",
+    # Student Record schemas
+    "StudentRecordBase",
+    "StudentRecordCreate",
+    "StudentRecordUpdate",
+    "StudentRecordResponse",
+    "StudentRecordListResponse",
 ]

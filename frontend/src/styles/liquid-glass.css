@@ -1,0 +1,243 @@
+/* Liquid Glass Design System - Apple Vision Pro Style */
+
+:root {
+  /* Glass Colors */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-dark: rgba(30, 30, 30, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-border-dark: rgba(255, 255, 255, 0.1);
+  
+  /* Blur Effects */
+  --blur-sm: 12px;
+  --blur-md: 24px;
+  --blur-lg: 40px;
+  --blur-xl: 60px;
+  
+  /* Shadows for depth */
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.12),
+                  0 2px 8px rgba(0, 0, 0, 0.08),
+                  inset 0 0 0 1px var(--glass-border);
+  --shadow-glass-hover: 0 12px 48px rgba(0, 0, 0, 0.15),
+                        0 4px 12px rgba(0, 0, 0, 0.1),
+                        inset 0 0 0 1px var(--glass-border);
+  
+  /* Border Radius - More rounded like iOS */
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+  
+  /* System Colors - Vibrant iOS palette */
+  --ios-blue: #007AFF;
+  --ios-indigo: #5856D6;
+  --ios-purple: #AF52DE;
+  --ios-pink: #FF2D55;
+  --ios-red: #FF3B30;
+  --ios-orange: #FF9500;
+  --ios-yellow: #FFCC00;
+  --ios-green: #34C759;
+  --ios-teal: #5AC8FA;
+  --ios-cyan: #32ADE6;
+  
+  /* Gradients for Liquid effect */
+  --gradient-liquid: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  
+  /* Background mesh gradient */
+  --mesh-gradient: 
+    radial-gradient(at 40% 20%, rgba(120, 119, 198, 0.3) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(227, 133, 133, 0.2) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(128, 202, 231, 0.3) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(199, 134, 199, 0.2) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(133, 199, 176, 0.3) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, rgba(237, 189, 131, 0.2) 0px, transparent 50%);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --glass-bg: rgba(30, 30, 30, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --mesh-gradient: 
+      radial-gradient(at 40% 20%, rgba(88, 86, 214, 0.25) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(255, 45, 85, 0.15) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(90, 200, 250, 0.2) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, rgba(175, 82, 222, 0.15) 0px, transparent 50%);
+  }
+}
+
+/* Base Glass Card */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-md)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--blur-md)) saturate(180%);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glass);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  box-shadow: var(--shadow-glass-hover);
+  transform: translateY(-2px);
+}
+
+/* Header Glass Effect */
+.glass-header {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(var(--blur-lg)) saturate(200%);
+  -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(200%);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Floating Button - Liquid style */
+.liquid-button {
+  background: var(--ios-blue);
+  color: white;
+  border-radius: var(--radius-full);
+  padding: 12px 24px;
+  font-weight: 600;
+  border: none;
+  box-shadow: 
+    0 4px 15px rgba(0, 122, 255, 0.4),
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.liquid-button:hover::before {
+  left: 100%;
+}
+
+.liquid-button:hover {
+  transform: scale(1.02);
+  box-shadow: 
+    0 6px 24px rgba(0, 122, 255, 0.5),
+    0 2px 6px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Menu Items - Glass style */
+.glass-menu-item {
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  margin: 4px 8px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.glass-menu-item:hover {
+  background: rgba(0, 122, 255, 0.1);
+}
+
+.glass-menu-item.is-active {
+  background: var(--ios-blue);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+}
+
+/* Page Background */
+.liquid-bg {
+  background: #f5f7fa;
+  background-image: var(--mesh-gradient);
+  min-height: 100vh;
+  position: relative;
+}
+
+.liquid-bg::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Dialog Glass Effect */
+.glass-dialog .el-dialog {
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-lg)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glass);
+  overflow: hidden;
+}
+
+/* Form Inputs */
+.glass-input {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(var(--blur-sm));
+  transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: var(--ios-blue);
+  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Table styling */
+.glass-table {
+  background: transparent;
+}
+
+.glass-table .el-table__header th {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(var(--blur-sm));
+  font-weight: 600;
+}
+
+.glass-table .el-table__row {
+  transition: all 0.2s ease;
+}
+
+.glass-table .el-table__row:hover {
+  background: rgba(0, 122, 255, 0.05);
+}

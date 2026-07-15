@@ -166,7 +166,7 @@ function checkProjectStructure() {
   const requiredFiles = [
     { path: 'frontend/package.json', desc: '前端 package.json' },
     { path: 'backend/requirements.txt', desc: '后端依赖文件' },
-    { path: 'frontend/src/App.tsx', desc: '前端主应用文件' },
+    { path: 'frontend/src/App.vue', desc: '前端主应用文件' },
     { path: 'backend/app/main.py', desc: '后端主应用文件' }
   ];
   
